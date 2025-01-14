@@ -2,6 +2,7 @@ package com.kospot.kospot.exception.payload.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.kospot.kospot.exception.payload.code.BaseCode;
+import com.kospot.kospot.exception.payload.code.Reason;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,9 +22,9 @@ public class ApiResponseDto<T> {
     }
 
     // 다양한 성공 상태 처리
-    public static <T> ApiResponseDto<T> of(Integer code, String message, T result){
-        return new ApiResponseDto<>(true, code,
-                message, result);
+    public static <T> ApiResponseDto<T> of(Reason reason, T result){
+        return new ApiResponseDto<>(true, reason.getCode(),
+                reason.getMessage(), result);
     }
 
     public static <T> ApiResponseDto<T> onFailure(Integer code, String message, T data){
