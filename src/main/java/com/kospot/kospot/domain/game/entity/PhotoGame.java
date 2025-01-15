@@ -19,7 +19,10 @@ public class PhotoGame extends BaseTimeEntity {
     @Enumerated
     private GameType gameType;
 
-    //Point 객체
+    // todo 정답 지역
+    private String correctLocation;
+
+    private Long answerTime;
 
 
 }

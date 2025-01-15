@@ -19,7 +19,13 @@ public class RoadViewGame extends BaseTimeEntity {
     @Enumerated
     private GameType gameType;
 
-    //Point 객체
+    // todo 정답 Point 객체
+    // todo 내가 고른 Point 객체
+
+    private Long answerTime;
+
+    private double answerDistance;
+
 
 
 
