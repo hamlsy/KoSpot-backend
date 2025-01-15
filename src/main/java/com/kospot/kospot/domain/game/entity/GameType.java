@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.game;
+package com.kospot.kospot.domain.game.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
