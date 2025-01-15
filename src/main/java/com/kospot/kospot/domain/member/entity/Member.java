@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.users.entity;
+package com.kospot.kospot.domain.member.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import jakarta.persistence.*;
