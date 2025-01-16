@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.game.entity;
+package com.kospot.kospot.domain.item.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -10,21 +10,19 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class PhotoGame extends BaseTimeEntity {
+public class Item extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "photoGame_id")
+    @Column(name = "item_id")
     private Long id;
 
-    @Enumerated
-    private GameType gameType;
+    private String name;
 
-    // todo 정답 지역
-    private String correctLocation;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
-    private Long averageAnswerTime;
-
-    private int score;
+    private int price;
 
 }
