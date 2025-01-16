@@ -27,6 +27,4 @@ public class RoadViewGame extends BaseTimeEntity {
     private double answerDistance;
 
 
-
-
 }
