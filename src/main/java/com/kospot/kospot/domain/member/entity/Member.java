@@ -28,6 +28,6 @@ public class Member extends BaseTimeEntity {
 
     private String email;
 
-    private int point;
+    private int points;
 
 }
