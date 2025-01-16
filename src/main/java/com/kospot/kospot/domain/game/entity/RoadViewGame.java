@@ -14,6 +14,7 @@ public class RoadViewGame extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "roadViewGame_id")
     private Long id;
 
     @Enumerated

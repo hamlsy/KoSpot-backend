@@ -14,6 +14,7 @@ public class PhotoGame extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "photoGame_id")
     private Long id;
 
     @Enumerated
