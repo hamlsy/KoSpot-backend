@@ -9,4 +9,5 @@ public enum RankMode {
     ROAD_VIEW("ROADVIEW"), PHOTO("PHOTO");
 
     private final String key;
+
 }
