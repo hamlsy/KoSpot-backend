@@ -21,6 +21,7 @@ public class RoadViewCoordinateGenerator {
 
     private static final String KAKAO_PANO_API_URL = "https://dapi.kakao.com/v2/local/geo/coord2panoinfo";
     private static final String KAKAO_ADDRESS_API_URL = "https://dapi.kakao.com/v2/local/geo/coord2address";
+    private static final String KAKAO_API_URL = "A";
     private static final int MAX_DISTANCE = 150;
     private static final int DISTANCE_INCREMENT = 50;
 
@@ -47,8 +48,7 @@ public class RoadViewCoordinateGenerator {
                     .block();
 
             if (response != null && response.getPanoId() != null) {
-                return Optional.of(new RoadviewLocation(
-                        response.getPanoId(),
+                return Optional.of(new Coordinate(
                         response.getLatitude(),
                         response.getLongitude()
                 ));

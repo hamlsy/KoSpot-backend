@@ -7,11 +7,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberItem extends BaseTimeEntity {
