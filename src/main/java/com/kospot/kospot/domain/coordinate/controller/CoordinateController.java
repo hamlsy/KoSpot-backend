@@ -1,14 +1,15 @@
 package com.kospot.kospot.domain.coordinate.controller;
 
 import com.kospot.kospot.domain.coordinate.dto.response.RandomCoordinateResponse;
-import com.kospot.kospot.domain.coordinate.dto.response.kakao.KakaoPanoResponse;
 import com.kospot.kospot.domain.coordinate.service.generator.RoadViewCoordinateGenerator;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class CoordinateController {
     private final RoadViewCoordinateGenerator roadViewCoordinateGenerator;

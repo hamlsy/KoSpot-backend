@@ -4,24 +4,28 @@ import com.kospot.kospot.domain.coordinate.dto.response.RandomCoordinateResponse
 import com.kospot.kospot.domain.coordinate.dto.response.kakao.KakaoPanoResponse;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.util.RandomCoordinateGenerator;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.swing.text.html.Option;
-import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class RoadViewCoordinateGenerator {
 
     private WebClient webClient;
-    // todo @Value("${kakao.api.key}")
+
+    @Value("${kakao.api.key}")
     private String kakaoApiKey;
 
     private static final String KAKAO_PANO_API_URL = "https://dapi.kakao.com/v2/local/geo/coord2panoinfo";
     private static final String KAKAO_ADDRESS_API_URL = "https://dapi.kakao.com/v2/local/geo/coord2address";
-    private static final String KAKAO_API_URL = "A";
+    private static final String KAKAO_API_URL = "https://dapi.kakao.com/v2/local/geo/coord2panoinfo";
+    private static final String KAKAO_API_HEADER = "KakaoAK ";
     private static final int MAX_DISTANCE = 150;
     private static final int DISTANCE_INCREMENT = 50;
 
@@ -50,7 +54,7 @@ public class RoadViewCoordinateGenerator {
                             .queryParam("y", coordinate.getLng())
                             .queryParam("radius", distance)
                             .build())
-                    .header("Authorization", "KakaoAK " + kakaoApiKey)
+                    .header("Authorization", KAKAO_API_HEADER + kakaoApiKey)
                     .retrieve()
                     .bodyToMono(KakaoPanoResponse.class)
                     .block();
