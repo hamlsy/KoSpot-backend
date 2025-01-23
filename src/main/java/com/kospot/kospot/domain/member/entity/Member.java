@@ -33,4 +33,5 @@ public class Member extends BaseTimeEntity {
 
     private int points;
 
+
 }

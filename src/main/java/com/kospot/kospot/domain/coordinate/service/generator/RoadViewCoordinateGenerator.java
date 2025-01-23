@@ -3,15 +3,15 @@ package com.kospot.kospot.domain.coordinate.service.generator;
 import com.kospot.kospot.domain.coordinate.dto.response.RandomCoordinateResponse;
 import com.kospot.kospot.domain.coordinate.dto.response.kakao.KakaoPanoResponse;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.kospot.domain.coordinate.repository.CoordinateRepository;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import com.kospot.kospot.domain.coordinate.util.RandomCoordinateGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class RoadViewCoordinateGenerator {
 
@@ -26,12 +26,20 @@ public class RoadViewCoordinateGenerator {
     private static final int DISTANCE_INCREMENT = 50;
 
     public RandomCoordinateResponse getRandomCoordinate() {
-        return null;
+        double randomLat = RandomCoordinateGenerator.generateRandomLatitude();
+        double randomLng = RandomCoordinateGenerator.generateRandomLongitude();
+        Coordinate coordinate = Coordinate.builder()
+                .lat(randomLat)
+                .lng(randomLng)
+                .build();
+        Coordinate resultCoordinate = findNearestPanoId(coordinate, DISTANCE_INCREMENT);
+        return RandomCoordinateResponse.from(resultCoordinate);
     }
 
-    private Optional<Coordinate> findNearestPanoId(Coordinate coordinate, int distance){
+    private Coordinate findNearestPanoId(Coordinate coordinate, int distance){
         if (distance >= MAX_DISTANCE) {
-            return Optional.empty();
+            // todo
+            throw new IllegalArgumentException();
         }
 
         try {
@@ -48,18 +56,19 @@ public class RoadViewCoordinateGenerator {
                     .block();
 
             if (response != null && response.getPanoId() != null) {
-                return Optional.of(new Coordinate(
-                        response.getLatitude(),
-                        response.getLongitude()
-                ));
+                return Coordinate.builder()
+                                .lat(response.getLat())
+                                .lng(response.getLng())
+                        .build();
             }
 
             return findNearestPanoId(coordinate, distance + DISTANCE_INCREMENT);
 
         } catch (Exception e) {
             log.error("Failed to fetch pano info for coordinates: {}, {}",
-                    coordinate.getLatitude(), coordinate.getLongitude(), e);
-            return Optional.empty();
+                    coordinate.getLat(), coordinate.getLng(), e);
+            // todo
+            throw new IllegalArgumentException();
         }
     }
 

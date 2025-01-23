@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.rank.entity;
+package com.kospot.kospot.domain.gameRank.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.kospot.domain.member.entity.Member;
@@ -13,14 +13,15 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Rank extends BaseTimeEntity {
+public class GameRank extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "game_rank_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Enumerated(EnumType.STRING)
@@ -28,8 +29,10 @@ public class Rank extends BaseTimeEntity {
 
     private int ratingScore;
 
+    @Enumerated(EnumType.STRING)
     private RankType rankType;
 
+    @Enumerated(EnumType.STRING)
     private RankLevel rankLevel;
 
 

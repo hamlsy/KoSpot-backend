@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.rank.entity;
+package com.kospot.kospot.domain.gameRank.entity;
 
 public enum RankType {
     BRONZE, SILVER, GOLD, PLATINUM,DIAMOND, MASTER;

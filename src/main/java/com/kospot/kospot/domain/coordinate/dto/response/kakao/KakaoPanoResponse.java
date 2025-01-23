@@ -8,6 +8,6 @@ import lombok.Getter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KakaoPanoResponse {
     private String panoId;
-    private double latitude;
-    private double longitude;
+    private double lat;
+    private double lng;
 }
