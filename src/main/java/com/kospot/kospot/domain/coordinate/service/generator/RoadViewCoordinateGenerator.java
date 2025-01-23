@@ -1,5 +1,6 @@
 package com.kospot.kospot.domain.coordinate.service.generator;
 
+import com.kospot.kospot.domain.coordinate.dto.response.RandomCoordinateResponse;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.repository.CoordinateRepository;
 import jakarta.validation.Valid;
@@ -7,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.Optional;
 
 @Service
 public class RoadViewCoordinateGenerator {
@@ -20,7 +23,11 @@ public class RoadViewCoordinateGenerator {
     private static final int MAX_DISTANCE = 150;
     private static final int DISTANCE_INCREMENT = 50;
 
-    private Coordinate generateRandomCoordinate() {
+    public RandomCoordinateResponse getRandomCoordinate() {
+        return null;
+    }
+
+    private Optional<Coordinate> findNearestPanoId(Coordinate coordinate, int distance){
 
     }
 
