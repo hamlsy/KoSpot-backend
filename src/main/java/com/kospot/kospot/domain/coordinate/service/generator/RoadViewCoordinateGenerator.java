@@ -17,7 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class RoadViewCoordinateGenerator {
 
-    private WebClient webClient;
+    private final WebClient webClient;
 
     @Value("${kakao.api.key}")
     private String kakaoApiKey;
