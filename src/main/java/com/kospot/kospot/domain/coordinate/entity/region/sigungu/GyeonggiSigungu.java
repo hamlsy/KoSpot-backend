@@ -49,6 +49,6 @@ public enum GyeonggiSigungu implements Sigungu{
 
     @Override
     public Sido getParentSido() {
-        return Sido.SEOUL;
+        return Sido.GYEONGGI;
     }
 }
