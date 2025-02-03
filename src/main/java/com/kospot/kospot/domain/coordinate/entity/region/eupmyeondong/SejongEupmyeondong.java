@@ -34,7 +34,6 @@ public enum SejongEupmyeondong implements Eupmyeondong{
 
     private final String name;
 
-
     @Override
     public SejongSigungu getParentSigungu() {
         return SejongSigungu.SEJONG_SI;
