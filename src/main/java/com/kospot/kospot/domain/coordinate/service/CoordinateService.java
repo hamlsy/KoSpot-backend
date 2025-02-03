@@ -1,6 +1,8 @@
 package com.kospot.kospot.domain.coordinate.service;
 
 
-public interface CoordinateService {
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 
+public interface CoordinateService {
+    Coordinate findCoordinateBySido(String sido);
 }
