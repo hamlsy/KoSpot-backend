@@ -1,4 +1,8 @@
 package com.kospot.kospot.domain.coordinate.service;
 
-public class CoordinateServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class CoordinateServiceImpl implements CoordinateService{
+
 }

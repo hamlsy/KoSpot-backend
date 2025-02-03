@@ -23,11 +23,7 @@ public class Coordinate extends BaseTimeEntity {
 
     private double lng;
 
-    @Enumerated(EnumType.STRING)
-    private Region region;
-
-    private String detailAddress;
-
-
+    @Embedded
+    private Address address;
 
 }
