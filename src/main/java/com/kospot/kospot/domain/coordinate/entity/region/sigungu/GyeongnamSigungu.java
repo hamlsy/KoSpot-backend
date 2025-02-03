@@ -31,11 +31,6 @@ public enum GyeongnamSigungu implements Sigungu {
     private final String name;
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public Sido getParentSido() {
         return Sido.GYEONGNAM;
     }
