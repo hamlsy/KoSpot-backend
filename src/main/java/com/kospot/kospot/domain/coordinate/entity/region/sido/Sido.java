@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.coordinate.entity;
+package com.kospot.kospot.domain.coordinate.entity.region.sido;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
-public enum Region {
+public enum Sido {
     SEOUL("서울특별시"),
     BUSAN("부산광역시"),
     DAEGU("대구광역시"),
@@ -27,11 +27,11 @@ public enum Region {
     JEJU("제주특별자치도"),
     NATIONWIDE("전국");
 
-    private final String key;
+    private final String name;
 
-    public static Region fromString(String koreanRegionName){
-        return Arrays.stream(Region.values())
-                .filter(r -> r.getKey().equals(koreanRegionName))
+    public static Sido fromString(String sidoName){
+        return Arrays.stream(Sido.values())
+                .filter(r -> r.getName().equals(sidoName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException());
     }
