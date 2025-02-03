@@ -1,6 +1,8 @@
 package com.kospot.kospot.domain.coordinate.controller;
 
 import com.kospot.kospot.domain.coordinate.dto.response.RandomCoordinateResponse;
+import com.kospot.kospot.domain.coordinate.service.CoordinateService;
+import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CoordinateController {
 
+    private final CoordinateService coordinateService;
+
     /**
      * 랜덤 좌표
      * Test 용도
@@ -21,7 +25,9 @@ public class CoordinateController {
     @GetMapping("/randomCoord")
     public ApiResponseDto<RandomCoordinateResponse> getRandomCoord(){
         log.info("Controller method called");
-        return null;
+        return ApiResponseDto.onSuccess(RandomCoordinateResponse.from(
+                coordinateService.getRandomCoordinateBySido("서울")
+        ));
     }
 
 }

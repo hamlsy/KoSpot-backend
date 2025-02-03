@@ -4,5 +4,5 @@ package com.kospot.kospot.domain.coordinate.service;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 
 public interface CoordinateService {
-    Coordinate findCoordinateBySido(String sido);
+    Coordinate getRandomCoordinateBySido(String sido);
 }

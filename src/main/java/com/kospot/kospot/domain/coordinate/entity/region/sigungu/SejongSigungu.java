@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum SejongSigungu implements Sigungu{
-    SEJONG_SI("세종시");
+    SEJONG_SI("세종특별자치시");
 
     private final String name;
 
