@@ -1,7 +1,6 @@
 package com.kospot.kospot.domain.coordinate.controller;
 
 import com.kospot.kospot.domain.coordinate.dto.response.RandomCoordinateResponse;
-import com.kospot.kospot.domain.coordinate.service.generator.RoadViewCoordinateGenerator;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 public class CoordinateController {
-    private final RoadViewCoordinateGenerator roadViewCoordinateGenerator;
-
 
     /**
      * 랜덤 좌표
@@ -24,9 +21,7 @@ public class CoordinateController {
     @GetMapping("/randomCoord")
     public ApiResponseDto<RandomCoordinateResponse> getRandomCoord(){
         log.info("Controller method called");
-        return ApiResponseDto.onSuccess(
-                roadViewCoordinateGenerator.getRandomCoordinate()
-        );
+        return null;
     }
 
 }
