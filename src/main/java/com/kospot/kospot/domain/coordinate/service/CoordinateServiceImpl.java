@@ -23,7 +23,7 @@ public class CoordinateServiceImpl implements CoordinateService{
     }
 
     private List<Coordinate> findCoordinatesBySido(String sidoString) {
-        Sido sido = Sido.fromString(sidoString);
+        Sido sido = Sido.fromName(sidoString);
         return coordinateRepository.findByAddress_Sido(sido).orElseThrow(
                 () -> new IllegalArgumentException("해당 시도의 좌표가 존재하지 않습니다.")
         );

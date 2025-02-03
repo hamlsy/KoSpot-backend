@@ -29,7 +29,7 @@ public enum Sido {
 
     private final String name;
 
-    public static Sido fromString(String sidoName){
+    public static Sido fromName(String sidoName){
         return Arrays.stream(Sido.values())
                 .filter(r -> r.getName().equals(sidoName))
                 .findFirst()
