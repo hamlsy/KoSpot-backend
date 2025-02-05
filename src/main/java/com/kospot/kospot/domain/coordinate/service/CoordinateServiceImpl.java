@@ -28,4 +28,14 @@ public class CoordinateServiceImpl implements CoordinateService{
                 () -> new IllegalArgumentException("해당 시도의 좌표가 존재하지 않습니다.")
         );
     }
+
+    //todo refactoring needed
+    @Override
+    public Coordinate getRandomCoordinate(){
+        List<Coordinate> coordinates = coordinateRepository.findAll();
+        int randomIndex = ThreadLocalRandom.current().nextInt(coordinates.size());
+        return coordinates.get(randomIndex);
+    }
+
+
 }
