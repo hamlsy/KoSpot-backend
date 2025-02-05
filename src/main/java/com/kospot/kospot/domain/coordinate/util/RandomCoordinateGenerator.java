@@ -9,40 +9,34 @@ public class RandomCoordinateGenerator {
 
     private static final double MIN_LAT = 33.10000;
     private static final double MAX_LAT = 38.61000;
-    private static final double MIN_LNG = 124.60000;
-    private static final double MAX_LNG = 131.87000;
+    private static final double MIN_LNG = 125.26000;
+    private static final double MAX_LNG = 129.35;
 
-    // 대한민국 내 육지 좌표 범위
-    private static final BoundingBox[] LAND_BOUNDING_BOXES = {
-        new BoundingBox(33.10000, 38.61000, 124.60000, 126.60000), // 서해안
-        new BoundingBox(33.10000, 38.61000, 126.60000, 129.30000), // 내륙
-        new BoundingBox(33.10000, 38.61000, 129.30000, 131.87000)  // 동해안
-    };
+    private static final int DECIMAL_PLACES = 10;
 
     // 소수점 5자리로 위도 생성
     public static double generateRandomLatitude() {
-        BoundingBox box = getRandomBoundingBox();
+        BoundingBox box = getBoundingBox();
         double latitude = ThreadLocalRandom.current().nextDouble(box.getMinLat(), box.getMaxLat());
-        return roundToFiveDecimalPlaces(latitude);
+        return roundToDecimalPlaces(latitude);
     }
 
     // 소수점 5자리로 경도 생성
     public static double generateRandomLongitude() {
-        BoundingBox box = getRandomBoundingBox();
+        BoundingBox box = getBoundingBox();
         double longitude = ThreadLocalRandom.current().nextDouble(box.getMinLng(), box.getMaxLng());
-        return roundToFiveDecimalPlaces(longitude);
+        return roundToDecimalPlaces(longitude);
     }
 
-    // 소수점 5자리로 반올림
-    private static double roundToFiveDecimalPlaces(double value) {
+    // 소수점 10자리로 반올림
+    private static double roundToDecimalPlaces(double value) {
         return BigDecimal.valueOf(value)
-                .setScale(5, RoundingMode.HALF_UP)
+                .setScale(DECIMAL_PLACES, RoundingMode.HALF_UP)
                 .doubleValue();
     }
 
-    // 랜덤한 BoundingBox 선택
-    private static BoundingBox getRandomBoundingBox() {
-        int randomIndex = ThreadLocalRandom.current().nextInt(LAND_BOUNDING_BOXES.length);
-        return LAND_BOUNDING_BOXES[randomIndex];
+    private static BoundingBox getBoundingBox() {
+        return new BoundingBox(MIN_LAT, MAX_LAT, MIN_LNG, MAX_LNG);
     }
+
 }
