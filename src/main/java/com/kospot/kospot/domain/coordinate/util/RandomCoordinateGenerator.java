@@ -12,7 +12,7 @@ public class RandomCoordinateGenerator {
     private static final double MIN_LNG = 125.26000;
     private static final double MAX_LNG = 129.35;
 
-    private static final int DECIMAL_PLACES = 10;
+    private static final int DECIMAL_PLACES = 14;
 
     // 소수점 5자리로 위도 생성
     public static double generateRandomLatitude() {
