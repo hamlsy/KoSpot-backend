@@ -21,19 +21,21 @@ public class CoordinateServiceImpl implements CoordinateService{
     private final CoordinateIdCacheRepository coordinateIdCacheRepository;
     private final DynamicCoordinateRepositoryFactory factory;
 
-    //todo refactoring needed
+    /**
+     * todo 예외처리 리팩터링
+     * @param sidoName
+     * @return
+     */
+
     @Override
     public Location getRandomCoordinateBySido(String sidoName) {
         Sido sido = Sido.fromName(sidoName);
-        Long maxId = coordinateIdCacheRepository.findById(sido).orElseThrow(
-                () -> new IllegalArgumentException("캐시 테이블의 ID 값이 존재하지 않습니다.")
-        ).getMaxId();
+        Long maxId = getMaxId(sido);
 
         Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);
         BaseCoordinateRepository<?, Long> repository = factory.getRepository(sido);
 
         do {
-            //todo refactor exception
             if (repository.existsById(randomIndex)) {
                 break;
             }
@@ -45,21 +47,28 @@ public class CoordinateServiceImpl implements CoordinateService{
         );
     }
 
-    //todo refactoring needed
-//    private List<Coordinate> findCoordinatesBySido(String sidoString) {
-//        Sido sido = Sido.fromName(sidoString);
-//        return coordinateRepository.findByAddress_Sido(sido).orElseThrow(
-//                () -> new IllegalArgumentException("해당 시도의 좌표가 존재하지 않습니다.")
-//        );
-//    }
-
-    //todo refactoring needed
     @Override
-    public Coordinate getRandomCoordinate(){
-        List<Coordinate> coordinates = coordinateRepository.findAll();
-        int randomIndex = ThreadLocalRandom.current().nextInt(coordinates.size());
-        return coordinates.get(randomIndex);
+    public Coordinate getAllRandomCoordinate(){
+        Long maxId = getMaxId(Sido.NATIONWIDE);
+        Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);
+
+        do {
+            if (coordinateRepository.existsById(randomIndex)) {
+                break;
+            }
+            randomIndex++;
+        }while(true);
+
+        return coordinateRepository.findById(randomIndex).orElseThrow(
+                () -> new IllegalArgumentException("해당 시도의 좌표가 존재하지 않습니다.")
+        );
+
     }
 
+    private Long getMaxId(Sido sido){
+        return coordinateIdCacheRepository.findById(sido).orElseThrow(
+                () -> new IllegalArgumentException("캐시 테이블의 ID 값이 존재하지 않습니다.")
+        ).getMaxId();
+    }
 
 }
