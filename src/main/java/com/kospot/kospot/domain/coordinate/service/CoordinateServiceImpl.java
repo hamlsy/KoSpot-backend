@@ -15,6 +15,7 @@ public class CoordinateServiceImpl implements CoordinateService{
 
     private final CoordinateRepository coordinateRepository;
 
+    //todo refactoring needed
     @Override
     public Coordinate getRandomCoordinateBySido(String sido) {
         List<Coordinate> coordinates = findCoordinatesBySido(sido);
@@ -22,6 +23,7 @@ public class CoordinateServiceImpl implements CoordinateService{
         return coordinates.get(randomIndex);
     }
 
+    //todo refactoring needed
     private List<Coordinate> findCoordinatesBySido(String sidoString) {
         Sido sido = Sido.fromName(sidoString);
         return coordinateRepository.findByAddress_Sido(sido).orElseThrow(
