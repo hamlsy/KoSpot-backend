@@ -1,6 +1,6 @@
 package com.kospot.kospot.domain.coordinate.dto.response;
 
-import com.kospot.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 import lombok.Builder;
 import lombok.Getter;
 
