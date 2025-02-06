@@ -18,6 +18,8 @@ public class CoordinateServiceImpl implements CoordinateService{
     private final CoordinateRepository coordinateRepository;
     private final CoordinateIdCacheRepository coordinateIdCacheRepository;
 
+
+
     //todo refactoring needed
     @Override
     public Coordinate getRandomCoordinateBySido(String sidoName) {
