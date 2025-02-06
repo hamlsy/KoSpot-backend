@@ -1,7 +1,9 @@
 package com.kospot.kospot.domain.coordinate.service;
 
+import com.kospot.kospot.domain.coordinate.entity.Location;
 import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
 import com.kospot.kospot.domain.coordinate.repository.CoordinateRepository;
 import com.kospot.kospot.domain.coordinateIdCache.entity.CoordinateIdCache;
 import com.kospot.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
@@ -17,25 +19,30 @@ public class CoordinateServiceImpl implements CoordinateService{
 
     private final CoordinateRepository coordinateRepository;
     private final CoordinateIdCacheRepository coordinateIdCacheRepository;
-
-
+    private final DynamicCoordinateRepositoryFactory factory;
 
     //todo refactoring needed
     @Override
-    public Coordinate getRandomCoordinateBySido(String sidoName) {
+    public Location getRandomCoordinateBySido(String sidoName) {
         Sido sido = Sido.fromName(sidoName);
         Long maxId = coordinateIdCacheRepository.findById(sido).orElseThrow(
-                () -> new IllegalArgumentException("해당 시도의 좌표가 존재하지 않습니다.")
+                () -> new IllegalArgumentException("캐시 테이블의 ID 값이 존재하지 않습니다.")
         ).getMaxId();
 
         Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);
+        BaseCoordinateRepository<?, Long> repository = factory.getRepository(sido);
+
         do {
             //todo refactor exception
-
-            randomIndex = ThreadLocalRandom.current().nextLong(maxId);
+            if (repository.existsById(randomIndex)) {
+                break;
+            }
+            randomIndex++;
         }while(true);
 
-        return
+        return (Location) repository.findById(randomIndex).orElseThrow(
+                () -> new IllegalArgumentException("해당 시도의 좌표가 존재하지 않습니다.")
+        );
     }
 
     //todo refactoring needed
