@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.rank.entity;
+package com.kospot.kospot.domain.gameRank.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,4 +9,5 @@ public enum RankMode {
     ROAD_VIEW("ROADVIEW"), PHOTO("PHOTO");
 
     private final String key;
+
 }

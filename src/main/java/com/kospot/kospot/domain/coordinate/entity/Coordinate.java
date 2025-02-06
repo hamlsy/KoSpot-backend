@@ -6,9 +6,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Coordinate extends BaseTimeEntity {
@@ -21,11 +23,7 @@ public class Coordinate extends BaseTimeEntity {
 
     private double lng;
 
-    @Enumerated(EnumType.STRING)
-    private Region region;
-
-    private String detailAddress;
-
-
+    @Embedded
+    private Address address;
 
 }
