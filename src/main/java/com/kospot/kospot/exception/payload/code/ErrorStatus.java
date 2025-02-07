@@ -1,8 +1,11 @@
 package com.kospot.kospot.exception.payload.code;
 
+import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+
+import java.util.Arrays;
 
 import static org.springframework.http.HttpStatus.*;
 
