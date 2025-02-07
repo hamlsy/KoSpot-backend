@@ -1,5 +1,7 @@
 package com.kospot.kospot.domain.coordinate.entity.sido;
 
+import com.kospot.kospot.exception.object.domain.CoordinateHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -33,15 +35,13 @@ public enum Sido {
         return Arrays.stream(Sido.values())
                 .filter(r -> r.getName().equals(sidoName))
                 .findFirst()
-                //todo refactoring exception
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.SIDO_NOT_FOUND));
     }
 
     public static Sido fromKey(String key) {
         return Arrays.stream(Sido.values())
                 .filter(s -> s.name().equalsIgnoreCase(key))
                 .findFirst()
-                //todo refactoring exception
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Sido key: " + key));
+                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.SIDO_NOT_FOUND));
     }
 }
