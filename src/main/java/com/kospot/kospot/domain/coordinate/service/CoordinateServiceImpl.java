@@ -62,7 +62,7 @@ public class CoordinateServiceImpl implements CoordinateService {
         return ThreadLocalRandom.current().nextLong(maxId);
     }
 
-    // excel row -> Coordinate
+    //excel row -> Coordinate
     private Coordinate rowToCoordinate(Row row) {
         Sido sido = Sido.fromName(getCellString(row, 0));
         Sigungu sigungu = SigunguConverter.convertSidoToSigungu(sido, getCellString(row, 1));
