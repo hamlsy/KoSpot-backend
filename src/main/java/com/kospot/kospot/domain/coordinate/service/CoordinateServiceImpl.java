@@ -5,12 +5,10 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
 import com.kospot.kospot.domain.coordinate.repository.CoordinateRepository;
-import com.kospot.kospot.domain.coordinateIdCache.entity.CoordinateIdCache;
 import com.kospot.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service

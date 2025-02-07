@@ -28,8 +28,13 @@ public enum ErrorStatus implements BaseCode{
     AUTH_INVALID_AUTHENTICATION(UNAUTHORIZED, 4057, "유효하지 않은 인증 객체입니다."),
 
     //member error(4100 ~ 4149)
-    MEMBER_NOT_FOUND(NOT_FOUND, 4100,"찾을 수 없는 유저 정보입니다.");
+    MEMBER_NOT_FOUND(NOT_FOUND, 4100,"찾을 수 없는 유저 정보입니다."),
 
+    //coordinate error(4150 ~ 4199)
+    COORDINATE_NOT_FOUND(NOT_FOUND, 4150, "해당 좌표를 찾을 수 없습니다."),
+    SIDO_NOT_FOUND(NOT_FOUND, 4151, "해당 시도를 찾을 수 없습니다."),
+    COORDINATE_CACHE_TABLE_ID_NOT_FOUND(NOT_FOUND, 4152, "해당 좌표 캐시 테이블 ID를 찾을 수 없습니다."),
+    ;
 
 
     private final HttpStatus httpStatus;
