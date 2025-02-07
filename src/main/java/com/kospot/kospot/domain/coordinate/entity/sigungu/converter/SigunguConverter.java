@@ -1,9 +1,7 @@
 package com.kospot.kospot.domain.coordinate.entity.sigungu.converter;
 
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
-import com.kospot.kospot.domain.coordinate.entity.region.sigungu.*;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.*;
-import com.kospot.kospot.domain.coordinate.region.entity.sigungu.*;
 import jakarta.persistence.AttributeConverter;
 
 public class SigunguConverter implements AttributeConverter<Sigungu, String> {

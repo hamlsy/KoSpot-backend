@@ -5,11 +5,14 @@ import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.Sigungu;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Embeddable
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Address {
