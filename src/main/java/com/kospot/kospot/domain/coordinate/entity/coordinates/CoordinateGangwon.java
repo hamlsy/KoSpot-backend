@@ -5,5 +5,7 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class CoordinateGangwon extends Location {
-
+    public CoordinateGangwon(Coordinate coordinate){
+        super(coordinate);
+    }
 }

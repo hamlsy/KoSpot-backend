@@ -5,5 +5,7 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class CoordinateSejong extends Location {
-
+    public CoordinateSejong(Coordinate coordinate) {
+        super(coordinate);
+    }
 }

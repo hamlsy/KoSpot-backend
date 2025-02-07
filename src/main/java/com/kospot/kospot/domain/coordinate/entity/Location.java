@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.coordinate.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,11 @@ public abstract class Location extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private LocationType locationType;
+
+    public Location(Coordinate coordinate) {
+        this.address = coordinate.getAddress();
+        this.lng = coordinate.getLng();
+        this.lat = coordinate.getLat();
+    }
 
 }
