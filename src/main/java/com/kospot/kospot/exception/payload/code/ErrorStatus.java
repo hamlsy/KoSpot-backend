@@ -30,6 +30,8 @@ public enum ErrorStatus implements BaseCode{
     //member error(4100 ~ 4149)
     MEMBER_NOT_FOUND(NOT_FOUND, 4100,"찾을 수 없는 유저 정보입니다.");
 
+
+
     private final HttpStatus httpStatus;
     private final Integer code;
     private final String message;
