@@ -62,8 +62,8 @@ public class CoordinateServiceImpl implements CoordinateService {
         return ThreadLocalRandom.current().nextLong(maxId);
     }
 
-    // excel row -> Location
-    private Location rowToLocation(Row row) {
+    // excel row -> Coordinate
+    private Coordinate rowToCoordinate(Row row) {
         Sido sido = Sido.fromName(getCellString(row, 0));
         Sigungu sigungu = SigunguConverter.convertSidoToSigungu(sido, getCellString(row, 1));
         String detailAddress = getCellString(row, 2);
@@ -75,9 +75,10 @@ public class CoordinateServiceImpl implements CoordinateService {
                 .sigungu(sigungu)
                 .detailAddress(detailAddress)
                 .build();
-        return Location.builder()
-                .lat(lat)
+        return Coordinate.builder()
+                .address(address)
                 .lng(lng)
+                .lat(lat)
                 .build();
     }
 
