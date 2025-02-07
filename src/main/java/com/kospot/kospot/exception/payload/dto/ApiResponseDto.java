@@ -1,7 +1,6 @@
 package com.kospot.kospot.exception.payload.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.kospot.kospot.exception.payload.code.BaseCode;
 import com.kospot.kospot.exception.payload.code.Reason;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import lombok.AllArgsConstructor;

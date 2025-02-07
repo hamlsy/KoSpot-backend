@@ -22,8 +22,8 @@ public class CoordinateServiceImpl implements CoordinateService {
     public Location getRandomCoordinateBySido(String sidoKey) {
         Sido sido = Sido.fromKey(sidoKey);
         Long maxId = getMaxId(sido);
+        Long randomIndex = getRandomIndex(maxId);
 
-        Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);
         BaseCoordinateRepository<?, Long> repository = factory.getRepository(sido);
 
         while (!repository.existsById(randomIndex)) {
@@ -36,7 +36,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     @Override
     public Location getAllRandomCoordinate() {
         Long maxId = getMaxId(Sido.NATIONWIDE);
-        Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);
+        Long randomIndex = getRandomIndex(maxId);
 
         while (!coordinateAdaptor.queryExistsById(randomIndex)) {
             randomIndex++;
@@ -47,6 +47,10 @@ public class CoordinateServiceImpl implements CoordinateService {
 
     private Long getMaxId(Sido sido) {
         return coordinateIdCacheAdaptor.queryById(sido).getMaxId();
+    }
+
+    private Long getRandomIndex(Long maxId) {
+        return ThreadLocalRandom.current().nextLong(maxId);
     }
 
 }

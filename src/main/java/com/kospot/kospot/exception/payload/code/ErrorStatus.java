@@ -1,11 +1,8 @@
 package com.kospot.kospot.exception.payload.code;
 
-import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-
-import java.util.Arrays;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -37,6 +34,7 @@ public enum ErrorStatus implements BaseCode{
     COORDINATE_NOT_FOUND(NOT_FOUND, 4150, "해당 좌표를 찾을 수 없습니다."),
     SIDO_NOT_FOUND(NOT_FOUND, 4151, "해당 시도를 찾을 수 없습니다."),
     COORDINATE_CACHE_TABLE_ID_NOT_FOUND(NOT_FOUND, 4152, "해당 좌표 캐시 테이블 ID를 찾을 수 없습니다."),
+
     //coordinate repository factory error(4200)
     DYNAMIC_COORDINATE_REPOSITORY_FACTORY_NOT_FOUND(NOT_FOUND, 4200, "해당 시도에 대한 레포지토리를 찾을 수 없습니다."),
     ;
