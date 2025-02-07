@@ -23,13 +23,13 @@ public class CoordinateServiceImpl implements CoordinateService{
 
     /**
      * todo 예외처리 리팩터링
-     * @param sidoName
+     * sidoKey
      * @return
      */
 
     @Override
-    public Location getRandomCoordinateBySido(String sidoName) {
-        Sido sido = Sido.fromName(sidoName);
+    public Location getRandomCoordinateBySido(String sidoKey) {
+        Sido sido = Sido.fromKey(sidoKey);
         Long maxId = getMaxId(sido);
 
         Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);

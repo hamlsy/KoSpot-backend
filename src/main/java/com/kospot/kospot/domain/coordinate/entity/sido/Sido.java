@@ -33,7 +33,15 @@ public enum Sido {
         return Arrays.stream(Sido.values())
                 .filter(r -> r.getName().equals(sidoName))
                 .findFirst()
+                //todo refactoring exception
                 .orElseThrow(() -> new IllegalArgumentException());
     }
 
+    public static Sido fromKey(String key) {
+        return Arrays.stream(Sido.values())
+                .filter(s -> s.name().equalsIgnoreCase(key))
+                .findFirst()
+                //todo refactoring exception
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Sido key: " + key));
+    }
 }
