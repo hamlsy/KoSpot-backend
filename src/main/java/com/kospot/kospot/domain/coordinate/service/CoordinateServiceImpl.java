@@ -2,10 +2,12 @@ package com.kospot.kospot.domain.coordinate.service;
 
 import com.kospot.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
 import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
 import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,6 +19,9 @@ public class CoordinateServiceImpl implements CoordinateService {
     private final CoordinateAdaptor coordinateAdaptor;
     private final CoordinateIdCacheAdaptor coordinateIdCacheAdaptor;
     private final DynamicCoordinateRepositoryFactory factory;
+    private final JdbcTemplate jdbcTemplate;
+
+    private static final String FILE_PATH = "/data/excel/"; //todo refactor
 
     @Override
     public Location getRandomCoordinateBySido(String sidoKey) {
