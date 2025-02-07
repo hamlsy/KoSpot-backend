@@ -6,8 +6,10 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
 import com.kospot.kospot.domain.coordinate.repository.CoordinateRepository;
+import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
 import com.kospot.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
 import com.kospot.kospot.exception.object.domain.CoordinateHandler;
+import com.kospot.kospot.exception.object.domain.CoordinateIdCacheHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CoordinateServiceImpl implements CoordinateService{
 
     private final CoordinateAdaptor coordinateAdaptor;
-    private final CoordinateIdCacheRepository coordinateIdCacheRepository;
+    private final CoordinateIdCacheAdaptor coordinateIdCacheAdaptor;
     private final DynamicCoordinateRepositoryFactory factory;
 
     @Override
@@ -51,9 +53,7 @@ public class CoordinateServiceImpl implements CoordinateService{
     }
 
     private Long getMaxId(Sido sido){
-        return coordinateIdCacheRepository.findById(sido).orElseThrow(
-                () -> new CoordinateHandler(ErrorStatus.COORDINATE_CACHE_TABLE_ID_NOT_FOUND)
-        ).getMaxId();
+        return coordinateIdCacheAdaptor.queryById(sido).getMaxId();
     }
 
 }
