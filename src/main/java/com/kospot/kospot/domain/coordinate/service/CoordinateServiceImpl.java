@@ -30,12 +30,9 @@ public class CoordinateServiceImpl implements CoordinateService{
         Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);
         BaseCoordinateRepository<?, Long> repository = factory.getRepository(sido);
 
-        do {
-            if (repository.existsById(randomIndex)) {
-                break;
-            }
+        while (!repository.existsById(randomIndex)) {
             randomIndex++;
-        }while(true);
+        }
 
         return coordinateAdaptor.queryById(randomIndex);
     }
@@ -45,12 +42,9 @@ public class CoordinateServiceImpl implements CoordinateService{
         Long maxId = getMaxId(Sido.NATIONWIDE);
         Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);
 
-        do {
-            if (coordinateAdaptor.queryExistsById(randomIndex)) {
-                break;
-            }
+        while (!coordinateAdaptor.queryExistsById(randomIndex)) {
             randomIndex++;
-        }while(true);
+        }
 
         return coordinateAdaptor.queryById(randomIndex);
 
