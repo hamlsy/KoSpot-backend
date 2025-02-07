@@ -6,6 +6,8 @@ import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
 import com.kospot.kospot.domain.coordinate.repository.CoordinateRepository;
 import com.kospot.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
+import com.kospot.kospot.exception.object.domain.CoordinateHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +20,6 @@ public class CoordinateServiceImpl implements CoordinateService{
     private final CoordinateRepository coordinateRepository;
     private final CoordinateIdCacheRepository coordinateIdCacheRepository;
     private final DynamicCoordinateRepositoryFactory factory;
-
-    /**
-     * todo 예외처리 리팩터링
-     * sidoKey
-     * @return
-     */
 
     @Override
     public Location getRandomCoordinateBySido(String sidoKey) {
@@ -41,7 +37,7 @@ public class CoordinateServiceImpl implements CoordinateService{
         }while(true);
 
         return (Location) repository.findById(randomIndex).orElseThrow(
-                () -> new IllegalArgumentException("해당 시도의 좌표가 존재하지 않습니다.")
+                () -> new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND)
         );
     }
 
@@ -58,14 +54,14 @@ public class CoordinateServiceImpl implements CoordinateService{
         }while(true);
 
         return coordinateRepository.findById(randomIndex).orElseThrow(
-                () -> new IllegalArgumentException("해당 시도의 좌표가 존재하지 않습니다.")
+                () -> new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND)
         );
 
     }
 
     private Long getMaxId(Sido sido){
         return coordinateIdCacheRepository.findById(sido).orElseThrow(
-                () -> new IllegalArgumentException("캐시 테이블의 ID 값이 존재하지 않습니다.")
+                () -> new CoordinateHandler(ErrorStatus.COORDINATE_CACHE_TABLE_ID_NOT_FOUND)
         ).getMaxId();
     }
 
