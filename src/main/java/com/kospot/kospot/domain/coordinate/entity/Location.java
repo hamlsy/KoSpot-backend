@@ -24,4 +24,8 @@ public abstract class Location extends BaseTimeEntity {
 
     @Embedded
     private Address address;
+
+    @Enumerated(EnumType.STRING)
+    private LocationType locationType;
+
 }

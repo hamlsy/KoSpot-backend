@@ -7,4 +7,6 @@ public interface CoordinateService {
     Location getRandomCoordinateBySido(String sido);
 
     Location getAllRandomCoordinate();
+
+
 }
