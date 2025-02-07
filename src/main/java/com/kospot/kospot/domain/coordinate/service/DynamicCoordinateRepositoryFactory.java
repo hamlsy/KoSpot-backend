@@ -4,6 +4,8 @@ import com.kospot.kospot.domain.coordinate.aop.SidoRepository;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
 import com.kospot.kospot.domain.coordinate.repository.CoordinateSeoulRepository;
+import com.kospot.kospot.exception.object.domain.CoordinateHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,9 +31,8 @@ public class DynamicCoordinateRepositoryFactory {
     @SuppressWarnings("unchecked")
     public <T> BaseCoordinateRepository<T, Long> getRepository(Sido sido) {
         BaseCoordinateRepository<?, Long> repository = repositoryCache.get(sido);
-        //todo refactoring exception
         if (repository == null) {
-            throw new IllegalArgumentException("Repository not found for sido: " + sido);
+            throw new CoordinateHandler(ErrorStatus.DYNAMIC_COORDINATE_REPOSITORY_FACTORY_NOT_FOUND);
         }
         return (BaseCoordinateRepository<T, Long>) repository;
     }
