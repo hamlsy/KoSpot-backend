@@ -1,8 +1,8 @@
 package com.kospot.kospot.domain.coordinate.entity;
 
-import com.kospot.kospot.domain.coordinate.entity.region.converter.SigunguConverter;
-import com.kospot.kospot.domain.coordinate.entity.region.sido.Sido;
-import com.kospot.kospot.domain.coordinate.entity.region.sigungu.Sigungu;
+import com.kospot.kospot.domain.coordinate.entity.sigungu.converter.SigunguConverter;
+import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.kospot.domain.coordinate.entity.sigungu.Sigungu;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
