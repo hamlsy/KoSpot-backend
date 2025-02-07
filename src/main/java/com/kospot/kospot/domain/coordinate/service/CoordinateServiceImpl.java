@@ -2,15 +2,9 @@ package com.kospot.kospot.domain.coordinate.service;
 
 import com.kospot.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
 import com.kospot.kospot.domain.coordinate.entity.Location;
-import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
-import com.kospot.kospot.domain.coordinate.repository.CoordinateRepository;
 import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
-import com.kospot.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
-import com.kospot.kospot.exception.object.domain.CoordinateHandler;
-import com.kospot.kospot.exception.object.domain.CoordinateIdCacheHandler;
-import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
-public class CoordinateServiceImpl implements CoordinateService{
+public class CoordinateServiceImpl implements CoordinateService {
 
     private final CoordinateAdaptor coordinateAdaptor;
     private final CoordinateIdCacheAdaptor coordinateIdCacheAdaptor;
@@ -40,7 +34,7 @@ public class CoordinateServiceImpl implements CoordinateService{
     }
 
     @Override
-    public Location getAllRandomCoordinate(){
+    public Location getAllRandomCoordinate() {
         Long maxId = getMaxId(Sido.NATIONWIDE);
         Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);
 
@@ -49,10 +43,9 @@ public class CoordinateServiceImpl implements CoordinateService{
         }
 
         return coordinateAdaptor.queryById(randomIndex);
-
     }
 
-    private Long getMaxId(Sido sido){
+    private Long getMaxId(Sido sido) {
         return coordinateIdCacheAdaptor.queryById(sido).getMaxId();
     }
 
