@@ -7,5 +7,5 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 public interface CoordinateService {
     Location getRandomCoordinateBySido(String sido);
 
-    Coordinate getAllRandomCoordinate();
+    Location getAllRandomCoordinate();
 }

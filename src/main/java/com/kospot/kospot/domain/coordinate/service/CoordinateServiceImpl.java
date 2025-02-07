@@ -1,5 +1,6 @@
 package com.kospot.kospot.domain.coordinate.service;
 
+import com.kospot.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
 import com.kospot.kospot.domain.coordinate.entity.Location;
 import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
@@ -17,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @RequiredArgsConstructor
 public class CoordinateServiceImpl implements CoordinateService{
 
-    private final CoordinateRepository coordinateRepository;
+    private final CoordinateAdaptor coordinateAdaptor;
     private final CoordinateIdCacheRepository coordinateIdCacheRepository;
     private final DynamicCoordinateRepositoryFactory factory;
 
@@ -36,26 +37,22 @@ public class CoordinateServiceImpl implements CoordinateService{
             randomIndex++;
         }while(true);
 
-        return (Location) repository.findById(randomIndex).orElseThrow(
-                () -> new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND)
-        );
+        return coordinateAdaptor.queryById(randomIndex);
     }
 
     @Override
-    public Coordinate getAllRandomCoordinate(){
+    public Location getAllRandomCoordinate(){
         Long maxId = getMaxId(Sido.NATIONWIDE);
         Long randomIndex = ThreadLocalRandom.current().nextLong(maxId);
 
         do {
-            if (coordinateRepository.existsById(randomIndex)) {
+            if (coordinateAdaptor.queryExistsById(randomIndex)) {
                 break;
             }
             randomIndex++;
         }while(true);
 
-        return coordinateRepository.findById(randomIndex).orElseThrow(
-                () -> new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND)
-        );
+        return coordinateAdaptor.queryById(randomIndex);
 
     }
 
