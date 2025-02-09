@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.coordinate.service;
 
 import com.kospot.kospot.domain.coordinate.entity.Address;
+import com.kospot.kospot.domain.coordinate.entity.LocationType;
 import com.kospot.kospot.domain.coordinate.entity.coordinates.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.Sigungu;
@@ -22,9 +23,13 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService{
         Sido sido = Sido.fromName(getCellString(row, 0));
         Sigungu sigungu = SigunguConverter.convertSidoToSigungu(sido, getCellString(row, 1));
         String detailAddress = getCellString(row, 2);
-        String poiName = getCellString(row,3);
+
         double lng = row.getCell(4).getNumericCellValue();
         double lat = row.getCell(5).getNumericCellValue();
+
+        String poiName = getCellString(row,7); //H line
+        String locationTypeString = getCellString(row,8); //I line
+        LocationType locationType = LocationType.fromString(locationTypeString);
 
         Address address = Address.builder()
                 .sido(sido)
@@ -33,9 +38,10 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService{
                 .build();
         return Coordinate.builder()
                 .address(address)
+                .poiName(poiName)
                 .lng(lng)
                 .lat(lat)
-                .poiName(poiName)
+                .locationType(locationType)
                 .build();
     }
 
