@@ -16,10 +16,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -64,9 +62,14 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
                 // BATCH_SIZE마다 저장
                 if (coordinatesMap.get(sido).size() >= BATCH_SIZE) {
-                    saveLocations(sido, coordinatesMap.get(sido));
+                    saveCoordinates(sido, coordinatesMap.get(sido));
                     coordinatesMap.get(sido).clear(); // 리스트 초기화
                 }
+            }
+
+            // 나머지 저장
+            for(Sido sido : coordinatesMap.keySet()) {
+                saveCoordinates(sido, coordinatesMap.get(sido));
             }
 
         } catch (FileNotFoundException e) {
@@ -77,8 +80,9 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
     }
 
-    private void saveLocations(Sido sido, List<Coordinate> coordinates) {
+    private void saveCoordinates(Sido sido, List<Coordinate> coordinates) {
         repositoryFactory.getRepository(sido).saveAll(coordinates);
+        System.out.println(repositoryFactory.getRepository(sido).getClass().getName() + " saved " + coordinates.size() + " coordinates");
     }
 
     //excel row -> Coordinate
