@@ -1,15 +1,13 @@
 package com.kospot.kospot.domain.coordinate.controller;
 
 import com.kospot.kospot.domain.coordinate.dto.response.CoordinateResponse;
-import com.kospot.kospot.domain.coordinate.dto.response.RandomCoordinateResponse;
+import com.kospot.kospot.domain.coordinate.service.CoordinateExcelService;
 import com.kospot.kospot.domain.coordinate.service.CoordinateService;
+import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CoordinateController {
 
     private final CoordinateService coordinateService;
+    private final CoordinateExcelService coordinateExcelService;
 
     /**
      * 랜덤 좌표
@@ -40,6 +39,18 @@ public class CoordinateController {
         );
     }
 
+    /**
+     * todo refactoring, 테스트용
+     * 추후 관리지 권한으로 전환
+     * @param filePath
+     * @return
+     */
 
+    @GetMapping("/importFromExcel")
+    public ApiResponseDto<?> importFromExcel(@RequestParam("filePath") String filePath) {
+        log.info("Controller method called");
+        coordinateExcelService.importCoordinatesFromExcel(filePath);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
 
 }
