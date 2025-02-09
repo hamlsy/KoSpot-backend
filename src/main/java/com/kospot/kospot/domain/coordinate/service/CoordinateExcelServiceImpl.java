@@ -15,11 +15,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -29,16 +31,16 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
     private final DynamicCoordinateRepositoryFactory repositoryFactory;
 
-    private final JdbcTemplate jdbcTemplate;
-    private static final String FILE_PATH = "/data/excel/"; //todo refactor
+    private static final String FILE_PATH = "data/excel/";
 
     private final int BATCH_SIZE = 1000;
 
     @Override
     @Transactional
-    public void importCoordinatesFromExcel(String filePath) {
-        try{
-            FileInputStream fis = new FileInputStream(new File(filePath));
+    public void importCoordinatesFromExcel(String fileName) {
+        try {
+            ClassPathResource resource = new ClassPathResource(FILE_PATH + fileName);
+            FileInputStream fis = new FileInputStream(resource.getFile());
             //excel -> Apache POI workbook 객체로 로드
             Workbook workbook = WorkbookFactory.create(fis);
             Sheet sheet = workbook.getSheetAt(0); // 첫 번째 시트
@@ -47,9 +49,9 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
             // 지역별 좌표 리스트를 저장하는 Map
             Map<Sido, List<Coordinate>> coordinatesMap = new HashMap<>();
 
-            while(rowIterator.hasNext()){
+            while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                if(row.getRowNum() == 0) continue; // 첫 번째 줄은 헤더이므로 건너뜀
+                if (row.getRowNum() == 0) continue; // 첫 번째 줄은 헤더이므로 건너뜀
 
                 Coordinate coordinate = rowToCoordinate(row);
                 Sido sido = coordinate.getAddress().getSido();
@@ -67,8 +69,9 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
                 }
             }
 
-
-        }catch (IOException e){
+        } catch (FileNotFoundException e) {
+            throw new CoordinateHandler(ErrorStatus.FILE_NOT_FOUND);
+        } catch (IOException e) {
             throw new CoordinateHandler(ErrorStatus.FILE_READ_ERROR);
         }
 

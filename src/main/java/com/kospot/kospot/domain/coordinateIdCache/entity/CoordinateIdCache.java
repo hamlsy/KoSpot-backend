@@ -17,7 +17,6 @@ import lombok.experimental.SuperBuilder;
 public class CoordinateIdCache extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Enumerated(EnumType.STRING)
     private Sido sido;
 

@@ -38,8 +38,9 @@ public enum ErrorStatus implements BaseCode{
     //coordinate repository factory error(4200)
     DYNAMIC_COORDINATE_REPOSITORY_FACTORY_NOT_FOUND(NOT_FOUND, 4200, "해당 시도에 대한 레포지토리를 찾을 수 없습니다."),
 
-    // File Read Error (4201 ~ 4210)
+    // File Error (4201 ~ 4210)
     FILE_READ_ERROR(INTERNAL_SERVER_ERROR, 4201, "파일을 읽는 중 오류가 발생했습니다."),
+    FILE_NOT_FOUND(NOT_FOUND, 4202, "파일을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;

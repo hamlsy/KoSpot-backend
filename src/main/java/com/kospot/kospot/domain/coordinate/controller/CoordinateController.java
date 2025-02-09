@@ -42,14 +42,14 @@ public class CoordinateController {
     /**
      * todo refactoring, 테스트용
      * 추후 관리지 권한으로 전환
-     * @param filePath
+     * @param fileName
      * @return
      */
 
     @GetMapping("/importFromExcel")
-    public ApiResponseDto<?> importFromExcel(@RequestParam("filePath") String filePath) {
+    public ApiResponseDto<?> importFromExcel(@RequestParam("fileName") String fileName) {
         log.info("Controller method called");
-        coordinateExcelService.importCoordinatesFromExcel(filePath);
+        coordinateExcelService.importCoordinatesFromExcel(fileName);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
