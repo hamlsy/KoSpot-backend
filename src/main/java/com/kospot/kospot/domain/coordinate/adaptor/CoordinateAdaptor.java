@@ -1,9 +1,9 @@
 package com.kospot.kospot.domain.coordinate.adaptor;
 
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 
 public interface CoordinateAdaptor {
-    Location queryById(Long id);
+    Coordinate queryById(Long id);
 
     boolean queryExistsById(Long id);
 }

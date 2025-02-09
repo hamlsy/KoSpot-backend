@@ -1,12 +1,12 @@
 package com.kospot.kospot.domain.coordinate.entity.converter;
 
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.coordinates.*;
 import com.kospot.kospot.exception.object.domain.CoordinateHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 
 public class CoordinateConverter {
-    public static Location convertToDetailCoordinate(Coordinate coordinate){
+    public static Coordinate convertToDetailCoordinate(CoordinateNationwide coordinate){
         return switch (coordinate.getAddress().getSido()){
             case SEOUL -> new CoordinateSeoul(coordinate);
             case BUSAN -> new CoordinateBusan(coordinate);

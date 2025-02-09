@@ -1,7 +1,7 @@
 package com.kospot.kospot.domain.coordinate.dto.response;
 
 import com.kospot.kospot.domain.coordinate.entity.Address;
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,7 +15,7 @@ public class CoordinateResponse {
     private double lng;
     private LocalDateTime createdDate;
 
-    public static CoordinateResponse from(Location coordinate) {
+    public static CoordinateResponse from(Coordinate coordinate) {
         return CoordinateResponse.builder()
                 .address(coordinate.getAddress())
                 .lat(coordinate.getLat())

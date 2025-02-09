@@ -1,12 +1,11 @@
 package com.kospot.kospot.domain.coordinate.service;
 
 import com.kospot.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
 import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -20,7 +19,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     private final DynamicCoordinateRepositoryFactory factory;
 
     @Override
-    public Location getRandomCoordinateBySido(String sidoKey) {
+    public Coordinate getRandomCoordinateBySido(String sidoKey) {
         Sido sido = Sido.fromKey(sidoKey);
         Long maxId = getMaxId(sido);
         Long randomIndex = getRandomIndex(maxId);
@@ -35,7 +34,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     }
 
     @Override
-    public Location getAllRandomCoordinate() {
+    public Coordinate getAllRandomCoordinate() {
         Long maxId = getMaxId(Sido.NATIONWIDE);
         Long randomIndex = getRandomIndex(maxId);
 

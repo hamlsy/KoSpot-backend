@@ -1,6 +1,6 @@
 package com.kospot.kospot.coordinate.service;
 
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.service.CoordinateService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +17,7 @@ public class CoordinateServiceTest {
 
 
     @Mock
-    private List<Location> coordinates;
+    private List<Coordinate> coordinates;
 
     @BeforeEach
     void setUp(){

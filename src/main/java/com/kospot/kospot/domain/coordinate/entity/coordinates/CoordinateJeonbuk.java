@@ -1,11 +1,11 @@
 package com.kospot.kospot.domain.coordinate.entity.coordinates;
 
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import jakarta.persistence.Entity;
 
 @Entity
-public class CoordinateJeonbuk extends Location {
-    public CoordinateJeonbuk(Coordinate coordinate){
+public class CoordinateJeonbuk extends Coordinate {
+    public CoordinateJeonbuk(CoordinateNationwide coordinate){
         super(coordinate);
     }
 }

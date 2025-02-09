@@ -1,12 +1,12 @@
 package com.kospot.kospot.domain.coordinate.service;
 
 
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 
 public interface CoordinateService {
-    Location getRandomCoordinateBySido(String sido);
+    Coordinate getRandomCoordinateBySido(String sido);
 
-    Location getAllRandomCoordinate();
+    Coordinate getAllRandomCoordinate();
 
 
 }
