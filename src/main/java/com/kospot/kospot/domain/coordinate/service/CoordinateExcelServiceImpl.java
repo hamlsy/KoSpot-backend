@@ -69,8 +69,7 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
 
         }catch (IOException e){
-            //todo exception refactoring
-            throw new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND);
+            throw new CoordinateHandler(ErrorStatus.FILE_READ_ERROR);
         }
 
     }
