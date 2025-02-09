@@ -23,6 +23,8 @@ public abstract class Location extends BaseTimeEntity {
 
     private double lng;
 
+    private String poiName;
+
     @Embedded
     private Address address;
 

@@ -18,9 +18,6 @@ public class CoordinateServiceImpl implements CoordinateService {
     private final CoordinateAdaptor coordinateAdaptor;
     private final CoordinateIdCacheAdaptor coordinateIdCacheAdaptor;
     private final DynamicCoordinateRepositoryFactory factory;
-    private final JdbcTemplate jdbcTemplate;
-
-    private static final String FILE_PATH = "/data/excel/"; //todo refactor
 
     @Override
     public Location getRandomCoordinateBySido(String sidoKey) {
