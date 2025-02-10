@@ -8,6 +8,7 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateNationwi
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.Sigungu;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.converter.SigunguConverter;
+import com.kospot.kospot.domain.coordinate.repository.CoordinateNationwideRepository;
 import com.kospot.kospot.exception.object.domain.CoordinateHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.transaction.Transactional;
@@ -29,10 +30,13 @@ import java.util.*;
 public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
     private final DynamicCoordinateRepositoryFactory repositoryFactory;
+    private final CoordinateNationwideRepository coordinateNationwideRepository;
 
     private static final String FILE_PATH = "data/excel/";
 
     private final int BATCH_SIZE = 1000;
+
+    private final Sido NATIONWIDE = Sido.NATIONWIDE;
 
     @Override
     @Transactional
@@ -59,19 +63,19 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
                 coordinatesMap.putIfAbsent(sido, new ArrayList<>());
                 coordinatesMap.get(sido).add(coordinate);
 
-                coordinatesMap.putIfAbsent(Sido.NATIONWIDE, new ArrayList<>());
-                coordinatesMap.get(Sido.NATIONWIDE).add(coordinateNationwide);
+                coordinatesMap.putIfAbsent(NATIONWIDE, new ArrayList<>());
+                coordinatesMap.get(NATIONWIDE).add(coordinateNationwide);
 
                 // BATCH_SIZE마다 저장
                 // todo refactoring
-                if (coordinatesMap.get(sido).size() >= BATCH_SIZE) {
+                if (isBatchSizeReached(sido, coordinatesMap)) {
                     saveCoordinates(sido, coordinatesMap.get(sido));
                     coordinatesMap.get(sido).clear();
                 }
 
-                if (coordinatesMap.get(Sido.NATIONWIDE).size() >= BATCH_SIZE) {
-                    saveCoordinates(sido, coordinatesMap.get(sido));
-                    coordinatesMap.get(sido).clear();
+                if (isBatchSizeReached(NATIONWIDE, coordinatesMap)) {
+                    saveCoordinates(NATIONWIDE, coordinatesMap.get(NATIONWIDE));
+                    coordinatesMap.get(NATIONWIDE).clear();
                 }
 
             }
@@ -87,6 +91,10 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
             throw new CoordinateHandler(ErrorStatus.FILE_READ_ERROR);
         }
 
+    }
+
+    private boolean isBatchSizeReached(Sido sido, Map<Sido, List<Coordinate>> coordinatesMap) {
+        return coordinatesMap.get(sido).size() >= BATCH_SIZE;
     }
 
     private void saveCoordinates(Sido sido, List<Coordinate> coordinates) {
