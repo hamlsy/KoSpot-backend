@@ -63,14 +63,21 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
                 coordinatesMap.get(Sido.NATIONWIDE).add(coordinateNationwide);
 
                 // BATCH_SIZE마다 저장
+                // todo refactoring
                 if (coordinatesMap.get(sido).size() >= BATCH_SIZE) {
                     saveCoordinates(sido, coordinatesMap.get(sido));
-                    coordinatesMap.get(sido).clear(); // 리스트 초기화
+                    coordinatesMap.get(sido).clear();
                 }
+
+                if (coordinatesMap.get(Sido.NATIONWIDE).size() >= BATCH_SIZE) {
+                    saveCoordinates(sido, coordinatesMap.get(sido));
+                    coordinatesMap.get(sido).clear();
+                }
+
             }
 
             // 나머지 저장
-            for(Sido sido : coordinatesMap.keySet()) {
+            for (Sido sido : coordinatesMap.keySet()) {
                 saveCoordinates(sido, coordinatesMap.get(sido));
             }
 
@@ -84,7 +91,6 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
     private void saveCoordinates(Sido sido, List<Coordinate> coordinates) {
         repositoryFactory.getRepository(sido).saveAll(coordinates);
-        System.out.println(repositoryFactory.getRepository(sido).getClass().getName() + " saved " + coordinates.size() + " coordinates");
     }
 
     //excel row -> CoordinateNationwide
