@@ -8,7 +8,6 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateNationwi
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.Sigungu;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.converter.SigunguConverter;
-import com.kospot.kospot.domain.coordinate.repository.CoordinateNationwideRepository;
 import com.kospot.kospot.exception.object.domain.CoordinateHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.transaction.Transactional;
@@ -30,12 +29,9 @@ import java.util.*;
 public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
     private final DynamicCoordinateRepositoryFactory repositoryFactory;
-    private final CoordinateNationwideRepository coordinateNationwideRepository;
-
     private static final String FILE_PATH = "data/excel/";
 
     private final int BATCH_SIZE = 1000;
-
     private final Sido NATIONWIDE = Sido.NATIONWIDE;
 
     @Override
@@ -44,6 +40,7 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
         try {
             ClassPathResource resource = new ClassPathResource(FILE_PATH + fileName);
             FileInputStream fis = new FileInputStream(resource.getFile());
+
             //excel -> Apache POI workbook 객체로 로드
             Workbook workbook = WorkbookFactory.create(fis);
             Sheet sheet = workbook.getSheetAt(0); // 첫 번째 시트
@@ -60,13 +57,15 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
                 Coordinate coordinate = CoordinateConverter.convertToDetailCoordinate(coordinateNationwide);
                 Sido sido = coordinate.getAddress().getSido();
 
+                // detail coordinate
                 coordinatesMap.putIfAbsent(sido, new ArrayList<>());
                 coordinatesMap.get(sido).add(coordinate);
 
+                // nation wide coordinate
                 coordinatesMap.putIfAbsent(NATIONWIDE, new ArrayList<>());
                 coordinatesMap.get(NATIONWIDE).add(coordinateNationwide);
 
-                // BATCH_SIZE마다 저장
+                // BATCH_SIZE 마다 저장
                 // todo refactoring
                 if (isBatchSizeReached(sido, coordinatesMap)) {
                     saveCoordinates(sido, coordinatesMap.get(sido));
