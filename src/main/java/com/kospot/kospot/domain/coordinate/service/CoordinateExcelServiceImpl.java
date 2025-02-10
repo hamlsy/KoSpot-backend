@@ -3,6 +3,7 @@ package com.kospot.kospot.domain.coordinate.service;
 import com.kospot.kospot.domain.coordinate.entity.Address;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.LocationType;
+import com.kospot.kospot.domain.coordinate.entity.converter.CoordinateConverter;
 import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.Sigungu;
@@ -51,14 +52,15 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
                 Row row = rowIterator.next();
                 if (row.getRowNum() == 0) continue; // 첫 번째 줄은 헤더이므로 건너뜀
 
-                Coordinate coordinate = rowToCoordinate(row);
+                CoordinateNationwide coordinateNationwide = rowToCoordinateNationwide(row);
+                Coordinate coordinate = CoordinateConverter.convertToDetailCoordinate(coordinateNationwide);
                 Sido sido = coordinate.getAddress().getSido();
 
                 coordinatesMap.putIfAbsent(sido, new ArrayList<>());
                 coordinatesMap.get(sido).add(coordinate);
 
                 coordinatesMap.putIfAbsent(Sido.NATIONWIDE, new ArrayList<>());
-                coordinatesMap.get(Sido.NATIONWIDE).add(coordinate);
+                coordinatesMap.get(Sido.NATIONWIDE).add(coordinateNationwide);
 
                 // BATCH_SIZE마다 저장
                 if (coordinatesMap.get(sido).size() >= BATCH_SIZE) {
@@ -85,8 +87,8 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
         System.out.println(repositoryFactory.getRepository(sido).getClass().getName() + " saved " + coordinates.size() + " coordinates");
     }
 
-    //excel row -> Coordinate
-    private CoordinateNationwide rowToCoordinate(Row row) {
+    //excel row -> CoordinateNationwide
+    private CoordinateNationwide rowToCoordinateNationwide(Row row) {
         Sido sido = Sido.fromName(getCellString(row, 0));
         Sigungu sigungu = SigunguConverter.convertSidoToSigungu(sido, getCellString(row, 1));
         String detailAddress = getCellString(row, 2);
@@ -103,6 +105,7 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
                 .sigungu(sigungu)
                 .detailAddress(detailAddress)
                 .build();
+
         return CoordinateNationwide.builder()
                 .address(address)
                 .poiName(poiName)

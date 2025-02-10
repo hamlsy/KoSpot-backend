@@ -6,7 +6,7 @@ import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import org.springframework.stereotype.Repository;
 
 @SidoRepository(Sido.SEOUL)
-@Repository
+//@Repository
 public interface CoordinateSeoulRepository extends BaseCoordinateRepository<CoordinateSeoul, Long> {
 
 }

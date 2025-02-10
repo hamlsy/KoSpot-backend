@@ -35,6 +35,8 @@ public abstract class Coordinate extends BaseTimeEntity {
         this.address = coordinate.getAddress();
         this.lng = coordinate.getLng();
         this.lat = coordinate.getLat();
+        this.poiName = coordinate.getPoiName();
+        this.locationType = coordinate.getLocationType();
     }
 
 }

@@ -24,8 +24,6 @@ public class DynamicCoordinateRepositoryFactory {
         System.out.println("Total repositories: " + repositories.size());
         repositories.forEach(repo -> {
             Class<?> actualClass = AopProxyUtils.ultimateTargetClass(repo);
-            System.out.println("Repository class: " + actualClass.getName());
-            System.out.println("Has SidoRepository annotation: " + actualClass.isAnnotationPresent(SidoRepository.class));
             if (actualClass.isAnnotationPresent(SidoRepository.class)) {
                 System.out.println("Sido value: " + actualClass.getAnnotation(SidoRepository.class).value());
             }
