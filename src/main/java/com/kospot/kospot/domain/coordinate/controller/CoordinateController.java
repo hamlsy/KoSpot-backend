@@ -24,7 +24,6 @@ public class CoordinateController {
      */
     @GetMapping("/randomCoord/{sido}")
     public ApiResponseDto<CoordinateResponse> getRandomCoordBySido(@PathVariable("sido") String sido) {
-        log.info("Controller method called");
         return ApiResponseDto.onSuccess(CoordinateResponse.from(
                 coordinateService.getRandomCoordinateBySido(sido)
         ));
@@ -32,7 +31,6 @@ public class CoordinateController {
 
     @GetMapping("/randomCoord")
     public ApiResponseDto<CoordinateResponse> getRandomCoord() {
-        log.info("Controller method called");
         return ApiResponseDto.onSuccess(CoordinateResponse.from(
                 coordinateService.getAllRandomCoordinate()
                 )
@@ -42,13 +40,11 @@ public class CoordinateController {
     /**
      * todo refactoring, 테스트용
      * 추후 관리지 권한으로 전환
-     * @param fileName
      * @return
      */
 
     @GetMapping("/importFromExcel")
     public ApiResponseDto<?> importFromExcel(@RequestParam("fileName") String fileName) {
-        log.info("Controller method called");
         coordinateExcelService.importCoordinatesFromExcel(fileName);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }

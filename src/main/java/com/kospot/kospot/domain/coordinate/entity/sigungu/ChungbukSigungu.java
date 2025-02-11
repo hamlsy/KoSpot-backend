@@ -8,21 +8,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ChungbukSigungu implements Sigungu {
 
-    GYERYONG_SI("계룡시"),
-    GONGJU_SI("공주시"),
-    GEUMSAN_GUN("금산군"),
-    NONSAN_SI("논산시"),
-    DANGJIN_SI("당진시"),
-    BORYEONG_SI("보령시"),
-    BUYEOGUN("부여군"),
-    SEOSAN_SI("서산시"),
-    SEOCHEON_GUN("서천군"),
-    ASAN_SI("아산시"),
-    YESAN_GUN("예산군"),
-    CHEONAN_SI("천안시"),
-    CHEONGYANG_GUN("청양군"),
-    TAEAN_GUN("태안군"),
-    HONGSEONG_GUN("홍성군"),
+    CHEONGJU_SI("청주시"),
+    CHUNGJU_SI("충주시"),
+    JECHEON_SI("제천시"),
+    BOEUN_GUN("보은군"),
+    OKCHEON_GUN("옥천군"),
+    YEONGDONG_GUN("영동군"),
+    JEUNGPYEONG_GUN("증평군"),
+    JINCHEON_GUN("진천군"),
+    GOESAN_GUN("괴산군"),
+    EUMSEONG_GUN("음성군"),
+    DANYANG_GUN("단양군"),
     ;
     private final String name;
 
