@@ -3,7 +3,6 @@ package com.kospot.kospot.domain.coordinate.service;
 import com.kospot.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
-import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
 import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,9 +23,7 @@ public class CoordinateServiceImpl implements CoordinateService {
         Long maxId = getMaxId(sido);
         Long randomIndex = getRandomIndex(maxId);
 
-        BaseCoordinateRepository<?, Long> repository = factory.getRepository(sido);
-
-        while (!repository.existsById(randomIndex)) {
+        while (coordinateAdaptor.queryExistsById(sido, randomIndex)) {
             randomIndex++;
         }
 

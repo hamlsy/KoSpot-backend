@@ -29,14 +29,6 @@ public class CoordinateController {
         ));
     }
 
-    @GetMapping("/randomCoord")
-    public ApiResponseDto<CoordinateResponse> getRandomCoord() {
-        return ApiResponseDto.onSuccess(CoordinateResponse.from(
-                coordinateService.getAllRandomCoordinate()
-                )
-        );
-    }
-
     /**
      * todo refactoring, 테스트용
      * 추후 관리지 권한으로 전환

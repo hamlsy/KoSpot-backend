@@ -5,6 +5,6 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateIncheon;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 
 @SidoRepository(Sido.INCHEON)
-public interface CoordinateIncheonRepository extends BaseCoordinateRepository<CoordinateIncheon, Long> {
+public interface CoordinateIncheonRepository extends CoordinateRepository<CoordinateIncheon, Long> {
 
 }

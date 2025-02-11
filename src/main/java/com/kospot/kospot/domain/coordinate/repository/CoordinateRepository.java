@@ -1,10 +1,12 @@
 package com.kospot.kospot.domain.coordinate.repository;
 
-import com.kospot.kospot.domain.coordinate.aop.SidoRepository;
-import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
-import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.NoRepositoryBean;
 
-@SidoRepository(Sido.NATIONWIDE)
-public interface CoordinateRepository extends BaseCoordinateRepository<CoordinateNationwide, Long> {
+@NoRepositoryBean
+public interface CoordinateRepository<T, ID> extends JpaRepository<T, ID> {
+    @Query("SELECT MAX(c.id) FROM #{#entityName} c")
+    Long findMaxId();
 
 }
