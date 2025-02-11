@@ -12,9 +12,12 @@ public enum DaeguSigungu implements Sigungu{
     DALSEO_GU("달서구"),
     DALSEONG_GUN("달성군"),
     DONG_GU("동구"),
+    JUNG_GU("중구"),
     NAM_GU("남구"),
     SEO_GU("서구"),
-    SUK_GU("수성구");
+    SUK_GU("수성구"),
+    GUNWI_GUN("군위군")
+    ;
 
     private final String name;
 

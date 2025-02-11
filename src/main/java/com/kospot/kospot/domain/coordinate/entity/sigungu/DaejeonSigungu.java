@@ -11,7 +11,7 @@ public enum DaejeonSigungu implements Sigungu{
     DONG_GU("동구"),
     SEO_GU("서구"),
     YUSEONG_GU("유성구"),
-    JUNG_GU("중구");
+    ;
 
     private final String name;
 

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 public enum GwangjuSigungu implements Sigungu{
     BUK_GU("북구"),
     DONG_GU("동구"),
+    SEO_GU("서구"),
     GWANGSAN_GU("광산구"),
     NAM_GU("남구");
 
