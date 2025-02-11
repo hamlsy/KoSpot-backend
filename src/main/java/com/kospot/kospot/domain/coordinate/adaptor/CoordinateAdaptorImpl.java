@@ -8,6 +8,8 @@ import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CoordinateAdaptorImpl implements CoordinateAdaptor{
@@ -30,6 +32,7 @@ public class CoordinateAdaptorImpl implements CoordinateAdaptor{
 
     @Override
     public Long queryMaxIdBySido(Sido sido){
-        return factory.getRepository(sido).findMaxId();
+        Long maxId = factory.getRepository(sido).findMaxId();
+        return Optional.ofNullable(maxId).orElse(0L);
     }
 }

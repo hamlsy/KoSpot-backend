@@ -23,7 +23,7 @@ public class CoordinateServiceImpl implements CoordinateService {
         Long maxId = getMaxId(sido);
         Long randomIndex = getRandomIndex(maxId);
 
-        while (coordinateAdaptor.queryExistsById(sido, randomIndex)) {
+        while (!coordinateAdaptor.queryExistsById(sido, randomIndex)) {
             randomIndex++;
         }
 
@@ -35,7 +35,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     }
 
     private Long getRandomIndex(Long maxId) {
-        return ThreadLocalRandom.current().nextLong(maxId);
+        return ThreadLocalRandom.current().nextLong(1, maxId+1);
     }
 
 

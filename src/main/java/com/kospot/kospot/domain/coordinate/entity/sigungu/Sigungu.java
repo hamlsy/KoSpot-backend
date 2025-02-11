@@ -6,8 +6,8 @@ public interface Sigungu {
     Sido getParentSido();
     String getName();
 
-    static <T extends Enum<T> & Sigungu> T fromName(Class<T> enumType, String name) {
-        for (T sigungu : enumType.getEnumConstants()) {
+    static <T extends Enum<T> & Sigungu> T fromName(Class<T> classType, String name) {
+        for (T sigungu : classType.getEnumConstants()) {
             if (sigungu.getName().equals(name)) {
                 return sigungu;
             }

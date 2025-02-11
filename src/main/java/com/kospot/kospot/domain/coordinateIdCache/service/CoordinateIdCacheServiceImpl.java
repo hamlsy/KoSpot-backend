@@ -29,6 +29,7 @@ public class CoordinateIdCacheServiceImpl implements CoordinateIdCacheService {
 
     public void saveMaxIdBySido(Sido sido) {
         Long maxId = coordinateAdaptor.queryMaxIdBySido(sido);
+
         repository.findById(sido).ifPresentOrElse(
                 coordinateIdCache -> coordinateIdCache.updateMaxId(maxId),
                 () -> repository.save(CoordinateIdCache.builder()

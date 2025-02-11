@@ -2,6 +2,8 @@ package com.kospot.kospot.domain.coordinate.entity.sigungu.converter;
 
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.*;
+import com.kospot.kospot.exception.object.domain.CoordinateHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.AttributeConverter;
 
 public class SigunguConverter implements AttributeConverter<Sigungu, String> {
@@ -16,11 +18,12 @@ public class SigunguConverter implements AttributeConverter<Sigungu, String> {
 
     @Override
     public Sigungu convertToEntityAttribute(String dbData) {
-        if (dbData == null || dbData.isEmpty()) {
+
+        if (dbData == null || dbData.trim().isEmpty()) {
             return null;
         }
-        // Assuming SEOUL as default Sido for simplicity
-        return convertSidoToSigungu(Sido.SEOUL, dbData);
+
+        return dbData;
     }
 
     public static Sigungu convertSidoToSigungu(Sido sido, String sigunguName) {
@@ -60,8 +63,7 @@ public class SigunguConverter implements AttributeConverter<Sigungu, String> {
             case JEJU:
                 return Sigungu.fromName(JejuSigungu.class, sigunguName);
             default:
-                //todo : exception handling
-                throw new IllegalArgumentException();
+                throw new CoordinateHandler(ErrorStatus.SIDO_NOT_FOUND);
         }
     }
 

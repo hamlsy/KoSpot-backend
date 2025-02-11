@@ -13,10 +13,7 @@ import com.kospot.kospot.exception.object.domain.CoordinateHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +51,7 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                if (row.getRowNum() == 0) continue; // 첫 번째 줄은 헤더이므로 건너뜀
+                if (row.getRowNum() == 0 || isRowEmpty(row)) continue; // 첫 번째 줄은 헤더이므로 건너뜀
 
                 CoordinateNationwide coordinateNationwide = rowToCoordinateNationwide(row);
                 Coordinate coordinate = CoordinateConverter.convertToDetailCoordinate(coordinateNationwide);
@@ -98,6 +95,17 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
         }
 
     }
+    private boolean isRowEmpty(Row row) {
+        if (row == null) return true; //row 자체가 null이면 빈 행으로 처리
+
+        for (Cell cell : row) {
+            if (cell != null && cell.getCellType() != CellType.BLANK) {
+                return false; //
+            }
+        }
+        return true; //
+    }
+
 
     private boolean isBatchSizeReached(Sido sido, Map<Sido, List<Coordinate>> coordinatesMap) {
         return coordinatesMap.get(sido).size() >= BATCH_SIZE;
