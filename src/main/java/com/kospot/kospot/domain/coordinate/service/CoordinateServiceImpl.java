@@ -30,19 +30,7 @@ public class CoordinateServiceImpl implements CoordinateService {
             randomIndex++;
         }
 
-        return coordinateAdaptor.queryById(randomIndex);
-    }
-
-    @Override
-    public Coordinate getAllRandomCoordinate() {
-        Long maxId = getMaxId(Sido.NATIONWIDE);
-        Long randomIndex = getRandomIndex(maxId);
-
-        while (!coordinateAdaptor.queryExistsById(randomIndex)) {
-            randomIndex++;
-        }
-
-        return coordinateAdaptor.queryById(randomIndex);
+        return coordinateAdaptor.queryById(sido, randomIndex);
     }
 
     private Long getMaxId(Sido sido) {

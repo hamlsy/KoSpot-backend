@@ -1,6 +1,8 @@
 package com.kospot.kospot.domain.coordinateIdCache.service;
 
-import com.kospot.kospot.domain.coordinate.entity.sido.Sido;import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
+import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.kospot.domain.coordinate.service.DynamicCoordinateRepositoryFactory;
+import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
 import com.kospot.kospot.domain.coordinateIdCache.entity.CoordinateIdCache;
 import com.kospot.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
 
@@ -12,11 +14,19 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CoordinateIdCacheServiceImpl implements CoordinateIdCacheService {
 
+    private final DynamicCoordinateRepositoryFactory factory;
     private final CoordinateIdCacheRepository repository;
 
     @Override
     @Transactional
-    public void saveMaxIdBySido(Sido sido, Long maxId) {
+    public void saveAllMaxId(){
+        for(Sido sido : Sido.values()){
+            saveMaxIdBySido(sido);
+        }
+    }
+
+    public void saveMaxIdBySido(Sido sido) {
+        Long maxId = factory.getRepository(sido).findMaxId();
         repository.findById(sido).ifPresentOrElse(
                 coordinateIdCache -> coordinateIdCache.updateMaxId(maxId),
                 () -> repository.save(CoordinateIdCache.builder()
@@ -25,6 +35,5 @@ public class CoordinateIdCacheServiceImpl implements CoordinateIdCacheService {
                         .build())
         );
     }
-
 
 }

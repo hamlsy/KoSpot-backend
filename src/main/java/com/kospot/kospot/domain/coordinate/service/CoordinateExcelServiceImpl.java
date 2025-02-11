@@ -8,6 +8,7 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateNationwi
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.Sigungu;
 import com.kospot.kospot.domain.coordinate.entity.sigungu.converter.SigunguConverter;
+import com.kospot.kospot.domain.coordinateIdCache.service.CoordinateIdCacheService;
 import com.kospot.kospot.exception.object.domain.CoordinateHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 
@@ -30,8 +31,9 @@ import java.util.*;
 public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
     private final DynamicCoordinateRepositoryFactory repositoryFactory;
-    private static final String FILE_PATH = "data/excel/";
+    private final CoordinateIdCacheService coordinateIdCacheService;
 
+    private static final String FILE_PATH = "data/excel/";
     private final int BATCH_SIZE = 1000;
     private final Sido NATIONWIDE = Sido.NATIONWIDE;
 
@@ -84,6 +86,10 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
             for (Sido sido : coordinatesMap.keySet()) {
                 saveCoordinates(sido, coordinatesMap.get(sido));
             }
+
+            // 캐시 테이블 저장
+            // 리팩토링 필요
+            coordinateIdCacheService.saveAllMaxId();
 
         } catch (FileNotFoundException e) {
             throw new CoordinateHandler(ErrorStatus.FILE_NOT_FOUND);

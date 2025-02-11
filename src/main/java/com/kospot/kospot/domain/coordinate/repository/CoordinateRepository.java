@@ -5,6 +5,6 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateNationwi
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 
 @SidoRepository(Sido.NATIONWIDE)
-public interface CoordinateNationwideRepository extends BaseCoordinateRepository<CoordinateNationwide, Long> {
+public interface CoordinateRepository extends BaseCoordinateRepository<CoordinateNationwide, Long> {
 
 }
