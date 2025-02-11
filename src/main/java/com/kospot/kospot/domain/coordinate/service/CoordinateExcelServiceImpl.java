@@ -102,9 +102,11 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
 
     //excel row -> CoordinateNationwide
     private CoordinateNationwide rowToCoordinateNationwide(Row row) {
-        Sido sido = Sido.fromName(getCellString(row, 0));
-        Sigungu sigungu = SigunguConverter.convertSidoToSigungu(sido, getCellString(row, 1));
-        String detailAddress = getCellString(row, 2);
+        Sido sido = Sido.fromName(getCellString(row, 0)); //A
+        Sigungu sigungu = SigunguConverter.convertSidoToSigungu(sido, getCellString(row, 1)); //B
+        String cLine = getCellString(row, 2);
+        String dLine = getCellString(row, 3);
+        String detailAddress = cLine + " " + dLine;
 
         double lng = row.getCell(4).getNumericCellValue();
         double lat = row.getCell(5).getNumericCellValue();
