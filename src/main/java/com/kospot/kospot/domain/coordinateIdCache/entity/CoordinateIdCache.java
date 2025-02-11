@@ -23,8 +23,8 @@ public class CoordinateIdCache extends BaseTimeEntity {
     @Column(nullable = false)
     private Long maxId;
 
-    public void updateMaxId(Long id){
-        this.maxId = id;
+    public void updateMaxId(Long maxId){
+        this.maxId = maxId;
     }
 
 }
