@@ -1,9 +1,14 @@
 package com.kospot.kospot.domain.coordinate.entity.coordinates;
 
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
-public class CoordinateJeonbuk extends Location {
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class CoordinateJeonbuk extends Coordinate {
+    public CoordinateJeonbuk(CoordinateNationwide coordinate){
+        super(coordinate);
+    }
 }

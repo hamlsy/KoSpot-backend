@@ -5,11 +5,14 @@ import com.kospot.kospot.domain.coordinateIdCache.entity.CoordinateIdCache;
 import com.kospot.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
 import com.kospot.kospot.exception.object.domain.CoordinateIdCacheHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CoordinateIdCacheAdaptorImpl implements CoordinateIdCacheAdaptor{
 
     private final CoordinateIdCacheRepository repository;

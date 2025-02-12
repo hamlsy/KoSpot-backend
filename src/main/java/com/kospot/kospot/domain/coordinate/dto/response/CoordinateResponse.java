@@ -1,7 +1,8 @@
 package com.kospot.kospot.domain.coordinate.dto.response;
 
 import com.kospot.kospot.domain.coordinate.entity.Address;
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.kospot.domain.coordinate.entity.LocationType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,14 +14,18 @@ public class CoordinateResponse {
     private Address address;
     private double lat;
     private double lng;
+    private LocationType locationType;
     private LocalDateTime createdDate;
+    private String poiName;
 
-    public static CoordinateResponse from(Location coordinate) {
+    public static CoordinateResponse from(Coordinate coordinate) {
         return CoordinateResponse.builder()
                 .address(coordinate.getAddress())
                 .lat(coordinate.getLat())
-                .lat(coordinate.getLng())
+                .lng(coordinate.getLng())
+                .locationType(coordinate.getLocationType())
                 .createdDate(coordinate.getCreatedDate())
+                .poiName(coordinate.getPoiName())
                 .build();
     }
 }
