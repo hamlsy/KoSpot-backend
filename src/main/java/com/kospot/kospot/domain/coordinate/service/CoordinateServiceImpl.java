@@ -15,7 +15,6 @@ public class CoordinateServiceImpl implements CoordinateService {
 
     private final CoordinateAdaptor coordinateAdaptor;
     private final CoordinateIdCacheAdaptor coordinateIdCacheAdaptor;
-    private final DynamicCoordinateRepositoryFactory factory;
 
     @Override
     public Coordinate getRandomCoordinateBySido(String sidoKey) {
@@ -35,7 +34,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     }
 
     private Long getRandomIndex(Long maxId) {
-        return ThreadLocalRandom.current().nextLong(1, maxId+1);
+        return ThreadLocalRandom.current().nextLong(1, maxId + 1);
     }
 
 

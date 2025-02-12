@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CoordinateIdCacheServiceImpl implements CoordinateIdCacheService {
 
     private final CoordinateAdaptor coordinateAdaptor;
-    private final DynamicCoordinateRepositoryFactory factory;
     private final CoordinateIdCacheRepository repository;
 
     @Override

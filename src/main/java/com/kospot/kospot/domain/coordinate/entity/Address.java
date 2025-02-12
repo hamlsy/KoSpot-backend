@@ -20,10 +20,5 @@ public class Address {
 
     private String sigungu;  // 시군구 (강남구, 수원시 등)
 
-//    @Convert(converter = EupmyeondongConverter.class)
-//    private Eupmyeondong eupmyeondong; // 읍면동/구 (삼성동, 영등포동 등)
-
-//    private String eupmyeonri;   // 읍/면/리 (농촌 지역 주소)
-
     private String detailAddress;
 }

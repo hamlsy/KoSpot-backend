@@ -83,7 +83,7 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
             }
 
             // 캐시 테이블 저장
-            // 리팩토링 필요
+            // todo refactoring
             coordinateIdCacheService.saveAllMaxId();
 
         } catch (FileNotFoundException e) {
@@ -117,8 +117,8 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
     private CoordinateNationwide rowToCoordinateNationwide(Row row) {
         Sido sido = Sido.fromName(getCellString(row, 0)); //A
         String sigungu = getCellString(row, 1); //B
-        String cLine = getCellString(row, 2);
-        String dLine = getCellString(row, 3);
+        String cLine = getCellString(row, 2); //C
+        String dLine = getCellString(row, 3);//D
         String detailAddress = cLine + " " + dLine;
 
         double lng = row.getCell(4).getNumericCellValue();
