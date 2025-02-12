@@ -6,8 +6,6 @@ import com.kospot.kospot.domain.coordinate.entity.LocationType;
 import com.kospot.kospot.domain.coordinate.entity.converter.CoordinateConverter;
 import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
-import com.kospot.kospot.domain.coordinate.entity.sigungu.Sigungu;
-import com.kospot.kospot.domain.coordinate.entity.sigungu.converter.SigunguConverter;
 import com.kospot.kospot.domain.coordinateIdCache.service.CoordinateIdCacheService;
 import com.kospot.kospot.exception.object.domain.CoordinateHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
@@ -118,7 +116,7 @@ public class CoordinateExcelServiceImpl implements CoordinateExcelService {
     //excel row -> CoordinateNationwide
     private CoordinateNationwide rowToCoordinateNationwide(Row row) {
         Sido sido = Sido.fromName(getCellString(row, 0)); //A
-        Sigungu sigungu = SigunguConverter.convertSidoToSigungu(sido, getCellString(row, 1)); //B
+        String sigungu = getCellString(row, 1); //B
         String cLine = getCellString(row, 2);
         String dLine = getCellString(row, 3);
         String detailAddress = cLine + " " + dLine;
