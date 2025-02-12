@@ -2,8 +2,6 @@ package com.kospot.kospot.domain.coordinateIdCache.service;
 
 import com.kospot.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
-import com.kospot.kospot.domain.coordinate.service.DynamicCoordinateRepositoryFactory;
-import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
 import com.kospot.kospot.domain.coordinateIdCache.entity.CoordinateIdCache;
 import com.kospot.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
 
@@ -20,8 +18,8 @@ public class CoordinateIdCacheServiceImpl implements CoordinateIdCacheService {
 
     @Override
     @Transactional
-    public void saveAllMaxId(){
-        for(Sido sido : Sido.values()){
+    public void saveAllMaxId() {
+        for (Sido sido : Sido.values()) {
             saveMaxIdBySido(sido);
         }
     }

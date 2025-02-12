@@ -1,7 +1,5 @@
 package com.kospot.kospot.domain.coordinate.entity;
 
-import lombok.Getter;
-
 import java.util.Map;
 
 public enum LocationType {
