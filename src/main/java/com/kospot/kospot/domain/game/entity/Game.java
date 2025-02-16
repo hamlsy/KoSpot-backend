@@ -19,6 +19,10 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class Game extends BaseTimeEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     // 정답 좌표
     @Column(nullable = false)
     private double targetLng;
@@ -30,6 +34,12 @@ public abstract class Game extends BaseTimeEntity {
     private double submittedLng;
     private double submittedLat;
 
+    // 정답 시간
+    private Long answerTime;
+
+    // 점수
+    private Long score;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
@@ -37,8 +47,6 @@ public abstract class Game extends BaseTimeEntity {
     @Column(name = "game_type")
     private GameType gameType;
 
-    private LocalDateTime startedAt;  // 게임 시작 시간
     private LocalDateTime endedAt;    // 게임 종료 시간
-
 
 }

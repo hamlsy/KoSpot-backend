@@ -14,21 +14,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoadViewGame extends BaseTimeEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roadViewGame_id")
-    private Long id;
-
-    private Long answerTime;
+public class RoadViewGame extends Game {
 
     private double answerDistance;
 
     private int score;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roadViewGame_id", nullable = false)
-    private Coordinate coordinate;
+    private String poiName;
 
 }
