@@ -1,6 +1,6 @@
 package com.kospot.kospot.domain.game.controller;
 
-import com.kospot.kospot.domain.game.service.RoadViewGameService;
+import com.kospot.kospot.domain.game.service.GameService;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/roadViewGame")
 public class RoadViewGameController {
 
-    private RoadViewGameService roadViewGameService;
+    private GameService gameService;
 
     @PostMapping("/start")
-    public ApiResponseDto<?> roadViewGameStart(){
+    public ApiResponseDto<?> startRoadViewGame(){
 
         return null;
     }
 
     @PostMapping("/end")
-    public ApiResponseDto<?> roadViewGameEnd(){
+    public ApiResponseDto<?> endRoadViewGame(){
 
         return null;
     }

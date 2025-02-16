@@ -47,6 +47,18 @@ public abstract class Game extends BaseTimeEntity {
     @Column(name = "game_type")
     private GameType gameType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "game_status")
+    private GameStatus gameStatus;
+
     private LocalDateTime endedAt;    // 게임 종료 시간
+
+    public Game(Coordinate coordinate, Member member, GameType gameType, GameStatus gameStatus){
+        this.member = member;
+        this.gameType = gameType;
+        this.gameStatus = gameStatus;
+        this.targetLat = coordinate.getLat();
+        this.targetLng = coordinate.getLng();
+    }
 
 }
