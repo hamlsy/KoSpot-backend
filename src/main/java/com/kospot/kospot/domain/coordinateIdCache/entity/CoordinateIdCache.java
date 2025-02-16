@@ -17,15 +17,14 @@ import lombok.experimental.SuperBuilder;
 public class CoordinateIdCache extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Enumerated(EnumType.STRING)
     private Sido sido;
 
     @Column(nullable = false)
     private Long maxId;
 
-    public void updateMaxId(Long id){
-        this.maxId = id;
+    public void updateMaxId(Long maxId){
+        this.maxId = maxId;
     }
 
 }

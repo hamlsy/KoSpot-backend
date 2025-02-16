@@ -5,6 +5,6 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateChungnam
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 
 @SidoRepository(Sido.CHUNGNAM)
-public interface CoordinateChungnamRepository extends BaseCoordinateRepository<CoordinateChungnam, Long> {
+public interface CoordinateChungnamRepository extends CoordinateRepository<CoordinateChungnam, Long> {
 
 }

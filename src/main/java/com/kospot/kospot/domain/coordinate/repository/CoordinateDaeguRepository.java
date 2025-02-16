@@ -5,6 +5,6 @@ import com.kospot.kospot.domain.coordinate.entity.coordinates.CoordinateDaegu;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
 
 @SidoRepository(Sido.DAEGU)
-public interface CoordinateDaeguRepository extends BaseCoordinateRepository<CoordinateDaegu, Long> {
+public interface CoordinateDaeguRepository extends CoordinateRepository<CoordinateDaegu, Long> {
 
 }

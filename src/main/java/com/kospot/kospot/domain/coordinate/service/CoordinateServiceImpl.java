@@ -1,9 +1,8 @@
 package com.kospot.kospot.domain.coordinate.service;
 
 import com.kospot.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
-import com.kospot.kospot.domain.coordinate.entity.Location;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
-import com.kospot.kospot.domain.coordinate.repository.BaseCoordinateRepository;
 import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,33 +15,18 @@ public class CoordinateServiceImpl implements CoordinateService {
 
     private final CoordinateAdaptor coordinateAdaptor;
     private final CoordinateIdCacheAdaptor coordinateIdCacheAdaptor;
-    private final DynamicCoordinateRepositoryFactory factory;
 
     @Override
-    public Location getRandomCoordinateBySido(String sidoKey) {
+    public Coordinate getRandomCoordinateBySido(String sidoKey) {
         Sido sido = Sido.fromKey(sidoKey);
         Long maxId = getMaxId(sido);
         Long randomIndex = getRandomIndex(maxId);
 
-        BaseCoordinateRepository<?, Long> repository = factory.getRepository(sido);
-
-        while (!repository.existsById(randomIndex)) {
+        while (!coordinateAdaptor.queryExistsById(sido, randomIndex)) {
             randomIndex++;
         }
 
-        return coordinateAdaptor.queryById(randomIndex);
-    }
-
-    @Override
-    public Location getAllRandomCoordinate() {
-        Long maxId = getMaxId(Sido.NATIONWIDE);
-        Long randomIndex = getRandomIndex(maxId);
-
-        while (!coordinateAdaptor.queryExistsById(randomIndex)) {
-            randomIndex++;
-        }
-
-        return coordinateAdaptor.queryById(randomIndex);
+        return coordinateAdaptor.queryById(sido, randomIndex);
     }
 
     private Long getMaxId(Sido sido) {
@@ -50,7 +34,8 @@ public class CoordinateServiceImpl implements CoordinateService {
     }
 
     private Long getRandomIndex(Long maxId) {
-        return ThreadLocalRandom.current().nextLong(maxId);
+        return ThreadLocalRandom.current().nextLong(1, maxId + 1);
     }
+
 
 }
