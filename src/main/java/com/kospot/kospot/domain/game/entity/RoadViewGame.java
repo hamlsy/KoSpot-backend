@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.game.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,15 +21,14 @@ public class RoadViewGame extends BaseTimeEntity {
     @Column(name = "roadViewGame_id")
     private Long id;
 
-    @Enumerated
-    private GameType gameType;
-
-    // todo 정답 Point 객체
-    // todo 내가 고른 Point 객체
-
     private Long answerTime;
 
     private double answerDistance;
 
     private int score;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roadViewGame_id", nullable = false)
+    private Coordinate coordinate;
+
 }
