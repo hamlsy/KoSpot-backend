@@ -1,6 +1,5 @@
 package com.kospot.kospot.domain.game.entity;
 
-import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -21,5 +20,14 @@ public class RoadViewGame extends Game {
 
     private String poiName;
 
+    private static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType){
+        return RoadViewGame.builder()
+                .targetLat(coordinate.getLat())
+                .targetLat(coordinate.getLng())
+                .member(member)
+                .gameType(gameType)
+                .gameStatus(GameStatus.ABANDONED)
+                .build();
+    }
 
 }

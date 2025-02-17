@@ -53,12 +53,12 @@ public abstract class Game extends BaseTimeEntity {
 
     private LocalDateTime endedAt;    // 게임 종료 시간
 
-    public Game(Coordinate coordinate, Member member, GameType gameType, GameStatus gameStatus){
+    public Game(double targetLat, double targetLng, Member member, GameType gameType, GameStatus gameStatus){
         this.member = member;
         this.gameType = gameType;
         this.gameStatus = gameStatus;
-        this.targetLat = coordinate.getLat();
-        this.targetLng = coordinate.getLng();
+        this.targetLat = targetLat;
+        this.targetLng = targetLng;
     }
 
 }
