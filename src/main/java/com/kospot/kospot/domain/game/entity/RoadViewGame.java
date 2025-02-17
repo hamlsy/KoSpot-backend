@@ -36,7 +36,7 @@ public class RoadViewGame extends Game {
     }
 
     public void end(double submittedLat, double submittedLng, double answerDistance){
-        super.end(submittedLat, submittedLng, getScore(answerDistance)); //todo add score
+        super.end(submittedLat, submittedLng, getScore(answerDistance));
         this.answerDistance = answerDistance;
     }
 

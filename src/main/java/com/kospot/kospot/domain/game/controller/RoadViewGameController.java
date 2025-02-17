@@ -3,6 +3,7 @@ package com.kospot.kospot.domain.game.controller;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
+import com.kospot.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,17 @@ import org.springframework.web.bind.annotation.*;
 public class RoadViewGameController {
 
     private final RoadViewGameService service;
+
+    /**
+     *  -----------------TEST------------------
+     */
+
+    @GetMapping("/scoreTest/{distance}")
+    public ApiResponseDto<?> testScore(@PathVariable("distance") double distance){
+        return ApiResponseDto.onSuccess(ScoreCalculator.calculateScore(distance));
+    }
+
+
 
     /**
      *  -----------------PRACTICE------------------
