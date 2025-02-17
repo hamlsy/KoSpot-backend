@@ -1,7 +1,6 @@
 package com.kospot.kospot.domain.game.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -59,6 +58,17 @@ public abstract class Game extends BaseTimeEntity {
         this.gameStatus = gameStatus;
         this.targetLat = targetLat;
         this.targetLng = targetLng;
+    }
+
+    // business
+    public void end(double submittedLat, double submittedLng){
+        this.gameStatus = GameStatus.COMPLETED;
+        this.submittedLat = submittedLat;
+        this.submittedLng = submittedLng;
+    }
+
+    private void getScore(){
+
     }
 
 }

@@ -41,7 +41,9 @@ public enum ErrorStatus implements BaseCode{
     // File Error (4201 ~ 4210)
     FILE_READ_ERROR(INTERNAL_SERVER_ERROR, 4201, "파일을 읽는 중 오류가 발생했습니다."),
     FILE_NOT_FOUND(NOT_FOUND, 4202, "파일을 찾을 수 없습니다."),
-    ;
+
+    // Game Error (4211 ~ 4250)
+    GAME_NOT_FOUND(NOT_FOUND, 4211, "해당 게임을 찾을 수 없습니다."),;
 
     private final HttpStatus httpStatus;
     private final Integer code;

@@ -1,5 +1,6 @@
 package com.kospot.kospot.domain.game.controller;
 
+import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
@@ -25,8 +26,8 @@ public class RoadViewGameController {
     }
 
     @PostMapping("/practice/end")
-    public ApiResponseDto<?> endRoadViewGame(){
-
+    public ApiResponseDto<?> endRoadViewGame(@RequestBody EndGameRequest.RoadViewPractice request){
+        service.endPracticeGame(request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
