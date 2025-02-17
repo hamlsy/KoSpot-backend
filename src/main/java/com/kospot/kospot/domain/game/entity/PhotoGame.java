@@ -11,11 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PhotoGame extends Game {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     // todo 정답 지역
     private String correctLocation;
 
     private Long averageAnswerTime;
 
-    private int score;
+    private double score;
 
 }

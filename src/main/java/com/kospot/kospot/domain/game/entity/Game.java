@@ -2,6 +2,8 @@ package com.kospot.kospot.domain.game.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.kospot.domain.member.entity.Member;
+import com.kospot.kospot.exception.object.domain.GameHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,10 +19,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @MappedSuperclass
 public abstract class Game extends BaseTimeEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     // 정답 좌표
     @Column(nullable = false)
@@ -62,10 +60,17 @@ public abstract class Game extends BaseTimeEntity {
 
     // business
     public void end(double submittedLat, double submittedLng, double score){
+        isCompleted();
         this.gameStatus = GameStatus.COMPLETED;
         this.submittedLat = submittedLat;
         this.submittedLng = submittedLng;
         this.score = score;
     }
 
+    //validation
+    private void isCompleted(){
+        if(this.gameStatus == GameStatus.COMPLETED){
+            throw new GameHandler(ErrorStatus.GAME_IS_ALREADY_COMPLETED);
+        }
+    }
 }

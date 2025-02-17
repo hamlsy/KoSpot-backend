@@ -17,6 +17,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoadViewGame extends Game {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private double answerDistance;
 
     private String poiName;
@@ -24,7 +28,7 @@ public class RoadViewGame extends Game {
     public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType){
         return RoadViewGame.builder()
                 .targetLat(coordinate.getLat())
-                .targetLat(coordinate.getLng())
+                .targetLng(coordinate.getLng())
                 .member(member)
                 .gameType(gameType)
                 .gameStatus(GameStatus.ABANDONED)

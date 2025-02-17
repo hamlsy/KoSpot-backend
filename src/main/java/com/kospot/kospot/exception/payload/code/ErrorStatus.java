@@ -43,7 +43,10 @@ public enum ErrorStatus implements BaseCode{
     FILE_NOT_FOUND(NOT_FOUND, 4202, "파일을 찾을 수 없습니다."),
 
     // Game Error (4211 ~ 4250)
-    GAME_NOT_FOUND(NOT_FOUND, 4211, "해당 게임을 찾을 수 없습니다."),;
+    GAME_NOT_FOUND(NOT_FOUND, 4211, "해당 게임을 찾을 수 없습니다."),
+    GAME_IS_ALREADY_COMPLETED(BAD_REQUEST, 4212, "이미 처리된 게임입니다"),
+    ;
+
 
     private final HttpStatus httpStatus;
     private final Integer code;
