@@ -20,7 +20,7 @@ public class RoadViewGame extends Game {
 
     private String poiName;
 
-    private static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType){
+    public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType){
         return RoadViewGame.builder()
                 .targetLat(coordinate.getLat())
                 .targetLat(coordinate.getLng())

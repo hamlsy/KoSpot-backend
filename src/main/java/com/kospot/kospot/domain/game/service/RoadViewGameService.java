@@ -1,9 +1,11 @@
 package com.kospot.kospot.domain.game.service;
 
+import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
+
 public interface RoadViewGameService {
 
-    void startGame(String sidoKey);
+    StartGameResponse.RoadView startPracticeGame(String sidoKey);
 
-    void endGame();
+    void endPracticeGame();
 
 }
