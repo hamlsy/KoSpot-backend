@@ -14,6 +14,6 @@ public class EndGameRequest {
         private double submittedLat;
         private double submittedLng;
         private double answerDistance;
-        private Long answerTime;
+        private double answerTime;
     }
 }

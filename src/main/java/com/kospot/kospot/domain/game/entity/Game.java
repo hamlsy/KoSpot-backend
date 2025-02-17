@@ -32,7 +32,7 @@ public abstract class Game extends BaseTimeEntity {
     private double submittedLat;
 
     // 정답 시간
-    private Long answerTime;
+    private double answerTime;
 
     // 점수
     private double score;
@@ -59,12 +59,14 @@ public abstract class Game extends BaseTimeEntity {
     }
 
     // business
-    public void end(double submittedLat, double submittedLng, double score){
+    public void end(double submittedLat, double submittedLng, double score, double answerTime){
         isCompleted();
         this.gameStatus = GameStatus.COMPLETED;
         this.submittedLat = submittedLat;
         this.submittedLng = submittedLng;
         this.score = score;
+        this.answerTime = answerTime;
+        this.endedAt = LocalDateTime.now();
     }
 
     //validation

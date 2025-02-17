@@ -3,7 +3,7 @@ package com.kospot.kospot.domain.game.util;
 public class ScoreCalculator {
     public static final double MAX_SCORE = 1000.0;
     private static final double D_MAX = 400.0; // 400km 이상이면 0점
-    private static final double D_S = 170.0; // 감쇠 거리 (작게 설정하여 점수 차이 강화)
+    private static final double D_S = 200.0; // 감쇠 거리 (작게 설정하여 점수 차이 강화)
 
     public static double calculateScore(double distance) {
         if (distance >= D_MAX) {
