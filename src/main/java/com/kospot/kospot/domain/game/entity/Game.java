@@ -37,7 +37,7 @@ public abstract class Game extends BaseTimeEntity {
     private Long answerTime;
 
     // 점수
-    private Long score;
+    private double score;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -61,14 +61,11 @@ public abstract class Game extends BaseTimeEntity {
     }
 
     // business
-    public void end(double submittedLat, double submittedLng){
+    public void end(double submittedLat, double submittedLng, double score){
         this.gameStatus = GameStatus.COMPLETED;
         this.submittedLat = submittedLat;
         this.submittedLng = submittedLng;
-    }
-
-    private void getScore(){
-
+        this.score = score;
     }
 
 }

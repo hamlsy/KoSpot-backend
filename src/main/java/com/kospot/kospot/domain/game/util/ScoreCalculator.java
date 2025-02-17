@@ -8,7 +8,7 @@ public class ScoreCalculator {
     private static final double BONUS_MAX = 200.0; // 최대 보너스 점수
     private static final double BONUS_SLOPE = 1.0; // 보너스 증가율
 
-    public double calculateScore(double distance) {
+    public static double calculateScore(double distance) {
         if (distance >= D_MAX) {
             return 0.0;
         }

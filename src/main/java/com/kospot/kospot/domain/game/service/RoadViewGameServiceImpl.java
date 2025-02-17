@@ -32,9 +32,9 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     @Override
     public void endPracticeGame(EndGameRequest.RoadViewPractice request){
         RoadViewGame game = adaptor.queryById(request.getGameId());
-        game.end(request.getSubmittedLat(), request.getSubmittedLng());
-        //todo calculate score and answerDistance
-
+        game.end(request.getSubmittedLat(),
+                request.getSubmittedLng(),
+                request.getAnswerDistance());
 
     }
 

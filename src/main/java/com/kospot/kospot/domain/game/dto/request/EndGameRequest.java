@@ -13,6 +13,7 @@ public class EndGameRequest {
         private Long gameId;
         private double submittedLat;
         private double submittedLng;
+        private double answerDistance;
         private Long answerTime;
     }
 }

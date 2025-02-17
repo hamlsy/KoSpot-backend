@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.game.entity;
 
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -30,4 +31,12 @@ public class RoadViewGame extends Game {
                 .build();
     }
 
+    public void end(double submittedLat, double submittedLng, double answerDistance){
+        super.end(submittedLat, submittedLng, getScore(answerDistance)); //todo add score
+        this.answerDistance = answerDistance;
+    }
+
+    private double getScore(double distance){
+        return ScoreCalculator.calculateScore(distance);
+    }
 }
