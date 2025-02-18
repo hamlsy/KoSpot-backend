@@ -1,6 +1,9 @@
 package com.kospot.kospot.domain.game.entity;
 
-import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
+import com.kospot.kospot.domain.game.util.ScoreCalculator;
+import com.kospot.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,22 +16,34 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoadViewGame extends BaseTimeEntity {
+public class RoadViewGame extends Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roadViewGame_id")
     private Long id;
-
-    @Enumerated
-    private GameType gameType;
-
-    // todo 정답 Point 객체
-    // todo 내가 고른 Point 객체
-
-    private Long answerTime;
 
     private double answerDistance;
 
-    private int score;
+    private String poiName;
+
+    public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType) {
+        return RoadViewGame.builder()
+                .targetLat(coordinate.getLat())
+                .targetLng(coordinate.getLng())
+                .member(member)
+                .gameType(gameType)
+                .poiName(coordinate.getPoiName())
+                .gameStatus(GameStatus.ABANDONED)
+                .build();
+    }
+
+    public void end(EndGameRequest.RoadViewPractice request) {
+        super.end(request.getSubmittedLat(), request.getSubmittedLng(),
+                getScore(request.getAnswerDistance()), request.getAnswerTime());
+        this.answerDistance = request.getAnswerDistance();
+    }
+
+    private double getScore(double distance) {
+        return ScoreCalculator.calculateScore(distance);
+    }
 }
