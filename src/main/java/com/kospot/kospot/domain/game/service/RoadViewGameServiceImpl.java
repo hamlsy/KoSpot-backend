@@ -30,10 +30,14 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
         repository.save(game);
         //todo refactor
         return StartGameResponse.RoadView.builder()
-                .gameId(game.getId())
-                .targetLat(aesService.encrypt(Double.toString(game.getTargetLat())))
-                .targetLng(aesService.encrypt(Double.toString(game.getTargetLng())))
+                .gameId(toEncryptString(game.getId()))
+                .targetLat(toEncryptString(game.getTargetLat()))
+                .targetLng(toEncryptString(game.getTargetLng()))
                 .build();
+    }
+
+    private <T> String toEncryptString(T object){
+        return aesService.encrypt(String.valueOf(object));
     }
 
     @Override
