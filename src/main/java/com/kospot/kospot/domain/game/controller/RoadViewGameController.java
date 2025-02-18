@@ -4,9 +4,8 @@ import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
-import com.kospot.kospot.domain.game.util.AESUtil;
+import com.kospot.kospot.domain.game.service.AESService;
 import com.kospot.kospot.domain.game.util.ScoreCalculator;
-import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/roadViewGame")
 public class RoadViewGameController {
 
+    private final AESService aesService;
     private final RoadViewGameService service;
 
     /**
@@ -29,7 +29,7 @@ public class RoadViewGameController {
 
     @GetMapping("/encrypt/{lat}")
     public ApiResponseDto<?> testEncrypt(@PathVariable("lat") String lat) throws Exception{
-        return ApiResponseDto.onSuccess(AESUtil.encrypt(lat));
+        return ApiResponseDto.onSuccess(aesService.encrypt(lat));
     }
 
     /**

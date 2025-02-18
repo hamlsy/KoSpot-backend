@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RoadViewGameServiceImpl implements RoadViewGameService {
 
+    private final AESService aesService;
     private final CoordinateService coordinateService;
     private final RoadViewGameAdaptor adaptor;
     private final RoadViewGameRepository repository;
@@ -27,7 +28,12 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
         Coordinate coordinate = coordinateService.getRandomCoordinateBySido(sidoKey);
         RoadViewGame game = RoadViewGame.create(coordinate, null, GameType.PRACTICE); //todo add member
         repository.save(game);
-        return StartGameResponse.RoadView.from(game);
+        //todo refactor
+        return StartGameResponse.RoadView.builder()
+                .gameId(game.getId())
+                .targetLat(aesService.encrypt(Double.toString(game.getTargetLat())))
+                .targetLng(aesService.encrypt(Double.toString(game.getTargetLng())))
+                .build();
     }
 
     @Override

@@ -11,16 +11,8 @@ public class StartGameResponse {
     public static class RoadView {
 
         private Long gameId;
-        private double targetLat;
-        private double targetLng;
-
-        public static RoadView from(RoadViewGame game){
-            return RoadView.builder()
-                    .gameId(game.getId())
-                    .targetLat(game.getTargetLat())
-                    .targetLng(game.getTargetLng())
-                    .build();
-        }
+        private String targetLat;
+        private String targetLng;
 
     }
 
