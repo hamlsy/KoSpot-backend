@@ -17,4 +17,17 @@ public class EndGameResponse {
                     .build();
         }
     }
+
+    @Getter
+    @Builder
+    public static class RoadViewRank {
+
+        private double score;
+
+        public static RoadViewRank from(RoadViewGame game){
+            return RoadViewRank.builder()
+                    .score(game.getScore())
+                    .build();
+        }
+    }
 }
