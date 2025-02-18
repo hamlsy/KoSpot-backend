@@ -4,6 +4,7 @@ import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
+import com.kospot.kospot.domain.game.util.AESUtil;
 import com.kospot.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
@@ -26,6 +27,10 @@ public class RoadViewGameController {
         return ApiResponseDto.onSuccess(ScoreCalculator.calculateScore(distance));
     }
 
+    @GetMapping("/encrypt/{lat}")
+    public ApiResponseDto<?> testEncrypt(@PathVariable("lat") String lat) throws Exception{
+        return ApiResponseDto.onSuccess(AESUtil.encrypt(lat));
+    }
 
     /**
      * -----------------PRACTICE------------------
