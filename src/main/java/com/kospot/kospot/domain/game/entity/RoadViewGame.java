@@ -32,6 +32,7 @@ public class RoadViewGame extends Game {
                 .targetLng(coordinate.getLng())
                 .member(member)
                 .gameType(gameType)
+                .poiName(coordinate.getPoiName())
                 .gameStatus(GameStatus.ABANDONED)
                 .build();
     }
