@@ -36,10 +36,6 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
                 .build();
     }
 
-    private <T> String toEncryptString(T object){
-        return aesService.encrypt(String.valueOf(object));
-    }
-
     @Override
     public EndGameResponse.RoadViewPractice endPracticeGame(EndGameRequest.RoadViewPractice request){
         RoadViewGame game = adaptor.queryById(request.getGameId());
@@ -47,4 +43,20 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
         return EndGameResponse.RoadViewPractice.from(game);
     }
 
+
+    @Override
+    public StartGameResponse.RoadView startRankGame() {
+        Coordinate coordinate = coordinateService.getRandomNationwideCoordinate();
+        RoadViewGame game = RoadViewGame.create(coordinate, null, GameType.RANK); //todo add member
+        repository.save(game);
+        return StartGameResponse.RoadView.builder()
+                .gameId(toEncryptString(game.getId()))
+                .targetLat(toEncryptString(game.getTargetLat()))
+                .targetLng(toEncryptString(game.getTargetLng()))
+                .build();
+    }
+
+    private <T> String toEncryptString(T object){
+        return aesService.encrypt(String.valueOf(object));
+    }
 }

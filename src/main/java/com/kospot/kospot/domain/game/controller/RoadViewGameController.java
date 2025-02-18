@@ -55,6 +55,11 @@ public class RoadViewGameController {
     /**
      *  -----------------RANK------------------
      */
+    @PostMapping("/rank/start")
+    public ApiResponseDto<StartGameResponse.RoadView> startRankGame() {
+        StartGameResponse.RoadView response = service.startRankGame();
+        return ApiResponseDto.onSuccess(response);
+    }
 
 
     /**

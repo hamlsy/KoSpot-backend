@@ -10,4 +10,5 @@ public interface RoadViewGameService {
 
     EndGameResponse.RoadViewPractice endPracticeGame(EndGameRequest.RoadViewPractice request);
 
+    StartGameResponse.RoadView startRankGame();
 }

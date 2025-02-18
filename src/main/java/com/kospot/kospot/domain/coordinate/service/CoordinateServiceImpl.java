@@ -29,6 +29,18 @@ public class CoordinateServiceImpl implements CoordinateService {
         return coordinateAdaptor.queryById(sido, randomIndex);
     }
 
+    @Override
+    public Coordinate getRandomNationwideCoordinate() {
+        Long maxId = getMaxId(Sido.NATIONWIDE);
+        Long randomIndex = getRandomIndex(maxId);
+
+        while (!coordinateAdaptor.queryNationwideExistsById(randomIndex)) {
+            randomIndex++;
+        }
+
+        return coordinateAdaptor.queryNationwideById(randomIndex);
+    }
+
     private Long getMaxId(Sido sido) {
         return coordinateIdCacheAdaptor.queryById(sido).getMaxId();
     }
