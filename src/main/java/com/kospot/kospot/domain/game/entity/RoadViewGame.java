@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.game.entity;
 
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class RoadViewGame extends Game {
 
     private String poiName;
 
-    public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType){
+    public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType) {
         return RoadViewGame.builder()
                 .targetLat(coordinate.getLat())
                 .targetLng(coordinate.getLng())
@@ -35,12 +36,13 @@ public class RoadViewGame extends Game {
                 .build();
     }
 
-    public void end(double submittedLat, double submittedLng, double answerDistance, double answerTime){
-        super.end(submittedLat, submittedLng, getScore(answerDistance), answerTime);
-        this.answerDistance = answerDistance;
+    public void end(EndGameRequest.RoadViewPractice request) {
+        super.end(request.getSubmittedLat(), request.getSubmittedLng(),
+                getScore(request.getAnswerDistance()), request.getAnswerTime());
+        this.answerDistance = request.getAnswerDistance();
     }
 
-    private double getScore(double distance){
+    private double getScore(double distance) {
         return ScoreCalculator.calculateScore(distance);
     }
 }

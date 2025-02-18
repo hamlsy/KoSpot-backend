@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.game.controller;
 
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
+import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.game.util.ScoreCalculator;
@@ -17,30 +18,29 @@ public class RoadViewGameController {
     private final RoadViewGameService service;
 
     /**
-     *  -----------------TEST------------------
+     * -----------------TEST------------------
      */
 
     @GetMapping("/scoreTest/{distance}")
-    public ApiResponseDto<?> testScore(@PathVariable("distance") double distance){
+    public ApiResponseDto<?> testScore(@PathVariable("distance") double distance) {
         return ApiResponseDto.onSuccess(ScoreCalculator.calculateScore(distance));
     }
 
 
-
     /**
-     *  -----------------PRACTICE------------------
+     * -----------------PRACTICE------------------
      */
 
     @PostMapping("/practice/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@RequestParam("sido") String sidoKey){
+    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@RequestParam("sido") String sidoKey) {
         StartGameResponse.RoadView response = service.startPracticeGame(sidoKey);
         return ApiResponseDto.onSuccess(response);
     }
 
     @PostMapping("/practice/end")
-    public ApiResponseDto<?> endRoadViewGame(@RequestBody EndGameRequest.RoadViewPractice request){
-        service.endPracticeGame(request);
-        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    public ApiResponseDto<?> endRoadViewGame(@RequestBody EndGameRequest.RoadViewPractice request) {
+        EndGameResponse.RoadViewPractice response = service.endPracticeGame(request);
+        return ApiResponseDto.onSuccess(response);
     }
 
     /**

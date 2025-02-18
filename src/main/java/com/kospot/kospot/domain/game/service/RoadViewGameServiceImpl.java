@@ -4,6 +4,7 @@ import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
+import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
@@ -30,14 +31,10 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     }
 
     @Override
-    public void endPracticeGame(EndGameRequest.RoadViewPractice request){
+    public EndGameResponse.RoadViewPractice endPracticeGame(EndGameRequest.RoadViewPractice request){
         RoadViewGame game = adaptor.queryById(request.getGameId());
-        //todo refactoring
-        game.end(request.getSubmittedLat(),
-                request.getSubmittedLng(),
-                request.getAnswerDistance(),
-                request.getAnswerTime());
-
+        game.end(request);
+        return EndGameResponse.RoadViewPractice.from(game);
     }
 
 }
