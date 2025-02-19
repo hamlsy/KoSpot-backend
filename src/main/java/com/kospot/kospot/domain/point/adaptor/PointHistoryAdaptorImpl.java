@@ -3,7 +3,6 @@ package com.kospot.kospot.domain.point.adaptor;
 
 import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.GameType;
-import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.entity.PointHistory;
 import com.kospot.kospot.domain.point.repository.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +23,4 @@ public class PointHistoryAdaptorImpl implements PointHistoryAdaptor{
         return repository.findAllByMemberId(memberId);
     }
 
-    @Override
-    public List<PointHistory> queryGameHistoryByMemberId(Long memberId, GameType gameType) {
-        return repository.findByMemberIdAndGameType(memberId, gameType);
-    }
-
-    @Override
-    public List<PointHistory> queryHistoryByMemberIdAndGameMode(Long memberId, GameType gameType, GameMode gameMode) {
-        return repository.findByMemberIdAndGameTypeAndGameMode(memberId, gameType, gameMode);
-    }
 }

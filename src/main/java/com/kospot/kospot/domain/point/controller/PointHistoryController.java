@@ -3,11 +3,9 @@ package com.kospot.kospot.domain.point.controller;
 import com.kospot.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.kospot.domain.point.dto.response.PointHistoryResponse;
 import com.kospot.kospot.domain.point.service.PointHistoryService;
-import com.kospot.kospot.domain.point.service.PointService;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,16 +20,16 @@ public class PointHistoryController {
     private final PointHistoryService service;
 
     /**
-        -------------TEST--------------
+     * -------------TEST--------------
      */
 
     @GetMapping("/my")
-    public ApiResponseDto<List<PointHistoryResponse>> findAllMyPointHistory(Long memberId){ // todo refactor
+    public ApiResponseDto<List<PointHistoryResponse>> findAllMyPointHistory(Long memberId) { // todo refactor
         return ApiResponseDto.onSuccess(service.findAllHistoryByMemberId(memberId));
     }
 
     /**
-        ---------------------------------
+     ---------------------------------
      */
 
 
