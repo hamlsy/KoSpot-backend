@@ -29,4 +29,12 @@ public class PointHistory extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    public static PointHistory create(Member member, int changeAmount, String description) {
+        return PointHistory.builder()
+                .changeAmount(changeAmount)
+                .description(description)
+                .member(member)
+                .build();
+    }
+
 }

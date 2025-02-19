@@ -43,7 +43,7 @@ public class Member extends BaseTimeEntity {
         this.point += amount;
     }
 
-    public void subtractPoint(int amount){
+    public void usePoint(int amount){
         if(this.point < amount){
             throw new IllegalArgumentException();
         }
