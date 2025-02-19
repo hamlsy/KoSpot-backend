@@ -39,7 +39,7 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     @Override
     public EndGameResponse.RoadViewPractice endPracticeGame(EndGameRequest.RoadView request){
         RoadViewGame game = adaptor.queryById(request.getGameId());
-        game.end(request);
+        endGame(game, request);
         return EndGameResponse.RoadViewPractice.from(game);
     }
 
@@ -59,8 +59,14 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     @Override
     public EndGameResponse.RoadViewRank endRankGame(EndGameRequest.RoadView request){
         RoadViewGame game = adaptor.queryById(request.getGameId());
-        game.end(request);
+        endGame(game, request);
         return EndGameResponse.RoadViewRank.from(game);
+    }
+
+    private void endGame(RoadViewGame game, EndGameRequest.RoadView request) {
+        game.end(
+                request.getSubmittedLat(), request.getSubmittedLng(), request.getAnswerTime(), request.getAnswerDistance()
+        );
     }
 
     private <T> String toEncryptString(T object){
