@@ -1,6 +1,8 @@
 package com.kospot.kospot.domain.member.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.kospot.exception.object.domain.PointHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -45,7 +47,7 @@ public class Member extends BaseTimeEntity {
 
     public void usePoint(int amount){
         if(this.point < amount){
-            throw new IllegalArgumentException();
+            throw new PointHandler(ErrorStatus.POINT_INSUFFICIENT);
         }
         this.point -= amount;
     }
