@@ -31,7 +31,24 @@ public class Member extends BaseTimeEntity {
 
     private String email;
 
-    private int points;
+    private int point;
+
+    //business
+
+    /**
+     * Point
+     */
+
+    public void addPoint(int amount){
+        this.point += amount;
+    }
+
+    public void subtractPoint(int amount){
+        if(this.point < amount){
+            throw new IllegalArgumentException();
+        }
+        this.point -= amount;
+    }
 
 
 }
