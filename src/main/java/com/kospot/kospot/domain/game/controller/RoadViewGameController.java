@@ -43,7 +43,7 @@ public class RoadViewGameController {
     }
 
     @PostMapping("/practice/end")
-    public ApiResponseDto<?> endRoadViewGame(@RequestBody EndGameRequest.RoadViewPractice request) {
+    public ApiResponseDto<?> endPracticeGame(@RequestBody EndGameRequest.RoadView request) {
         EndGameResponse.RoadViewPractice response = service.endPracticeGame(request);
         return ApiResponseDto.onSuccess(response);
     }
@@ -55,6 +55,17 @@ public class RoadViewGameController {
     /**
      *  -----------------RANK------------------
      */
+    @PostMapping("/rank/start")
+    public ApiResponseDto<StartGameResponse.RoadView> startRankGame() {
+        StartGameResponse.RoadView response = service.startRankGame();
+        return ApiResponseDto.onSuccess(response);
+    }
+
+    @PostMapping("/rank/end")
+    public ApiResponseDto<?> endRankGame(@RequestBody EndGameRequest.RoadView request) {
+        EndGameResponse.RoadViewRank response = service.endRankGame(request);
+        return ApiResponseDto.onSuccess(response);
+    }
 
 
     /**

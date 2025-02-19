@@ -10,4 +10,10 @@ public interface CoordinateAdaptor {
     boolean queryExistsById(Sido sido, Long id);
 
     Long queryMaxIdBySido(Sido sido);
+
+    Coordinate queryNationwideById(Long id);
+
+    Long queryNationwideMaxId();
+
+    boolean queryNationwideExistsById(Long id);
 }

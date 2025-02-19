@@ -9,7 +9,7 @@ public class EndGameRequest {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RoadViewPractice{
+    public static class RoadView {
         private Long gameId;
         private double submittedLat;
         private double submittedLng;
