@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+//todo add point system
 public class RoadViewGameServiceImpl implements RoadViewGameService {
 
     private final MemberAdaptor memberAdaptor;
@@ -44,7 +45,6 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
 
     @Override
     public EndGameResponse.RoadViewPractice endPracticeGame(Long memberId, EndGameRequest.RoadView request){ //todo add member
-        Member member = memberAdaptor.queryById(memberId);
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
         return EndGameResponse.RoadViewPractice.from(game);
