@@ -3,9 +3,10 @@ package com.kospot.kospot.domain.point.service;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.entity.PointHistory;
 import com.kospot.kospot.domain.point.repository.PointHistoryRepository;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional

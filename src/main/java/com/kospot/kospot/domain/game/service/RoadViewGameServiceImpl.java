@@ -6,7 +6,7 @@ import com.kospot.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
-import com.kospot.kospot.domain.game.entity.GameType;
+import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     @Override
     public StartGameResponse.RoadView startPracticeGame(String sidoKey){
         Coordinate coordinate = coordinateService.getRandomCoordinateBySido(sidoKey);
-        RoadViewGame game = RoadViewGame.create(coordinate, null, GameType.PRACTICE); //todo add member
+        RoadViewGame game = RoadViewGame.create(coordinate, null, GameMode.PRACTICE); //todo add member
         repository.save(game);
         //todo refactor
         return StartGameResponse.RoadView.builder()
@@ -47,7 +47,7 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     @Override
     public StartGameResponse.RoadView startRankGame() {
         Coordinate coordinate = coordinateService.getRandomNationwideCoordinate();
-        RoadViewGame game = RoadViewGame.create(coordinate, null, GameType.RANK); //todo add member
+        RoadViewGame game = RoadViewGame.create(coordinate, null, GameMode.RANK); //todo add member
         repository.save(game);
         return StartGameResponse.RoadView.builder()
                 .gameId(toEncryptString(game.getId()))
