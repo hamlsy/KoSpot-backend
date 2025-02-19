@@ -8,9 +8,9 @@ import com.kospot.kospot.domain.point.entity.PointHistory;
 import java.util.List;
 
 public interface PointHistoryAdaptor {
-    List<PointHistory> getAllHistoryByMember(Member member);
+    List<PointHistory> queryAllHistoryByMemberId(Long memberId);
 
-    List<PointHistory> getGameHistoryByMember(Member member, GameType gameType);
+    List<PointHistory> queryGameHistoryByMemberId(Long memberId, GameType gameType);
 
-    List<PointHistory> getHistoryByMemberAndGameMode(Member member, GameType gameType, GameMode gameMode);
+    List<PointHistory> queryHistoryByMemberIdAndGameMode(Long memberId, GameType gameType, GameMode gameMode);
 }
