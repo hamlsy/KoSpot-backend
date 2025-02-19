@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.pointHistory.entity;
+package com.kospot.kospot.domain.point.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.kospot.domain.member.entity.Member;
