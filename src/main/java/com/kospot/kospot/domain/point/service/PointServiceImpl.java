@@ -31,4 +31,5 @@ public class PointServiceImpl implements PointService {
                 PointHistory.create(member, amount, description)
         );
     }
+
 }
