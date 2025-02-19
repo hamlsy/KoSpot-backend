@@ -24,7 +24,7 @@ public class PointServiceImpl implements PointService {
     @Override
     public void usePoint(Member member, int amount, String description) {
         member.usePoint(amount);
-        savePointHistory(member, amount, description);
+        savePointHistory(member, -1 * amount, description);
     }
 
     private void savePointHistory(Member member, int amount, String description){
