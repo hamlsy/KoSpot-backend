@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.member.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.kospot.exception.object.domain.PointHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -24,6 +27,9 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "member")
+    private List<GameRank> gameRank;
 
     @Column(nullable = false, unique = true)
     private String username;

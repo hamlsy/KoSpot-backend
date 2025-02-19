@@ -9,6 +9,9 @@ import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
+import com.kospot.kospot.domain.member.adaptor.MemberAdaptor;
+import com.kospot.kospot.domain.member.entity.Member;
+import com.kospot.kospot.domain.point.service.PointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class RoadViewGameServiceImpl implements RoadViewGameService {
+
+    private final MemberAdaptor memberAdaptor;
+    private final PointService pointService;
 
     private final AESService aesService;
     private final CoordinateService coordinateService;
@@ -37,7 +43,8 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     }
 
     @Override
-    public EndGameResponse.RoadViewPractice endPracticeGame(EndGameRequest.RoadView request){
+    public EndGameResponse.RoadViewPractice endPracticeGame(Long memberId, EndGameRequest.RoadView request){ //todo add member
+        Member member = memberAdaptor.queryById(memberId);
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
         return EndGameResponse.RoadViewPractice.from(game);

@@ -8,7 +8,7 @@ public interface RoadViewGameService {
 
     StartGameResponse.RoadView startPracticeGame(String sidoKey);
 
-    EndGameResponse.RoadViewPractice endPracticeGame(EndGameRequest.RoadView request);
+    EndGameResponse.RoadViewPractice endPracticeGame(Long memberId, EndGameRequest.RoadView request);
 
     StartGameResponse.RoadView startRankGame();
 

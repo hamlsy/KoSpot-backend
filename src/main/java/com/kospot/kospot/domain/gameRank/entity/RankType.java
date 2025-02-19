@@ -1,7 +1,7 @@
 package com.kospot.kospot.domain.gameRank.entity;
 
 public enum RankType {
-    BRONZE, SILVER, GOLD, PLATINUM,DIAMOND, MASTER;
+    BRONZE, SILVER, GOLD, PLATINUM, DIAMOND, MASTER;
 
     public static RankType getRankByRating(int rating) {
         if (rating < 500) return BRONZE;

@@ -43,8 +43,8 @@ public class RoadViewGameController {
     }
 
     @PostMapping("/practice/end")
-    public ApiResponseDto<?> endPracticeGame(@RequestBody EndGameRequest.RoadView request) {
-        EndGameResponse.RoadViewPractice response = service.endPracticeGame(request);
+    public ApiResponseDto<?> endPracticeGame(Long memberId, @RequestBody EndGameRequest.RoadView request) {
+        EndGameResponse.RoadViewPractice response = service.endPracticeGame(memberId, request);
         return ApiResponseDto.onSuccess(response);
     }
 
