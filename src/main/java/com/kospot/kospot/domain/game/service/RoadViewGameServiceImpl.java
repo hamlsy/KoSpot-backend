@@ -11,7 +11,9 @@ import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.kospot.domain.member.entity.Member;
+import com.kospot.kospot.domain.point.entity.PointHistoryType;
 import com.kospot.kospot.domain.point.service.PointService;
+import com.kospot.kospot.domain.point.util.PointCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +49,11 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     public EndGameResponse.RoadViewPractice endPracticeGame(Member member, EndGameRequest.RoadView request){ //todo add member
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
-        pointService.addPoint(member, game.getScore(), );
+
+        // add point
+        int point = PointCalculator.getPracticePoint(game.getScore());
+        pointService.addPoint(member, point, PointHistoryType.PRACTICE_GAME);
+
         return EndGameResponse.RoadViewPractice.from(game);
     }
 
