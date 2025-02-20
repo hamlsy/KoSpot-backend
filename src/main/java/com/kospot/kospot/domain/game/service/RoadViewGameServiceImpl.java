@@ -7,8 +7,12 @@ import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.entity.GameMode;
+import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
+import com.kospot.kospot.domain.gameRank.entity.GameRank;
+import com.kospot.kospot.domain.gameRank.entity.RankTier;
+import com.kospot.kospot.domain.gameRank.repository.GameRankRepository;
 import com.kospot.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.entity.PointHistoryType;
@@ -24,9 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RoadViewGameServiceImpl implements RoadViewGameService {
 
-    private final MemberAdaptor memberAdaptor;
     private final PointService pointService;
     private final PointHistoryService pointHistoryService;
+    private final GameRankRepository gameRankRepository;
 
     private final AESService aesService;
     private final CoordinateService coordinateService;
@@ -81,8 +85,11 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
 
+        GameRank memberGameRank = gameRankRepository.findByMemberIdAndGameType(member.getId(), GameType.ROADVIEW);
+        RankTier tier = memberGameRank.getRankTier();
+
         // add point
-        int point = PointCalculator.getRankPoint(null, game.getScore());
+        int point = PointCalculator.getRankPoint(tier, game.getScore());
         pointService.addPoint(member, point);
 
         // save point history

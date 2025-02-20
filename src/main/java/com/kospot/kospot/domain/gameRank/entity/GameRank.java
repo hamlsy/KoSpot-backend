@@ -31,7 +31,7 @@ public class GameRank extends BaseTimeEntity {
     private int ratingScore;
 
     @Enumerated(EnumType.STRING)
-    private RankTier rankType;
+    private RankTier rankTier;
 
     @Enumerated(EnumType.STRING)
     private RankLevel rankLevel;

@@ -28,9 +28,6 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "member")
-    private List<GameRank> gameRank;
-
     @Column(nullable = false, unique = true)
     private String username;
 
