@@ -14,24 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PointServiceImpl implements PointService {
 
-    private final PointHistoryRepository repository;
-
     @Override
-    public void addPoint(Member member, int amount, PointHistoryType pointHistoryType) {
+    public void addPoint(Member member, int amount) {
         member.addPoint(amount);
-        savePointHistory(member, amount, pointHistoryType);
     }
 
     @Override
-    public void usePoint(Member member, int amount, PointHistoryType pointHistoryType) {
+    public void usePoint(Member member, int amount) {
         member.usePoint(amount);
-        savePointHistory(member, -1 * amount, pointHistoryType);
-    }
-
-    private void savePointHistory(Member member, int amount, PointHistoryType pointHistoryType){
-        repository.save(
-                PointHistory.create(member, amount, pointHistoryType)
-        );
     }
 
 }

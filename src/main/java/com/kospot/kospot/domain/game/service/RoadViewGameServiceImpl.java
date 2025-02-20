@@ -12,6 +12,7 @@ import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.entity.PointHistoryType;
+import com.kospot.kospot.domain.point.service.PointHistoryService;
 import com.kospot.kospot.domain.point.service.PointService;
 import com.kospot.kospot.domain.point.util.PointCalculator;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
 
     private final MemberAdaptor memberAdaptor;
     private final PointService pointService;
+    private final PointHistoryService pointHistoryService;
 
     private final AESService aesService;
     private final CoordinateService coordinateService;
@@ -52,7 +54,10 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
 
         // add point
         int point = PointCalculator.getPracticePoint(game.getScore());
-        pointService.addPoint(member, point, PointHistoryType.PRACTICE_GAME);
+        pointService.addPoint(member, point);
+
+        // save point history
+        pointHistoryService.savePointHistory(member, -1 * point, PointHistoryType.PRACTICE_GAME);
 
         return EndGameResponse.RoadViewPractice.from(game);
     }

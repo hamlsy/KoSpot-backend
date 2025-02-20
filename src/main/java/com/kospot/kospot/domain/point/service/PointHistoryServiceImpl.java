@@ -1,10 +1,15 @@
 package com.kospot.kospot.domain.point.service;
 
+import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.kospot.domain.point.dto.response.PointHistoryResponse;
 import com.kospot.kospot.domain.point.entity.PointHistory;
+import com.kospot.kospot.domain.point.entity.PointHistoryType;
+import com.kospot.kospot.domain.point.repository.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PointHistoryServiceImpl implements PointHistoryService{
 
+    private final PointHistoryRepository repository;
     private final PointHistoryAdaptor adaptor;
 
     @Override
@@ -23,5 +29,12 @@ public class PointHistoryServiceImpl implements PointHistoryService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void savePointHistory(Member member, int amount, PointHistoryType pointHistoryType){
+        repository.save(
+                PointHistory.create(member, amount, pointHistoryType)
+        );
+    }
 
 }
