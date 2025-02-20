@@ -6,6 +6,7 @@ import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.game.service.AESService;
 import com.kospot.kospot.domain.game.util.ScoreCalculator;
+import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +44,8 @@ public class RoadViewGameController {
     }
 
     @PostMapping("/practice/end")
-    public ApiResponseDto<?> endPracticeGame(Long memberId, @RequestBody EndGameRequest.RoadView request) {
-        EndGameResponse.RoadViewPractice response = service.endPracticeGame(memberId, request);
+    public ApiResponseDto<?> endPracticeGame(Member member, @RequestBody EndGameRequest.RoadView request) {
+        EndGameResponse.RoadViewPractice response = service.endPracticeGame(member, request);
         return ApiResponseDto.onSuccess(response);
     }
 

@@ -44,9 +44,10 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     }
 
     @Override
-    public EndGameResponse.RoadViewPractice endPracticeGame(Long memberId, EndGameRequest.RoadView request){ //todo add member
+    public EndGameResponse.RoadViewPractice endPracticeGame(Member member, EndGameRequest.RoadView request){ //todo add member
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
+        pointService.addPoint(member, game.getScore(), );
         return EndGameResponse.RoadViewPractice.from(game);
     }
 

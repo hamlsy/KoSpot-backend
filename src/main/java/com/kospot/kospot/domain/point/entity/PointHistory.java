@@ -21,18 +21,17 @@ public class PointHistory extends BaseTimeEntity {
 
     private int changeAmount;
 
-    @Lob
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @Enumerated(EnumType.STRING)
+    private PointHistoryType pointHistoryType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public static PointHistory create(Member member, int changeAmount, String description) {
+    public static PointHistory create(Member member, int changeAmount, PointHistoryType pointHistoryType) {
         return PointHistory.builder()
                 .changeAmount(changeAmount)
-                .description(description)
+                .pointHistoryType(pointHistoryType)
                 .member(member)
                 .build();
     }
