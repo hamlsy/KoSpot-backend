@@ -63,8 +63,8 @@ public class RoadViewGameController {
     }
 
     @PostMapping("/rank/end")
-    public ApiResponseDto<?> endRankGame(@RequestBody EndGameRequest.RoadView request) {
-        EndGameResponse.RoadViewRank response = service.endRankGame(request);
+    public ApiResponseDto<?> endRankGame(Member member, @RequestBody EndGameRequest.RoadView request) {
+        EndGameResponse.RoadViewRank response = service.endRankGame(member, request);
         return ApiResponseDto.onSuccess(response);
     }
 

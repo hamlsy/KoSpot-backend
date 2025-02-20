@@ -13,5 +13,5 @@ public interface RoadViewGameService {
 
     StartGameResponse.RoadView startRankGame();
 
-    EndGameResponse.RoadViewRank endRankGame(EndGameRequest.RoadView request);
+    EndGameResponse.RoadViewRank endRankGame(Member member, EndGameRequest.RoadView request);
 }

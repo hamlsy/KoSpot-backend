@@ -48,7 +48,8 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     }
 
     @Override
-    public EndGameResponse.RoadViewPractice endPracticeGame(Member member, EndGameRequest.RoadView request){ //todo add member
+    public EndGameResponse.RoadViewPractice endPracticeGame(Member member, EndGameRequest.RoadView request){
+        //end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
 
@@ -76,9 +77,18 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     }
 
     @Override
-    public EndGameResponse.RoadViewRank endRankGame(EndGameRequest.RoadView request){
+    public EndGameResponse.RoadViewRank endRankGame(Member member, EndGameRequest.RoadView request){
+        // end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
+
+        // add point
+        int point = PointCalculator.getRankPoint(null, game.getScore());
+        pointService.addPoint(member, point);
+
+        // save point history
+        pointHistoryService.savePointHistory(member, point, PointHistoryType.RANK_GAME);
+
         return EndGameResponse.RoadViewRank.from(game);
     }
 

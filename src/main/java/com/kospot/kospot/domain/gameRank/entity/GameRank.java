@@ -1,7 +1,7 @@
 package com.kospot.kospot.domain.gameRank.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.kospot.domain.game.entity.GameMode;
+import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class GameRank extends BaseTimeEntity {
     private Member member;
 
     @Enumerated(EnumType.STRING)
-    private GameMode gameMode;
+    private GameType gameType;
 
     private int ratingScore;
 
