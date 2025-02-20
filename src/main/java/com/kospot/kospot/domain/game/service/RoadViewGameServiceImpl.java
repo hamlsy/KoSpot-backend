@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-//todo add point system
 public class RoadViewGameServiceImpl implements RoadViewGameService {
 
     private final MemberAdaptor memberAdaptor;
@@ -35,9 +34,9 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
     private final RoadViewGameRepository repository;
 
     @Override
-    public StartGameResponse.RoadView startPracticeGame(String sidoKey){
+    public StartGameResponse.RoadView startPracticeGame(Member member, String sidoKey){
         Coordinate coordinate = coordinateService.getRandomCoordinateBySido(sidoKey);
-        RoadViewGame game = RoadViewGame.create(coordinate, null, GameMode.PRACTICE); //todo add member
+        RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.PRACTICE);
         repository.save(game);
         //todo refactor
         return StartGameResponse.RoadView.builder()
@@ -65,9 +64,9 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
 
 
     @Override
-    public StartGameResponse.RoadView startRankGame() {
+    public StartGameResponse.RoadView startRankGame(Member member) {
         Coordinate coordinate = coordinateService.getRandomNationwideCoordinate();
-        RoadViewGame game = RoadViewGame.create(coordinate, null, GameMode.RANK); //todo add member
+        RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.RANK);
         repository.save(game);
         return StartGameResponse.RoadView.builder()
                 .gameId(toEncryptString(game.getId()))

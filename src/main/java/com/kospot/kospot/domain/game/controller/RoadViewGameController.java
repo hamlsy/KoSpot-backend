@@ -38,8 +38,8 @@ public class RoadViewGameController {
      */
 
     @PostMapping("/practice/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@RequestParam("sido") String sidoKey) {
-        StartGameResponse.RoadView response = service.startPracticeGame(sidoKey);
+    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(Member member, @RequestParam("sido") String sidoKey) {
+        StartGameResponse.RoadView response = service.startPracticeGame(member, sidoKey);
         return ApiResponseDto.onSuccess(response);
     }
 
@@ -57,8 +57,8 @@ public class RoadViewGameController {
      *  -----------------RANK------------------
      */
     @PostMapping("/rank/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startRankGame() {
-        StartGameResponse.RoadView response = service.startRankGame();
+    public ApiResponseDto<StartGameResponse.RoadView> startRankGame(Member member) {
+        StartGameResponse.RoadView response = service.startRankGame(member);
         return ApiResponseDto.onSuccess(response);
     }
 
