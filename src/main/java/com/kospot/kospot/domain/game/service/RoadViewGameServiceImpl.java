@@ -84,13 +84,8 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
         // end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
-
         GameRank memberGameRank = gameRankRepository.findByMemberIdAndGameType(member.getId(), GameType.ROADVIEW);
         RankTier tier = memberGameRank.getRankTier();
-
-        /**
-         * be async
-          */
 
         // add point
         int point = PointCalculator.getRankPoint(tier, game.getScore());
@@ -98,10 +93,6 @@ public class RoadViewGameServiceImpl implements RoadViewGameService {
 
         // save point history
         pointHistoryService.savePointHistory(member, point, PointHistoryType.RANK_GAME);
-
-        /**
-         *
-         */
 
         return EndGameResponse.RoadViewRank.from(game);
     }

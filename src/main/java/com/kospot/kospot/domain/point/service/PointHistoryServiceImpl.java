@@ -30,8 +30,7 @@ public class PointHistoryServiceImpl implements PointHistoryService{
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-//    @Transactional
+    @Transactional
     public void savePointHistory(Member member, int amount, PointHistoryType pointHistoryType){
         repository.save(
                 PointHistory.create(member, amount, pointHistoryType)
