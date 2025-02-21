@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.point.dto.response;
 
 import com.kospot.kospot.domain.point.entity.PointHistory;
+import com.kospot.kospot.domain.point.entity.PointHistoryType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,7 +19,7 @@ public class PointHistoryResponse {
         return PointHistoryResponse.builder()
                 .changeAmount(pointHistory.getChangeAmount())
                 .changeTime(pointHistory.getCreatedDate())
-                .description(pointHistory.getDescription())
+                .description(pointHistory.getPointHistoryType().getDescription())
                 .build();
     }
 
