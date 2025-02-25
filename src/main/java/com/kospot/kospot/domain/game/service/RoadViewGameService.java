@@ -2,6 +2,7 @@ package com.kospot.kospot.domain.game.service;
 
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.service.CoordinateService;
+import com.kospot.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
@@ -47,6 +48,7 @@ public class RoadViewGameService {
                 .build();
     }
 
+    //todo refactor transaction
     public EndGameResponse.RoadViewPractice endPracticeGame(Member member, EndGameRequest.RoadView request){
         //end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
@@ -73,6 +75,7 @@ public class RoadViewGameService {
                 .build();
     }
 
+    //todo refactor transaction
     public EndGameResponse.RoadViewRank endRankGame(Member member, EndGameRequest.RoadView request){
         // end game
         RoadViewGame game = adaptor.queryById(request.getGameId());

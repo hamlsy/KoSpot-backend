@@ -1,7 +1,9 @@
 package com.kospot.kospot.domain.coordinate.service;
 
+import com.kospot.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.kospot.domain.coordinateIdCache.adaptor.CoordinateIdCacheAdaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

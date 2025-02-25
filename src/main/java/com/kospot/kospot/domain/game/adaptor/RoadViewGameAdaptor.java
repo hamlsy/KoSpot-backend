@@ -12,11 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class RoadViewGameAdaptor implements RoadViewGameAdaptor{
+public class RoadViewGameAdaptor {
 
     private final RoadViewGameRepository repository;
 
-    @Override
     public RoadViewGame queryById(Long gameId) {
         return repository.findById(gameId).orElseThrow(
                 () -> new GameHandler(ErrorStatus.GAME_NOT_FOUND)

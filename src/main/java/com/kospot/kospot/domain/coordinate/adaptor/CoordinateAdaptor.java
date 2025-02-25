@@ -16,12 +16,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CoordinateAdaptor implements CoordinateAdaptor{
+public class CoordinateAdaptor {
 
     private final DynamicCoordinateRepositoryFactory factory;
     private final CoordinateNationwideRepository nationwideRepository;
 
-    @Override
     public Coordinate queryById(Sido sido, Long id) {
         return factory.getRepository(sido).findById(id)
                 .map(Coordinate.class::cast)
@@ -30,12 +29,10 @@ public class CoordinateAdaptor implements CoordinateAdaptor{
         );
     }
 
-    @Override
     public boolean queryExistsById(Sido sido, Long id) {
         return factory.getRepository(sido).existsById(id);
     }
 
-    @Override
     public Long queryMaxIdBySido(Sido sido){
         Long maxId = factory.getRepository(sido).findMaxId();
         return Optional.ofNullable(maxId).orElse(0L);
@@ -45,7 +42,6 @@ public class CoordinateAdaptor implements CoordinateAdaptor{
      *  Nationwide
      */
 
-    @Override
     public Coordinate queryNationwideById(Long id) {
         return nationwideRepository.findById(id)
                 .map(Coordinate.class::cast)
@@ -54,12 +50,10 @@ public class CoordinateAdaptor implements CoordinateAdaptor{
                 );
     }
 
-    @Override
     public boolean queryNationwideExistsById(Long id) {
         return nationwideRepository.existsById(id);
     }
 
-    @Override
     public Long queryNationwideMaxId() {
         Long maxId = nationwideRepository.findMaxId();
         return Optional.ofNullable(maxId).orElse(0L);

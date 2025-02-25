@@ -11,11 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberAdaptor implements MemberAdaptor{
+public class MemberAdaptor {
 
     private final MemberRepository repository;
 
-    @Override
     public Member queryById(Long memberId) {
         return repository.findById(memberId).orElseThrow(
                 () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)

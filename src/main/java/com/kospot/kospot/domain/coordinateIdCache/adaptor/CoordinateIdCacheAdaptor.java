@@ -13,11 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CoordinateIdCacheAdaptor implements CoordinateIdCacheAdaptor{
+public class CoordinateIdCacheAdaptor {
 
     private final CoordinateIdCacheRepository repository;
 
-    @Override
     public CoordinateIdCache queryById(Sido sido) {
         return repository.findById(sido).orElseThrow(
                 () -> new CoordinateIdCacheHandler(ErrorStatus.COORDINATE_CACHE_TABLE_ID_NOT_FOUND)
