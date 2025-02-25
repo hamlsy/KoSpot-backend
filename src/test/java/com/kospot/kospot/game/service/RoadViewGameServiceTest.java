@@ -12,8 +12,6 @@ import com.kospot.kospot.domain.gameRank.entity.RankTier;
 import com.kospot.kospot.domain.gameRank.repository.GameRankRepository;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.member.repository.MemberRepository;
-import com.kospot.kospot.domain.point.service.PointHistoryService;
-import com.kospot.kospot.domain.point.service.PointService;
 import com.kospot.kospot.domain.point.util.PointCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

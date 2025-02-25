@@ -1,7 +1,6 @@
 package com.kospot.kospot.coordinate.service;
 
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.kospot.domain.coordinate.service.CoordinateService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
