@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.game.controller;
+package com.kospot.kospot.presentation.game;
 
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;

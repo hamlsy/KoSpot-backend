@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.coordinate.controller;
+package com.kospot.kospot.presentation.coordinate;
 
 import com.kospot.kospot.domain.coordinate.dto.response.CoordinateResponse;
 import com.kospot.kospot.domain.coordinate.service.CoordinateExcelService;

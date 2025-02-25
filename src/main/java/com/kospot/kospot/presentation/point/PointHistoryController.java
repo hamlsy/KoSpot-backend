@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.point.controller;
+package com.kospot.kospot.presentation.point;
 
 import com.kospot.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.kospot.domain.point.dto.response.PointHistoryResponse;
