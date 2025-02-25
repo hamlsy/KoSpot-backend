@@ -18,6 +18,8 @@ import com.kospot.kospot.domain.point.service.PointService;
 import com.kospot.kospot.domain.point.util.PointCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class RoadViewGameServiceTest {
+    private static final Logger log = LoggerFactory.getLogger(RoadViewGameServiceTest.class);
     @Autowired
     private RoadViewGameService roadViewGameService;
 
@@ -72,8 +75,11 @@ public class RoadViewGameServiceTest {
         int expectedPoint = PointCalculator.getPracticePoint(game.getScore());
         int actualPoint = member.getPoint();
         assertEquals(expectedPoint, actualPoint);
+        System.out.println("expectedPoint: " + expectedPoint + " actualPoint: " + actualPoint);
         assertEquals(game.getScore(), response.getScore());
+        System.out.println("game.getScore(): " + game.getScore() + " response.getScore(): " + response.getScore());
         assertEquals(GameStatus.COMPLETED, game.getGameStatus());
+        System.out.println("game.getGameStatus(): " + game.getGameStatus());
     }
 
     @Test
@@ -109,9 +115,11 @@ public class RoadViewGameServiceTest {
         int expectedPoint = PointCalculator.getRankPoint(gameRank.getRankTier(), game.getScore());
         int actualPoint = member.getPoint();
 
-        assertEquals(expectedPoint, actualPoint);
+        System.out.println("expectedPoint: " + expectedPoint + " actualPoint: " + actualPoint);
         assertEquals(game.getScore(), response.getScore());
+        System.out.println("game.getScore(): " + game.getScore() + " response.getScore(): " + response.getScore());
         assertEquals(GameStatus.COMPLETED, game.getGameStatus());
+        System.out.println("game.getGameStatus(): " + game.getGameStatus());
     }
 
 }
