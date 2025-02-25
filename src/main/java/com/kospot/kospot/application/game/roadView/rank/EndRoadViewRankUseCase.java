@@ -23,6 +23,7 @@ public class EndRoadViewRankUseCase {
     private final GameRankAdaptor gameRankAdaptor;
     private final PointHistoryService pointHistoryService;
 
+    //todo refactor transaction
     public EndGameResponse.RoadViewRank execute(Member member, EndGameRequest.RoadView request){
         // end
         RoadViewGame game = roadViewGameService.endRankGame(member, request);

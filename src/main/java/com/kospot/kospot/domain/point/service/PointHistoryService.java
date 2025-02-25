@@ -20,6 +20,7 @@ public class PointHistoryService {
     private final PointHistoryRepository repository;
     private final PointHistoryAdaptor adaptor;
 
+    //todo change to usecase
     public List<PointHistoryResponse> findAllHistoryByMemberId(Long memberId) {
         List<PointHistory> histories = adaptor.queryAllHistoryByMemberId(memberId);
         return histories.stream()

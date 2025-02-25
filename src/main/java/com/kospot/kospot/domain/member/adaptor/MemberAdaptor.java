@@ -4,11 +4,11 @@ import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.member.repository.MemberRepository;
 import com.kospot.kospot.exception.object.domain.MemberHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.kospot.global.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Adaptor
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberAdaptor {

@@ -1,6 +1,7 @@
 package com.kospot.kospot.presentation.game;
 
 import com.kospot.kospot.application.game.roadView.practice.StartRoadViewPracticeUseCase;
+import com.kospot.kospot.application.game.roadView.rank.EndRoadViewRankUseCase;
 import com.kospot.kospot.application.game.roadView.rank.StartRoadViewRankUseCase;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
@@ -21,7 +22,10 @@ import org.springframework.web.bind.annotation.*;
 public class RoadViewGameController {
 
     private final StartRoadViewPracticeUseCase startRoadViewPracticeUseCase;
+
     private final StartRoadViewRankUseCase startRoadViewRankUseCase;
+    private final EndRoadViewRankUseCase endRoadViewRankUseCase;
+
     private final AESService aesService;
     private final RoadViewGameService service;
 
@@ -67,9 +71,8 @@ public class RoadViewGameController {
     }
 
     @PostMapping("/rank/end")
-    public ApiResponseDto<?> endRankGame(Member member, @RequestBody EndGameRequest.RoadView request) {
-        EndGameResponse.RoadViewRank response = service.endRankGame(member, request);
-        return ApiResponseDto.onSuccess(response);
+    public ApiResponseDto<EndGameResponse.RoadViewRank> endRankGame(Member member, @RequestBody EndGameRequest.RoadView request) {
+        return ApiResponseDto.onSuccess(endRoadViewRankUseCase.execute(member, request));
     }
 
 

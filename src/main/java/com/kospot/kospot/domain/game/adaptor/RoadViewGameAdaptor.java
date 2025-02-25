@@ -5,11 +5,11 @@ import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.kospot.exception.object.domain.GameHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.kospot.global.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Adaptor
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RoadViewGameAdaptor {

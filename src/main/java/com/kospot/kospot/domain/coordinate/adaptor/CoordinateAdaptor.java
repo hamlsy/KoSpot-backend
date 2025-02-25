@@ -7,13 +7,14 @@ import com.kospot.kospot.domain.coordinate.service.DynamicCoordinateRepositoryFa
 import com.kospot.kospot.exception.object.domain.CoordinateHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 
+import com.kospot.kospot.global.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Service
+@Adaptor
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CoordinateAdaptor {
