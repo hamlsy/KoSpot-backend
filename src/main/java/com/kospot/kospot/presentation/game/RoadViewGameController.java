@@ -9,8 +9,10 @@ import com.kospot.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/roadViewGame")
