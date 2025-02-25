@@ -1,6 +1,5 @@
 package com.kospot.kospot.domain.game.adaptor;
 
-
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.kospot.exception.object.domain.GameHandler;

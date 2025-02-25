@@ -26,7 +26,7 @@ public class EndRoadViewRankUseCase {
     //todo refactor transaction
     public EndGameResponse.RoadViewRank execute(Member member, EndGameRequest.RoadView request){
         // end
-        RoadViewGame game = roadViewGameService.endRankGame(request);
+        RoadViewGame game = roadViewGameService.endRankGame(member, request);
 
         // earn point
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);

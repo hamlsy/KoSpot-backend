@@ -8,7 +8,6 @@ import com.kospot.kospot.exception.payload.code.ErrorStatus;
 
 import com.kospot.kospot.global.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Adaptor
