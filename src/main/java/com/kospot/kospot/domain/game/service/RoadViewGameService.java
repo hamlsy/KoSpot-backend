@@ -31,26 +31,16 @@ public class RoadViewGameService {
     private final PointHistoryService pointHistoryService;
     private final GameRankRepository gameRankRepository;
 
-    private final AESService aesService;
     private final CoordinateService coordinateService;
     private final RoadViewGameAdaptor adaptor;
     private final RoadViewGameRepository repository;
 
-    public StartGameResponse.RoadView startPracticeGame(Member member, String sidoKey){
+    public RoadViewGame startPracticeGame(Member member, String sidoKey){
         Coordinate coordinate = coordinateService.getRandomCoordinateBySido(sidoKey);
         RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.PRACTICE);
         repository.save(game);
 
-        return getEncryptedRoadViewGameResponse(game);
-    }
-
-    //encrypt
-    private StartGameResponse.RoadView getEncryptedRoadViewGameResponse(RoadViewGame game) {
-        return StartGameResponse.RoadView.builder()
-                .gameId(toEncryptString(game.getId()))
-                .targetLat(toEncryptString(game.getTargetLat()))
-                .targetLng(toEncryptString(game.getTargetLng()))
-                .build();
+        return game;
     }
 
     //todo refactor transaction
@@ -69,12 +59,11 @@ public class RoadViewGameService {
         return EndGameResponse.RoadViewPractice.from(game);
     }
 
-    public StartGameResponse.RoadView startRankGame(Member member) {
+    public RoadViewGame startRankGame(Member member) {
         Coordinate coordinate = coordinateService.getRandomNationwideCoordinate();
         RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.RANK);
         repository.save(game);
-
-        return getEncryptedRoadViewGameResponse(game);
+        return game;
     }
 
     //todo refactor transaction
@@ -101,7 +90,5 @@ public class RoadViewGameService {
         );
     }
 
-    private <T> String toEncryptString(T object){
-        return aesService.encrypt(String.valueOf(object));
-    }
+
 }

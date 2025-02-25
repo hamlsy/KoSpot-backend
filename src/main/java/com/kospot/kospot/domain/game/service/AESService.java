@@ -30,4 +30,8 @@ public class AESService {
             throw new GameHandler(ErrorStatus.GAME_COORDINATES_ENCRYPT_ERROR);
         }
     }
+
+    public <T> String toEncryptString(T object){
+        return encrypt(String.valueOf(object));
+    }
 }
