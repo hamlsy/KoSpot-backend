@@ -48,6 +48,7 @@ public enum ErrorStatus implements BaseCode{
     GAME_COORDINATES_ENCRYPT_ERROR(BAD_REQUEST, 4213, "게임 좌표 암호화 중 오류가 발생했습니다."),
     GAME_TYPE_NOT_FOUND(NOT_FOUND, 4214, "존재하지 않는 게임입니다."),
     GAME_MODE_NOT_FOUND(NOT_FOUND, 4215, "존재하지 않는 게임 모드입니다."),
+    GAME_NOT_SAME_MEMBER(BAD_REQUEST, 4216, "동일한 사용자가 아닙니다."),
 
     // Point Error (4251 ~ 4260)
     POINT_INSUFFICIENT(BAD_REQUEST, 4251, "포인트가 부족합니다.")

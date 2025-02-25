@@ -29,7 +29,6 @@ public class RoadViewGameService {
 
     private final PointService pointService;
     private final PointHistoryService pointHistoryService;
-    private final GameRankRepository gameRankRepository;
 
     private final CoordinateService coordinateService;
     private final RoadViewGameAdaptor adaptor;
@@ -47,7 +46,7 @@ public class RoadViewGameService {
     public EndGameResponse.RoadViewPractice endPracticeGame(Member member, EndGameRequest.RoadView request){
         //end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
-        endGame(game, request);
+        endGame(member, game, request);
 
         // add point
         int point = PointCalculator.getPracticePoint(game.getScore());
@@ -63,40 +62,21 @@ public class RoadViewGameService {
         Coordinate coordinate = coordinateService.getRandomNationwideCoordinate();
         RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.RANK);
         repository.save(game);
+
         return game;
     }
-
-//    //todo refactor transaction
-//    public EndGameResponse.RoadViewRank endRankGame(Member member, EndGameRequest.RoadView request){
-//        // end game
-//        RoadViewGame game = adaptor.queryById(request.getGameId());
-//        endGame(game, request);
-//
-//        // add point
-//        GameRank memberGameRank = gameRankRepository.findByMemberIdAndGameType(member, GameType.ROADVIEW);
-//        RankTier tier = memberGameRank.getRankTier();
-//        int point = PointCalculator.getRankPoint(tier, game.getScore());
-//        pointService.addPoint(member, point);
-//
-//        // save point history
-//        pointHistoryService.savePointHistory(member, point, PointHistoryType.RANK_GAME);
-//
-//        return EndGameResponse.RoadViewRank.from(game);
-//    }
 
     //todo refactor transaction
     public RoadViewGame endRankGame(Member member, EndGameRequest.RoadView request){
-        // end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
-        endGame(game, request);
+        endGame(member, game, request);
 
         return game;
-
     }
 
-    private void endGame(RoadViewGame game, EndGameRequest.RoadView request) {
+    private void endGame(Member member, RoadViewGame game, EndGameRequest.RoadView request) {
         game.end(
-                request.getSubmittedLat(), request.getSubmittedLng(), request.getAnswerTime(), request.getAnswerDistance()
+                member, request.getSubmittedLat(), request.getSubmittedLng(), request.getAnswerTime(), request.getAnswerDistance()
         );
     }
 
