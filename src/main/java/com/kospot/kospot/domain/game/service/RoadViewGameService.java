@@ -66,22 +66,32 @@ public class RoadViewGameService {
         return game;
     }
 
+//    //todo refactor transaction
+//    public EndGameResponse.RoadViewRank endRankGame(Member member, EndGameRequest.RoadView request){
+//        // end game
+//        RoadViewGame game = adaptor.queryById(request.getGameId());
+//        endGame(game, request);
+//
+//        // add point
+//        GameRank memberGameRank = gameRankRepository.findByMemberIdAndGameType(member, GameType.ROADVIEW);
+//        RankTier tier = memberGameRank.getRankTier();
+//        int point = PointCalculator.getRankPoint(tier, game.getScore());
+//        pointService.addPoint(member, point);
+//
+//        // save point history
+//        pointHistoryService.savePointHistory(member, point, PointHistoryType.RANK_GAME);
+//
+//        return EndGameResponse.RoadViewRank.from(game);
+//    }
+
     //todo refactor transaction
-    public EndGameResponse.RoadViewRank endRankGame(Member member, EndGameRequest.RoadView request){
+    public RoadViewGame endRankGame(Member member, EndGameRequest.RoadView request){
         // end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
 
-        // add point
-        GameRank memberGameRank = gameRankRepository.findByMemberIdAndGameType(member, GameType.ROADVIEW);
-        RankTier tier = memberGameRank.getRankTier();
-        int point = PointCalculator.getRankPoint(tier, game.getScore());
-        pointService.addPoint(member, point);
-        
-        // save point history
-        pointHistoryService.savePointHistory(member, point, PointHistoryType.RANK_GAME);
+        return game;
 
-        return EndGameResponse.RoadViewRank.from(game);
     }
 
     private void endGame(RoadViewGame game, EndGameRequest.RoadView request) {

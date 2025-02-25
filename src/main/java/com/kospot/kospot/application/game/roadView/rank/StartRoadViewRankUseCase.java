@@ -1,4 +1,4 @@
-package com.kospot.kospot.application.game.roadView;
+package com.kospot.kospot.application.game.roadView.rank;
 
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;

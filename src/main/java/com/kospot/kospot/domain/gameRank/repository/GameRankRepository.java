@@ -11,6 +11,6 @@ public interface GameRankRepository extends JpaRepository<GameRank, Long> {
 
     @Query("select r from GameRank r join fetch r.member where r.member = :member " +
             "and r.gameType = :gameType")
-    GameRank findByMemberIdAndGameType(@Param("member") Member member, @Param("gameType") GameType gameType);
+    GameRank findByMemberAndGameType(@Param("member") Member member, @Param("gameType") GameType gameType);
 
 }
