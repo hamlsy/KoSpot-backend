@@ -9,15 +9,16 @@ import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
-public enum GameType {
-    ROADVIEW("로드뷰 모드"), PHOTO("사진 모드");
+public enum GameMode {
+    RANK("RANK_GAME"), PRACTICE("PRACTICE_GAME");
 
-    private final String type;
+    private final String mode;
 
-    public static GameType fromKey(String key) {
-        return Arrays.stream(GameType.values())
+    public static GameMode fromKey(String key) {
+        return Arrays.stream(GameMode.values())
                 .filter(s -> s.name().equalsIgnoreCase(key))
                 .findFirst()
-                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.GAME_TYPE_NOT_FOUND));
+                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.GAME_MODE_NOT_FOUND));
     }
+
 }

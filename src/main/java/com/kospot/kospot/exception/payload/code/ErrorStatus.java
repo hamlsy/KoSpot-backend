@@ -46,7 +46,12 @@ public enum ErrorStatus implements BaseCode{
     GAME_NOT_FOUND(NOT_FOUND, 4211, "해당 게임을 찾을 수 없습니다."),
     GAME_IS_ALREADY_COMPLETED(BAD_REQUEST, 4212, "이미 처리된 게임입니다."),
     GAME_COORDINATES_ENCRYPT_ERROR(BAD_REQUEST, 4213, "게임 좌표 암호화 중 오류가 발생했습니다."),
-    ;
+    GAME_TYPE_NOT_FOUND(NOT_FOUND, 4214, "존재하지 않는 게임입니다."),
+    GAME_MODE_NOT_FOUND(NOT_FOUND, 4215, "존재하지 않는 게임 모드입니다."),
+
+    // Point Error (4251 ~ 4260)
+    POINT_INSUFFICIENT(BAD_REQUEST, 4251, "포인트가 부족합니다.")
+    ,;
 
 
     private final HttpStatus httpStatus;

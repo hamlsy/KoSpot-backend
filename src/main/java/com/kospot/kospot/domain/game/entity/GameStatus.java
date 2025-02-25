@@ -6,5 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum GameStatus {
-    ABANDONED, COMPLETED
+    ABANDONED("탈주"), COMPLETED("완료");
+
+    private final String status;
 }

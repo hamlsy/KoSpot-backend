@@ -3,9 +3,10 @@ package com.kospot.kospot.domain.game.controller;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
-import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.game.service.AESService;
+import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.game.util.ScoreCalculator;
+import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -37,14 +38,14 @@ public class RoadViewGameController {
      */
 
     @PostMapping("/practice/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@RequestParam("sido") String sidoKey) {
-        StartGameResponse.RoadView response = service.startPracticeGame(sidoKey);
+    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(Member member, @RequestParam("sido") String sidoKey) {
+        StartGameResponse.RoadView response = service.startPracticeGame(member, sidoKey);
         return ApiResponseDto.onSuccess(response);
     }
 
     @PostMapping("/practice/end")
-    public ApiResponseDto<?> endPracticeGame(@RequestBody EndGameRequest.RoadView request) {
-        EndGameResponse.RoadViewPractice response = service.endPracticeGame(request);
+    public ApiResponseDto<?> endPracticeGame(Member member, @RequestBody EndGameRequest.RoadView request) {
+        EndGameResponse.RoadViewPractice response = service.endPracticeGame(member, request);
         return ApiResponseDto.onSuccess(response);
     }
 
@@ -56,14 +57,14 @@ public class RoadViewGameController {
      *  -----------------RANK------------------
      */
     @PostMapping("/rank/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startRankGame() {
-        StartGameResponse.RoadView response = service.startRankGame();
+    public ApiResponseDto<StartGameResponse.RoadView> startRankGame(Member member) {
+        StartGameResponse.RoadView response = service.startRankGame(member);
         return ApiResponseDto.onSuccess(response);
     }
 
     @PostMapping("/rank/end")
-    public ApiResponseDto<?> endRankGame(@RequestBody EndGameRequest.RoadView request) {
-        EndGameResponse.RoadViewRank response = service.endRankGame(request);
+    public ApiResponseDto<?> endRankGame(Member member, @RequestBody EndGameRequest.RoadView request) {
+        EndGameResponse.RoadViewRank response = service.endRankGame(member, request);
         return ApiResponseDto.onSuccess(response);
     }
 

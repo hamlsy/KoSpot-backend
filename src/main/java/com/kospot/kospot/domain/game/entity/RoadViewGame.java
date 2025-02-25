@@ -26,21 +26,21 @@ public class RoadViewGame extends Game {
 
     private String poiName;
 
-    public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType) {
+    public static RoadViewGame create(Coordinate coordinate, Member member, GameMode gameMode) {
         return RoadViewGame.builder()
                 .targetLat(coordinate.getLat())
                 .targetLng(coordinate.getLng())
                 .member(member)
-                .gameType(gameType)
+                .gameType(GameType.ROADVIEW)
+                .gameMode(gameMode)
                 .poiName(coordinate.getPoiName())
                 .gameStatus(GameStatus.ABANDONED)
                 .build();
     }
 
-    public void end(EndGameRequest.RoadView request) {
-        super.end(request.getSubmittedLat(), request.getSubmittedLng(),
-                getScore(request.getAnswerDistance()), request.getAnswerTime());
-        this.answerDistance = request.getAnswerDistance();
+    public void end(double submittedLat, double submittedLng, double answerTime, double answerDistance) {
+        super.end(submittedLat, submittedLng, getScore(answerDistance), answerTime);
+        this.answerDistance = answerDistance;
     }
 
     private double getScore(double distance) {

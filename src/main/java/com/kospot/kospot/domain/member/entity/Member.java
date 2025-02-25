@@ -1,12 +1,17 @@
 package com.kospot.kospot.domain.member.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.kospot.domain.gameRank.entity.GameRank;
+import com.kospot.kospot.exception.object.domain.PointHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -31,7 +36,24 @@ public class Member extends BaseTimeEntity {
 
     private String email;
 
-    private int points;
+    private int point;
+
+    //business
+
+    /**
+     * Point
+     */
+
+    public void addPoint(int amount){
+        this.point += amount;
+    }
+
+    public void usePoint(int amount){
+        if(this.point < amount){
+            throw new PointHandler(ErrorStatus.POINT_INSUFFICIENT);
+        }
+        this.point -= amount;
+    }
 
 
 }

@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.gameRank.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,17 +21,17 @@ public class GameRank extends BaseTimeEntity {
     @Column(name = "game_rank_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Enumerated(EnumType.STRING)
-    private RankMode rankMode;
+    private GameType gameType;
 
     private int ratingScore;
 
     @Enumerated(EnumType.STRING)
-    private RankType rankType;
+    private RankTier rankTier;
 
     @Enumerated(EnumType.STRING)
     private RankLevel rankLevel;

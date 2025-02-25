@@ -45,14 +45,19 @@ public abstract class Game extends BaseTimeEntity {
     private GameType gameType;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "game_mode")
+    private GameMode gameMode;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "game_status")
     private GameStatus gameStatus;
 
     private LocalDateTime endedAt;    // 게임 종료 시간
 
-    public Game(double targetLat, double targetLng, Member member, GameType gameType, GameStatus gameStatus){
+    public Game(double targetLat, double targetLng, Member member, GameType gameType, GameMode gameMode, GameStatus gameStatus){
         this.member = member;
         this.gameType = gameType;
+        this.gameMode = gameMode;
         this.gameStatus = gameStatus;
         this.targetLat = targetLat;
         this.targetLng = targetLng;
