@@ -40,7 +40,12 @@ public class RoadViewGameService {
         Coordinate coordinate = coordinateService.getRandomCoordinateBySido(sidoKey);
         RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.PRACTICE);
         repository.save(game);
-        //todo refactor
+
+        return getEncryptedRoadViewGameResponse(game);
+    }
+
+    //encrypt
+    private StartGameResponse.RoadView getEncryptedRoadViewGameResponse(RoadViewGame game) {
         return StartGameResponse.RoadView.builder()
                 .gameId(toEncryptString(game.getId()))
                 .targetLat(toEncryptString(game.getTargetLat()))
@@ -59,7 +64,7 @@ public class RoadViewGameService {
         pointService.addPoint(member, point);
 
         // save point history
-        pointHistoryService.savePointHistory(member, -1 * point, PointHistoryType.PRACTICE_GAME);
+        pointHistoryService.savePointHistory(member, point, PointHistoryType.PRACTICE_GAME);
 
         return EndGameResponse.RoadViewPractice.from(game);
     }
@@ -68,11 +73,8 @@ public class RoadViewGameService {
         Coordinate coordinate = coordinateService.getRandomNationwideCoordinate();
         RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.RANK);
         repository.save(game);
-        return StartGameResponse.RoadView.builder()
-                .gameId(toEncryptString(game.getId()))
-                .targetLat(toEncryptString(game.getTargetLat()))
-                .targetLng(toEncryptString(game.getTargetLng()))
-                .build();
+
+        return getEncryptedRoadViewGameResponse(game);
     }
 
     //todo refactor transaction
@@ -80,10 +82,10 @@ public class RoadViewGameService {
         // end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(game, request);
-        GameRank memberGameRank = gameRankRepository.findByMemberIdAndGameType(member.getId(), GameType.ROADVIEW);
-        RankTier tier = memberGameRank.getRankTier();
 
         // add point
+        GameRank memberGameRank = gameRankRepository.findByMemberIdAndGameType(member, GameType.ROADVIEW);
+        RankTier tier = memberGameRank.getRankTier();
         int point = PointCalculator.getRankPoint(tier, game.getScore());
         pointService.addPoint(member, point);
         

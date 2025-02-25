@@ -32,7 +32,6 @@ public class CoordinateExcelService {
     private final int BATCH_SIZE = 1000;
     private final Sido NATIONWIDE = Sido.NATIONWIDE;
 
-    @Override
     @Transactional
     public void importCoordinatesFromExcel(String fileName) {
         try {
