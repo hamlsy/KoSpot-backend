@@ -1,5 +1,6 @@
 package com.kospot.kospot.presentation.coordinate;
 
+import com.kospot.kospot.application.coordinate.ImportCoordinateUseCase;
 import com.kospot.kospot.domain.coordinate.dto.response.CoordinateResponse;
 import com.kospot.kospot.domain.coordinate.service.CoordinateExcelService;
 import com.kospot.kospot.domain.coordinate.service.CoordinateService;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class CoordinateController {
 
     private final CoordinateService coordinateService;
-    private final CoordinateExcelService coordinateExcelService;
+    private final ImportCoordinateUseCase importCoordinateUseCase;
 
     /**
      * 랜덤 좌표
@@ -37,7 +38,7 @@ public class CoordinateController {
 
     @GetMapping("/importFromExcel")
     public ApiResponseDto<?> importFromExcel(@RequestParam("fileName") String fileName) {
-        coordinateExcelService.importCoordinatesFromExcel(fileName);
+        importCoordinateUseCase.execute(fileName);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
