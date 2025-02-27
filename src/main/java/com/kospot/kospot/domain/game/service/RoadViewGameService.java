@@ -38,19 +38,12 @@ public class RoadViewGameService {
     }
 
     //todo refactor transaction
-    public EndGameResponse.RoadViewPractice endPracticeGame(Member member, EndGameRequest.RoadView request){
+    public RoadViewGame endPracticeGame(Member member, EndGameRequest.RoadView request){
         //end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(member, game, request);
 
-        // add point
-        int point = PointCalculator.getPracticePoint(game.getScore());
-        pointService.addPoint(member, point);
-
-        // save point history
-        pointHistoryService.savePointHistory(member, point, PointHistoryType.PRACTICE_GAME);
-
-        return EndGameResponse.RoadViewPractice.from(game);
+        return game;
     }
 
     public RoadViewGame startRankGame(Member member) {
