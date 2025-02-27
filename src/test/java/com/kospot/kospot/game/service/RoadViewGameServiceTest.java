@@ -61,16 +61,16 @@ public class RoadViewGameServiceTest {
 
     @Test
     @DisplayName("연습 게임 종료 테스트")
-    void end_practice_game_test(){
+    void end_practice_game_test() {
         //given
         Member member = memberRepository.save(Member.builder()
-                        .username("mem1")
-                        .nickname("nick1")
+                .username("mem1")
+                .nickname("nick1")
                 .build());
         RoadViewGame game = roadViewGameRepository.save(RoadViewGame.builder()
-                        .gameType(GameType.ROADVIEW)
-                        .member(member)
-                        .gameMode(GameMode.PRACTICE).build());
+                .gameType(GameType.ROADVIEW)
+                .member(member)
+                .gameMode(GameMode.PRACTICE).build());
 
         EndGameRequest.RoadView request = EndGameRequest.RoadView.builder()
                 .gameId(game.getId())
@@ -78,7 +78,7 @@ public class RoadViewGameServiceTest {
                 .build();
 
         // when
-        EndGameResponse.RoadViewPractice response = endRoadViewPracticeUseCase.execute (member, request);
+        EndGameResponse.RoadViewPractice response = endRoadViewPracticeUseCase.execute(member, request);
 
         // then
         int expectedPoint = PointCalculator.getPracticePoint(game.getScore());
@@ -93,7 +93,7 @@ public class RoadViewGameServiceTest {
 
     @Test
     @DisplayName("랭크 게임 종료 테스트")
-    void end_rank_game_test(){
+    void end_rank_game_test() {
         //given
         Member member = memberRepository.save(Member.builder()
                 .username("mem1")
