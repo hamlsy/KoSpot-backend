@@ -37,7 +37,6 @@ public class RoadViewGameService {
         return game;
     }
 
-    //todo refactor transaction
     public RoadViewGame endPracticeGame(Member member, EndGameRequest.RoadView request){
         //end game
         RoadViewGame game = adaptor.queryById(request.getGameId());
@@ -54,7 +53,6 @@ public class RoadViewGameService {
         return game;
     }
 
-    //todo refactor transaction
     public RoadViewGame endRankGame(Member member, EndGameRequest.RoadView request){
         RoadViewGame game = adaptor.queryById(request.getGameId());
         endGame(member, game, request);

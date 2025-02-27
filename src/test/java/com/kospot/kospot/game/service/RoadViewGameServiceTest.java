@@ -1,5 +1,6 @@
 package com.kospot.kospot.game.service;
 
+import com.kospot.kospot.application.game.roadView.practice.EndRoadViewPracticeUseCase;
 import com.kospot.kospot.application.game.roadView.rank.EndRoadViewRankUseCase;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
@@ -38,6 +39,9 @@ public class RoadViewGameServiceTest {
     private EndRoadViewRankUseCase endRoadViewRankUseCase;
 
     @Autowired
+    private EndRoadViewPracticeUseCase endRoadViewPracticeUseCase;
+
+    @Autowired
     private RoadViewGameService roadViewGameService;
 
     @Autowired
@@ -74,7 +78,7 @@ public class RoadViewGameServiceTest {
                 .build();
 
         // when
-        EndGameResponse.RoadViewPractice response = roadViewGameService.endPracticeGame(member, request);
+        EndGameResponse.RoadViewPractice response = endRoadViewPracticeUseCase.execute (member, request);
 
         // then
         int expectedPoint = PointCalculator.getPracticePoint(game.getScore());

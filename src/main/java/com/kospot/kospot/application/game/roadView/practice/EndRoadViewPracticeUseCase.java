@@ -20,6 +20,7 @@ public class EndRoadViewPracticeUseCase {
     private final PointService pointService;
     private final PointHistoryService pointHistoryService;
 
+    // todo refactor transaction
     public EndGameResponse.RoadViewPractice execute(Member member, EndGameRequest.RoadView request) {
         RoadViewGame game = roadViewGameService.endPracticeGame(member, request);
 
