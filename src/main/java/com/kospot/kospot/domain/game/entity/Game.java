@@ -64,8 +64,9 @@ public abstract class Game extends BaseTimeEntity {
     }
 
     // business
-    public void end(double submittedLat, double submittedLng, double score, double answerTime){
-        isCompleted();
+    public void end(Member member, double submittedLat, double submittedLng, double score, double answerTime){
+        validateOwnMember(member);
+        validateGameStatus();
         this.gameStatus = GameStatus.COMPLETED;
         this.submittedLat = submittedLat;
         this.submittedLng = submittedLng;
@@ -75,9 +76,23 @@ public abstract class Game extends BaseTimeEntity {
     }
 
     //validation
-    private void isCompleted(){
-        if(this.gameStatus == GameStatus.COMPLETED){
+    private void validateGameStatus(){
+        if(isCompleted()){
             throw new GameHandler(ErrorStatus.GAME_IS_ALREADY_COMPLETED);
         }
+    }
+
+    private boolean isCompleted(){
+        return this.gameStatus == GameStatus.COMPLETED;
+    }
+
+    private void validateOwnMember(Member member){
+        if(isNotSameMember(member)){
+            throw new GameHandler(ErrorStatus.GAME_NOT_SAME_MEMBER);
+        }
+    }
+
+    private boolean isNotSameMember(Member member){
+        return this.member.getId() != member.getId();
     }
 }

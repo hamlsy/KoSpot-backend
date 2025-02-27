@@ -1,5 +1,7 @@
 package com.kospot.kospot.game.service;
 
+import com.kospot.kospot.application.game.roadView.practice.EndRoadViewPracticeUseCase;
+import com.kospot.kospot.application.game.roadView.rank.EndRoadViewRankUseCase;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.entity.GameMode;
@@ -32,6 +34,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class RoadViewGameServiceTest {
     private static final Logger log = LoggerFactory.getLogger(RoadViewGameServiceTest.class);
+
+    @Autowired
+    private EndRoadViewRankUseCase endRoadViewRankUseCase;
+
+    @Autowired
+    private EndRoadViewPracticeUseCase endRoadViewPracticeUseCase;
+
     @Autowired
     private RoadViewGameService roadViewGameService;
 
@@ -52,16 +61,16 @@ public class RoadViewGameServiceTest {
 
     @Test
     @DisplayName("연습 게임 종료 테스트")
-    void end_practice_game_test(){
+    void end_practice_game_test() {
         //given
         Member member = memberRepository.save(Member.builder()
-                        .username("mem1")
-                        .nickname("nick1")
+                .username("mem1")
+                .nickname("nick1")
                 .build());
         RoadViewGame game = roadViewGameRepository.save(RoadViewGame.builder()
-                        .gameType(GameType.ROADVIEW)
-                        .member(member)
-                        .gameMode(GameMode.PRACTICE).build());
+                .gameType(GameType.ROADVIEW)
+                .member(member)
+                .gameMode(GameMode.PRACTICE).build());
 
         EndGameRequest.RoadView request = EndGameRequest.RoadView.builder()
                 .gameId(game.getId())
@@ -69,7 +78,7 @@ public class RoadViewGameServiceTest {
                 .build();
 
         // when
-        EndGameResponse.RoadViewPractice response = roadViewGameService.endPracticeGame(member, request);
+        EndGameResponse.RoadViewPractice response = endRoadViewPracticeUseCase.execute(member, request);
 
         // then
         int expectedPoint = PointCalculator.getPracticePoint(game.getScore());
@@ -84,7 +93,7 @@ public class RoadViewGameServiceTest {
 
     @Test
     @DisplayName("랭크 게임 종료 테스트")
-    void end_rank_game_test(){
+    void end_rank_game_test() {
         //given
         Member member = memberRepository.save(Member.builder()
                 .username("mem1")
@@ -109,7 +118,7 @@ public class RoadViewGameServiceTest {
                 .build();
 
         // when
-        EndGameResponse.RoadViewRank response = roadViewGameService.endRankGame(member, request);
+        EndGameResponse.RoadViewRank response = endRoadViewRankUseCase.execute(member, request);
 
         // then
         int expectedPoint = PointCalculator.getRankPoint(gameRank.getRankTier(), game.getScore());

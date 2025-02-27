@@ -24,6 +24,7 @@ public class EndGameResponse {
 
         private double score;
 
+        //todo refactor
         public static RoadViewRank from(RoadViewGame game){
             return RoadViewRank.builder()
                     .score(game.getScore())

@@ -6,11 +6,11 @@ import com.kospot.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRe
 import com.kospot.kospot.exception.object.domain.CoordinateIdCacheHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 
+import com.kospot.kospot.global.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Adaptor
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CoordinateIdCacheAdaptor {

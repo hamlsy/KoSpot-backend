@@ -15,13 +15,12 @@ public class CoordinateServiceTest {
     @Mock
     private CoordinateService coordinateService;
 
-
     @Mock
     private List<Coordinate> coordinates;
 
     @BeforeEach
-    void setUp(){
-        for(int i = 0; i < 30; i++){
+    void setUp() {
+        for (int i = 0; i < 30; i++) {
 
         }
     }
