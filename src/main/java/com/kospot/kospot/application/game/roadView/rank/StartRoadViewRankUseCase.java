@@ -1,9 +1,13 @@
 package com.kospot.kospot.application.game.roadView.rank;
 
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
+import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.service.AESService;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
+import com.kospot.kospot.domain.gameRank.adaptor.GameRankAdaptor;
+import com.kospot.kospot.domain.gameRank.entity.GameRank;
+import com.kospot.kospot.domain.gameRank.service.GameRankService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.global.annotation.usecase.UseCase;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +17,15 @@ import lombok.RequiredArgsConstructor;
 public class StartRoadViewRankUseCase {
 
     private final RoadViewGameService roadViewGameService;
+    private final GameRankAdaptor gameRankAdaptor;
+    private final GameRankService gameRankService;
     private final AESService aesService;
 
     public StartGameResponse.RoadView execute(Member member){
         RoadViewGame game = roadViewGameService.startRankGame(member);
+        GameRank rank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);
+        gameRankService.applyPenaltyForAbandon(rank);
+
         return getEncryptedRoadViewGameResponse(game);
     }
 
