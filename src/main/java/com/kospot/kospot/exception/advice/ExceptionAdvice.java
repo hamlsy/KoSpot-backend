@@ -4,6 +4,7 @@ import com.kospot.kospot.exception.object.general.GeneralException;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import com.kospot.kospot.exception.payload.code.Reason;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Hidden
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {

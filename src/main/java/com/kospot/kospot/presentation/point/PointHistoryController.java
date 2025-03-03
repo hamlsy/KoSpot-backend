@@ -4,6 +4,8 @@ import com.kospot.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.kospot.domain.point.dto.response.PointHistoryResponse;
 import com.kospot.kospot.domain.point.service.PointHistoryService;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,9 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/pointHistory")
+@ApiResponse(responseCode = "2000", description = "OK")
+@Tag(name = "PointHistory Api", description = "포인트 기록 API")
+@RequestMapping("/api/pointHistory")
 public class PointHistoryController {
 
     private final PointHistoryAdaptor adaptor;
