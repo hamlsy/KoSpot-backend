@@ -6,10 +6,12 @@ import com.kospot.kospot.domain.game.service.AESService;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.global.annotation.usecase.UseCase;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
+@Transactional
 public class StartRoadViewPracticeUseCase {
 
     private final RoadViewGameService roadViewGameService;

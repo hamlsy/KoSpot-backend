@@ -10,10 +10,12 @@ import com.kospot.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.kospot.domain.gameRank.service.GameRankService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.global.annotation.usecase.UseCase;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
+@Transactional
 public class StartRoadViewRankUseCase {
 
     private final RoadViewGameService roadViewGameService;

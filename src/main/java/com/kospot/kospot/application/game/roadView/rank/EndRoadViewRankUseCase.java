@@ -13,10 +13,12 @@ import com.kospot.kospot.domain.point.entity.PointHistoryType;
 import com.kospot.kospot.domain.point.service.PointHistoryService;
 import com.kospot.kospot.domain.point.service.PointService;
 import com.kospot.kospot.global.annotation.usecase.UseCase;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
+@Transactional
 public class EndRoadViewRankUseCase {
 
     private final RoadViewGameService roadViewGameService;
