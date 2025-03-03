@@ -7,6 +7,7 @@ import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.gameRank.adaptor.GameRankAdaptor;
 import com.kospot.kospot.domain.gameRank.entity.GameRank;
+import com.kospot.kospot.domain.gameRank.service.GameRankService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.entity.PointHistoryType;
 import com.kospot.kospot.domain.point.service.PointHistoryService;
@@ -22,6 +23,7 @@ public class EndRoadViewRankUseCase {
     private final PointService pointService;
     private final GameRankAdaptor gameRankAdaptor;
     private final PointHistoryService pointHistoryService;
+    private final GameRankService gameRankService;
 
     //todo refactor transaction
     public EndGameResponse.RoadViewRank execute(Member member, EndGameRequest.RoadView request){
@@ -31,6 +33,9 @@ public class EndRoadViewRankUseCase {
         // earn point
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);
         int point = pointService.addPointByRankGameScore(member, gameRank, game.getScore());
+
+        // calculate rating point
+        gameRankService.updateRatingScoreAfterGameEnd(gameRank, game);
 
         // save point history
         pointHistoryService.savePointHistory(member, point, PointHistoryType.RANK_GAME);

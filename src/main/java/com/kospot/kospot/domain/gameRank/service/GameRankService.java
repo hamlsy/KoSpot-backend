@@ -19,14 +19,17 @@ public class GameRankService {
         gameRank.changeRatingScore(ABANDON_PENALTY);
     }
 
-    public int updateRatingScoreAfterGameEnd(GameRank gameRank, Game game) {
+    public void updateRatingScoreAfterGameEnd(GameRank gameRank, Game game) {
         int ratingScore = gameRank.getRatingScore();
         double gameScore = game.getScore();
         int changedRatingScore = RatingScoreCalculator.calculateRatingChange(gameScore, ratingScore);
-
+        
+        // game 기록 업데이트
+        game.updateRatingScore(ratingScore, changedRatingScore);
+        
+        // gameRank 업데이트
         gameRank.changeRatingScore(RECOVERY_SCORE + changedRatingScore);
-
-        return changedRatingScore;
+        
     }
 
 }

@@ -34,6 +34,9 @@ public abstract class Game extends BaseTimeEntity {
     // 정답 시간
     private double answerTime;
 
+    private int currentRatingScore;
+    private int changeRatingScore;
+
     // 점수
     private double score;
 
@@ -64,7 +67,8 @@ public abstract class Game extends BaseTimeEntity {
     }
 
     // business
-    public void end(Member member, double submittedLat, double submittedLng, double score, double answerTime){
+    public void end(Member member, double submittedLat, double submittedLng,
+                    double score, double answerTime){
         validateOwnMember(member);
         validateGameStatus();
         this.gameStatus = GameStatus.COMPLETED;
@@ -73,6 +77,11 @@ public abstract class Game extends BaseTimeEntity {
         this.score = score;
         this.answerTime = answerTime;
         this.endedAt = LocalDateTime.now();
+    }
+
+    public void updateRatingScore(int currentRatingScore, int changeRatingScore) {
+        this.currentRatingScore = currentRatingScore;
+        this.changeRatingScore = changeRatingScore;
     }
 
     //validation
