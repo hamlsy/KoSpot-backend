@@ -17,7 +17,7 @@ public class RatingScoreCalculator {
      * @param currentRating 현재 사용자의 레이팅 점수
      * @return 변경될 레이팅 포인트 (양수 또는 음수)
      */
-    public static int calculateRatingChange(int gameScore, int currentRating) {
+    public static int calculateRatingChange(double gameScore, int currentRating) {
         // 게임 점수 범위 검증
         if (gameScore < MIN_GAME_SCORE) {
             gameScore = MIN_GAME_SCORE;
@@ -47,7 +47,7 @@ public class RatingScoreCalculator {
      * 기준 점수 미만일 경우 패널티(마이너스 점수)를 계산합니다.
      * 브론즈의 경우 패널티가 없습니다.
      */
-    private static int calculatePenalty(int gameScore, RankTier tier) {
+    private static int calculatePenalty(double gameScore, RankTier tier) {
         // 브론즈는 패널티 없음
         if (tier == RankTier.BRONZE) {
             return 0;
