@@ -6,12 +6,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum RankTier {
-    BRONZE(1.0, 200, 0, 30),
-    SILVER(1.2, 300, 250, 25),
-    GOLD(1.5, 380, 300, 20),
-    PLATINUM(1.8, 450, 400, 15),
-    DIAMOND(2.0, 500, 480, 10),
-    MASTER(2.5, 600, 550, 5),
+    BRONZE(1.0, 200, 0, 200),
+    SILVER(1.2, 300, 150, 160),
+    GOLD(1.5, 350, 200, 120),
+    PLATINUM(1.8, 400, 300, 100),
+    DIAMOND(2.0, 450, 400, 80),
+    MASTER(2.5, 550, 450, 60),
     ;
 
     private final double pointMultiplier;

@@ -1,6 +1,5 @@
 package com.kospot.kospot.domain.gameRank.util;
 
-import com.kospot.kospot.domain.gameRank.entity.RankLevel;
 import com.kospot.kospot.domain.gameRank.entity.RankTier;
 
 public class RatingScoreCalculator {
@@ -8,6 +7,8 @@ public class RatingScoreCalculator {
     // 기본 점수 범위 (0~1000)
     private static final int MIN_GAME_SCORE = 0;
     private static final int MAX_GAME_SCORE = 1000;
+    private static final double PENALTY_COEFFICIENT = 7.0;
+    public static final double BASE_POINT_COEFFICIENT = 5.0;
 
     /**
      * 게임 점수를 기반으로 얻게 될 레이팅 포인트를 계산합니다.
@@ -30,10 +31,10 @@ public class RatingScoreCalculator {
         int ratingChange = 0;
         if (gameScore >= tier.getMinScoreThreshold()) {
             // 기준 점수를 넘겼을 때 포인트 계산
-            double basePoints = (gameScore - tier.getMinScoreThreshold()) / 10.0;
+            double basePoints = (gameScore - tier.getMinScoreThreshold()) / BASE_POINT_COEFFICIENT;
 
             // 포인트 계산 (티어가 높을수록 얻는 양 감소)
-            ratingChange = (int) Math.min(tier.getMaxBonus(), basePoints / tier.getPointMultiplier());
+            ratingChange = (int) Math.min(tier.getMaxBonus(), basePoints);
         } else {
             // 패널티 점수 계산 (티어에 따라 다름)
             ratingChange = calculatePenalty(gameScore, tier);
@@ -58,8 +59,7 @@ public class RatingScoreCalculator {
         }
 
         // 패널티 계산 (티어가 높을수록 패널티 심화)
-        double penaltyBase = (tier.getPenaltyThreshold() - gameScore) / 10.0;
-        int penalty = (int) (penaltyBase * tier.getPointMultiplier());
+        int penalty = (int) ((tier.getPenaltyThreshold() - gameScore) / PENALTY_COEFFICIENT);
 
         // 패널티는 음수로 반환
         return -penalty;
