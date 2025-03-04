@@ -22,6 +22,8 @@ public class EndGameResponse {
     @Builder
     public static class RoadViewRank {
 
+        private int ratingPoint;
+        private int changedRatingPoint;
         private double score;
 
         //todo refactor
