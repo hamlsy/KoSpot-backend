@@ -1,4 +1,4 @@
-package com.kospot.kospot.gameRank;
+package com.kospot.kospot.gameRank.util;
 
 import com.kospot.kospot.domain.gameRank.util.RatingScoreCalculator;
 import org.junit.jupiter.api.DisplayName;
