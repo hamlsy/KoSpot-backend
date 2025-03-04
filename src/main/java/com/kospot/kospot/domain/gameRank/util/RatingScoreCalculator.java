@@ -72,7 +72,7 @@ public class RatingScoreCalculator {
      * @param ratingChange 변경될 레이팅 포인트
      * @return 최종 레이팅 포인트
      */
-    public static int calculateNewRating(int currentRating, int ratingChange) {
+    private static int calculateNewRating(int currentRating, int ratingChange) {
         return Math.max(0, currentRating + ratingChange); // 레이팅은 0 아래로 내려가지 않음
     }
 
@@ -83,7 +83,7 @@ public class RatingScoreCalculator {
      * @param currentRating 현재 레이팅
      * @return 계산된 최종 레이팅
      */
-    public static int calculateRating(int gameScore, int currentRating) {
+    private static int calculateRating(int gameScore, int currentRating) {
         int ratingChange = calculateRatingChange(gameScore, currentRating);
         return calculateNewRating(currentRating, ratingChange);
     }
