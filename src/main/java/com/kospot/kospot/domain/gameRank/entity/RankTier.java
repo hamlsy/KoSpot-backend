@@ -20,11 +20,19 @@ public enum RankTier {
     private final int maxBonus;
 
     public static RankTier getRankByRating(int rating) {
-        if (rating < 1000) return BRONZE;
-        if (rating < 2000) return SILVER;
-        if (rating < 3000) return GOLD;
-        if (rating < 4000) return PLATINUM;
-        if (rating < 5000) return DIAMOND;
-        return MASTER;
+        switch (rating / 1000) {
+            case 0:
+                return BRONZE;
+            case 1:
+                return SILVER;
+            case 2:
+                return GOLD;
+            case 3:
+                return PLATINUM;
+            case 4:
+                return DIAMOND;
+            default:
+                return MASTER;
+        }
     }
 }

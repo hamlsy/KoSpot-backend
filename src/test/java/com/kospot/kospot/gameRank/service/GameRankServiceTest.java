@@ -3,6 +3,8 @@ package com.kospot.kospot.gameRank.service;
 import com.kospot.kospot.domain.game.entity.Game;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.gameRank.entity.GameRank;
+import com.kospot.kospot.domain.gameRank.entity.RankLevel;
+import com.kospot.kospot.domain.gameRank.entity.RankTier;
 import com.kospot.kospot.domain.gameRank.service.GameRankService;
 import com.kospot.kospot.domain.gameRank.util.RatingScoreCalculator;
 import jakarta.transaction.Transactional;
@@ -40,6 +42,32 @@ public class GameRankServiceTest {
         System.out.println("game.getCurrentRatingScore() = " + game.getCurrentRatingScore());
         assertEquals(changeRatingScore, game.getChangeRatingScore());
         System.out.println("game.getChangeRatingScore() = " + game.getChangeRatingScore());
+
+    }
+
+    @Test
+    @DisplayName("게임 랭크 테스트")
+    void testGameRank(){
+        //given
+        GameRank rank = GameRank.builder()
+                .ratingScore(3000)
+                .build();
+        rank.applyPenaltyForAbandon();
+
+        RoadViewGame game = RoadViewGame.builder()
+                .score(100)
+                .build();
+        //when
+        gameRankService.updateRatingScoreAfterGameEnd(rank,game);
+
+        //then
+        System.out.println("rank.getRankTier() = " + rank.getRankTier());
+        System.out.println("rank.getRankLevel() = " + rank.getRankLevel());
+        System.out.println(rank.getRatingScore());
+        System.out.println(RatingScoreCalculator.calculateRatingChange(100, 3000));
+
+        assertEquals(RankTier.GOLD, rank.getRankTier());
+        assertEquals(RankLevel.ONE, rank.getRankLevel());
 
     }
 }

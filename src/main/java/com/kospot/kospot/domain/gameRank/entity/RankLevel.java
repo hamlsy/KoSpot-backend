@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum RankLevel {
-    FIVE(0), FOUR(200), THREE(400), TWO(600), ONE(800);
+    ONE(800), TWO(600), THREE(400), FOUR(200), FIVE(0);
 
     private final int minRating;
 

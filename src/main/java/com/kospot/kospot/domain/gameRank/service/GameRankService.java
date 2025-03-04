@@ -12,15 +12,14 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class GameRankService {
 
-    private static final int ABANDON_PENALTY = -100;
     private static final int RECOVERY_SCORE = 100;
 
     public void applyPenaltyForAbandon(GameRank gameRank) {
-        gameRank.changeRatingScore(ABANDON_PENALTY);
+        gameRank.applyPenaltyForAbandon();
     }
 
     public void updateRatingScoreAfterGameEnd(GameRank gameRank, Game game) {
-        int currentRatingScore = gameRank.getRatingScore();
+        int currentRatingScore = gameRank.getRatingScore() + RECOVERY_SCORE;
         double gameScore = game.getScore();
         int changeRatingScore = RatingScoreCalculator.calculateRatingChange(gameScore, currentRatingScore);
 
@@ -29,7 +28,7 @@ public class GameRankService {
 
         // gameRank update
         gameRank.changeRatingScore(RECOVERY_SCORE + changeRatingScore);
-        
+
     }
 
 }
