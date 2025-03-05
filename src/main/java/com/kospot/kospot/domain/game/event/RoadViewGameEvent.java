@@ -1,14 +1,13 @@
-package com.kospot.kospot.application.game.roadView.rank.event;
+package com.kospot.kospot.domain.game.event;
 
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-public class RoadViewRankEvent {
+public class RoadViewGameEvent {
     private final Member member;
     private final RoadViewGame roadViewGame;
 }
