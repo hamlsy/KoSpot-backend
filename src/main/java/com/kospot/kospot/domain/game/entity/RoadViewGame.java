@@ -57,6 +57,6 @@ public class RoadViewGame extends Game {
     }
 
     private int getChangeRatingScore(int currentRatingScore) {
-        return RatingScoreCalculator.calculateRatingChange(super.score, currentRatingScore);
+        return RatingScoreCalculator.calculateRatingChange(this.score, currentRatingScore);
     }
 }

@@ -22,14 +22,16 @@ public class EndGameResponse {
     @Builder
     public static class RoadViewRank {
 
-        private int ratingPoint;
-        private int changedRatingPoint;
+        private int currentRatingPoint;
+        private int ratingScoreChange;
         private double score;
 
         //todo refactor
         public static RoadViewRank from(RoadViewGame game){
             return RoadViewRank.builder()
                     .score(game.getScore())
+                    .currentRatingPoint(game.getCurrentRatingScore())
+                    .ratingScoreChange(game.getRatingScoreChange())
                     .build();
         }
     }
