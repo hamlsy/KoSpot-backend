@@ -47,7 +47,7 @@ public class EndRoadViewRankEventListener {
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);
         int point = pointService.addPointByRankGameScore(member, gameRank, game.getScore());
 
-        // calculate rating point
+        // update rating point
         gameRankService.updateRatingScoreAfterGameEnd(gameRank, game);
 
         // save point history
