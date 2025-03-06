@@ -2,6 +2,7 @@ package com.kospot.kospot.game.service;
 
 import com.kospot.kospot.application.game.roadView.rank.EndRoadViewRankUseCase;
 import com.kospot.kospot.application.game.roadView.rank.EndRoadViewRankUseCaseV2;
+import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
@@ -43,11 +44,12 @@ public class RoadViewGameListenerTest {
     private RoadViewGameRepository roadViewGameRepository;
 
     private List<Member> members = new ArrayList<>();
+    private List<EndGameRequest.RoadView> requests = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
         // given
-        for(int i = 0 ; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             Member member = Member.builder()
                     .nickname("nickname" + i)
                     .username("username" + i)
@@ -57,26 +59,46 @@ public class RoadViewGameListenerTest {
             gameRankRepository.save(gameRank);
             RoadViewGame game = gameService.startRankGame(member);
             roadViewGameRepository.save(game);
+            requests.add(
+                    EndGameRequest.RoadView.builder()
+                            .gameId(game.getId())
+                            .answerDistance((int) (Math.random() * 301))
+                            .build()
+            );
         }
-        // when
         memberRepository.saveAll(members);
-
-        // then
     }
 
     @Test
     @DisplayName("기존 게임 종료 로직 시간 측정")
     void testGameEnd() {
         // given
+        long startTime = System.currentTimeMillis();
+
         // when
+        for (int i = 0; i < 100; i++) {
+            endRoadViewRankUseCase.execute(members.get(i), requests.get(i));
+        }
+
         // then
+        long endTime = System.currentTimeMillis();
+        System.out.println("기존 게임 종료 로직 시간: " + (endTime - startTime) + "ms");
+
     }
 
     @Test
     @DisplayName("게임 종료 이벤트 리스너 시간 측정")
     void testGameEndEventListener() {
         //given
+        long startTime = System.currentTimeMillis();
+
         //when
+        for (int i = 0; i < 100; i++) {
+            endRoadViewRankUseCaseV2.execute(members.get(i), requests.get(i));
+        }
+
         //then
+        long endTime = System.currentTimeMillis();
+        System.out.println("게임 종료 이벤트 리스너 시간: " + (endTime - startTime) + "ms");
     }
 }
