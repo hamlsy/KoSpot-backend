@@ -23,8 +23,17 @@ public class GameRankService {
         double gameScore = game.getScore();
         int changeRatingScore = RatingScoreCalculator.calculateRatingChange(gameScore, currentRatingScore);
 
-        // game update
         game.updateRatingScore(currentRatingScore, changeRatingScore);
+
+        // gameRank update
+        gameRank.changeRatingScore(RECOVERY_SCORE + changeRatingScore);
+
+    }
+
+    public void updateRatingScoreAfterGameEndV2(GameRank gameRank, Game game) {
+        int currentRatingScore = gameRank.getRatingScore() + RECOVERY_SCORE;
+        double gameScore = game.getScore();
+        int changeRatingScore = RatingScoreCalculator.calculateRatingChange(gameScore, currentRatingScore);
 
         // gameRank update
         gameRank.changeRatingScore(RECOVERY_SCORE + changeRatingScore);

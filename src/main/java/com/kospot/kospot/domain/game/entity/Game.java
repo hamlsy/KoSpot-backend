@@ -38,7 +38,7 @@ public abstract class Game extends BaseTimeEntity {
     private int changeRatingScore;
 
     // 점수
-    private double score;
+    protected double score;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -67,15 +67,26 @@ public abstract class Game extends BaseTimeEntity {
     }
 
     // business
-    public void end(Member member, double submittedLat, double submittedLng,
-                    double score, double answerTime){
+    public void end(Member member, double submittedLat, double submittedLng, double answerTime){
         validateOwnMember(member);
         validateGameStatus();
         this.gameStatus = GameStatus.COMPLETED;
         this.submittedLat = submittedLat;
         this.submittedLng = submittedLng;
-        this.score = score;
         this.answerTime = answerTime;
+        this.endedAt = LocalDateTime.now();
+    }
+
+    public void endRank(Member member, double submittedLat, double submittedLng, double answerTime,
+                        int currentRatingScore, int changeRatingScore){
+        validateOwnMember(member);
+        validateGameStatus();
+        this.gameStatus = GameStatus.COMPLETED;
+        this.submittedLat = submittedLat;
+        this.submittedLng = submittedLng;
+        this.answerTime = answerTime;
+        this.currentRatingScore = currentRatingScore;
+        this.changeRatingScore = changeRatingScore;
         this.endedAt = LocalDateTime.now();
     }
 

@@ -35,20 +35,20 @@ public class EndRoadViewRankEventListener {
         try{
             Member member = event.getMember();
             RoadViewGame game = event.getRoadViewGame();
-            updatePointAndRank(member, game);
+            GameRank gameRank = event.getGameRank();
+            updatePointAndRank(member, game, gameRank);
         }catch (Exception e){
             //todo exception handling
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void updatePointAndRank(Member member, RoadViewGame game){
+    public void updatePointAndRank(Member member, RoadViewGame game, GameRank gameRank){
         // earn point
-        GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);
         int point = pointService.addPointByRankGameScore(member, gameRank, game.getScore());
 
-        // calculate rating point
-        gameRankService.updateRatingScoreAfterGameEnd(gameRank, game);
+        // update game rank
+        gameRankService.updateRatingScoreAfterGameEndV2(gameRank, game);
 
         // save point history
         pointHistoryService.savePointHistory(member, point, PointHistoryType.RANK_GAME);

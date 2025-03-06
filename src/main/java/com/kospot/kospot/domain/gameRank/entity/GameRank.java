@@ -37,6 +37,15 @@ public class GameRank extends BaseTimeEntity {
     private RankLevel rankLevel;
 
     //business logic
+    public static GameRank create(Member member, GameType gameType){
+        return GameRank.builder()
+                .member(member)
+                .rankTier(RankTier.BRONZE)
+                .rankLevel(RankLevel.FIVE)
+                .gameType(gameType)
+                .build();
+    }
+
     public void changeRatingScore(int score) {
         this.ratingScore += score;
         changeRank();
