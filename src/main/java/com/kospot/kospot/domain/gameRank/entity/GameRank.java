@@ -40,6 +40,7 @@ public class GameRank extends BaseTimeEntity {
     public static GameRank create(Member member, GameType gameType){
         return GameRank.builder()
                 .member(member)
+                .ratingScore(0)
                 .rankTier(RankTier.BRONZE)
                 .rankLevel(RankLevel.FIVE)
                 .gameType(gameType)
