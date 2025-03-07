@@ -21,10 +21,19 @@ public class GameRankService {
     public void updateRatingScoreAfterGameEnd(GameRank gameRank, Game game) {
         int currentRatingScore = gameRank.getRatingScore() + RECOVERY_SCORE;
         double gameScore = game.getScore();
-        int changeRatingScore = RatingScoreCalculator.calculateRatingChange(gameScore, currentRatingScore);
+        int ratingScoreChange = RatingScoreCalculator.calculateRatingChange(gameScore, currentRatingScore);
 
-        // game update
-        game.updateRatingScore(currentRatingScore, changeRatingScore);
+        game.updateRatingScore(currentRatingScore, ratingScoreChange);
+
+        // gameRank update
+        gameRank.changeRatingScore(RECOVERY_SCORE + ratingScoreChange);
+
+    }
+
+    public void updateRatingScoreAfterGameEndV2(GameRank gameRank, Game game) {
+        int currentRatingScore = gameRank.getRatingScore() + RECOVERY_SCORE;
+        double gameScore = game.getScore();
+        int changeRatingScore = RatingScoreCalculator.calculateRatingChange(gameScore, currentRatingScore);
 
         // gameRank update
         gameRank.changeRatingScore(RECOVERY_SCORE + changeRatingScore);
