@@ -10,6 +10,7 @@ import com.kospot.kospot.domain.gameRank.adaptor.GameRankAdaptor;
 import com.kospot.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.global.annotation.usecase.UseCase;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
