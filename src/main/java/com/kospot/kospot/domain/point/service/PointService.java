@@ -22,6 +22,12 @@ public class PointService {
         return point;
     }
 
+    public int addPointByRankGameScoreV2(Member member, RankTier tier, double score) {
+        int point = PointCalculator.getRankPoint(tier, score);
+        member.addPoint(point);
+        return point;
+    }
+
     public void addPoint(Member member, int amount) {
         member.addPoint(amount);
     }

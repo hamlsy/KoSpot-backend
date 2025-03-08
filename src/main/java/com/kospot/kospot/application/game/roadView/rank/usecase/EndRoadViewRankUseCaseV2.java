@@ -8,6 +8,7 @@ import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.gameRank.adaptor.GameRankAdaptor;
 import com.kospot.kospot.domain.gameRank.entity.GameRank;
+import com.kospot.kospot.domain.gameRank.service.GameRankService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.global.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
@@ -21,15 +22,22 @@ public class EndRoadViewRankUseCaseV2 {
 
     private final RoadViewGameService roadViewGameService;
     private final GameRankAdaptor gameRankAdaptor;
+    private final GameRankService gameRankService;
     private final ApplicationEventPublisher eventPublisher;
 
     public EndGameResponse.RoadViewRank execute(Member member, EndGameRequest.RoadView request) {
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);
         RoadViewGame game = roadViewGameService.endRankGameV2(member, gameRank, request);
 
+        //event
         eventPublisher.publishEvent(new RoadViewGameEvent(member, game, gameRank));
 
-        return EndGameResponse.RoadViewRank.from(game);
+        int currentRatingScore = gameRank.getRatingScore();
+
+        // calculate rating point
+        gameRankService.updateRatingScoreAfterGameEndV2(gameRank, game);
+
+        return EndGameResponse.RoadViewRank.fromV2(game, currentRatingScore, gameRank.getRatingScore());
     }
 
 

@@ -3,6 +3,7 @@ package com.kospot.kospot.application.game.roadView.rank.listener;
 import com.kospot.kospot.application.game.roadView.rank.event.UpdatePointAndRankEvent;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.event.RoadViewGameEvent;
+import com.kospot.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.kospot.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -22,7 +23,8 @@ public class EndRoadViewRankEventListener {
         try{
             Member member = event.getMember();
             RoadViewGame game = event.getRoadViewGame();
-            updatePointAndRankEvent.updatePointAndRank(member, game);
+            GameRank gameRank = event.getGameRank();
+            updatePointAndRankEvent.updatePointAndRank(member, game, gameRank.getRankTier());
         }catch (Exception e){
             //todo exception handling
         }

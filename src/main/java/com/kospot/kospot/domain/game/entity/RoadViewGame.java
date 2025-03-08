@@ -46,10 +46,10 @@ public class RoadViewGame extends Game {
         this.score = getScore(answerDistance);
     }
 
-    public void endRank(Member member, double submittedLat, double submittedLng, double answerTime, double answerDistance, int currentRatingScore) {
+    public void endRank(Member member, double submittedLat, double submittedLng, double answerTime, double answerDistance) {
         this.answerDistance = answerDistance;
         this.score = getScore(answerDistance);
-        super.endRank(member, submittedLat, submittedLng, answerTime, currentRatingScore, getChangeRatingScore(currentRatingScore));
+        super.endRank(member, submittedLat, submittedLng, answerTime);
     }
 
     private double getScore(double distance) {

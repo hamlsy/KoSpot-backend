@@ -34,13 +34,14 @@ public class EndRoadViewRankUseCase {
 
         // earn point
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);
-        int point = pointService.addPointByRankGameScore(member, gameRank, game.getScore());
+        int point = pointService.addPointByRankGameScore(gameRank.getMember(), gameRank, game.getScore());
 
         // calculate rating point
         gameRankService.updateRatingScoreAfterGameEnd(gameRank, game);
 
+        //todo
         // save point history
-        pointHistoryService.savePointHistory(member, point, PointHistoryType.RANK_GAME);
+        pointHistoryService.savePointHistory(gameRank.getMember(), point, PointHistoryType.RANK_GAME);
 
         return EndGameResponse.RoadViewRank.from(game);
     }

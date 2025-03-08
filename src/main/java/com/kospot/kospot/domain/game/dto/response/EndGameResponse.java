@@ -34,5 +34,13 @@ public class EndGameResponse {
                     .ratingScoreChange(game.getRatingScoreChange())
                     .build();
         }
+
+        public static RoadViewRank fromV2(RoadViewGame game, int currentRatingPoint, int ratingScoreChange){
+            return RoadViewRank.builder()
+                    .score(game.getScore())
+                    .currentRatingPoint(currentRatingPoint)
+                    .ratingScoreChange(ratingScoreChange)
+                    .build();
+        }
     }
 }

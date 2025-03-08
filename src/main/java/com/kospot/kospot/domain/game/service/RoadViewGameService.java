@@ -70,8 +70,7 @@ public class RoadViewGameService {
     private void endRankGame(Member member, RoadViewGame game, GameRank gameRank, EndGameRequest.RoadView request) {
         game.endRank(
                 member, request.getSubmittedLat(), request.getSubmittedLng(),
-                request.getAnswerTime(), request.getAnswerDistance(),
-                getCurrentRatingScore(gameRank)
+                request.getAnswerTime(), request.getAnswerDistance()
         );
     }
 

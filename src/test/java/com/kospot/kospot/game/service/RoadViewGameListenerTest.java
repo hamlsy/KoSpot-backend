@@ -18,6 +18,7 @@ import com.kospot.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.kospot.domain.point.entity.PointHistory;
 import com.kospot.kospot.domain.point.repository.PointHistoryRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,10 +80,12 @@ public class RoadViewGameListenerTest {
     private List<RoadViewGame> games = new ArrayList<>();
     private List<EndGameRequest.RoadView> requests = new ArrayList<>();
 
+    private static int TEST_SIZE = 150;
+
     @BeforeEach
     void setUp() {
         // given
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < TEST_SIZE; i++) {
             Member member = Member.builder()
                     .nickname("nickname" + i)
                     .username("username" + i)
@@ -115,26 +118,27 @@ public class RoadViewGameListenerTest {
         long startTime = System.currentTimeMillis();
 
         //when
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < TEST_SIZE; i++) {
             Member member = members.get(i);
             endRoadViewRankUseCase.execute(member, requests.get(i));
 
         }
         // then
         long endTime = System.currentTimeMillis();
-        System.out.println("기존 게임 종료 로직 시간: " + (endTime - startTime) + "ms");
 
         //persist
         Member member = memberRepository.findById(members.get(0).getId()).orElseThrow();
 
         int countPointHistory = (int) pointHistoryRepository.count();
-        assertEquals(100, countPointHistory);
+        assertEquals(TEST_SIZE, countPointHistory);
 
         int memberPoint = member.getPoint();
         assertNotEquals(0, memberPoint);
 
         int ratingScore = gameRankRepository.findByMemberAndGameType(member, GameType.ROADVIEW).getRatingScore();
         assertNotEquals(0, ratingScore);
+
+        System.out.println("기존 게임 종료 로직 시간: " + (endTime - startTime) + "ms");
     }
 
     @Test
@@ -144,14 +148,13 @@ public class RoadViewGameListenerTest {
         long startTime = System.currentTimeMillis();
 
         //when
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < TEST_SIZE; i++) {
             Member member = members.get(i);
             endRoadViewRankUseCaseV2.execute(member, requests.get(i));
         }
 
         //then
         long endTime = System.currentTimeMillis();
-        System.out.println("게임 종료 이벤트 리스너 시간: " + (endTime - startTime) + "ms");
 
         Thread.sleep(1000);
 
@@ -159,7 +162,7 @@ public class RoadViewGameListenerTest {
         Member member = memberRepository.findById(members.get(0).getId()).orElseThrow();
 
         int countPointHistory = (int) pointHistoryRepository.count();
-        assertEquals(100, countPointHistory);
+        assertEquals(TEST_SIZE, countPointHistory);
 
         int memberPoint = member.getPoint();
         assertNotEquals(0, memberPoint);
@@ -167,5 +170,6 @@ public class RoadViewGameListenerTest {
         int ratingScore = gameRankRepository.findByMemberAndGameType(member, GameType.ROADVIEW).getRatingScore();
         assertNotEquals(0, ratingScore);
 
+        System.out.println("게임 종료 이벤트 리스너 시간: " + (endTime - startTime) + "ms");
     }
 }
