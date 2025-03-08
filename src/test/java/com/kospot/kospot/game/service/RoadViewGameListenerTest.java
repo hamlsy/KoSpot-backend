@@ -26,10 +26,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 import static org.awaitility.Awaitility.await;
@@ -117,13 +119,21 @@ public class RoadViewGameListenerTest {
         //given
         long startTime = System.currentTimeMillis();
 
-        //when
-        for (int i = 0; i < TEST_SIZE; i++) {
-            Member member = members.get(i);
-            endRoadViewRankUseCase.execute(member, requests.get(i));
+        // when - CompletableFuture로 병렬 실행
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
 
+        for (int i = 0; i < TEST_SIZE; i++) {
+            final int index = i;
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                Member member = members.get(index);
+                endRoadViewRankUseCaseV2.execute(member, requests.get(index));
+                System.out.println("요청 " + index + " 완료 - 스레드: " + Thread.currentThread().getName());
+            });
+            futures.add(future);
         }
-        // then
+
+        // 모든 작업 완료 대기
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
         long endTime = System.currentTimeMillis();
 
         //persist
@@ -147,16 +157,22 @@ public class RoadViewGameListenerTest {
         //given
         long startTime = System.currentTimeMillis();
 
-        //when
-        for (int i = 0; i < TEST_SIZE; i++) {
-            Member member = members.get(i);
-            endRoadViewRankUseCaseV2.execute(member, requests.get(i));
-        }
+        // when - CompletableFuture로 병렬 실행
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
 
-        //then
+        for (int i = 0; i < TEST_SIZE; i++) {
+            final int index = i;
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                Member member = members.get(index);
+                endRoadViewRankUseCaseV2.execute(member, requests.get(index));
+                System.out.println("요청 " + index + " 완료 - 스레드: " + Thread.currentThread().getName());
+            });
+            futures.add(future);
+        }
         long endTime = System.currentTimeMillis();
 
-        Thread.sleep(1000);
+        // 모든 작업 완료 대기
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
         //persist
         Member member = memberRepository.findById(members.get(0).getId()).orElseThrow();

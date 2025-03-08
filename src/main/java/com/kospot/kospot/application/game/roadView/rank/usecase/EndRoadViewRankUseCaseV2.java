@@ -37,6 +37,7 @@ public class EndRoadViewRankUseCaseV2 {
         // calculate rating point
         gameRankService.updateRatingScoreAfterGameEndV2(gameRank, game);
 
+
         return EndGameResponse.RoadViewRank.fromV2(game, currentRatingScore, gameRank.getRatingScore());
     }
 

@@ -24,6 +24,7 @@ public class EndRoadViewRankEventListener {
             Member member = event.getMember();
             RoadViewGame game = event.getRoadViewGame();
             GameRank gameRank = event.getGameRank();
+
             updatePointAndRankEvent.updatePointAndRank(member, game, gameRank.getRankTier());
         }catch (Exception e){
             //todo exception handling
