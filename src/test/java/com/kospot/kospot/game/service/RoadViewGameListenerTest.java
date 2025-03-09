@@ -200,7 +200,7 @@ public class RoadViewGameListenerTest {
         // when
         doThrow(new RuntimeException("이벤트 리스너 강제 예외"))
                 .when(updatePointAndRankEvent)
-                        .updatePointAndRank(any(Member.class), any(RoadViewGame.class), any(RankTier.class));
+                .updatePointAndRank(any(Member.class), any(RoadViewGame.class), any(RankTier.class));
 
         endRoadViewRankUseCaseV2.execute(member, request);
 
