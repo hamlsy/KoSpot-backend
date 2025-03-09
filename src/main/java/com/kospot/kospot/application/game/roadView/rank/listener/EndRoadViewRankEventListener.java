@@ -5,6 +5,8 @@ import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.event.RoadViewGameEvent;
 import com.kospot.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.kospot.domain.member.entity.Member;
+import com.kospot.kospot.exception.object.domain.EventHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -27,7 +29,7 @@ public class EndRoadViewRankEventListener {
 
             updatePointAndRankEvent.updatePointAndRank(member, game, gameRank.getRankTier());
         }catch (Exception e){
-            //todo exception handling
+            throw new EventHandler(ErrorStatus.EVENT_GAME_END_ERROR);
         }
     }
 

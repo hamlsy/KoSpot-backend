@@ -7,7 +7,6 @@ import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
-import com.kospot.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.kospot.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,9 +31,9 @@ public class RoadViewGameService {
         return game;
     }
 
-    public RoadViewGame endPracticeGame(Member member, EndGameRequest.RoadView request) {
+    public RoadViewGame endGame(Member member, EndGameRequest.RoadView request) {
         RoadViewGame game = adaptor.queryById(request.getGameId());
-        endGame(member, game, request);
+        endGameUpdate(member, game, request);
 
         return game;
     }
@@ -47,34 +46,12 @@ public class RoadViewGameService {
         return game;
     }
 
-    public RoadViewGame endRankGame(Member member, EndGameRequest.RoadView request) {
-        RoadViewGame game = adaptor.queryById(request.getGameId());
-        endGame(member, game, request);
 
-        return game;
-    }
-
-    public RoadViewGame endRankGameV2(Member member, GameRank gameRank, EndGameRequest.RoadView request) {
-        RoadViewGame game = adaptor.queryById(request.getGameId());
-        endRankGame(member, game, gameRank, request);
-
-        return game;
-    }
-
-    private void endGame(Member member, RoadViewGame game, EndGameRequest.RoadView request) {
+    private void endGameUpdate(Member member, RoadViewGame game, EndGameRequest.RoadView request) {
         game.end(
-                member, request.getSubmittedLat(), request.getSubmittedLng(), request.getAnswerTime(), request.getAnswerDistance()
-        );
-    }
-
-    private void endRankGame(Member member, RoadViewGame game, GameRank gameRank, EndGameRequest.RoadView request) {
-        game.endRank(
                 member, request.getSubmittedLat(), request.getSubmittedLng(),
                 request.getAnswerTime(), request.getAnswerDistance()
         );
     }
 
-    private int getCurrentRatingScore(GameRank gameRank) {
-        return gameRank.getRatingScore() + RECOVERY_SCORE; // recovery penalty score
-    }
 }

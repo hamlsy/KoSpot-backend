@@ -12,7 +12,6 @@ import com.kospot.kospot.domain.point.entity.PointHistoryType;
 import com.kospot.kospot.domain.point.service.PointHistoryService;
 import com.kospot.kospot.domain.point.service.PointService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,21 +21,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class UpdatePointAndRankEvent {
 
     private final PointService pointService;
-    private final GameRankAdaptor gameRankAdaptor;
     private final MemberAdaptor memberAdaptor;
     private final PointHistoryService pointHistoryService;
-    private final GameRankService gameRankService;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void updatePointAndRank(Member member, RoadViewGame game, RankTier rankTier){
+    public void updatePointAndRank(Member member, RoadViewGame game, RankTier rankTier) {
         //earn point
+        Member persistMember = memberAdaptor.queryById(member.getId()); // persist
 
-        // persist
-        Member persistMember = memberAdaptor.queryById(member.getId());
-
-        int point = pointService.addPointByRankGameScoreV2(persistMember, rankTier, game.getScore());
+        int point = pointService.addPointByRankGameScore(persistMember, rankTier, game.getScore());
 
         // save point history
         pointHistoryService.savePointHistory(persistMember, point, PointHistoryType.RANK_GAME);
+
     }
 }

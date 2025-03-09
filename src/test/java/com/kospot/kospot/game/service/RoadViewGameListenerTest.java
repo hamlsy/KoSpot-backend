@@ -1,32 +1,31 @@
 package com.kospot.kospot.game.service;
 
+import com.kospot.kospot.application.game.roadView.rank.event.UpdatePointAndRankEvent;
 import com.kospot.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
-import com.kospot.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCaseV2;
 import com.kospot.kospot.application.game.roadView.rank.listener.EndRoadViewRankEventListener;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
-import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
+import com.kospot.kospot.domain.game.entity.GameStatus;
 import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.gameRank.entity.GameRank;
+import com.kospot.kospot.domain.gameRank.entity.RankTier;
 import com.kospot.kospot.domain.gameRank.repository.GameRankRepository;
-import com.kospot.kospot.domain.gameRank.util.RatingScoreCalculator;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.member.repository.MemberRepository;
 import com.kospot.kospot.domain.point.adaptor.PointHistoryAdaptor;
-import com.kospot.kospot.domain.point.entity.PointHistory;
 import com.kospot.kospot.domain.point.repository.PointHistoryRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.ArrayList;
@@ -35,10 +34,11 @@ import java.util.concurrent.CompletableFuture;
 
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 
+@Slf4j
 @SpringBootTest
 @RecordApplicationEvents
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -48,7 +48,7 @@ public class RoadViewGameListenerTest {
     private EndRoadViewRankUseCase endRoadViewRankUseCase;
 
     @Autowired
-    private EndRoadViewRankUseCaseV2 endRoadViewRankUseCaseV2;
+    private EndRoadViewRankUseCase endRoadViewRankUseCaseV2;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -76,6 +76,9 @@ public class RoadViewGameListenerTest {
 
     @Autowired
     private EntityManager em;
+
+    @Mock
+    private UpdatePointAndRankEvent updatePointAndRankEvent;
 
     private List<Member> members = new ArrayList<>();
     private List<GameRank> gameRanks = new ArrayList<>();
@@ -127,7 +130,6 @@ public class RoadViewGameListenerTest {
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                 Member member = members.get(index);
                 endRoadViewRankUseCaseV2.execute(member, requests.get(index));
-                System.out.println("요청 " + index + " 완료 - 스레드: " + Thread.currentThread().getName());
             });
             futures.add(future);
         }
@@ -148,7 +150,7 @@ public class RoadViewGameListenerTest {
         int ratingScore = gameRankRepository.findByMemberAndGameType(member, GameType.ROADVIEW).getRatingScore();
         assertNotEquals(0, ratingScore);
 
-        System.out.println("기존 게임 종료 로직 시간: " + (endTime - startTime) + "ms");
+        log.info("기존 게임 종료 로직 시간: {}ms", (endTime - startTime));
     }
 
     @Test
@@ -165,7 +167,6 @@ public class RoadViewGameListenerTest {
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                 Member member = members.get(index);
                 endRoadViewRankUseCaseV2.execute(member, requests.get(index));
-                System.out.println("요청 " + index + " 완료 - 스레드: " + Thread.currentThread().getName());
             });
             futures.add(future);
         }
@@ -186,6 +187,34 @@ public class RoadViewGameListenerTest {
         int ratingScore = gameRankRepository.findByMemberAndGameType(member, GameType.ROADVIEW).getRatingScore();
         assertNotEquals(0, ratingScore);
 
-        System.out.println("게임 종료 이벤트 리스너 시간: " + (endTime - startTime) + "ms");
+        log.info("기존 게임 종료 로직 시간: {}ms", (endTime - startTime));
+    }
+
+    @Test
+    @DisplayName("게임 종료 이벤트 리스너 롤백 테스트")
+    void testGameEndEventListenerRollback() throws InterruptedException {
+        //given
+        Member member = members.get(0);
+        EndGameRequest.RoadView request = requests.get(0);
+
+        // when
+        doThrow(new RuntimeException("이벤트 리스너 강제 예외"))
+                .when(updatePointAndRankEvent)
+                        .updatePointAndRank(any(Member.class), any(RoadViewGame.class), any(RankTier.class));
+
+        endRoadViewRankUseCaseV2.execute(member, request);
+
+        Thread.sleep(1000);
+        //then
+        RoadViewGame retrievedGame = roadViewGameRepository.findById(member.getId()).orElseThrow();
+        GameRank gameRank = gameRankRepository.findByMemberAndGameType(member, GameType.ROADVIEW);
+        assertEquals(GameStatus.COMPLETED, retrievedGame.getGameStatus());
+        Member persistMember = gameRank.getMember();
+        assertEquals(0, persistMember.getPoint());
+        assertNotEquals(0, gameRank.getRatingScore());
+        log.info("game status :" + retrievedGame.getGameStatus());
+        log.info("member point :" + persistMember.getPoint());
+        log.info("member ratingpoint :" + gameRank.getRatingScore());
+        log.info("게임 종료 이벤트 리스너 롤백 테스트 성공");
     }
 }

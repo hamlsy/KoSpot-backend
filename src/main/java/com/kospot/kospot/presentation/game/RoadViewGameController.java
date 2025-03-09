@@ -3,7 +3,6 @@ package com.kospot.kospot.presentation.game;
 import com.kospot.kospot.application.game.roadView.practice.EndRoadViewPracticeUseCase;
 import com.kospot.kospot.application.game.roadView.practice.StartRoadViewPracticeUseCase;
 import com.kospot.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
-import com.kospot.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCaseV2;
 import com.kospot.kospot.application.game.roadView.rank.usecase.StartRoadViewRankUseCase;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
@@ -30,7 +29,6 @@ public class RoadViewGameController {
     private final StartRoadViewPracticeUseCase startRoadViewPracticeUseCase;
     private final StartRoadViewRankUseCase startRoadViewRankUseCase;
     private final EndRoadViewRankUseCase endRoadViewRankUseCase;
-    private final EndRoadViewRankUseCaseV2 endRoadViewRankUseCaseV2;
     private final EndRoadViewPracticeUseCase endRoadViewPracticeUseCase;
 
     private final AESService aesService;
@@ -47,17 +45,6 @@ public class RoadViewGameController {
     @GetMapping("/encrypt/{lat}")
     public ApiResponseDto<?> testEncrypt(@PathVariable("lat") String lat) throws Exception {
         return ApiResponseDto.onSuccess(aesService.encrypt(lat));
-    }
-
-    @GetMapping("/gameEndTest")
-    public ApiResponseDto<?> testGameEnd(Member member, @RequestBody EndGameRequest.RoadView request) {
-        return ApiResponseDto.onSuccess(endRoadViewRankUseCase.execute(member, request));
-    }
-
-    @GetMapping("/gameEndTestV2")
-    public ApiResponseDto<?> testGameEndV2(Member member, @RequestBody EndGameRequest.RoadView request) {
-
-        return ApiResponseDto.onSuccess(endRoadViewRankUseCaseV2.execute(member, request));
     }
 
     /**
