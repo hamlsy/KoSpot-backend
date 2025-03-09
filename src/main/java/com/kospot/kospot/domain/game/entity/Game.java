@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @SuperBuilder
@@ -34,11 +35,8 @@ public abstract class Game extends BaseTimeEntity {
     // 정답 시간
     private double answerTime;
 
-    private int currentRatingScore;
-    private int changeRatingScore;
-
     // 점수
-    private double score;
+    protected double score;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -67,22 +65,16 @@ public abstract class Game extends BaseTimeEntity {
     }
 
     // business
-    public void end(Member member, double submittedLat, double submittedLng,
-                    double score, double answerTime){
+    public void end(Member member, double submittedLat, double submittedLng, double answerTime){
         validateOwnMember(member);
         validateGameStatus();
         this.gameStatus = GameStatus.COMPLETED;
         this.submittedLat = submittedLat;
         this.submittedLng = submittedLng;
-        this.score = score;
         this.answerTime = answerTime;
         this.endedAt = LocalDateTime.now();
     }
 
-    public void updateRatingScore(int currentRatingScore, int changeRatingScore) {
-        this.currentRatingScore = currentRatingScore;
-        this.changeRatingScore = changeRatingScore;
-    }
 
     //validation
     private void validateGameStatus(){
@@ -102,6 +94,6 @@ public abstract class Game extends BaseTimeEntity {
     }
 
     private boolean isNotSameMember(Member member){
-        return this.member.getId() != member.getId();
+        return !Objects.equals(this.member.getId(), member.getId());
     }
 }

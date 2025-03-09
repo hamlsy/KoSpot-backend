@@ -1,13 +1,11 @@
 package com.kospot.kospot.gameRank.service;
 
-import com.kospot.kospot.domain.game.entity.Game;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.kospot.domain.gameRank.entity.RankLevel;
 import com.kospot.kospot.domain.gameRank.entity.RankTier;
 import com.kospot.kospot.domain.gameRank.service.GameRankService;
 import com.kospot.kospot.domain.gameRank.util.RatingScoreCalculator;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +38,8 @@ public class GameRankServiceTest {
         System.out.println("changeRatingScore = " + changeRatingScore);
         assertEquals(3000, game.getCurrentRatingScore());
         System.out.println("game.getCurrentRatingScore() = " + game.getCurrentRatingScore());
-        assertEquals(changeRatingScore, game.getChangeRatingScore());
-        System.out.println("game.getChangeRatingScore() = " + game.getChangeRatingScore());
+        assertEquals(changeRatingScore, game.getRatingScoreChange());
+        System.out.println("game.getChangeRatingScore() = " + game.getRatingScoreChange());
 
     }
 

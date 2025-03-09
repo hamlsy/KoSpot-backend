@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PointService {
 
-    public int addPointByRankGameScore(Member member, GameRank gameRank, double score) {
-        RankTier tier = gameRank.getRankTier();
+    public int addPointByRankGameScore(Member member, RankTier tier, double score) {
         int point = PointCalculator.getRankPoint(tier, score);
         member.addPoint(point);
         return point;

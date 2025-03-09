@@ -21,7 +21,9 @@ public class RoadViewGameService {
     private final RoadViewGameAdaptor adaptor;
     private final RoadViewGameRepository repository;
 
-    public RoadViewGame startPracticeGame(Member member, String sidoKey){
+    private static final int RECOVERY_SCORE = 100;
+
+    public RoadViewGame startPracticeGame(Member member, String sidoKey) {
         Coordinate coordinate = coordinateService.getRandomCoordinateBySido(sidoKey);
         RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.PRACTICE);
         repository.save(game);
@@ -29,9 +31,9 @@ public class RoadViewGameService {
         return game;
     }
 
-    public RoadViewGame endPracticeGame(Member member, EndGameRequest.RoadView request){
+    public RoadViewGame endGame(Member member, EndGameRequest.RoadView request) {
         RoadViewGame game = adaptor.queryById(request.getGameId());
-        endGame(member, game, request);
+        endGameUpdate(member, game, request);
 
         return game;
     }
@@ -44,18 +46,12 @@ public class RoadViewGameService {
         return game;
     }
 
-    public RoadViewGame endRankGame(Member member, EndGameRequest.RoadView request){
-        RoadViewGame game = adaptor.queryById(request.getGameId());
-        endGame(member, game, request);
 
-        return game;
-    }
-
-    private void endGame(Member member, RoadViewGame game, EndGameRequest.RoadView request) {
+    private void endGameUpdate(Member member, RoadViewGame game, EndGameRequest.RoadView request) {
         game.end(
-                member, request.getSubmittedLat(), request.getSubmittedLng(), request.getAnswerTime(), request.getAnswerDistance()
+                member, request.getSubmittedLat(), request.getSubmittedLng(),
+                request.getAnswerTime(), request.getAnswerDistance()
         );
     }
-
 
 }

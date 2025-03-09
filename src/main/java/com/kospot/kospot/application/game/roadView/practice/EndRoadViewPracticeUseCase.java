@@ -24,7 +24,7 @@ public class EndRoadViewPracticeUseCase {
 
     // todo refactor transaction
     public EndGameResponse.RoadViewPractice execute(Member member, EndGameRequest.RoadView request) {
-        RoadViewGame game = roadViewGameService.endPracticeGame(member, request);
+        RoadViewGame game = roadViewGameService.endGame(member, request);
 
         // add point
         int point = PointCalculator.getPracticePoint(game.getScore());

@@ -14,10 +14,10 @@ public class RatingScoreCalculator {
      * 게임 점수를 기반으로 얻게 될 레이팅 포인트를 계산합니다.
      *
      * @param gameScore 게임 한 판의 점수 (0~1000)
-     * @param currentRating 현재 사용자의 레이팅 점수
+     * @param currentRatingScore 현재 사용자의 레이팅 점수
      * @return 변경될 레이팅 포인트 (양수 또는 음수)
      */
-    public static int calculateRatingChange(double gameScore, int currentRating) {
+    public static int calculateRatingChange(double gameScore, int currentRatingScore) {
         // 게임 점수 범위 검증
         if (gameScore < MIN_GAME_SCORE) {
             gameScore = MIN_GAME_SCORE;
@@ -25,7 +25,7 @@ public class RatingScoreCalculator {
             gameScore = MAX_GAME_SCORE;
         }
 
-        RankTier tier = RankTier.getRankByRating(currentRating);
+        RankTier tier = RankTier.getRankByRating(currentRatingScore);
 
         // 점수 평가: 포인트 계산
         int ratingChange = 0;
