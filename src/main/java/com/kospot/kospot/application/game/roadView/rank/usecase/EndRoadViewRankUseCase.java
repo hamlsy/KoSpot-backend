@@ -29,13 +29,13 @@ public class EndRoadViewRankUseCase {
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);
         RoadViewGame game = roadViewGameService.endGame(member, request);
 
-        //event
-        eventPublisher.publishEvent(new RoadViewGameEvent(member, game, gameRank));
-
         int currentRatingScore = gameRank.getRatingScore();
 
         // calculate rating point
         gameRankService.updateRatingScoreAfterGameEnd(gameRank, game);
+
+        //event
+        eventPublisher.publishEvent(new RoadViewGameEvent(member, game, gameRank));
 
         return EndGameResponse.RoadViewRank.fromV2(game, currentRatingScore, gameRank.getRatingScore());
     }
