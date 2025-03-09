@@ -1,6 +1,6 @@
 package com.kospot.kospot.game.service;
 
-import com.kospot.kospot.application.game.roadView.practice.EndRoadViewPracticeUseCase;
+import com.kospot.kospot.application.game.roadView.practice.usecase.EndRoadViewPracticeUseCase;
 import com.kospot.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
 import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.dto.response.EndGameResponse;

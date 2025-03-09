@@ -1,38 +1,37 @@
-package com.kospot.kospot.application.game.roadView.practice;
+package com.kospot.kospot.application.game.roadView.practice.event;
 
-import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
-import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
+
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.kospot.domain.game.service.RoadViewGameService;
+import com.kospot.kospot.domain.gameRank.entity.RankTier;
+import com.kospot.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.entity.PointHistoryType;
 import com.kospot.kospot.domain.point.service.PointHistoryService;
 import com.kospot.kospot.domain.point.service.PointService;
 import com.kospot.kospot.domain.point.util.PointCalculator;
-import com.kospot.kospot.global.annotation.usecase.UseCase;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-@UseCase
+@Component
 @RequiredArgsConstructor
-@Transactional
-public class EndRoadViewPracticeUseCase {
+public class UpdatePointEvent {
 
-    private final RoadViewGameService roadViewGameService;
     private final PointService pointService;
+    private final MemberAdaptor memberAdaptor;
     private final PointHistoryService pointHistoryService;
 
-    // todo refactor transaction
-    public EndGameResponse.RoadViewPractice execute(Member member, EndGameRequest.RoadView request) {
-        RoadViewGame game = roadViewGameService.endGame(member, request);
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updatePoint(Member member, RoadViewGame game) {
+        //earn point
+        Member persistMember = memberAdaptor.queryById(member.getId()); // persist
 
-        // add point
         int point = PointCalculator.getPracticePoint(game.getScore());
         pointService.addPoint(member, point);
 
         // save point history
         pointHistoryService.savePointHistory(member, point, PointHistoryType.PRACTICE_GAME);
 
-        return EndGameResponse.RoadViewPractice.from(game);
     }
 }

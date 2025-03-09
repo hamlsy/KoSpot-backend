@@ -1,4 +1,4 @@
-package com.kospot.kospot.application.game.roadView.practice;
+package com.kospot.kospot.application.game.roadView.practice.usecase;
 
 import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
