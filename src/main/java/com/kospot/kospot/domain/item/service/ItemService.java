@@ -1,5 +1,6 @@
 package com.kospot.kospot.domain.item.service;
 
+import com.kospot.kospot.domain.item.dto.request.ItemRequest;
 import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.item.repository.ItemRepository;
 import com.kospot.kospot.domain.member.entity.Member;
@@ -16,7 +17,12 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
-    public void registerItem(){
+    //todo set Amazon
+    public void registerItem(Member member, ItemRequest.Create request){
+        member.validateAdmin();
+
+        itemRepository.save(item);
     }
+
 
 }

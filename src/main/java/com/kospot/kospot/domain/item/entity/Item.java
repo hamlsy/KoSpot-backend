@@ -1,6 +1,11 @@
 package com.kospot.kospot.domain.item.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.kospot.domain.member.entity.Member;
+import com.kospot.kospot.domain.member.entity.Role;
+import com.kospot.kospot.domain.memberItem.entity.MemberItem;
+import com.kospot.kospot.exception.object.domain.MemberHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,13 +28,24 @@ public class Item extends BaseTimeEntity {
 
     private String imageUrl;
 
-    private int price;
-
     @Lob
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    private int price;
+
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
+
+    //business
+    public static Item create(String name, String imageUrl, String description, int price, ItemType itemType) {
+        return Item.builder()
+                .name(name)
+                .imageUrl(imageUrl)
+                .description(description)
+                .price(price)
+                .itemType(itemType)
+                .build();
+    }
 
 }

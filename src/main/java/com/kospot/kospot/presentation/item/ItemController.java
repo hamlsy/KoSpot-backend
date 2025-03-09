@@ -2,6 +2,7 @@ package com.kospot.kospot.presentation.item;
 
 import com.kospot.kospot.application.item.FindItemsByTypeUseCase;
 import com.kospot.kospot.domain.item.dto.response.ItemResponse;
+import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,7 +31,7 @@ public class ItemController {
 
     //todo register item - S3, admin
     @Operation(summary = "아이템 등록", description = "아이템을 등록합니다.")
-    public ApiResponseDto<?> registerItem(){
+    public ApiResponseDto<?> registerItem(Member member){
         return null;
     }
 
@@ -38,7 +39,7 @@ public class ItemController {
     //todo delete item, admin
     @Operation(summary = "아이템 삭제", description = "아이템을 삭제합니다.")
     @DeleteMapping("/{id}")
-    public ApiResponseDto<?> deleteItem(@PathVariable("id") Long itemId){
+    public ApiResponseDto<?> deleteItem(Member member, @PathVariable("id") Long itemId){
         return null;
     }
 
@@ -46,7 +47,7 @@ public class ItemController {
 
     @Operation(summary = "아이템 업데이트", description = "아이템을 업데이트 합니다.")
     @PutMapping("/{id}")
-    public ApiResponseDto<?> updateItem(@PathVariable("id") Long itemId){
+    public ApiResponseDto<?> updateItem(Member member, @PathVariable("id") Long itemId){
         return null;
     }
 
