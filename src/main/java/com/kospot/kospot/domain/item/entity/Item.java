@@ -21,10 +21,15 @@ public class Item extends BaseTimeEntity {
 
     private String name;
 
+    private String imageUrl;
+
+    private int price;
+
     @Lob
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private int price;
+    @Enumerated(EnumType.STRING)
+    private ItemType itemType;
 
 }

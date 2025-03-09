@@ -1,4 +1,4 @@
-package com.kospot.kospot.presentation.item;
+package com.kospot.kospot.presentation.memberItem;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,17 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
-@Tag(name = "Item Api", description = "아이템 API")
-@RequestMapping("/api/item")
-public class ItemController {
+@Tag(name = "MemberItem Api", description = "멤버 아이템 API")
+@RequestMapping("/api/memberItem")
+public class MemberItemController {
 
-    //todo getItemList
+    //todo purchase item
 
-    //todo register item - S3
-
-    //todo delete item
-
-    //todo update item
-
+    //todo equip item
 
 }
