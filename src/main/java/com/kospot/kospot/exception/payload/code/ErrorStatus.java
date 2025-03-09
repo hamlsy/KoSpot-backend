@@ -56,8 +56,9 @@ public enum ErrorStatus implements BaseCode{
 
     // Event Error (4261 ~ 4270)
     EVENT_GAME_END_ERROR(INTERNAL_SERVER_ERROR, 4261, "게임 종료 중 오류가 발생했습니다."),
-    ;
 
+    // Item Error (4271 ~ 4280)
+    ITEM_NOT_FOUND(NOT_FOUND, 4271, "해당 아이템을 찾을 수 없습니다."),;
 
     private final HttpStatus httpStatus;
     private final Integer code;
