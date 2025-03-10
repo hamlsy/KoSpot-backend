@@ -33,6 +33,7 @@ public class ItemController {
      * @return
      */
 
+    @PostMapping("/imageTest")
     public ApiResponseDto<?> imageUploadTest(ItemRequest.Create request) {
         itemService.registerItemTest(request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
@@ -50,6 +51,7 @@ public class ItemController {
 
     //todo register item - S3, admin
     @Operation(summary = "아이템 등록", description = "아이템을 등록합니다.")
+    @PostMapping("/")
     public ApiResponseDto<?> registerItem(Member member){
         return null;
     }
