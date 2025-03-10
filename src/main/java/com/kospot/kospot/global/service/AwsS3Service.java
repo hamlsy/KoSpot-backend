@@ -28,20 +28,31 @@ public class AwsS3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final AmazonS3 amazonS3;
     private final AmazonS3Client amazonS3Client;
 
-    private static final String LOCAL_FILE_PATH = "src/main/resources/file/dump/";
+    private static final String LOCAL_FILE_PATH = "src/main/resources/dump/";
+    private static final String S3_IMAGE_PATH = "file/image/";
+    private static final String S3_ITEM_MARKER_PATH = S3_IMAGE_PATH + "item/marker/";
+    private static final String S3_NOTICE_PATH = S3_IMAGE_PATH + "notice/";
 
-    public String uploadImage(MultipartFile image) {
+
+    public String uploadItemMarkerImage(MultipartFile image){
+        return uploadImage(image, S3_ITEM_MARKER_PATH);
+    }
+
+    public String uploadNoticeImage(MultipartFile image){
+        return uploadImage(image, S3_NOTICE_PATH);
+    }
+
+    private String uploadImage(MultipartFile image, String filePath) {
         validateFileExtension(image.getOriginalFilename());
         String fileName = createFileName(image);
-
+        String s3Key = filePath + fileName;
         try {
-            File uploadFile = uploadLocalFile(image, fileName).orElseThrow(
+            File uploadFile = uploadLocalFile(image, fileName, filePath).orElseThrow(
                     () -> new S3Handler(ErrorStatus.FILE_INVALID_EXTENSION)
             );
-            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
+            amazonS3Client.putObject(new PutObjectRequest(bucket, s3Key, uploadFile).withCannedAcl(
                     CannedAccessControlList.PublicRead));
             removeNewFile(uploadFile);
         } catch (IOException e) {
@@ -69,8 +80,12 @@ public class AwsS3Service {
         }
     }
 
-    private Optional<File> uploadLocalFile(MultipartFile multipartFile, String fileName) throws IOException {
-        File convertFile = new File(LOCAL_FILE_PATH + fileName);
+    private Optional<File> uploadLocalFile(MultipartFile multipartFile, String fileName, String filePath) throws IOException {
+        String localPathName = LOCAL_FILE_PATH + filePath + fileName;
+        File convertFile = new File(localPathName);
+
+        createParentDir(convertFile);
+
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(multipartFile.getBytes());
@@ -78,6 +93,14 @@ public class AwsS3Service {
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    private static void createParentDir(File convertFile) {
+        // 상위 디렉토리 생성
+        File parentDir = convertFile.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs(); // 모든 중간 디렉토리 생성
+        }
     }
 
     private void removeNewFile(File file) {

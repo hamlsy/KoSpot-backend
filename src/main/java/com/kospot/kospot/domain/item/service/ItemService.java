@@ -24,7 +24,9 @@ public class ItemService {
     // Item Create가 실패해도 S3에 이미지가 올라가는 문제 발생
     public void registerItem(Member member, ItemRequest.Create request) {
         member.validateAdmin();
-        String imageUrl = awsS3Service.uploadImage(request.getImage());
+
+        // todo item type에 따라 다르게
+        String imageUrl = awsS3Service.uploadItemMarkerImage(request.getImage());
         Item item = request.toEntity(imageUrl);
 
         itemRepository.save(item);
@@ -32,7 +34,7 @@ public class ItemService {
 
     // test
     public void registerItemTest(ItemRequest.Create request) {
-        String imageUrl = awsS3Service.uploadImage(request.getImage());
+        String imageUrl = awsS3Service.uploadItemMarkerImage(request.getImage());
         Item item = request.toEntity(imageUrl);
 
         itemRepository.save(item);
