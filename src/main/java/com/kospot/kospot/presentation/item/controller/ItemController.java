@@ -1,8 +1,8 @@
-package com.kospot.kospot.presentation.item;
+package com.kospot.kospot.presentation.item.controller;
 
 import com.kospot.kospot.application.item.*;
-import com.kospot.kospot.domain.item.dto.request.ItemRequest;
-import com.kospot.kospot.domain.item.dto.response.ItemResponse;
+import com.kospot.kospot.presentation.item.dto.request.ItemRequest;
+import com.kospot.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.kospot.domain.item.service.ItemService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;

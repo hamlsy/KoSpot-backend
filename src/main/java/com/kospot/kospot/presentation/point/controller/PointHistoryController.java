@@ -1,7 +1,7 @@
-package com.kospot.kospot.presentation.point;
+package com.kospot.kospot.presentation.point.controller;
 
 import com.kospot.kospot.domain.point.adaptor.PointHistoryAdaptor;
-import com.kospot.kospot.domain.point.dto.response.PointHistoryResponse;
+import com.kospot.kospot.presentation.point.response.PointHistoryResponse;
 import com.kospot.kospot.domain.point.service.PointHistoryService;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

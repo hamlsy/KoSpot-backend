@@ -1,4 +1,4 @@
-package com.kospot.kospot.presentation.memberItem;
+package com.kospot.kospot.presentation.memberItem.controller;
 
 import com.kospot.kospot.application.memberItem.EquipMemberItemUseCase;
 import com.kospot.kospot.domain.member.entity.Member;

@@ -1,6 +1,6 @@
 package com.kospot.kospot.application.item;
 
-import com.kospot.kospot.domain.item.dto.request.ItemRequest;
+import com.kospot.kospot.presentation.item.dto.request.ItemRequest;
 import com.kospot.kospot.domain.item.service.ItemService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.global.annotation.usecase.UseCase;

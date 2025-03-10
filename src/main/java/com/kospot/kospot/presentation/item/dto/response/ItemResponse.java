@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.item.dto.response;
+package com.kospot.kospot.presentation.item.dto.response;
 
 import com.kospot.kospot.domain.item.entity.Item;
 import lombok.Builder;

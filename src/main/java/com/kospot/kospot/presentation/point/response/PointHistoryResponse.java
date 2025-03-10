@@ -1,7 +1,6 @@
-package com.kospot.kospot.domain.point.dto.response;
+package com.kospot.kospot.presentation.point.response;
 
 import com.kospot.kospot.domain.point.entity.PointHistory;
-import com.kospot.kospot.domain.point.entity.PointHistoryType;
 import lombok.Builder;
 import lombok.Getter;
 

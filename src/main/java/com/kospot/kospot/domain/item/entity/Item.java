@@ -34,6 +34,8 @@ public class Item extends BaseTimeEntity {
 
     private int price;
 
+    // todo implement quantity
+
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
 

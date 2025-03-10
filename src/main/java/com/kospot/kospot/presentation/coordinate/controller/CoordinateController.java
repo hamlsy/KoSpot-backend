@@ -1,7 +1,7 @@
-package com.kospot.kospot.presentation.coordinate;
+package com.kospot.kospot.presentation.coordinate.controller;
 
 import com.kospot.kospot.application.coordinate.ImportCoordinateUseCase;
-import com.kospot.kospot.domain.coordinate.dto.response.CoordinateResponse;
+import com.kospot.kospot.presentation.coordinate.dto.response.CoordinateResponse;
 import com.kospot.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;

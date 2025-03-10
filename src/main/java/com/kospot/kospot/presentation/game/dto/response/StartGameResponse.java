@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.game.dto.response;
+package com.kospot.kospot.presentation.game.dto.response;
 
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import lombok.Builder;

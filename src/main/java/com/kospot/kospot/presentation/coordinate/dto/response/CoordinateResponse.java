@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.coordinate.dto.response;
+package com.kospot.kospot.presentation.coordinate.dto.response;
 
 import com.kospot.kospot.domain.coordinate.entity.Address;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;

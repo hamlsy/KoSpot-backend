@@ -2,8 +2,8 @@ package com.kospot.kospot.application.game.roadView.rank.usecase;
 
 import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.game.event.RoadViewRankEvent;
-import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
-import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
+import com.kospot.kospot.presentation.game.dto.request.EndGameRequest;
+import com.kospot.kospot.presentation.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.gameRank.adaptor.GameRankAdaptor;

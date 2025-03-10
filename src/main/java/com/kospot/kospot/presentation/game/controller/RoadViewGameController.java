@@ -1,12 +1,12 @@
-package com.kospot.kospot.presentation.game;
+package com.kospot.kospot.presentation.game.controller;
 
 import com.kospot.kospot.application.game.roadView.practice.usecase.EndRoadViewPracticeUseCase;
 import com.kospot.kospot.application.game.roadView.practice.usecase.StartRoadViewPracticeUseCase;
 import com.kospot.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
 import com.kospot.kospot.application.game.roadView.rank.usecase.StartRoadViewRankUseCase;
-import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
-import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
-import com.kospot.kospot.domain.game.dto.response.StartGameResponse;
+import com.kospot.kospot.presentation.game.dto.request.EndGameRequest;
+import com.kospot.kospot.presentation.game.dto.response.EndGameResponse;
+import com.kospot.kospot.presentation.game.dto.response.StartGameResponse;
 import com.kospot.kospot.domain.game.service.AESService;
 import com.kospot.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.kospot.domain.member.entity.Member;

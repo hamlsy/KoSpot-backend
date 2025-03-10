@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.item.dto.request;
+package com.kospot.kospot.presentation.item.dto.request;
 
 import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.item.entity.ItemType;

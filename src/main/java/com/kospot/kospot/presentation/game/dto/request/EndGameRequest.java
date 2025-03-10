@@ -1,4 +1,4 @@
-package com.kospot.kospot.domain.game.dto.request;
+package com.kospot.kospot.presentation.game.dto.request;
 
 import lombok.*;
 

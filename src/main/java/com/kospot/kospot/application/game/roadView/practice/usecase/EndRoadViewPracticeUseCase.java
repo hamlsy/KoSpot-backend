@@ -1,7 +1,7 @@
 package com.kospot.kospot.application.game.roadView.practice.usecase;
 
-import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
-import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
+import com.kospot.kospot.presentation.game.dto.request.EndGameRequest;
+import com.kospot.kospot.presentation.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.event.RoadViewPracticeEvent;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;

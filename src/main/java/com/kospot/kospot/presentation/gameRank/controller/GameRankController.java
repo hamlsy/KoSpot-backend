@@ -1,4 +1,4 @@
-package com.kospot.kospot.presentation.gameRank;
+package com.kospot.kospot.presentation.gameRank.controller;
 
 import com.kospot.kospot.domain.gameRank.util.RatingScoreCalculator;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
