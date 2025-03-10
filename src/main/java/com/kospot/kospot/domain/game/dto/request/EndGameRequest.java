@@ -1,16 +1,13 @@
 package com.kospot.kospot.domain.game.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 public class EndGameRequest {
 
-    @Getter
+    @Data
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Builder
     public static class RoadView {
         private Long gameId;
         private double submittedLat;

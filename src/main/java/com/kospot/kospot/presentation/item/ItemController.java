@@ -34,7 +34,7 @@ public class ItemController {
      */
 
     @PostMapping("/imageTest")
-    public ApiResponseDto<?> imageUploadTest(ItemRequest.Create request) {
+    public ApiResponseDto<?> imageUploadTest(@ModelAttribute ItemRequest.Create request) {
         itemService.registerItemTest(request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }

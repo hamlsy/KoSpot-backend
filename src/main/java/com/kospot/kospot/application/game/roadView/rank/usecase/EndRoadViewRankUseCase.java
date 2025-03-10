@@ -37,7 +37,7 @@ public class EndRoadViewRankUseCase {
         //event
         eventPublisher.publishEvent(new RoadViewRankEvent(member, game, gameRank));
 
-        return EndGameResponse.RoadViewRank.fromV2(game, currentRatingScore, gameRank.getRatingScore());
+        return EndGameResponse.RoadViewRank.from(game, currentRatingScore, gameRank.getRatingScore());
     }
 
 

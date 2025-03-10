@@ -21,6 +21,7 @@ public class ItemService {
     private final AwsS3Service awsS3Service;
 
     //todo optimize image upload transaction
+    // Item Create가 실패해도 S3에 이미지가 올라가는 문제 발생
     public void registerItem(Member member, ItemRequest.Create request){
         member.validateAdmin();
         String imageUrl = awsS3Service.uploadImage(request.getImage());
@@ -30,7 +31,6 @@ public class ItemService {
     }
 
     // test
-
     public void registerItemTest(ItemRequest.Create request) {
         String imageUrl = awsS3Service.uploadImage(request.getImage());
         Item item = request.toEntity(imageUrl);

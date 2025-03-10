@@ -32,14 +32,14 @@ public class AwsS3Service {
     private final AmazonS3 amazonS3;
     private final AmazonS3Client amazonS3Client;
 
-    private static final String LOCAL_FILE_PATH = "resources/file/dump";
+    private static final String LOCAL_FILE_PATH = "src/main/resources/file/dump/";
 
     public String uploadImage(MultipartFile image) {
         validateFileExtension(image.getOriginalFilename());
         String fileName = createFileName(image);
 
         try {
-            File uploadFile = uploadLocalFile(image).orElseThrow(
+            File uploadFile = uploadLocalFile(image, fileName).orElseThrow(
                     () ->  new S3Handler(ErrorStatus.FILE_INVALID_EXTENSION)
             );
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
@@ -70,8 +70,8 @@ public class AwsS3Service {
         }
     }
 
-    private Optional<File> uploadLocalFile(MultipartFile multipartFile) throws IOException{
-        File convertFile = new File(LOCAL_FILE_PATH + multipartFile.getOriginalFilename());
+    private Optional<File> uploadLocalFile(MultipartFile multipartFile, String fileName) throws IOException{
+        File convertFile = new File(LOCAL_FILE_PATH + fileName);
         if(convertFile.createNewFile()){
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(multipartFile.getBytes());
