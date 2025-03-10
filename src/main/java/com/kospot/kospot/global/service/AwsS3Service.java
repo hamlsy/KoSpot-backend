@@ -1,8 +1,8 @@
 package com.kospot.kospot.global.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kospot.kospot.exception.object.domain.S3Handler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
@@ -12,11 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.FileHandler;
 
 @Slf4j
 @Service
@@ -27,17 +30,21 @@ public class AwsS3Service {
     private String bucket;
 
     private final AmazonS3 amazonS3;
+    private final AmazonS3Client amazonS3Client;
+
+    private final String LOCAL_FILE_PATH = "resources/file/dump";
 
     public String uploadImage(MultipartFile image) {
         validateFileExtension(image.getOriginalFilename());
         String fileName = createFileName(image);
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(image.getSize());
-        objectMetadata.setContentType(image.getContentType());
 
-        try (InputStream inputStream = image.getInputStream()) {
-            amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        try {
+            File uploadFile = uploadLocalFile(image).orElseThrow(
+                    () ->  new S3Handler(ErrorStatus.FILE_INVALID_EXTENSION)
+            );
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
+                    CannedAccessControlList.PublicRead));
+            removeNewFile(uploadFile);
         } catch (IOException e) {
             throw new S3Handler(ErrorStatus.FILE_UPLOAD_FAILED);
         }
@@ -61,5 +68,24 @@ public class AwsS3Service {
         if (!allowedExtentionList.contains(extention)) {
             throw new S3Handler(ErrorStatus.FILE_INVALID_EXTENSION);
         }
+    }
+
+    private Optional<File> uploadLocalFile(MultipartFile multipartFile) throws IOException{
+        File convertFile = new File(LOCAL_FILE_PATH + multipartFile.getOriginalFilename());
+        if(convertFile.createNewFile()){
+            try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
+                fos.write(multipartFile.getBytes());
+            }
+            return Optional.of(convertFile);
+        }
+        return Optional.empty();
+    }
+
+    private void removeNewFile(File file){
+        if (file.delete()) {
+            log.info("File delete success");
+            return;
+        }
+        log.info("File delete fail");
     }
 }

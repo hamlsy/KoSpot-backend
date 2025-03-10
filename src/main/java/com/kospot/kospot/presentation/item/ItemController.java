@@ -1,6 +1,6 @@
 package com.kospot.kospot.presentation.item;
 
-import com.kospot.kospot.application.item.FindItemsByTypeUseCase;
+import com.kospot.kospot.application.item.FindAllItemsByTypeUseCase;
 import com.kospot.kospot.domain.item.dto.response.ItemResponse;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
@@ -21,12 +21,12 @@ import java.util.List;
 @RequestMapping("/api/item")
 public class ItemController {
 
-    private final FindItemsByTypeUseCase findItemsByTypeUseCase;
+    private final FindAllItemsByTypeUseCase findAllItemsByTypeUseCase;
 
     @Operation(summary = "아이템 타입 조회", description = "타입 별 아이템들을 조회합니다.")
     @GetMapping("/{itemTypeKey}")
     public ApiResponseDto<List<ItemResponse.ItemDto>> findItemsByItemType(@PathVariable("itemTypeKey") String itemTypeKey){
-        return ApiResponseDto.onSuccess(findItemsByTypeUseCase.execute(itemTypeKey));
+        return ApiResponseDto.onSuccess(findAllItemsByTypeUseCase.execute(itemTypeKey));
     }
 
     //todo register item - S3, admin

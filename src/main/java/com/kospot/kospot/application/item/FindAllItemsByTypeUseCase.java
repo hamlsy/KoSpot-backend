@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @UseCase
 @RequiredArgsConstructor
-public class FindItemsByTypeUseCase {
+public class FindAllItemsByTypeUseCase {
 
     private final ItemAdaptor itemAdaptor;
 

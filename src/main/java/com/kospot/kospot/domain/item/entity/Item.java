@@ -38,7 +38,7 @@ public class Item extends BaseTimeEntity {
     private ItemType itemType;
 
     //business
-    public static Item create(String name, String imageUrl, String description, int price, ItemType itemType) {
+    public static Item create(String name, String description, ItemType itemType, int price, String imageUrl) {
         return Item.builder()
                 .name(name)
                 .imageUrl(imageUrl)
