@@ -1,7 +1,6 @@
 package com.kospot.kospot.presentation.item;
 
-import com.kospot.kospot.application.item.FindAllItemsByTypeUseCase;
-import com.kospot.kospot.application.item.RegisterItemUseCase;
+import com.kospot.kospot.application.item.*;
 import com.kospot.kospot.domain.item.dto.request.ItemRequest;
 import com.kospot.kospot.domain.item.dto.response.ItemResponse;
 import com.kospot.kospot.domain.item.service.ItemService;
@@ -27,6 +26,10 @@ public class ItemController {
 
     private final FindAllItemsByTypeUseCase findAllItemsByTypeUseCase;
     private final RegisterItemUseCase registerItemUseCase;
+    private final DeleteAllItemUseCase deleteAllItemUseCase;
+    private final DeleteItemFromShopUseCase deleteItemFromShopUseCase;
+    private final RestoreItemToShopUseCase restoreItemToShopUseCase;
+
 
     private final ItemService itemService;
 
@@ -58,21 +61,32 @@ public class ItemController {
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
+    @Operation(summary = "아이템 상점 삭제", description = "아이템을 상점에서 삭제합니다.")
+    @PutMapping("/deleteShop/{id}")
+    public ApiResponseDto<?> deleteItemFromShop(Member member, @PathVariable("id") Long id){
+        deleteItemFromShopUseCase.execute(member, id);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
 
-    //todo delete item, admin
-    @Operation(summary = "아이템 삭제", description = "아이템을 삭제합니다.")
-    @DeleteMapping("/{id}")
-    public ApiResponseDto<?> deleteItem(Member member, @PathVariable("id") Long itemId) {
-        return null;
+    @Operation(summary = "아이템 상점 재등록", description = "아이템을 상점에 재등록합니다.")
+    @PutMapping("/restoreShop/{id}")
+    public ApiResponseDto<?> restoreItemToShop(Member member, @PathVariable("id") Long id){
+        restoreItemToShopUseCase.execute(member, id);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     //todo update item
-
     @Operation(summary = "아이템 업데이트", description = "아이템을 업데이트 합니다.")
     @PutMapping("/{id}")
     public ApiResponseDto<?> updateItem(Member member, @PathVariable("id") Long itemId) {
         return null;
     }
 
+    @Operation(summary = "아이템 삭제", description = "아이템을 삭제합니다.")
+    @DeleteMapping("/{id}")
+    public ApiResponseDto<?> deleteItem(Member member, @PathVariable("id") Long itemId) {
+        deleteAllItemUseCase.execute(member, itemId);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
 
 }

@@ -37,6 +37,8 @@ public class Item extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
 
+    private boolean isAvailable = true;
+
     //business
     public static Item create(String name, String description, ItemType itemType, int price, String imageUrl) {
         return Item.builder()
@@ -47,5 +49,14 @@ public class Item extends BaseTimeEntity {
                 .itemType(itemType)
                 .build();
     }
+
+    public void deleteFromShop(){
+        this.isAvailable = false;
+    }
+
+    public void restoreToShop(){
+        this.isAvailable = true;
+    }
+
 
 }

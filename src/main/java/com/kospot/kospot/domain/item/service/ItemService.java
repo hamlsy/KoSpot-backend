@@ -42,10 +42,18 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    // todo item 완전 삭제와 상점에서의 삭제를 구분하기
-    // todo 연관관계 고려, memberItem, member,
     public void deleteItemById(Long id){
         itemRepository.deleteById(id);
+    }
+
+    public void deleteItemFromShop(Long id){
+        Item item = itemAdaptor.queryById(id);
+        item.deleteFromShop();
+    }
+
+    public void restoreItemToShop(Long id){
+        Item item = itemAdaptor.queryById(id);
+        item.restoreToShop();
     }
 
 }
