@@ -28,7 +28,8 @@ public class ItemController {
     private final ItemService itemService;
 
     /**
-     *  TEST
+     * TEST
+     *
      * @param
      * @return
      */
@@ -40,19 +41,19 @@ public class ItemController {
     }
 
     /**
-     *  ----------------------------
+     * ----------------------------
      */
 
     @Operation(summary = "아이템 타입 조회", description = "타입 별 아이템들을 조회합니다.")
     @GetMapping("/{itemTypeKey}")
-    public ApiResponseDto<List<ItemResponse.ItemDto>> findItemsByItemType(@PathVariable("itemTypeKey") String itemTypeKey){
+    public ApiResponseDto<List<ItemResponse.ItemDto>> findItemsByItemType(@PathVariable("itemTypeKey") String itemTypeKey) {
         return ApiResponseDto.onSuccess(findAllItemsByTypeUseCase.execute(itemTypeKey));
     }
 
     //todo register item - S3, admin
     @Operation(summary = "아이템 등록", description = "아이템을 등록합니다.")
     @PostMapping("/")
-    public ApiResponseDto<?> registerItem(Member member){
+    public ApiResponseDto<?> registerItem(Member member) {
         return null;
     }
 
@@ -60,7 +61,7 @@ public class ItemController {
     //todo delete item, admin
     @Operation(summary = "아이템 삭제", description = "아이템을 삭제합니다.")
     @DeleteMapping("/{id}")
-    public ApiResponseDto<?> deleteItem(Member member, @PathVariable("id") Long itemId){
+    public ApiResponseDto<?> deleteItem(Member member, @PathVariable("id") Long itemId) {
         return null;
     }
 
@@ -68,7 +69,7 @@ public class ItemController {
 
     @Operation(summary = "아이템 업데이트", description = "아이템을 업데이트 합니다.")
     @PutMapping("/{id}")
-    public ApiResponseDto<?> updateItem(Member member, @PathVariable("id") Long itemId){
+    public ApiResponseDto<?> updateItem(Member member, @PathVariable("id") Long itemId) {
         return null;
     }
 

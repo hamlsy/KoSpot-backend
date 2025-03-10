@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.FileHandler;
 
 @Slf4j
 @Service
@@ -40,7 +39,7 @@ public class AwsS3Service {
 
         try {
             File uploadFile = uploadLocalFile(image, fileName).orElseThrow(
-                    () ->  new S3Handler(ErrorStatus.FILE_INVALID_EXTENSION)
+                    () -> new S3Handler(ErrorStatus.FILE_INVALID_EXTENSION)
             );
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
                     CannedAccessControlList.PublicRead));
@@ -70,9 +69,9 @@ public class AwsS3Service {
         }
     }
 
-    private Optional<File> uploadLocalFile(MultipartFile multipartFile, String fileName) throws IOException{
+    private Optional<File> uploadLocalFile(MultipartFile multipartFile, String fileName) throws IOException {
         File convertFile = new File(LOCAL_FILE_PATH + fileName);
-        if(convertFile.createNewFile()){
+        if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(multipartFile.getBytes());
             }
@@ -81,7 +80,7 @@ public class AwsS3Service {
         return Optional.empty();
     }
 
-    private void removeNewFile(File file){
+    private void removeNewFile(File file) {
         if (file.delete()) {
             log.info("File delete success");
             return;

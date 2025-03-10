@@ -2,7 +2,7 @@ package com.kospot.kospot.domain.item.service;
 
 import com.kospot.kospot.domain.item.dto.request.ItemRequest;
 import com.kospot.kospot.domain.item.entity.Item;
-import com.kospot.kospot.domain.item.entity.ItemType;
+
 import com.kospot.kospot.domain.item.repository.ItemRepository;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.global.service.AwsS3Service;
@@ -22,7 +22,7 @@ public class ItemService {
 
     //todo optimize image upload transaction
     // Item Create가 실패해도 S3에 이미지가 올라가는 문제 발생
-    public void registerItem(Member member, ItemRequest.Create request){
+    public void registerItem(Member member, ItemRequest.Create request) {
         member.validateAdmin();
         String imageUrl = awsS3Service.uploadImage(request.getImage());
         Item item = request.toEntity(imageUrl);
