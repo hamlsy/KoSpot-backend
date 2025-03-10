@@ -30,12 +30,10 @@ public class ItemController {
     private final DeleteItemFromShopUseCase deleteItemFromShopUseCase;
     private final RestoreItemToShopUseCase restoreItemToShopUseCase;
 
-
     private final ItemService itemService;
 
     /**
      * TEST
-     *
      */
 
     @PostMapping("/imageTest")
@@ -63,14 +61,14 @@ public class ItemController {
 
     @Operation(summary = "아이템 상점 삭제", description = "아이템을 상점에서 삭제합니다.")
     @PutMapping("/deleteShop/{id}")
-    public ApiResponseDto<?> deleteItemFromShop(Member member, @PathVariable("id") Long id){
+    public ApiResponseDto<?> deleteItemFromShop(Member member, @PathVariable("id") Long id) {
         deleteItemFromShopUseCase.execute(member, id);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 상점 재등록", description = "아이템을 상점에 재등록합니다.")
     @PutMapping("/restoreShop/{id}")
-    public ApiResponseDto<?> restoreItemToShop(Member member, @PathVariable("id") Long id){
+    public ApiResponseDto<?> restoreItemToShop(Member member, @PathVariable("id") Long id) {
         restoreItemToShopUseCase.execute(member, id);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
