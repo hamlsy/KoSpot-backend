@@ -32,7 +32,7 @@ public class AwsS3Service {
     private final AmazonS3 amazonS3;
     private final AmazonS3Client amazonS3Client;
 
-    private final String LOCAL_FILE_PATH = "resources/file/dump";
+    private static final String LOCAL_FILE_PATH = "resources/file/dump";
 
     public String uploadImage(MultipartFile image) {
         validateFileExtension(image.getOriginalFilename());

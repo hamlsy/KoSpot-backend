@@ -23,19 +23,19 @@ public class ItemService {
     //todo optimize image upload transaction
     public void registerItem(Member member, ItemRequest.Create request){
         member.validateAdmin();
-        ItemType itemType = ItemType.fromKey(request.getItemTypeKey());
         String imageUrl = awsS3Service.uploadImage(request.getImage());
-
-        Item item = Item.create(
-                request.getName(),
-                request.getDescription(),
-                itemType,
-                request.getPrice(),
-                imageUrl
-        );
+        Item item = request.toEntity(imageUrl);
 
         itemRepository.save(item);
     }
 
+    // test
+
+    public void registerItemTest(ItemRequest.Create request) {
+        String imageUrl = awsS3Service.uploadImage(request.getImage());
+        Item item = request.toEntity(imageUrl);
+
+        itemRepository.save(item);
+    }
 
 }

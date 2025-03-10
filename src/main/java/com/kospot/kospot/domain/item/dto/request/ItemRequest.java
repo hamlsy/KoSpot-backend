@@ -18,6 +18,13 @@ public class ItemRequest {
         private int price;
         private String itemTypeKey;
 
+        public Item toEntity(String imageUrl){
+            return Item.create(name, description,
+                    ItemType.fromKey(itemTypeKey), price,
+                    imageUrl
+            );
+        }
+
     }
 
 }
