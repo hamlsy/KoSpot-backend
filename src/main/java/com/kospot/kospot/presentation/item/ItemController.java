@@ -1,6 +1,7 @@
 package com.kospot.kospot.presentation.item;
 
 import com.kospot.kospot.application.item.FindAllItemsByTypeUseCase;
+import com.kospot.kospot.application.item.RegisterItemUseCase;
 import com.kospot.kospot.domain.item.dto.request.ItemRequest;
 import com.kospot.kospot.domain.item.dto.response.ItemResponse;
 import com.kospot.kospot.domain.item.service.ItemService;
@@ -25,13 +26,13 @@ import java.util.List;
 public class ItemController {
 
     private final FindAllItemsByTypeUseCase findAllItemsByTypeUseCase;
+    private final RegisterItemUseCase registerItemUseCase;
+
     private final ItemService itemService;
 
     /**
      * TEST
      *
-     * @param
-     * @return
      */
 
     @PostMapping("/imageTest")
@@ -50,11 +51,11 @@ public class ItemController {
         return ApiResponseDto.onSuccess(findAllItemsByTypeUseCase.execute(itemTypeKey));
     }
 
-    //todo register item - S3, admin
     @Operation(summary = "아이템 등록", description = "아이템을 등록합니다.")
     @PostMapping("/")
-    public ApiResponseDto<?> registerItem(Member member) {
-        return null;
+    public ApiResponseDto<?> registerItem(Member member, @ModelAttribute ItemRequest.Create request) {
+        registerItemUseCase.execute(member, request);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
 

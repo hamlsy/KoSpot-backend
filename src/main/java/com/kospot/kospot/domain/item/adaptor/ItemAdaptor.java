@@ -3,6 +3,8 @@ package com.kospot.kospot.domain.item.adaptor;
 import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.item.entity.ItemType;
 import com.kospot.kospot.domain.item.repository.ItemRepository;
+import com.kospot.kospot.exception.object.domain.ItemHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import com.kospot.kospot.global.annotation.adaptor.Adaptor;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,12 @@ public class ItemAdaptor {
 
     public List<Item> queryAllByItemType(ItemType itemType){
         return repository.findAllByItemType(itemType);
+    }
+
+    public Item queryById(Long id){
+        return repository.findById(id).orElseThrow(
+                () -> new ItemHandler(ErrorStatus.ITEM_NOT_FOUND)
+        );
     }
 
 }

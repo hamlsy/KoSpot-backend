@@ -1,5 +1,6 @@
 package com.kospot.kospot.domain.item.service;
 
+import com.kospot.kospot.domain.item.adaptor.ItemAdaptor;
 import com.kospot.kospot.domain.item.dto.request.ItemRequest;
 import com.kospot.kospot.domain.item.entity.Item;
 
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final ItemAdaptor itemAdaptor;
     private final AwsS3Service awsS3Service;
 
     //todo optimize image upload transaction
@@ -32,12 +34,18 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    // test
+    // todo test code <- 삭제 예정
     public void registerItemTest(ItemRequest.Create request) {
         String imageUrl = awsS3Service.uploadItemMarkerImage(request.getImage());
         Item item = request.toEntity(imageUrl);
 
         itemRepository.save(item);
+    }
+
+    // todo item 완전 삭제와 상점에서의 삭제를 구분하기
+    // todo 연관관계 고려, memberItem, member,
+    public void deleteItemById(Long id){
+        itemRepository.deleteById(id);
     }
 
 }
