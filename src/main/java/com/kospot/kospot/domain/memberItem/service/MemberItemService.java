@@ -21,7 +21,7 @@ public class MemberItemService {
     private final MemberItemAdaptor memberItemAdaptor;
     private final MemberItemRepository memberItemRepository;
 
-    public void equipItem(Member member, Long memberItemId){
+    public void equipItem(Member member, Long memberItemId) {
         MemberItem memberItem = memberItemAdaptor.queryByIdFetchItem(memberItemId);
         ItemType memberItemType = memberItem.getItem().getItemType();
 
@@ -34,11 +34,9 @@ public class MemberItemService {
         memberItem.equip();
     }
 
-
-    public void deleteAllByItemId(Long itemId){
+    public void deleteAllByItemId(Long itemId) {
         memberItemRepository.deleteAllByItemId(itemId);
     }
-
 
 
 }

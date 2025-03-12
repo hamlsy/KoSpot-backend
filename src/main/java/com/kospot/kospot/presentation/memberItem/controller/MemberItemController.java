@@ -27,13 +27,13 @@ public class MemberItemController {
     //todo purchase item
     @Operation(summary = "아이템 구매", description = "상점에서 아이템을 구매합니다.")
     @GetMapping("/purchase/{itemId}")
-    public ApiResponseDto<?> purchaseItem(Member member, @PathVariable("itemId") Long itemId){
+    public ApiResponseDto<?> purchaseItem(Member member, @PathVariable("itemId") Long itemId) {
         return null;
     }
 
     @Operation(summary = "아이템 장착", description = "인벤토리에서 아이템을 장착합니다.")
     @GetMapping("/{memberItemId}")
-    public ApiResponseDto<?> equipItem(Member member, @PathVariable("memberItemId") Long memberItemId){
+    public ApiResponseDto<?> equipItem(Member member, @PathVariable("memberItemId") Long memberItemId) {
         equipMemberItemUseCase.execute(member, memberItemId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }

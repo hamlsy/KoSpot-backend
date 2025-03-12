@@ -15,13 +15,13 @@ public class MemberItemAdaptor {
 
     private final MemberItemRepository memberItemRepository;
 
-    public MemberItem queryById(Long id){
+    public MemberItem queryById(Long id) {
         return memberItemRepository.findById(id).orElseThrow(
                 () -> new MemberItemHandler(ErrorStatus.ITEM_NOT_FOUND)
         );
     }
 
-    public MemberItem queryByIdFetchItem(Long id){
+    public MemberItem queryByIdFetchItem(Long id) {
         return memberItemRepository.findByIdFetchItem(id).orElseThrow(
                 () -> new MemberItemHandler(ErrorStatus.ITEM_NOT_FOUND)
         );

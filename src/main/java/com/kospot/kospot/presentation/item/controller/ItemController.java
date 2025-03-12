@@ -60,23 +60,30 @@ public class ItemController {
     }
 
     @Operation(summary = "아이템 상점 삭제", description = "아이템을 상점에서 삭제합니다.")
-    @PutMapping("/deleteShop/{id}")
+    @PutMapping("/{id}/deleteShop")
     public ApiResponseDto<?> deleteItemFromShop(Member member, @PathVariable("id") Long id) {
         deleteItemFromShopUseCase.execute(member, id);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 상점 재등록", description = "아이템을 상점에 재등록합니다.")
-    @PutMapping("/restoreShop/{id}")
+    @PutMapping("/{id}/restoreShop")
     public ApiResponseDto<?> restoreItemToShop(Member member, @PathVariable("id") Long id) {
         restoreItemToShopUseCase.execute(member, id);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     //todo update item
-    @Operation(summary = "아이템 업데이트", description = "아이템을 업데이트 합니다.")
-    @PutMapping("/{id}")
-    public ApiResponseDto<?> updateItem(Member member, @PathVariable("id") Long itemId) {
+    @Operation(summary = "아이템 정보 업데이트", description = "아이템 정보를 업데이트 합니다.")
+    @PutMapping("/{id}/info")
+    public ApiResponseDto<?> updateItemInfo(Member member, @PathVariable("id") Long itemId) {
+        return null;
+    }
+
+    @Operation(summary = "아이템 사진 업데이트", description = "아이템 사진을 업데이트 합니다.")
+    @PutMapping("/{id}/image")
+    public ApiResponseDto<?> updateItemImage(Member member, @PathVariable("id") Long itemId) {
+
         return null;
     }
 
