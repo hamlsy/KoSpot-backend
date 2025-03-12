@@ -2,7 +2,7 @@ package com.kospot.kospot.domain.point.service;
 
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.adaptor.PointHistoryAdaptor;
-import com.kospot.kospot.presentation.point.response.PointHistoryResponse;
+import com.kospot.kospot.presentation.point.dto.response.PointHistoryResponse;
 import com.kospot.kospot.domain.point.entity.PointHistory;
 import com.kospot.kospot.domain.point.entity.PointHistoryType;
 import com.kospot.kospot.domain.point.repository.PointHistoryRepository;

@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CoordinateIdCacheService {
 
     private final CoordinateAdaptor coordinateAdaptor;
     private final CoordinateIdCacheRepository repository;
 
-    @Transactional
     public void saveAllMaxId() {
         for (Sido sido : Sido.values()) {
             saveMaxIdBySido(sido);
