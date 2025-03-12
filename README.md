@@ -37,15 +37,15 @@ KoSpot에서는 대용량 데이터 처리와 랜덤 조회 성능을 최적화�
 - **ISSUE**: [#12 랜덤 좌표 조회 성능 최적화](https://github.com/hamlsy/KoSpot-backend/issues/17)
 - **개선 내용**: MySQL에서 ORDER BY RAND() 대신 ID 범위 샘플링 기법 적용, 캐시테이블로 ID 범위 계산 최적화, 지역별 테이블 분리로 캐시 미스 최소화
 
-### 2. Bulk Insert 최적화
+### 2. 게임 종료 로직 최적화
 
-- **이슈**: 
+- **이슈**: [#35 게임 종료 로직 최적화](https://github.com/hamlsy/KoSpot-backend/issues/35)
 - **PR**: 
 - **개선 내용**: 
 
-### 3. 게임 종료 로직 최적화
+### 3. Bulk Insert 최적화
 
-- **이슈**: [#35 게임 종료 로직 최적화](https://github.com/hamlsy/KoSpot-backend/issues/35)
+- **이슈**: 
 - **PR**: 
 - **개선 내용**: 
 
