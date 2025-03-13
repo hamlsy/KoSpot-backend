@@ -1,6 +1,5 @@
 package com.kospot.kospot.global.service;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
@@ -29,12 +28,15 @@ public class AwsS3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.region.static}")
+    private String staticRegion;
+
     private final AmazonS3Client amazonS3Client;
 
-    private static final String S3_AWS_STATIC_PATH = "https://%s.s3.ap-northeast-2.amazonaws.com/";
+    private static final String S3_AWS_STATIC_PATH = "https://%s.s3.%s.amazonaws.com/";
     private static final String LOCAL_FILE_PATH = "src/main/resources/dump/";
 
-    public void deleteFile(String s3Key){
+    public void deleteFile(String s3Key) {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, s3Key));
     }
 
@@ -57,7 +59,7 @@ public class AwsS3Service {
     }
 
     public String generateFileUrl(String s3Key) {
-        return String.format(S3_AWS_STATIC_PATH, bucket) + s3Key;
+        return String.format(S3_AWS_STATIC_PATH, bucket, staticRegion) + s3Key;
     }
 
     private String createFileName(MultipartFile multipartFile) {

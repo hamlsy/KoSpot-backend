@@ -150,7 +150,6 @@ public class ItemUseCaseTest {
         boolean isEmpty = itemList.isEmpty();
         assertTrue(isEmpty);
 
-
     }
 
     @DisplayName("아이템 삭제 테스트")
