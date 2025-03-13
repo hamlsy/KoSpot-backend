@@ -20,15 +20,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class ImageService {
 
-    private AwsS3Service awsS3Service;
-    private ImageRepository imageRepository;
-    private ImageAdaptor imageAdaptor;
+    private final AwsS3Service awsS3Service;
+    private final ImageRepository imageRepository;
+    private final ImageAdaptor imageAdaptor;
 
     private static final String S3_IMAGE_PATH = "file/image/";
     private static final String S3_ITEM_PATH = S3_IMAGE_PATH + "item/";
 
     public void uploadItemImage(MultipartFile file, Item item) {
-        String uploadFilePath = S3_ITEM_PATH + item.getItemType().name().toLowerCase();
+        String uploadFilePath = S3_ITEM_PATH + item.getItemType().name().toLowerCase() + "/";
         String fileName = awsS3Service.uploadImage(file, uploadFilePath);
         String s3Key = uploadFilePath + fileName;
         String fileUrl = awsS3Service.generateFileUrl(s3Key);

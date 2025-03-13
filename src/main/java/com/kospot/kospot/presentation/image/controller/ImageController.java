@@ -1,6 +1,7 @@
 package com.kospot.kospot.presentation.image.controller;
 
 import com.kospot.kospot.application.image.UpdateImageUseCase;
+import com.kospot.kospot.domain.image.service.ImageService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
@@ -23,6 +24,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class ImageController {
 
     private final UpdateImageUseCase updateImageUseCase;
+
+    private final ImageService imageService;
+
+    /**
+     * Test
+     */
+
+    @PutMapping("/test")
+    public ApiResponseDto<?> testUpdateImage(ImageRequest.Update request){
+        imageService.updateImage(request);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
+
+    /**
+     *  -----------------------------------
+     */
 
     @Operation(summary = "이미지 수정", description = "이미지를 수정합니다.")
     @PutMapping("/")

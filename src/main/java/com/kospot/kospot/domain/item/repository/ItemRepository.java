@@ -14,10 +14,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findAllByItemType(ItemType itemType);
 
-    @Query("select i from Item i join fetch i.Image where i.id = :id")
+    @Query("select i from Item i join fetch i.image im where i.id = :id")
     Optional<Item> findByIdFetchImage(@Param("id") Long id);
 
-    @Query("select i from Item i join fetch i.Image where i.isAvailable = true and i.itemType = :itemType")
+    @Query("select i from Item i join fetch i.image im where i.isAvailable = true and i.itemType = :itemType")
     List<Item> findAvailableItemsByItemTypeFetchImage(@Param("itemType") ItemType itemType);
 
 }
