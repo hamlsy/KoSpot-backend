@@ -21,17 +21,21 @@ public class ItemAdaptor {
 
     private final ItemRepository repository;
 
-    public List<Item> queryAllByItemType(ItemType itemType){
+    public List<Item> queryAllByItemType(ItemType itemType) {
         return repository.findAllByItemType(itemType);
     }
 
-    public Item queryById(Long id){
+    public List<Item> queryAllByItemTypeFetchImage(ItemType itemType) {
+        return repository.findAllByItemTypeFetchImage(itemType);
+    }
+
+    public Item queryById(Long id) {
         return repository.findById(id).orElseThrow(
                 () -> new ItemHandler(ErrorStatus.ITEM_NOT_FOUND)
         );
     }
 
-    public Item queryByIdFetchImage(Long id){
+    public Item queryByIdFetchImage(Long id) {
         return repository.findByIdFetchImage(id).orElseThrow(
                 () -> new ItemHandler(ErrorStatus.ITEM_NOT_FOUND)
         );

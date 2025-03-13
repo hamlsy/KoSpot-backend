@@ -19,30 +19,30 @@ public class Image extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fileUrl;
     private String s3Key;
-    private String fileName;
+    private String imageName;
+    private String imageUrl;
 
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
     //todo Notice, Event <- manny to one, Banner <- one to one
 
 
-    public static Image create(String fileUrl, String s3Key, String fileName){
+    public static Image create(String s3Key, String imageName, String imageUrl) {
         return Image.builder()
-                .fileUrl(fileUrl)
                 .s3Key(s3Key)
-                .fileName(fileName)
+                .imageName(imageName)
+                .imageUrl(imageUrl)
                 .build();
     }
 
     //business
-    public void setItemEntity(Item item){
+    public void setItemEntity(Item item) {
         this.item = item;
     }
 

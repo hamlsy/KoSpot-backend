@@ -24,13 +24,15 @@ public class ImageService {
     private static final String S3_IMAGE_PATH = "file/image/";
     private static final String S3_ITEM_PATH = S3_IMAGE_PATH + "item/";
 
-    public Image uploadItemImage(MultipartFile file, Item item){
+    public void uploadItemImage(MultipartFile file, Item item) {
         String uploadFilePath = S3_ITEM_PATH + item.getItemType().name().toLowerCase();
         String fileName = awsS3Service.uploadImage(file, uploadFilePath);
-        Image image = Image.create(uploadFilePath, uploadFilePath + fileName, fileName);
+        String s3Key = uploadFilePath + fileName;
+        String fileUrl = awsS3Service.generateFileUrl(s3Key);
+        Image image = Image.create(s3Key, fileName, fileUrl);
         image.setItemEntity(item);
 
-        return imageRepository.save(image);
+        imageRepository.save(image);
     }
 
     //todo implement upload notice images, banner image, event images

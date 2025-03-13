@@ -31,6 +31,7 @@ public class AwsS3Service {
 
     private final AmazonS3Client amazonS3Client;
 
+    private static final String S3_AWS_STATIC_PATH = "https://s3.amazonaws.com/";
     private static final String LOCAL_FILE_PATH = "src/main/resources/dump/";
     private static final String S3_FILE_NAME_DELIMITER = ".com/";
 
@@ -56,6 +57,10 @@ public class AwsS3Service {
         }
 
         return fileName;
+    }
+
+    public String generateFileUrl(String s3Key) {
+        return S3_AWS_STATIC_PATH + bucket + "/" + s3Key;
     }
 
     private String createFileName(MultipartFile multipartFile) {

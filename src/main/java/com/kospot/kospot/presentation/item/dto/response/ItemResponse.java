@@ -4,8 +4,6 @@ import com.kospot.kospot.domain.item.entity.Item;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 public class ItemResponse {
 
     @Getter
@@ -22,7 +20,7 @@ public class ItemResponse {
             return builder()
                     .itemId(item.getId())
                     .name(item.getName())
-                    .imageUrl(item.getImageUrl())
+                    .imageUrl(item.getImage().getImageUrl())
                     .description(item.getDescription())
                     .build();
         }

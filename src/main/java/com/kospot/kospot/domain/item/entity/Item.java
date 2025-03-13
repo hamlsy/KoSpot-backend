@@ -48,8 +48,8 @@ public class Item extends BaseTimeEntity {
         return Item.builder()
                 .name(name)
                 .description(description)
-                .price(price)
                 .itemType(itemType)
+                .price(price)
                 .build();
     }
 

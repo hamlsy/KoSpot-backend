@@ -1,5 +1,6 @@
 package com.kospot.kospot.domain.item.repository;
 
+import com.kospot.kospot.domain.image.entity.ImageType;
 import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.item.entity.ItemType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select i from Item i join fetch i.Image where i.id = :id")
     Optional<Item> findByIdFetchImage(@Param("id") Long id);
+
+    @Query("select i from Item i join fetch i.Image where i.itemType = :itemType")
+    List<Item> findAllByItemTypeFetchImage(@Param("itemType") ItemType itemType);
 }
 

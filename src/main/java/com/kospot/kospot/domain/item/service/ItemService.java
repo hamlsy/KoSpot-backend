@@ -24,22 +24,18 @@ public class ItemService {
 
     //todo optimize image upload transaction
     // Item Create가 실패해도 S3에 이미지가 올라가는 문제 발생
-    public void registerItem(Member member, ItemRequest.Create request) {
+    public Item registerItem(Member member, ItemRequest.Create request) {
         member.validateAdmin();
+        Item item = request.toEntity();
 
-        // todo item type에 따라 다르게
-        String imageUrl = awsS3Service.uploadItemMarkerImage(request.getImage());
-        Item item = request.toEntity(imageUrl);
-
-        itemRepository.save(item);
+        return itemRepository.save(item);
     }
 
     // todo test code <- 삭제 예정
-    public void registerItemTest(ItemRequest.Create request) {
-        String imageUrl = awsS3Service.uploadItemMarkerImage(request.getImage());
-        Item item = request.toEntity(imageUrl);
+    public Item registerItemTest(ItemRequest.Create request) {
+        Item item = request.toEntity();
 
-        itemRepository.save(item);
+        return itemRepository.save(item);
     }
 
     public void deleteItemById(Long id){

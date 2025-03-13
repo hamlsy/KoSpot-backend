@@ -1,6 +1,8 @@
 package com.kospot.kospot.presentation.item.controller;
 
 import com.kospot.kospot.application.item.*;
+import com.kospot.kospot.domain.image.service.ImageService;
+import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.presentation.item.dto.request.ItemRequest;
 import com.kospot.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.kospot.domain.item.service.ItemService;
@@ -31,6 +33,7 @@ public class ItemController {
     private final RestoreItemToShopUseCase restoreItemToShopUseCase;
 
     private final ItemService itemService;
+    private final ImageService imageService;
 
     /**
      * TEST
@@ -38,7 +41,8 @@ public class ItemController {
 
     @PostMapping("/imageTest")
     public ApiResponseDto<?> imageUploadTest(@ModelAttribute ItemRequest.Create request) {
-        itemService.registerItemTest(request);
+        Item item =  itemService.registerItemTest(request);
+        imageService.uploadItemImage(request.getImage(), item);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

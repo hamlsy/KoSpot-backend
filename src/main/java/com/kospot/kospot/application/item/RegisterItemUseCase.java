@@ -1,5 +1,7 @@
 package com.kospot.kospot.application.item;
 
+import com.kospot.kospot.domain.image.service.ImageService;
+import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.presentation.item.dto.request.ItemRequest;
 import com.kospot.kospot.domain.item.service.ItemService;
 import com.kospot.kospot.domain.member.entity.Member;
@@ -13,9 +15,11 @@ import lombok.RequiredArgsConstructor;
 public class RegisterItemUseCase {
 
     private final ItemService itemService;
+    private final ImageService imageService;
 
     public void execute(Member member, ItemRequest.Create request){
-        itemService.registerItem(member, request);
+        Item item = itemService.registerItem(member, request);
+        imageService.uploadItemImage(request.getImage(), item);
     }
 
 }
