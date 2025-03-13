@@ -20,7 +20,6 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemAdaptor itemAdaptor;
-    private final AwsS3Service awsS3Service;
 
     //todo optimize image upload transaction
     // Item Create가 실패해도 S3에 이미지가 올라가는 문제 발생
