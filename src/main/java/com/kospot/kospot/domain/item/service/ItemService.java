@@ -1,11 +1,11 @@
 package com.kospot.kospot.domain.item.service;
 
 import com.kospot.kospot.domain.item.adaptor.ItemAdaptor;
+import com.kospot.kospot.domain.item.entity.ItemType;
 import com.kospot.kospot.presentation.item.dto.request.ItemRequest;
 import com.kospot.kospot.domain.item.entity.Item;
 
 import com.kospot.kospot.domain.item.repository.ItemRepository;
-import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.global.service.AwsS3Service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +24,7 @@ public class ItemService {
 
     //todo optimize image upload transaction
     // Item Create가 실패해도 S3에 이미지가 올라가는 문제 발생
-    public Item registerItem(Member member, ItemRequest.Create request) {
-        member.validateAdmin();
-        Item item = request.toEntity();
-
-        return itemRepository.save(item);
-    }
-
-    // todo test code <- 삭제 예정
-    public Item registerItemTest(ItemRequest.Create request) {
+    public Item registerItem(ItemRequest.Create request) {
         Item item = request.toEntity();
 
         return itemRepository.save(item);
@@ -52,4 +44,11 @@ public class ItemService {
         item.restoreToShop();
     }
 
+    public void updateItemInfo(ItemRequest.UpdateInfo request) {
+        Item item = itemAdaptor.queryById(request.getItemId());
+        item.updateItemInfo(
+                request.getName(), request.getDescription(),
+                ItemType.fromKey(request.getItemTypeKey()), request.getPrice()
+        );
+    }
 }

@@ -19,8 +19,9 @@ public class Image extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String s3Key;
+    private String imagePath;
     private String imageName;
+    private String s3Key;
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
@@ -33,17 +34,25 @@ public class Image extends BaseTimeEntity {
     //todo Notice, Event <- manny to one, Banner <- one to one
 
 
-    public static Image create(String s3Key, String imageName, String imageUrl) {
+    public static Image create(String imagePath, String imageName, String s3Key, String imageUrl, ImageType imageType) {
         return Image.builder()
+                .imagePath(imagePath)
                 .s3Key(s3Key)
                 .imageName(imageName)
                 .imageUrl(imageUrl)
+                .imageType(imageType)
                 .build();
     }
 
     //business
     public void setItemEntity(Item item) {
         this.item = item;
+    }
+
+    public void updateImage(String imageName, String s3Key, String imageUrl) {
+        this.s3Key = s3Key;
+        this.imageName = imageName;
+        this.imageUrl = imageUrl;
     }
 
 }

@@ -35,10 +35,8 @@ public class AwsS3Service {
     private static final String LOCAL_FILE_PATH = "src/main/resources/dump/";
     private static final String S3_FILE_NAME_DELIMITER = ".com/";
 
-    private void deleteFile(String fileUrl){
-        String fileName = fileUrl.substring(fileUrl.lastIndexOf(S3_FILE_NAME_DELIMITER)
-                + fileUrl.length());
-        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+    public void deleteFile(String s3Key){
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, s3Key));
     }
 
     public String uploadImage(MultipartFile image, String filePath) {

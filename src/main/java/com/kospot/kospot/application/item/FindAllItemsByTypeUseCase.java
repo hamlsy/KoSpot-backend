@@ -18,7 +18,7 @@ public class FindAllItemsByTypeUseCase {
 
     public List<ItemResponse.ItemDto> execute(String itemTypeKey) {
         ItemType itemType = ItemType.fromKey(itemTypeKey);
-        List<Item> items = itemAdaptor.queryAllByItemTypeFetchImage(itemType);
+        List<Item> items = itemAdaptor.queryAvailableItemsByItemTypeFetchImage(itemType);
         return items.stream()
                 .map(ItemResponse.ItemDto::from)
                 .collect(Collectors.toList());

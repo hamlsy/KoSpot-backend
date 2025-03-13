@@ -53,11 +53,18 @@ public class Item extends BaseTimeEntity {
                 .build();
     }
 
-    public void deleteFromShop(){
+    public void updateItemInfo(String name, String description, ItemType itemType, int price) {
+        this.name = name;
+        this.description = description;
+        this.itemType = itemType;
+        this.price = price;
+    }
+
+    public void deleteFromShop() {
         this.isAvailable = false;
     }
 
-    public void restoreToShop(){
+    public void restoreToShop() {
         this.isAvailable = true;
     }
 

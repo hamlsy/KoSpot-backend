@@ -25,8 +25,8 @@ public class ItemAdaptor {
         return repository.findAllByItemType(itemType);
     }
 
-    public List<Item> queryAllByItemTypeFetchImage(ItemType itemType) {
-        return repository.findAllByItemTypeFetchImage(itemType);
+    public List<Item> queryAvailableItemsByItemTypeFetchImage(ItemType itemType) {
+        return repository.findAvailableItemsByItemTypeFetchImage(itemType);
     }
 
     public Item queryById(Long id) {

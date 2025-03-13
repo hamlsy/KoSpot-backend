@@ -28,9 +28,10 @@ public class ItemController {
 
     private final FindAllItemsByTypeUseCase findAllItemsByTypeUseCase;
     private final RegisterItemUseCase registerItemUseCase;
-    private final DeleteAllItemUseCase deleteAllItemUseCase;
+    private final DeleteItemUseCase deleteItemUseCase;
     private final DeleteItemFromShopUseCase deleteItemFromShopUseCase;
     private final RestoreItemToShopUseCase restoreItemToShopUseCase;
+    private final UpdateItemInfoUseCase updateItemInfoUseCase;
 
     private final ItemService itemService;
     private final ImageService imageService;
@@ -41,7 +42,7 @@ public class ItemController {
 
     @PostMapping("/imageTest")
     public ApiResponseDto<?> imageUploadTest(@ModelAttribute ItemRequest.Create request) {
-        Item item =  itemService.registerItemTest(request);
+        Item item =  itemService.registerItem(request);
         imageService.uploadItemImage(request.getImage(), item);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
@@ -50,7 +51,7 @@ public class ItemController {
      * ----------------------------
      */
 
-    @Operation(summary = "아이템 타입 조회", description = "타입 별 아이템들을 조회합니다.")
+    @Operation(summary = "아이템 타입 별 조회", description = "타입 별 아이템들을 조회합니다.")
     @GetMapping("/{itemTypeKey}")
     public ApiResponseDto<List<ItemResponse.ItemDto>> findItemsByItemType(@PathVariable("itemTypeKey") String itemTypeKey) {
         return ApiResponseDto.onSuccess(findAllItemsByTypeUseCase.execute(itemTypeKey));
@@ -79,22 +80,16 @@ public class ItemController {
 
     //todo update item
     @Operation(summary = "아이템 정보 업데이트", description = "아이템 정보를 업데이트 합니다.")
-    @PutMapping("/{id}/info")
-    public ApiResponseDto<?> updateItemInfo(Member member, @PathVariable("id") Long itemId) {
-        return null;
-    }
-
-    @Operation(summary = "아이템 사진 업데이트", description = "아이템 사진을 업데이트 합니다.")
-    @PutMapping("/{id}/image")
-    public ApiResponseDto<?> updateItemImage(Member member, @PathVariable("id") Long itemId) {
-
-        return null;
+    @PutMapping("/info")
+    public ApiResponseDto<?> updateItemInfo(Member member, @RequestBody ItemRequest.UpdateInfo request) {
+        updateItemInfoUseCase.execute(member, request);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 삭제", description = "아이템을 삭제합니다.")
     @DeleteMapping("/{id}")
     public ApiResponseDto<?> deleteItem(Member member, @PathVariable("id") Long itemId) {
-        deleteAllItemUseCase.execute(member, itemId);
+        deleteItemUseCase.execute(member, itemId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

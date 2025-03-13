@@ -18,7 +18,12 @@ public class RegisterItemUseCase {
     private final ImageService imageService;
 
     public void execute(Member member, ItemRequest.Create request){
-        Item item = itemService.registerItem(member, request);
+        member.validateAdmin();
+
+        // insert item
+        Item item = itemService.registerItem(request);
+
+        // insert image
         imageService.uploadItemImage(request.getImage(), item);
     }
 

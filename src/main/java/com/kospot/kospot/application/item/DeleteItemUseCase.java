@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class DeleteAllItemUseCase {
+public class DeleteItemUseCase {
 
     private ItemService itemService;
     private MemberItemService memberItemService;

@@ -26,4 +26,18 @@ public class ItemRequest {
 
     }
 
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateInfo {
+
+        private Long itemId;
+        private String name;
+        private String description;
+        private int price;
+        private String itemTypeKey;
+
+    }
+
 }
