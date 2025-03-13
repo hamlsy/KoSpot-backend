@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DeleteItemUseCase {
 
-    private ItemService itemService;
-    private MemberItemService memberItemService;
+    private final ItemService itemService;
+    private final MemberItemService memberItemService;
 
     public void execute(Member member, Long id){
         member.validateAdmin();

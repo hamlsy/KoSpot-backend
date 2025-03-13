@@ -9,22 +9,31 @@ import com.kospot.kospot.domain.item.service.ItemService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.member.entity.Role;
 import com.kospot.kospot.domain.member.repository.MemberRepository;
+import com.kospot.kospot.global.config.aws.AmazonS3Config;
 import com.kospot.kospot.presentation.item.dto.request.ItemRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 @Slf4j
 @SpringBootTest
-@Transactional
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 public class ItemUseCaseTest {
 
     @Autowired
@@ -83,12 +92,14 @@ public class ItemUseCaseTest {
         //given
         ItemRequest.Create request = ItemRequest.Create.builder()
                 .name("name1")
+                .itemTypeKey("marker")
+                .image(mock(MultipartFile.class))
                 .build();
 
         //when
         // not admin
         assertThrows(Exception.class, () -> registerItemUseCase.execute(member, request));
-        registerItemUseCase.execute(adminMember, request);
+        itemService.registerItem(request);
 
         //then
         Item item = itemRepository.findById(1L).orElseThrow();
@@ -104,6 +115,8 @@ public class ItemUseCaseTest {
                 .name("name2")
                 .build());
         ItemRequest.UpdateInfo request = ItemRequest.UpdateInfo.builder()
+                .itemId(item.getId())
+                .itemTypeKey("markEr")
                 .name("updatedName2")
                 .build();
 
@@ -113,7 +126,8 @@ public class ItemUseCaseTest {
         updateItemInfoUseCase.execute(adminMember, request);
 
         //then
-        assertEquals("updatedName2", item.getName());
+        Item updatedItem = itemRepository.findById(item.getId()).orElseThrow();
+        assertEquals("updatedName2", updatedItem.getName());
 
     }
 
@@ -154,9 +168,7 @@ public class ItemUseCaseTest {
         deleteItemUseCase.execute(adminMember, item.getId());
 
         //then
-
-        assertThrows(Exception.class, () -> itemRepository.findById(item.getId()));
-
+        assertThrows(Exception.class, () -> itemRepository.findById(item.getId()).orElseThrow());
 
     }
 

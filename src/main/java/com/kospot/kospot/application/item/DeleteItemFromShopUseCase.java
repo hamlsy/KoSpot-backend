@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class DeleteItemFromShopUseCase {
 
-    private ItemService itemService;
+    private final ItemService itemService;
 
     public void execute(Member member, Long id){
         member.validateAdmin();

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UpdateImageUseCase {
 
-    private ImageService imageService;
+    private final ImageService imageService;
 
     public void execute(Member member, ImageRequest.Update request) {
         member.validateAdmin();
