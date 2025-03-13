@@ -31,7 +31,7 @@ public class AESService {
         }
     }
 
-    public <T> String toEncryptString(T object){
+    public <T> String toEncryptString(T object) {
         return encrypt(String.valueOf(object));
     }
 }

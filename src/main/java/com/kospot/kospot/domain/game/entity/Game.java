@@ -55,7 +55,7 @@ public abstract class Game extends BaseTimeEntity {
 
     private LocalDateTime endedAt;    // 게임 종료 시간
 
-    public Game(double targetLat, double targetLng, Member member, GameType gameType, GameMode gameMode, GameStatus gameStatus){
+    public Game(double targetLat, double targetLng, Member member, GameType gameType, GameMode gameMode, GameStatus gameStatus) {
         this.member = member;
         this.gameType = gameType;
         this.gameMode = gameMode;
@@ -65,7 +65,7 @@ public abstract class Game extends BaseTimeEntity {
     }
 
     // business
-    public void end(Member member, double submittedLat, double submittedLng, double answerTime){
+    public void end(Member member, double submittedLat, double submittedLng, double answerTime) {
         validateOwnMember(member);
         validateGameStatus();
         this.gameStatus = GameStatus.COMPLETED;
@@ -77,23 +77,23 @@ public abstract class Game extends BaseTimeEntity {
 
 
     //validation
-    private void validateGameStatus(){
-        if(isCompleted()){
+    private void validateGameStatus() {
+        if (isCompleted()) {
             throw new GameHandler(ErrorStatus.GAME_IS_ALREADY_COMPLETED);
         }
     }
 
-    private boolean isCompleted(){
+    private boolean isCompleted() {
         return this.gameStatus == GameStatus.COMPLETED;
     }
 
-    private void validateOwnMember(Member member){
-        if(isNotSameMember(member)){
+    private void validateOwnMember(Member member) {
+        if (isNotSameMember(member)) {
             throw new GameHandler(ErrorStatus.GAME_NOT_SAME_MEMBER);
         }
     }
 
-    private boolean isNotSameMember(Member member){
+    private boolean isNotSameMember(Member member) {
         return !Objects.equals(this.member.getId(), member.getId());
     }
 }

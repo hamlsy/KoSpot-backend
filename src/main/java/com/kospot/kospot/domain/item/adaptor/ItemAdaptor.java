@@ -31,4 +31,10 @@ public class ItemAdaptor {
         );
     }
 
+    public Item queryByIdFetchImage(Long id){
+        return repository.findByIdFetchImage(id).orElseThrow(
+                () -> new ItemHandler(ErrorStatus.ITEM_NOT_FOUND)
+        );
+    }
+
 }

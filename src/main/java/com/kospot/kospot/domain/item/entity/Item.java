@@ -1,6 +1,7 @@
 package com.kospot.kospot.domain.item.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.kospot.domain.image.entity.Image;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.member.entity.Role;
 import com.kospot.kospot.domain.memberItem.entity.MemberItem;
@@ -26,8 +27,6 @@ public class Item extends BaseTimeEntity {
 
     private String name;
 
-    private String imageUrl;
-
     @Lob
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -41,11 +40,13 @@ public class Item extends BaseTimeEntity {
 
     private boolean isAvailable = true;
 
+    @OneToOne(mappedBy = "item")
+    private Image image;
+
     //business
-    public static Item create(String name, String description, ItemType itemType, int price, String imageUrl) {
+    public static Item create(String name, String description, ItemType itemType, int price) {
         return Item.builder()
                 .name(name)
-                .imageUrl(imageUrl)
                 .description(description)
                 .price(price)
                 .itemType(itemType)

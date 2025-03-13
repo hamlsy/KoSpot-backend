@@ -58,12 +58,12 @@ public class Member extends BaseTimeEntity {
 
     //validate
     public void validateAdmin() {
-        if(isNotAdmin()){
+        if (isNotAdmin()) {
             throw new MemberHandler(ErrorStatus.AUTH_ADMIN_PRIVILEGES_REQUIRED);
         }
     }
 
-    private boolean isNotAdmin(){
+    private boolean isNotAdmin() {
         return this.role != Role.ADMIN;
     }
 }

@@ -3,6 +3,7 @@ package com.kospot.kospot.global.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kospot.kospot.exception.object.domain.S3Handler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
@@ -31,20 +32,15 @@ public class AwsS3Service {
     private final AmazonS3Client amazonS3Client;
 
     private static final String LOCAL_FILE_PATH = "src/main/resources/dump/";
-    private static final String S3_IMAGE_PATH = "file/image/";
-    private static final String S3_ITEM_MARKER_PATH = S3_IMAGE_PATH + "item/marker/";
-    private static final String S3_NOTICE_PATH = S3_IMAGE_PATH + "notice/";
+    private static final String S3_FILE_NAME_DELIMITER = ".com/";
 
-
-    public String uploadItemMarkerImage(MultipartFile image){
-        return uploadImage(image, S3_ITEM_MARKER_PATH);
+    private void deleteFile(String fileUrl){
+        String fileName = fileUrl.substring(fileUrl.lastIndexOf(S3_FILE_NAME_DELIMITER)
+                + fileUrl.length());
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
-    public String uploadNoticeImage(MultipartFile image){
-        return uploadImage(image, S3_NOTICE_PATH);
-    }
-
-    private String uploadImage(MultipartFile image, String filePath) {
+    public String uploadImage(MultipartFile image, String filePath) {
         validateFileExtension(image.getOriginalFilename());
         String fileName = createFileName(image);
         String s3Key = filePath + fileName;
