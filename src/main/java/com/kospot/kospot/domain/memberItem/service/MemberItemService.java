@@ -1,5 +1,7 @@
 package com.kospot.kospot.domain.memberItem.service;
 
+import com.kospot.kospot.domain.item.adaptor.ItemAdaptor;
+import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.item.entity.ItemType;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.memberItem.adaptor.MemberItemAdaptor;
@@ -36,6 +38,11 @@ public class MemberItemService {
 
     public void deleteAllByItemId(Long itemId) {
         memberItemRepository.deleteAllByItemId(itemId);
+    }
+
+    public void purchaseItem(Member member, Item item) {
+        MemberItem memberItem = MemberItem.create(member, item);
+        memberItemRepository.save(memberItem);
     }
 
 

@@ -51,4 +51,8 @@ public class ItemService {
                 request.getPrice(), request.getQuantity()
         );
     }
+
+    public void purchaseItem(Item item) {
+        item.purchase();
+    }
 }

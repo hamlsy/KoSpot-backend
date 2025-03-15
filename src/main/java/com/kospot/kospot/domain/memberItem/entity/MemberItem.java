@@ -33,8 +33,6 @@ public class MemberItem extends BaseTimeEntity {
 
     private Boolean isEquipped = false;
 
-    private LocalDateTime equippedAt;
-
     //business
     public void equip() {
         this.isEquipped = true;
@@ -42,6 +40,13 @@ public class MemberItem extends BaseTimeEntity {
 
     public void unEquip() {
         this.isEquipped = false;
+    }
+
+    public static MemberItem create(Member member, Item item) {
+        return MemberItem.builder()
+                .member(member)
+                .item(item)
+                .build();
     }
 
 }

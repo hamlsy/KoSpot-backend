@@ -2,7 +2,7 @@ package com.kospot.kospot.presentation.memberItem.controller;
 
 import com.kospot.kospot.application.memberItem.EquipMemberItemUseCase;
 import com.kospot.kospot.application.memberItem.FindAllMemberItemsByItemTypeUseCase;
-import com.kospot.kospot.domain.item.entity.ItemType;
+import com.kospot.kospot.application.memberItem.PurchaseItemUseCase;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
@@ -29,12 +29,14 @@ public class MemberItemController {
 
     private final EquipMemberItemUseCase equipMemberItemUseCase;
     private final FindAllMemberItemsByItemTypeUseCase findAllMemberItemsByItemTypeUseCase;
+    private final PurchaseItemUseCase purchaseItemUseCase;
 
-    //todo purchase item
+    //todo refactoring
     @Operation(summary = "아이템 구매", description = "상점에서 아이템을 구매합니다.")
     @GetMapping("/purchase/{itemId}")
     public ApiResponseDto<?> purchaseItem(Member member, @PathVariable("itemId") Long itemId) {
-        return null;
+        purchaseItemUseCase.execute(member, itemId);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 장착", description = "인벤토리에서 아이템을 장착합니다.")
