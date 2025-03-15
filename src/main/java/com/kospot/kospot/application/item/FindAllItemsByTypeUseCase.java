@@ -1,6 +1,7 @@
 package com.kospot.kospot.application.item;
 
 import com.kospot.kospot.domain.item.adaptor.ItemAdaptor;
+import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.item.entity.ItemType;
@@ -22,6 +23,11 @@ public class FindAllItemsByTypeUseCase {
         return items.stream()
                 .map(ItemResponse.ItemDto::from)
                 .collect(Collectors.toList());
+    }
+
+    public List<ItemResponse.ItemDto> executeV2(Member member, String itemTypeKey){
+        ItemType itemType = ItemType.fromKey(itemTypeKey);
+        return itemAdaptor.queryAvailableItemsByWithOwnersByFetchImage(member, itemType);
     }
 
 }

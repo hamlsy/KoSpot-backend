@@ -3,10 +3,12 @@ package com.kospot.kospot.domain.item.adaptor;
 import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.item.entity.ItemType;
 import com.kospot.kospot.domain.item.repository.ItemRepository;
+import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.object.domain.ItemHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import com.kospot.kospot.global.annotation.adaptor.Adaptor;
 
+import com.kospot.kospot.presentation.item.dto.response.ItemResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,10 @@ public class ItemAdaptor {
 
     public List<Item> queryAvailableItemsByItemTypeFetchImage(ItemType itemType) {
         return repository.findAvailableItemsByItemTypeFetchImage(itemType);
+    }
+
+    public List<ItemResponse.ItemDto> queryAvailableItemsByWithOwnersByFetchImage(Member member, ItemType itemType){
+        return repository.findAvailableItemsWithOwnersByTypeFetchImage(member, itemType);
     }
 
     public Item queryById(Long id) {

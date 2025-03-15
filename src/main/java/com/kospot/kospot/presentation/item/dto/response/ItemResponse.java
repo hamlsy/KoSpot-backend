@@ -12,9 +12,11 @@ public class ItemResponse {
 
         private Long itemId;
         private String name;
-        private String imageUrl;
         private String description;
         private int price;
+        private int quantity;
+        private String imageUrl;
+        private boolean isOwned;
 
         public static ItemDto from(Item item){
             return builder()
