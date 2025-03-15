@@ -3,7 +3,7 @@ package com.kospot.kospot.domain.game.service;
 import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.kospot.domain.game.adaptor.RoadViewGameAdaptor;
-import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
+import com.kospot.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;

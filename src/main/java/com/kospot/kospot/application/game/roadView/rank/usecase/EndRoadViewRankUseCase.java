@@ -1,9 +1,9 @@
 package com.kospot.kospot.application.game.roadView.rank.usecase;
 
 import com.kospot.kospot.domain.game.entity.GameType;
-import com.kospot.kospot.domain.game.event.RoadViewGameEvent;
-import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
-import com.kospot.kospot.domain.game.dto.response.EndGameResponse;
+import com.kospot.kospot.domain.game.event.RoadViewRankEvent;
+import com.kospot.kospot.presentation.game.dto.request.EndGameRequest;
+import com.kospot.kospot.presentation.game.dto.response.EndGameResponse;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.kospot.domain.gameRank.adaptor.GameRankAdaptor;
@@ -29,15 +29,15 @@ public class EndRoadViewRankUseCase {
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);
         RoadViewGame game = roadViewGameService.endGame(member, request);
 
-        //event
-        eventPublisher.publishEvent(new RoadViewGameEvent(member, game, gameRank));
-
         int currentRatingScore = gameRank.getRatingScore();
 
         // calculate rating point
         gameRankService.updateRatingScoreAfterGameEnd(gameRank, game);
 
-        return EndGameResponse.RoadViewRank.fromV2(game, currentRatingScore, gameRank.getRatingScore());
+        //event
+        eventPublisher.publishEvent(new RoadViewRankEvent(member, game, gameRank));
+
+        return EndGameResponse.RoadViewRank.from(game, currentRatingScore, gameRank.getRatingScore());
     }
 
 

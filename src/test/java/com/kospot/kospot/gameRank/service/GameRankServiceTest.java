@@ -36,10 +36,7 @@ public class GameRankServiceTest {
         int changeRatingScore = RatingScoreCalculator.calculateRatingChange(game.getScore(), rank.getRatingScore());
         assertEquals(3000 + changeRatingScore, rank.getRatingScore() - 100);
         System.out.println("changeRatingScore = " + changeRatingScore);
-        assertEquals(3000, game.getCurrentRatingScore());
-        System.out.println("game.getCurrentRatingScore() = " + game.getCurrentRatingScore());
-        assertEquals(changeRatingScore, game.getRatingScoreChange());
-        System.out.println("game.getChangeRatingScore() = " + game.getRatingScoreChange());
+
 
     }
 

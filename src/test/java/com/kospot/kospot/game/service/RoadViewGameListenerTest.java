@@ -3,7 +3,7 @@ package com.kospot.kospot.game.service;
 import com.kospot.kospot.application.game.roadView.rank.event.UpdatePointAndRankEvent;
 import com.kospot.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
 import com.kospot.kospot.application.game.roadView.rank.listener.EndRoadViewRankEventListener;
-import com.kospot.kospot.domain.game.dto.request.EndGameRequest;
+import com.kospot.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.entity.GameStatus;
 import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;

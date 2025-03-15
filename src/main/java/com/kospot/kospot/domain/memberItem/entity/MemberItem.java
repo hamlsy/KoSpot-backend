@@ -35,4 +35,13 @@ public class MemberItem extends BaseTimeEntity {
 
     private LocalDateTime equippedAt;
 
+    //business
+    public void equip() {
+        this.isEquipped = true;
+    }
+
+    public void unEquip() {
+        this.isEquipped = false;
+    }
+
 }

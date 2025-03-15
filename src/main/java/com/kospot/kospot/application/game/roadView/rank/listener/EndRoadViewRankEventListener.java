@@ -2,7 +2,7 @@ package com.kospot.kospot.application.game.roadView.rank.listener;
 
 import com.kospot.kospot.application.game.roadView.rank.event.UpdatePointAndRankEvent;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.kospot.domain.game.event.RoadViewGameEvent;
+import com.kospot.kospot.domain.game.event.RoadViewRankEvent;
 import com.kospot.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.object.domain.EventHandler;
@@ -21,7 +21,7 @@ public class EndRoadViewRankEventListener {
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleGameEnd(RoadViewGameEvent event){
+    public void handleGameEnd(RoadViewRankEvent event){
         try{
             Member member = event.getMember();
             RoadViewGame game = event.getRoadViewGame();
