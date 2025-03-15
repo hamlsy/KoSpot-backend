@@ -29,16 +29,16 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public void deleteItemById(Long id){
+    public void deleteItemById(Long id) {
         itemRepository.deleteById(id);
     }
 
-    public void deleteItemFromShop(Long id){
+    public void deleteItemFromShop(Long id) {
         Item item = itemAdaptor.queryById(id);
         item.deleteFromShop();
     }
 
-    public void restoreItemToShop(Long id){
+    public void restoreItemToShop(Long id) {
         Item item = itemAdaptor.queryById(id);
         item.restoreToShop();
     }
@@ -47,7 +47,8 @@ public class ItemService {
         Item item = itemAdaptor.queryById(request.getItemId());
         item.updateItemInfo(
                 request.getName(), request.getDescription(),
-                ItemType.fromKey(request.getItemTypeKey()), request.getPrice()
+                ItemType.fromKey(request.getItemTypeKey()),
+                request.getPrice(), request.getQuantity()
         );
     }
 }

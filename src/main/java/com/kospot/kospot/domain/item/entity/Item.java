@@ -33,7 +33,7 @@ public class Item extends BaseTimeEntity {
 
     private int price;
 
-    // todo implement quantity
+    private int quantity;
 
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
@@ -44,20 +44,22 @@ public class Item extends BaseTimeEntity {
     private Image image;
 
     //business
-    public static Item create(String name, String description, ItemType itemType, int price) {
+    public static Item create(String name, String description, ItemType itemType, int price, int quantity) {
         return Item.builder()
                 .name(name)
                 .description(description)
                 .itemType(itemType)
                 .price(price)
+                .quantity(quantity)
                 .build();
     }
 
-    public void updateItemInfo(String name, String description, ItemType itemType, int price) {
+    public void updateItemInfo(String name, String description, ItemType itemType, int price, int quantity) {
         this.name = name;
         this.description = description;
         this.itemType = itemType;
         this.price = price;
+        this.quantity = quantity;
     }
 
     public void deleteFromShop() {
