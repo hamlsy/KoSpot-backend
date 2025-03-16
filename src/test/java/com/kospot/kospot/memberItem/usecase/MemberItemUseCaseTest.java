@@ -1,6 +1,9 @@
 package com.kospot.kospot.memberItem.usecase;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.kospot.application.memberItem.EquipMemberItemUseCase;
+import com.kospot.kospot.application.memberItem.FindAllMemberItemsByItemTypeUseCase;
 import com.kospot.kospot.application.memberItem.PurchaseItemUseCase;
 import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.item.entity.ItemType;
@@ -11,6 +14,7 @@ import com.kospot.kospot.domain.memberItem.adaptor.MemberItemAdaptor;
 import com.kospot.kospot.domain.memberItem.entity.MemberItem;
 import com.kospot.kospot.domain.memberItem.repository.MemberItemRepository;
 import com.kospot.kospot.domain.memberItem.service.MemberItemService;
+import com.kospot.kospot.presentation.memberItem.dto.response.MemberItemResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +23,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,6 +41,9 @@ public class MemberItemUseCaseTest {
 
     @Autowired
     private EquipMemberItemUseCase equipMemberItemUseCase;
+
+    @Autowired
+    private FindAllMemberItemsByItemTypeUseCase findAllMemberItemsByItemTypeUseCase;
 
     //adaptor
     @Autowired
@@ -124,6 +134,24 @@ public class MemberItemUseCaseTest {
         assertEquals(true, memberItem2.getIsEquipped());
         assertEquals(false, memberItem1.getIsEquipped());
 
+    }
+
+    @DisplayName("내 아이템 조회를 테스트합니다.")
+    @Test
+    void findAllMemberItemsUseCaseTest () {
+        //given
+
+        //when
+        log.info("-----when-----");
+        List<MemberItemResponse> response1 =
+                findAllMemberItemsByItemTypeUseCase.execute(member, "marker");
+
+        List<MemberItemResponse> response2 =
+                findAllMemberItemsByItemTypeUseCase.execute(member, "none");
+
+        //then
+        log.info("response dto list: {} ", response1);
+        log.info("response dto list: {} ", response2);
     }
 
 }
