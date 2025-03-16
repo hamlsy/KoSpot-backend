@@ -22,12 +22,12 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAvailableItemsByItemTypeFetchImage(@Param("itemType") ItemType itemType);
 
     @Query("select new com.kospot.kospot.presentation.item.dto.response.ItemResponse(" +
-            "i.id, i.name, i.description, i.price, i.stock, i.image.imageUrl, " +
+            "i.id, i.name, i.description, i.price, i.stock, img.imageUrl, " +
             "CASE WHEN mi.id IS NOT NULL THEN TRUE ELSE FALSE END) " +
             "from Item i " +
             "left join i.image img " +
-            "left join MemberItem mi on i.id = mi.item.id where mi.member = :member " +
-            "and i.itemType = :itemType and i.isAvailable = true")
+            "left join MemberItem mi on i.id = mi.item.id and mi.member = :member " +
+            "where i.itemType = :itemType and i.isAvailable = true")
     List<ItemResponse> findAvailableItemsWithOwnersByTypeFetchImage(
             @Param("member") Member member,
             @Param("itemType") ItemType itemType);

@@ -49,6 +49,7 @@ public class Item extends BaseTimeEntity {
                 .itemType(itemType)
                 .price(price)
                 .stock(stock)
+                .isAvailable(true)
                 .build();
     }
 

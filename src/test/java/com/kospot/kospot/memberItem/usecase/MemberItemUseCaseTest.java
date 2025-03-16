@@ -2,9 +2,12 @@ package com.kospot.kospot.memberItem.usecase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kospot.kospot.application.item.FindAllItemsByTypeUseCase;
 import com.kospot.kospot.application.memberItem.EquipMemberItemUseCase;
 import com.kospot.kospot.application.memberItem.FindAllMemberItemsByItemTypeUseCase;
 import com.kospot.kospot.application.memberItem.PurchaseItemUseCase;
+import com.kospot.kospot.domain.image.entity.Image;
+import com.kospot.kospot.domain.image.repository.ImageRepository;
 import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.item.entity.ItemType;
 import com.kospot.kospot.domain.item.repository.ItemRepository;
@@ -14,6 +17,8 @@ import com.kospot.kospot.domain.memberItem.adaptor.MemberItemAdaptor;
 import com.kospot.kospot.domain.memberItem.entity.MemberItem;
 import com.kospot.kospot.domain.memberItem.repository.MemberItemRepository;
 import com.kospot.kospot.domain.memberItem.service.MemberItemService;
+import com.kospot.kospot.presentation.image.dto.request.ImageRequest;
+import com.kospot.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.kospot.presentation.memberItem.dto.response.MemberItemResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +50,9 @@ public class MemberItemUseCaseTest {
     @Autowired
     private FindAllMemberItemsByItemTypeUseCase findAllMemberItemsByItemTypeUseCase;
 
+    @Autowired
+    private FindAllItemsByTypeUseCase findAllItemsByTypeUseCase;
+
     //adaptor
     @Autowired
     private MemberItemAdaptor memberItemAdaptor;
@@ -58,6 +66,9 @@ public class MemberItemUseCaseTest {
 
     @Autowired
     private MemberItemRepository memberItemRepository;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
     //service
     @Autowired
@@ -74,18 +85,37 @@ public class MemberItemUseCaseTest {
                 .build());
 
         for (int i = 0; i < 5; i++) {
-            Item item = Item.create(
-                    "item" + (i + 1), "", ItemType.MARKER, 50, 50
-            );
+            Image image = Image.builder()
+                    .imageUrl("" + i)
+                    .build();
+            imageRepository.save(image);
+            Item item = Item.builder()
+                    .name("item" + (i + 1))
+                    .description("")
+                    .itemType(ItemType.MARKER)
+                    .price(50)
+                    .stock(50)
+                    .isAvailable(true)
+                    .image(image)
+                    .build();
 
             itemRepository.save(item);
         }
         for (int i = 5; i < 10; i++) {
+            Image image = Image.builder()
+                    .imageUrl("" + i)
+                    .build();
+            imageRepository.save(image);
             ItemType itemType = i == 6 ? ItemType.NONE : ItemType.MARKER;
-            Item item = Item.create(
-                    "item" + (i + 1), "", itemType, 50, 50
-            );
-
+            Item item = Item.builder()
+                    .name("item" + (i + 1))
+                    .description("")
+                    .itemType(itemType)
+                    .price(50)
+                    .stock(50)
+                    .isAvailable(true)
+                    .image(image)
+                    .build();
             itemRepository.save(item);
             MemberItem memberItem = MemberItem.builder()
                     .item(item)
@@ -138,7 +168,7 @@ public class MemberItemUseCaseTest {
 
     @DisplayName("내 아이템 조회를 테스트합니다.")
     @Test
-    void findAllMemberItemsUseCaseTest () {
+    void findAllMemberItemsUseCaseTest() {
         //given
 
         //when
@@ -153,5 +183,19 @@ public class MemberItemUseCaseTest {
         log.info("response dto list: {} ", response1);
         log.info("response dto list: {} ", response2);
     }
+
+    @DisplayName("아이템 조회를 테스트합니다.")
+    @Test
+    void findAllItemsByTypeUseCaseTest() {
+        //given
+
+        //when
+        log.info("-----when-----");
+        List<ItemResponse> response = findAllItemsByTypeUseCase.executeV2(member, "marker");
+
+        //then
+        log.info("responses: {}", response);
+    }
+
 
 }
