@@ -33,7 +33,6 @@ public class ImageService {
         String s3Key = uploadFilePath + fileName;
         String fileUrl = awsS3Service.generateFileUrl(s3Key);
         Image image = Image.create(uploadFilePath, fileName, s3Key, fileUrl, ImageType.ITEM);
-        image.setItemEntity(item);
 
         imageRepository.save(image);
     }

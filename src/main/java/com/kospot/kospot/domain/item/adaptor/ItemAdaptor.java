@@ -31,7 +31,7 @@ public class ItemAdaptor {
         return repository.findAvailableItemsByItemTypeFetchImage(itemType);
     }
 
-    public List<ItemResponse.ItemDto> queryAvailableItemsByWithOwnersByFetchImage(Member member, ItemType itemType){
+    public List<ItemResponse> queryAvailableItemsByWithOwnersByFetchImage(Member member, ItemType itemType){
         return repository.findAvailableItemsWithOwnersByTypeFetchImage(member, itemType);
     }
 

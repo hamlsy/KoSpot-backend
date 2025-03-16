@@ -32,7 +32,13 @@ public class MemberItemAdaptor {
         );
     }
 
-    public List<MemberItemResponse.MemberItemDto> queryByMemberAndItemTypeFetch(Member member, ItemType itemType) {
+    public MemberItem queryByItemIdFetchItem(Long itemId) {
+        return repository.findByItemIdFetchItem(itemId).orElseThrow(
+                () -> new MemberItemHandler(ErrorStatus.ITEM_NOT_FOUND)
+        );
+    }
+
+    public List<MemberItemResponse> queryByMemberAndItemTypeFetch(Member member, ItemType itemType) {
         return repository.findAllByMemberAndItemTypeFetch(member, itemType);
     }
 

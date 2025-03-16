@@ -21,7 +21,7 @@ public class FindAllMemberItemsByItemTypeUseCase {
 
     private final MemberItemAdaptor memberItemAdaptor;
 
-    public List<MemberItemResponse.MemberItemDto> execute(Member member, String itemType) {
+    public List<MemberItemResponse> execute(Member member, String itemType) {
         return  memberItemAdaptor.queryByMemberAndItemTypeFetch(member, ItemType.fromKey(itemType));
     }
 

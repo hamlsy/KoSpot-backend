@@ -37,7 +37,8 @@ public class Item extends BaseTimeEntity {
 
     private boolean isAvailable = true;
 
-    @OneToOne(mappedBy = "item")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
     private Image image;
 
     //business

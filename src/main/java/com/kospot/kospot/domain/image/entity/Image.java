@@ -27,12 +27,7 @@ public class Image extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
-
     //todo Notice, Event <- manny to one, Banner <- one to one
-
 
     public static Image create(String imagePath, String imageName, String s3Key, String imageUrl, ImageType imageType) {
         return Image.builder()
@@ -45,10 +40,6 @@ public class Image extends BaseTimeEntity {
     }
 
     //business
-    public void setItemEntity(Item item) {
-        this.item = item;
-    }
-
     public void updateImage(String imageName, String s3Key, String imageUrl) {
         this.s3Key = s3Key;
         this.imageName = imageName;

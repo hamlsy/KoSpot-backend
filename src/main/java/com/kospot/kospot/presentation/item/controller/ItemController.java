@@ -53,7 +53,7 @@ public class ItemController {
 
     @Operation(summary = "아이템 타입 별 조회", description = "타입 별 아이템들을 조회합니다.")
     @GetMapping("/{itemTypeKey}")
-    public ApiResponseDto<List<ItemResponse.ItemDto>> findItemsByItemType(@PathVariable("itemTypeKey") String itemTypeKey) {
+    public ApiResponseDto<List<ItemResponse>> findItemsByItemType(@PathVariable("itemTypeKey") String itemTypeKey) {
         return ApiResponseDto.onSuccess(findAllItemsByTypeUseCase.execute(itemTypeKey));
     }
 

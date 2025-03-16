@@ -48,7 +48,7 @@ public class MemberItemController {
 
     @Operation(summary = "내 아이템 조회", description = "내 인벤토리에서 타입 별 아이템들을 조회합니다.")
     @GetMapping("/{itemType}")
-    public ApiResponseDto<List<MemberItemResponse.MemberItemDto>> findAllMemberItemByItemType(
+    public ApiResponseDto<List<MemberItemResponse>> findAllMemberItemByItemType(
             Member member, @PathVariable("itemType") String itemType) {
         return ApiResponseDto.onSuccess(findAllMemberItemsByItemTypeUseCase.execute(member, itemType));
     }

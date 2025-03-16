@@ -21,6 +21,9 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
     @Query("select mi from MemberItem mi join fetch mi.item where mi.id = :id")
     Optional<MemberItem> findByIdFetchItem(@Param("id") Long id);
 
+    @Query("select mi from MemberItem mi join fetch mi.item where mi.item.id = :itemId")
+    Optional<MemberItem> findByItemIdFetchItem(@Param("itemId") Long itemId);
+
     // 중복 아이템 장착 방지
     @Query("select mi from MemberItem mi join " +
             "mi.item i where mi.member = :member " +
@@ -30,11 +33,11 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
                                                          @Param("itemType") ItemType itemType);
 
 
-    @Query("select new com.kospot.kospot.presentation.memberItem.dto.response.MemberItemResponse.MemberItemDto(" +
-            "mi.id mi.item.name, mi.item.description, mi.isEquipped, mi.createdAt) " +
+    @Query("select new com.kospot.kospot.presentation.memberItem.dto.response.MemberItemResponse(" +
+            "mi.id, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
             "from MemberItem mi join mi.item " +
             "where mi.member = :member and mi.item.itemType = :itemType")
-    List<MemberItemResponse.MemberItemDto> findAllByMemberAndItemTypeFetch(@Param("member") Member member,
-                                                                           @Param("itemType") ItemType itemType);
+    List<MemberItemResponse> findAllByMemberAndItemTypeFetch(@Param("member") Member member,
+                                                             @Param("itemType") ItemType itemType);
 
 }

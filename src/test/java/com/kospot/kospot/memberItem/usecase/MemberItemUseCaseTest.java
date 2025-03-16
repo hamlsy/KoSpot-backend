@@ -6,7 +6,10 @@ import com.kospot.kospot.domain.item.entity.ItemType;
 import com.kospot.kospot.domain.item.repository.ItemRepository;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.member.repository.MemberRepository;
+import com.kospot.kospot.domain.memberItem.adaptor.MemberItemAdaptor;
 import com.kospot.kospot.domain.memberItem.entity.MemberItem;
+import com.kospot.kospot.domain.memberItem.repository.MemberItemRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 @Slf4j
@@ -26,12 +31,19 @@ public class MemberItemUseCaseTest {
     private PurchaseItemUseCase purchaseItemUseCase;
 
 
+    //adaptor
+    @Autowired
+    private MemberItemAdaptor memberItemAdaptor;
+
     // repository
     @Autowired
     private ItemRepository itemRepository;
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private MemberItemRepository memberItemRepository;
 
     private Member member;
 
@@ -45,7 +57,7 @@ public class MemberItemUseCaseTest {
 
         for (int i = 0; i < 10; i++) {
             Item item = Item.create(
-                    "item" + i, "", ItemType.MARKER, 50, 50
+                    "item" + (i+1), "", ItemType.MARKER, 50, 50
             );
 
             itemRepository.save(item);
@@ -57,16 +69,17 @@ public class MemberItemUseCaseTest {
     @Test
     void purchaseItemUseCaseTest() {
         //given
-        MemberItem memberItem = MemberItem.builder()
-                .member(member)
-                .item(itemRepository.findById(3L).orElseThrow())
-                .build();
+        log.info("-----test start------");
+        Long itemId = 3L;
 
         //when
-        purchaseItemUseCase.execute(member, 4L);
+        purchaseItemUseCase.execute(member, itemId);
 
         //then
-
+        log.info("query by item id");
+        MemberItem memberItem = memberItemAdaptor.queryByItemIdFetchItem(itemId);
+        assertNotNull(memberItem);
+        assertEquals("item3", memberItem.getItem().getName());
 
     }
 

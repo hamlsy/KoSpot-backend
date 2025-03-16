@@ -1,4 +1,8 @@
 spring:
+  config:
+    activate:
+      on-profile:
+        - test
   datasource:
     url: jdbc:mysql://localhost:3306/kospot-test?serverTimezone=UTC
     username: root
