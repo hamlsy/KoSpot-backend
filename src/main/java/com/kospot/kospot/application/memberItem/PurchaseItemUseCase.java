@@ -40,7 +40,7 @@ public class PurchaseItemUseCase {
         memberItemService.purchaseItem(member, item);
 
         // point history 생성
-        pointHistoryService.savePointHistory(member, itemPrice, PointHistoryType.ITEM_PURCHASE);
+        pointHistoryService.savePointHistory(member, -1 * itemPrice, PointHistoryType.ITEM_PURCHASE);
     }
 
 }
