@@ -12,12 +12,12 @@ public class PointHistoryResponse {
 
     private int changeAmount;
     private String description;
-    private LocalDateTime changeTime;
+    private LocalDateTime createdDate;
 
     public static PointHistoryResponse from(PointHistory pointHistory){
         return PointHistoryResponse.builder()
                 .changeAmount(pointHistory.getChangeAmount())
-                .changeTime(pointHistory.getCreatedDate())
+                .createdDate(pointHistory.getCreatedDate())
                 .description(pointHistory.getPointHistoryType().getDescription())
                 .build();
     }
