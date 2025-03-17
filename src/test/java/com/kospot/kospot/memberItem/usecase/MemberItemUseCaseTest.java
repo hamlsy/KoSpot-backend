@@ -131,14 +131,15 @@ public class MemberItemUseCaseTest {
     @Test
     void purchaseItemUseCaseTest() {
         //given
-        log.info("-----test start------");
+        logStart();
         Long itemId = 3L;
 
         //when
+        logWhen();
         purchaseItemUseCase.execute(member, itemId);
 
         //then
-        log.info("query by item id");
+        logThen();
         MemberItem memberItem = memberItemAdaptor.queryByItemIdFetchItem(itemId);
         assertNotNull(memberItem);
         assertEquals("item3", memberItem.getItem().getName());

@@ -24,6 +24,7 @@ public class MemberItemService {
 
     public void equipItem(Member member, Long memberItemId) {
         MemberItem memberItem = memberItemAdaptor.queryByIdFetchItem(memberItemId);
+
         ItemType memberItemType = memberItem.getItem().getItemType();
 
         // unEquip
