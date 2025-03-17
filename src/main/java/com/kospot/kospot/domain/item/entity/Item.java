@@ -2,10 +2,7 @@ package com.kospot.kospot.domain.item.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.kospot.domain.image.entity.Image;
-import com.kospot.kospot.domain.member.entity.Member;
-import com.kospot.kospot.domain.member.entity.Role;
-import com.kospot.kospot.domain.memberItem.entity.MemberItem;
-import com.kospot.kospot.exception.object.domain.MemberHandler;
+import com.kospot.kospot.exception.object.domain.ItemHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,31 +30,35 @@ public class Item extends BaseTimeEntity {
 
     private int price;
 
-    // todo implement quantity
+    private int stock;
 
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
 
     private boolean isAvailable = true;
 
-    @OneToOne(mappedBy = "item")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
     private Image image;
 
     //business
-    public static Item create(String name, String description, ItemType itemType, int price) {
+    public static Item create(String name, String description, ItemType itemType, int price, int stock) {
         return Item.builder()
                 .name(name)
                 .description(description)
                 .itemType(itemType)
                 .price(price)
+                .stock(stock)
+                .isAvailable(true)
                 .build();
     }
 
-    public void updateItemInfo(String name, String description, ItemType itemType, int price) {
+    public void updateItemInfo(String name, String description, ItemType itemType, int price, int quantity) {
         this.name = name;
         this.description = description;
         this.itemType = itemType;
         this.price = price;
+        this.stock = quantity;
     }
 
     public void deleteFromShop() {
@@ -68,5 +69,16 @@ public class Item extends BaseTimeEntity {
         this.isAvailable = true;
     }
 
+    public void purchase() {
+        validateStock();
+        this.stock -= 1;
+    }
+
+    // validation
+    private void validateStock(){
+        if(this.stock <= 0) {
+            throw new ItemHandler(ErrorStatus.ITEM_OUT_OF_STOCK);
+        }
+    }
 
 }

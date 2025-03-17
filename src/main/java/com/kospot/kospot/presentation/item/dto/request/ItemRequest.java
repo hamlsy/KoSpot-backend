@@ -18,10 +18,11 @@ public class ItemRequest {
         private String description;
         private int price;
         private String itemTypeKey;
+        private int quantity;
 
         public Item toEntity(){
             return Item.create(name, description,
-                    ItemType.fromKey(itemTypeKey), price);
+                    ItemType.fromKey(itemTypeKey), price, quantity);
         }
 
     }
@@ -37,6 +38,7 @@ public class ItemRequest {
         private String description;
         private int price;
         private String itemTypeKey;
+        private int quantity;
 
     }
 

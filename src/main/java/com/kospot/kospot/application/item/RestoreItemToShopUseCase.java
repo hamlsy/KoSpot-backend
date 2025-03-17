@@ -14,6 +14,7 @@ public class RestoreItemToShopUseCase {
     private final ItemService itemService;
 
     public void execute(Member member, Long id){
+        member.validateAdmin();
         itemService.restoreItemToShop(id);
     }
 

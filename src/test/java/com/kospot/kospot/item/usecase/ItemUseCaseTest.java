@@ -9,23 +9,18 @@ import com.kospot.kospot.domain.item.service.ItemService;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.member.entity.Role;
 import com.kospot.kospot.domain.member.repository.MemberRepository;
-import com.kospot.kospot.global.config.aws.AmazonS3Config;
 import com.kospot.kospot.presentation.item.dto.request.ItemRequest;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;

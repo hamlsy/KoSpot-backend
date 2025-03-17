@@ -3,6 +3,7 @@ package com.kospot.kospot.domain.memberItem.repository;
 import com.kospot.kospot.domain.item.entity.ItemType;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.memberItem.entity.MemberItem;
+import com.kospot.kospot.presentation.memberItem.dto.response.MemberItemResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +21,9 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
     @Query("select mi from MemberItem mi join fetch mi.item where mi.id = :id")
     Optional<MemberItem> findByIdFetchItem(@Param("id") Long id);
 
+    @Query("select mi from MemberItem mi join fetch mi.item where mi.item.id = :itemId")
+    Optional<MemberItem> findByItemIdFetchItem(@Param("itemId") Long itemId);
+
     // 중복 아이템 장착 방지
     @Query("select mi from MemberItem mi join " +
             "mi.item i where mi.member = :member " +
@@ -27,5 +31,13 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
             "and mi.isEquipped = true")
     List<MemberItem> findEquippedItemByMemberAndItemType(@Param("member") Member member,
                                                          @Param("itemType") ItemType itemType);
+
+
+    @Query("select new com.kospot.kospot.presentation.memberItem.dto.response.MemberItemResponse(" +
+            "mi.id, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
+            "from MemberItem mi join mi.item " +
+            "where mi.member = :member and mi.item.itemType = :itemType")
+    List<MemberItemResponse> findAllByMemberAndItemTypeFetch(@Param("member") Member member,
+                                                             @Param("itemType") ItemType itemType);
 
 }
