@@ -149,16 +149,16 @@ public class MemberItemUseCaseTest {
     @Test
     void equipMemberItemUseCaseTest() {
         //given
-        log.info("-----test start------");
+        logStart();
         memberItemService.equipItem(member, 1L);
         memberItemService.equipItem(member, 2L);
 
         //when
-        log.info("-----when-----");
+        logWhen();
         equipMemberItemUseCase.execute(member, 3L);
 
         //then
-        log.info("-----then------");
+        logThen();
         MemberItem memberItem1 = memberItemRepository.findByIdFetchItem(1L).orElseThrow();
         MemberItem memberItem2 = memberItemRepository.findById(3L).orElseThrow();
         assertEquals(true, memberItem2.getIsEquipped());
@@ -172,7 +172,7 @@ public class MemberItemUseCaseTest {
         //given
 
         //when
-        log.info("-----when-----");
+        logWhen();
         List<MemberItemResponse> response1 =
                 findAllMemberItemsByItemTypeUseCase.execute(member, "marker");
 
@@ -190,12 +190,23 @@ public class MemberItemUseCaseTest {
         //given
 
         //when
-        log.info("-----when-----");
+        logWhen();
         List<ItemResponse> response = findAllItemsByTypeUseCase.executeV2(member, "marker");
 
         //then
         log.info("responses: {}", response);
     }
 
+    private void logWhen() {
+        log.info("-----when-----");
+    }
+
+    private void logThen() {
+        log.info("-----then-----");
+    }
+
+    private void logStart() {
+        log.info("-----start-----");
+    }
 
 }
