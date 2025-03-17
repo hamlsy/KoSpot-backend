@@ -192,7 +192,7 @@ public class MemberItemUseCaseTest {
 
         //when
         logWhen();
-        List<ItemResponse> response = findAllItemsByTypeUseCase.executeV2(member, "marker");
+        List<ItemResponse> response = findAllItemsByTypeUseCase.execute(member, "marker");
 
         //then
         log.info("responses: {}", response);
