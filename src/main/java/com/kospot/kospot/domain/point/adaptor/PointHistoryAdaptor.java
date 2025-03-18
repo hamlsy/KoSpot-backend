@@ -1,11 +1,14 @@
 package com.kospot.kospot.domain.point.adaptor;
 
 
+import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.entity.PointHistory;
 import com.kospot.kospot.domain.point.repository.PointHistoryRepository;
 import com.kospot.kospot.global.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
@@ -19,5 +22,10 @@ public class PointHistoryAdaptor {
     public List<PointHistory> queryAllHistoryByMemberId(Long memberId) {
         return repository.findAllByMemberId(memberId);
     }
+
+    public List<PointHistory> queryAllByMemberPaging(Member member, Pageable pageable) {
+        return repository.findAllByMemberPaging(member, pageable);
+    }
+
 
 }

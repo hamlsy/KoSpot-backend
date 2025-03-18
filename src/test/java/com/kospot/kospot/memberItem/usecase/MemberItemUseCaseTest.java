@@ -17,10 +17,8 @@ import com.kospot.kospot.domain.memberItem.adaptor.MemberItemAdaptor;
 import com.kospot.kospot.domain.memberItem.entity.MemberItem;
 import com.kospot.kospot.domain.memberItem.repository.MemberItemRepository;
 import com.kospot.kospot.domain.memberItem.service.MemberItemService;
-import com.kospot.kospot.presentation.image.dto.request.ImageRequest;
 import com.kospot.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.kospot.presentation.memberItem.dto.response.MemberItemResponse;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,11 +28,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 
 @Slf4j
 @SpringBootTest
