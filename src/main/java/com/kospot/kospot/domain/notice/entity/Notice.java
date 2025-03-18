@@ -34,6 +34,14 @@ public class Notice extends BaseTimeEntity {
     private List<Image> images;
 
     //business
+    public static Notice create(String title, String content, List<Image> images) {
+        return Notice.builder()
+                .title(title)
+                .content(content)
+                .images(images)
+                .build();
+    }
+
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
