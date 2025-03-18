@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class FindAllPointHistoryPagingUseCase {
 
-    private final int SIZE = 10;
+    private final static int SIZE = 10;
     private final PointHistoryAdaptor pointHistoryAdaptor;
 
     public List<PointHistoryResponse> execute(Member member, int page) {
