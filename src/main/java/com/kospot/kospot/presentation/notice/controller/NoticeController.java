@@ -57,7 +57,7 @@ public class NoticeController {
     //todo html notice update - admin
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
     @PutMapping("/")
-    public ApiResponseDto<?> updateNotice(Member member) {
+    public ApiResponseDto<?> updateNotice(Member member, @ModelAttribute NoticeRequest.Update request) {
         return null;
     }
 

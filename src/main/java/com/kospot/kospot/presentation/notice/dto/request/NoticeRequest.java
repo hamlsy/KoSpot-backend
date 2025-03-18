@@ -18,4 +18,19 @@ public class NoticeRequest {
         private String content;
         private List<MultipartFile> images;
     }
+
+    @Data
+    @Builder
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Update {
+
+        private Long noticeId;
+        private String title;
+        private String content;
+
+
+    }
+
 }
