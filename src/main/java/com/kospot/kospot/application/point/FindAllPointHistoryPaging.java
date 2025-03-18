@@ -22,10 +22,11 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class FindAllPointHistoryPaging {
 
+    private final int SIZE = 15;
     private final PointHistoryAdaptor pointHistoryAdaptor;
 
-    public List<PointHistoryResponse> execute(Member member, int page, int size) {
-        Pageable pageable = (Pageable) PageRequest.of(page, size, Sort.Direction.DESC, "createdDate");
+    public List<PointHistoryResponse> execute(Member member, int page) {
+        Pageable pageable = (Pageable) PageRequest.of(page, SIZE, Sort.Direction.DESC, "createdDate");
         List<PointHistory> pointHistories = pointHistoryAdaptor.queryAllByMemberIdPaging(member, pageable);
         return pointHistories.stream().map(PointHistoryResponse::from)
                 .collect(Collectors.toList());

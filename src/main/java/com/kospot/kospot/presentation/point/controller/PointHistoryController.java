@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,15 +37,13 @@ public class PointHistoryController {
     }
 
     /**
-     ---------------------------------
+     * ---------------------------------
      */
 
-    @GetMapping("/{page}/{size}")
+    @GetMapping("/")
     public ApiResponseDto<List<PointHistoryResponse>> findAllByPointHistoryPaging(Member member,
-                                                                                  @PathVariable("page") int page, @PathVariable("size") int size){
-        return ApiResponseDto.onSuccess(
-                findAllPointHistoryPaging.execute(member, page, size)
-        );
+                                                                                  @RequestParam(value = "page", defaultValue = "0") int page) {
+        return ApiResponseDto.onSuccess(findAllPointHistoryPaging.execute(member, page));
     }
 
 
