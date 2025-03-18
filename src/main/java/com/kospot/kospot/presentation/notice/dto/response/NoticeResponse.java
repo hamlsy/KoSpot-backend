@@ -28,4 +28,24 @@ public class NoticeResponse {
 
     }
 
+    @Getter
+    @Builder
+    @ToString
+    public static class Detail {
+        private Long noticeId;
+        private String title;
+        private String content;
+        private LocalDateTime createdDate;
+
+        public static Detail from(Notice notice) {
+            return Detail.builder()
+                    .noticeId(notice.getId())
+                    .title(notice.getTitle())
+                    .content(notice.getContent())
+                    .createdDate(notice.getCreatedDate())
+                    .build();
+        }
+
+    }
+
 }

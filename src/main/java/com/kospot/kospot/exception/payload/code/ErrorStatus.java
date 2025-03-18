@@ -67,6 +67,9 @@ public enum ErrorStatus implements BaseCode {
     // Image Error (4281 ~ 4290)
     IMAGE_TYPE_NOT_FOUND(NOT_FOUND, 4281, "해당 이미지 타입을 찾을 수 없습니다."),
     IMAGE_NOT_FOUND(NOT_FOUND, 4282, "해당 이미지를 찾을 수 없습니다."),
+
+    // Notice Error(4291 ~ 4300)
+    NOTICE_NOT_FOUND(NOT_FOUND, 4291, "해당 공지사항을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;

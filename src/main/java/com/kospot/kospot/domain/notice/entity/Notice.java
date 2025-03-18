@@ -27,10 +27,10 @@ public class Notice extends BaseTimeEntity {
     private String title;
 
     @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Image> images;
-
 
 }
