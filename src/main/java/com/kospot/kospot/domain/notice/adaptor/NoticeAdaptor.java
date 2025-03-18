@@ -30,4 +30,10 @@ public class NoticeAdaptor {
         () -> new NoticeHandler(ErrorStatus.NOTICE_NOT_FOUND));
     }
 
+    public Notice findAByIdFetchImage(Long id) {
+        return noticeRepository.findByIdFetchImage(id).orElseThrow(
+                () -> new NoticeHandler(ErrorStatus.NOTICE_NOT_FOUND)
+        );
+    }
+
 }

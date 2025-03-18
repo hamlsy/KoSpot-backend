@@ -67,6 +67,10 @@ public class ImageService {
 
     }
 
+    public void deleteImage(Image image) {
+        awsS3Service.deleteFile(image.getS3Key());
+    }
+
     //todo implement upload notice images, banner image, event images
 
 }

@@ -1,6 +1,7 @@
 package com.kospot.kospot.presentation.notice.controller;
 
 import com.kospot.kospot.application.notice.CreateNoticeUseCase;
+import com.kospot.kospot.application.notice.DeleteNoticeUseCase;
 import com.kospot.kospot.application.notice.FindAllNoticePagingUseCase;
 import com.kospot.kospot.application.notice.FindDetailNoticeUseCase;
 import com.kospot.kospot.domain.member.entity.Member;
@@ -29,6 +30,7 @@ public class NoticeController {
     private final FindAllNoticePagingUseCase findAllNoticePagingUseCase;
     private final FindDetailNoticeUseCase findDetailNoticeUseCase;
     private final CreateNoticeUseCase createNoticeUseCase;
+    private final DeleteNoticeUseCase deleteNoticeUseCase;
 
     @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 리스트를 조회합니다.")
     @GetMapping("/")
@@ -61,9 +63,10 @@ public class NoticeController {
 
     //todo notice delete - admin
     @Operation(summary = "공지사항 삭제", description = "공지사항을 삭제합니다.")
-    @DeleteMapping("/")
-    public ApiResponseDto<?> deleteNotice(Member member) {
-        return null;
+    @DeleteMapping("/{id}")
+    public ApiResponseDto<?> deleteNotice(Member member, @PathVariable("id") Long noticeId) {
+        deleteNoticeUseCase.execute(member, noticeId);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
 }
