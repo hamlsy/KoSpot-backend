@@ -33,4 +33,10 @@ public class Notice extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY)
     private List<Image> images;
 
+    //business
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
 }

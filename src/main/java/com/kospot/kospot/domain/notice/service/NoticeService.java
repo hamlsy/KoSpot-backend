@@ -14,6 +14,19 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
 
+    //todo create
+    public void createNotice() {
 
+    }
+
+    //todo update
+    public void updateNotice() {
+
+    }
+
+    //todo delete
+    public void deleteNotice() {
+
+    }
 
 }
