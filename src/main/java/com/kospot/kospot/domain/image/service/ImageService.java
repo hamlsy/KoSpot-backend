@@ -32,23 +32,43 @@ public class ImageService {
     private static final String S3_ITEM_PATH = S3_IMAGE_PATH + "item/";
 
     public void uploadItemImage(MultipartFile file, Item item) {
-        String uploadFilePath = S3_ITEM_PATH + item.getItemType().name().toLowerCase() + "/";
-        Image image = uploadImage(file, uploadFilePath, ImageType.ITEM);
-        imageRepository.save(image);
+        if(isValidImage(file)){
+            String uploadFilePath = S3_ITEM_PATH + item.getItemType().name().toLowerCase() + "/";
+            Image image = uploadImage(file, uploadFilePath, ImageType.ITEM);
+            imageRepository.save(image);
+        }
     }
 
     //todo refactoring bulk insert
     public List<Image> uploadNoticeImages(List<MultipartFile> files) {
-         List<Image> images = files.stream().map(f -> uploadImage(f, S3_NOTICE_PATH, ImageType.NOTICE)).collect(Collectors.toList());
-         imageRepository.saveAll(images);
-         return images;
+        if(isNotValidImages(files)) {
+            return null;
+        }
+        List<Image> images = files.stream().map(f -> uploadImage(f, S3_NOTICE_PATH, ImageType.NOTICE)).collect(Collectors.toList());
+        imageRepository.saveAll(images);
+        return images;
     }
 
     private Image uploadImage(MultipartFile file, String uploadFilePath, ImageType imageType) {
+        if(isNotValidImage(file)){
+            return null;
+        }
         String fileName = awsS3Service.uploadImage(file, uploadFilePath);
         String s3Key = uploadFilePath + fileName;
         String fileUrl = awsS3Service.generateFileUrl(s3Key);
         return Image.create(uploadFilePath, fileName, s3Key, fileUrl, imageType);
+    }
+
+    private boolean isNotValidImages(List<MultipartFile> files) {
+        return files == null && files.isEmpty();
+    }
+
+    private boolean isNotValidImage(MultipartFile file) {
+        return file == null;
+    }
+
+    private boolean isValidImage(MultipartFile file) {
+        return file != null;
     }
 
     public void updateImage(ImageRequest.Update request) {
