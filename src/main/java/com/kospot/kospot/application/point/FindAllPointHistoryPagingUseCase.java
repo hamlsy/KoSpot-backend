@@ -7,12 +7,11 @@ import com.kospot.kospot.global.annotation.usecase.UseCase;
 import com.kospot.kospot.presentation.point.dto.response.PointHistoryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,14 +19,14 @@ import java.util.stream.Collectors;
 @UseCase
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class FindAllPointHistoryPaging {
+public class FindAllPointHistoryPagingUseCase {
 
-    private final int SIZE = 15;
+    private final int SIZE = 10;
     private final PointHistoryAdaptor pointHistoryAdaptor;
 
     public List<PointHistoryResponse> execute(Member member, int page) {
-        Pageable pageable = (Pageable) PageRequest.of(page, SIZE, Sort.Direction.DESC, "createdDate");
-        List<PointHistory> pointHistories = pointHistoryAdaptor.queryAllByMemberIdPaging(member, pageable);
+        Pageable pageable = PageRequest.of(page, SIZE, Sort.Direction.DESC, "createdDate");
+        List<PointHistory> pointHistories = pointHistoryAdaptor.queryAllByMemberPaging(member, pageable);
         return pointHistories.stream().map(PointHistoryResponse::from)
                 .collect(Collectors.toList());
     }

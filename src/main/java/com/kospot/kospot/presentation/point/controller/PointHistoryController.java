@@ -1,6 +1,6 @@
 package com.kospot.kospot.presentation.point.controller;
 
-import com.kospot.kospot.application.point.FindAllPointHistoryPaging;
+import com.kospot.kospot.application.point.FindAllPointHistoryPagingUseCase;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.kospot.presentation.point.dto.response.PointHistoryResponse;
@@ -25,7 +25,7 @@ public class PointHistoryController {
     private final PointHistoryAdaptor adaptor;
     private final PointHistoryService service;
 
-    private final FindAllPointHistoryPaging findAllPointHistoryPaging;
+    private final FindAllPointHistoryPagingUseCase findAllPointHistoryPaging;
 
     /**
      * -------------TEST--------------
