@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class GameRoomAdaptor {
 
-    private final GameRoomRepository gameRoomRepository;
+    private final GameRoomRepository repository;
 
 
 }
