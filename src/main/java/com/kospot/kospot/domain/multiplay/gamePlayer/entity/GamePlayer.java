@@ -20,11 +20,11 @@ public class GamePlayer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_room_id")
     private GameRoom gameRoom;
 
@@ -35,5 +35,22 @@ public class GamePlayer {
     private GamePlayerStatus status;
 
     //todo marker image, chatMessage
+
+    //business
+    public void leaveGameRoom() {
+        if (gameRoom != null) {
+            gameRoom.removePlayer(this);
+            this.gameRoom = null;
+        }
+        this.status = GamePlayerStatus.NONE;
+    }
+
+    public void startGame() {
+        this.status = GamePlayerStatus.PLAYING;
+    }
+
+    public void finishGame() {
+        this.status = GamePlayerStatus.FINISHED;
+    }
 
 }

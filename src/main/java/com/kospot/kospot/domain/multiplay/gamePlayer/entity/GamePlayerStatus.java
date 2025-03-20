@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum GamePlayerStatus {
     WAITING("대기"), PLAYING("진행중"),
-    FINISHED("종료");
+    FINISHED("종료"), NONE("none");
 
     private final String name;
 }
