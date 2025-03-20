@@ -1,9 +1,6 @@
 package com.kospot.kospot.presentation.notice.controller;
 
-import com.kospot.kospot.application.notice.CreateNoticeUseCase;
-import com.kospot.kospot.application.notice.DeleteNoticeUseCase;
-import com.kospot.kospot.application.notice.FindAllNoticePagingUseCase;
-import com.kospot.kospot.application.notice.FindDetailNoticeUseCase;
+import com.kospot.kospot.application.notice.*;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
@@ -31,6 +28,7 @@ public class NoticeController {
     private final FindDetailNoticeUseCase findDetailNoticeUseCase;
     private final CreateNoticeUseCase createNoticeUseCase;
     private final DeleteNoticeUseCase deleteNoticeUseCase;
+    private final UpdateNoticeUseCase updateNoticeUseCase;
 
     @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 리스트를 조회합니다.")
     @GetMapping("/")
@@ -56,9 +54,10 @@ public class NoticeController {
 
     //todo html notice update - admin
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
-    @PutMapping("/")
-    public ApiResponseDto<?> updateNotice(Member member, @ModelAttribute NoticeRequest.Update request) {
-        return null;
+    @PutMapping("/{id}")
+    public ApiResponseDto<?> updateNotice(Member member, @PathVariable("id") Long noticeId, @ModelAttribute NoticeRequest.Update request) {
+        updateNoticeUseCase.execute(member, noticeId, request);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     //todo notice delete - admin

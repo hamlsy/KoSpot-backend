@@ -11,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Slf4j
 @Adaptor
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class NoticeAdaptor {
         () -> new NoticeHandler(ErrorStatus.NOTICE_NOT_FOUND));
     }
 
-    public Notice findAByIdFetchImage(Long id) {
+    public Notice findByIdFetchImage(Long id) {
         return noticeRepository.findByIdFetchImage(id).orElseThrow(
                 () -> new NoticeHandler(ErrorStatus.NOTICE_NOT_FOUND)
         );

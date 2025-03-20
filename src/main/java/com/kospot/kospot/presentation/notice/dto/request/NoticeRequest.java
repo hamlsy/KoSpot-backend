@@ -26,10 +26,8 @@ public class NoticeRequest {
     @AllArgsConstructor
     public static class Update {
 
-        private Long noticeId;
         private String title;
         private String content;
-
 
     }
 

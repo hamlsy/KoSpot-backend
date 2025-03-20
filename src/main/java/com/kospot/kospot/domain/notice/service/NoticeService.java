@@ -35,9 +35,9 @@ public class NoticeService {
         noticeRepository.save(notice);
     }
 
-    //todo update
-    public void updateNotice() {
-
+    //todo refactor image, content order
+    public void updateNotice(Notice notice, NoticeRequest.Update request) {
+        notice.update(request.getTitle(), request.getContent());
     }
 
     //todo delete
