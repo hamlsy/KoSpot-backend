@@ -1,7 +1,7 @@
 package com.kospot.kospot.application.game.roadView.rank.usecase;
 
 import com.kospot.kospot.presentation.game.dto.response.StartGameResponse;
-import com.kospot.kospot.domain.game.entity.GameType;
+import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.service.AESService;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
@@ -25,7 +25,7 @@ public class StartRoadViewRankUseCase {
 
     public StartGameResponse.RoadView execute(Member member){
         RoadViewGame game = roadViewGameService.startRankGame(member);
-        GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameType.ROADVIEW);
+        GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameMode.ROADVIEW);
         gameRankService.applyPenaltyForAbandon(gameRank);
 
         return getEncryptedRoadViewGameResponse(game);
