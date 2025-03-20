@@ -2,6 +2,7 @@ package com.kospot.kospot.domain.image.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.kospot.domain.item.entity.Item;
+import com.kospot.kospot.domain.notice.entity.Notice;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +28,11 @@ public class Image extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
-    //todo Notice, Event <- manny to one, Banner <- one to one
+    //todo Notice, Event <- manny o one, Banner <- one to one
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "notice_id")
+    private Notice notice;
 
     public static Image create(String imagePath, String imageName, String s3Key, String imageUrl, ImageType imageType) {
         return Image.builder()
@@ -44,6 +49,10 @@ public class Image extends BaseTimeEntity {
         this.s3Key = s3Key;
         this.imageName = imageName;
         this.imageUrl = imageUrl;
+    }
+
+    public void setNoticeFk(Notice notice) {
+        this.notice = notice;
     }
 
 }
