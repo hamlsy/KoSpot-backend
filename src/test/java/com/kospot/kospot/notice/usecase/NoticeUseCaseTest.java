@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -75,14 +77,36 @@ public class NoticeUseCaseTest {
         //when
         createNoticeUseCase.execute(admin, request);
 
-
         //then
         Notice notice = noticeRepository.findById(1L).orElseThrow();
         assertEquals(request.getTitle(), notice.getTitle());
         assertEquals(request.getContent(), notice.getContent());
-
         assertThrows(Exception.class, () -> createNoticeUseCase.execute(member, request));
 
     }
+
+    @DisplayName("공지사항 전체 조회를 테스트합니다.")
+    @Test
+    void findAllNoticePagingUseCase() {
+        //given
+        for (int i = 0; i < 30; i++) {
+            noticeRepository.save(
+                    Notice.builder()
+                            .title("title" + i)
+                            .build()
+            );
+        }
+
+        //when
+        List<NoticeResponse.Summary> responses = findAllNoticePagingUseCase.execute(0);
+
+        //then
+        assertEquals(10, responses.size());
+        assertEquals("title29", responses.get(0).getTitle());
+        log.info("reponses: {}", responses);
+
+    }
+
+
 
 }
