@@ -60,7 +60,7 @@ public class ImageService {
     }
 
     private boolean isNotValidImages(List<MultipartFile> files) {
-        return files == null && files.isEmpty();
+        return files == null;
     }
 
     private boolean isNotValidImage(MultipartFile file) {
