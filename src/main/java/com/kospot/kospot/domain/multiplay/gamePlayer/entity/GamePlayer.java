@@ -1,5 +1,6 @@
 package com.kospot.kospot.domain.multiplay.gamePlayer.entity;
 
+import com.kospot.kospot.domain.item.entity.Item;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.multiplay.gameRoom.entity.GameRoom;
 import jakarta.persistence.*;
@@ -29,17 +30,19 @@ public class GamePlayer {
     private GameRoom gameRoom;
 
     private Integer roundRank; // 해당 라운드 순위
-    private int score;
+    private int totalScore;
 
     @Enumerated(EnumType.STRING)
     private GamePlayerStatus status;
 
     //todo marker image, chatMessage
+    //todo 연관관계, 아이템 여러개?
+    private Item equippedMarker;
 
     //business
     public void leaveGameRoom() {
         if (gameRoom != null) {
-            gameRoom.removePlayer(this);
+            gameRoom.playerLeave(this);
             this.gameRoom = null;
         }
         this.status = GamePlayerStatus.NONE;

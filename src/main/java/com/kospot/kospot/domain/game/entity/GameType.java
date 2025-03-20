@@ -10,7 +10,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum GameType {
-    RANK("RANK_GAME"), PRACTICE("PRACTICE_GAME");
+    RANK("RANK_GAME"), PRACTICE("PRACTICE_GAME"), INDIVIDUAL("개인전"), COOPERATIVE("협동전");
 
     private final String mode;
 
