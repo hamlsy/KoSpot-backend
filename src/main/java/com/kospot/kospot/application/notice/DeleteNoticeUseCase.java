@@ -27,6 +27,7 @@ public class DeleteNoticeUseCase {
         //validate
         member.validateAdmin();
         Notice notice = noticeAdaptor.findAByIdFetchImage(noticeId);
+
         //delete images
         List<Image> images = notice.getImages();
         images.forEach(imageService::deleteImage);

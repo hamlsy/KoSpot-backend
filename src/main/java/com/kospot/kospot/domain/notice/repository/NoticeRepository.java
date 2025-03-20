@@ -14,6 +14,6 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
     @Override
     Page<Notice> findAll(Pageable pageable);
 
-    @Query("select n from Notice n join fetch n.images where n.id = :id")
+    @Query("select n from Notice n left join fetch n.images where n.id = :id")
     Optional<Notice> findByIdFetchImage(@Param("id") Long id);
 }

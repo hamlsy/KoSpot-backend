@@ -1,6 +1,7 @@
 package com.kospot.kospot.notice.usecase;
 
 import com.kospot.kospot.application.notice.CreateNoticeUseCase;
+import com.kospot.kospot.application.notice.DeleteNoticeUseCase;
 import com.kospot.kospot.application.notice.FindAllNoticePagingUseCase;
 import com.kospot.kospot.application.notice.FindDetailNoticeUseCase;
 import com.kospot.kospot.domain.member.entity.Member;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,6 +38,9 @@ public class NoticeUseCaseTest {
 
     @Autowired
     private FindDetailNoticeUseCase findDetailNoticeUseCase;
+
+    @Autowired
+    private DeleteNoticeUseCase deleteNoticeUseCase;
 
     //repository
     @Autowired
@@ -87,7 +92,7 @@ public class NoticeUseCaseTest {
 
     @DisplayName("공지사항 전체 조회를 테스트합니다.")
     @Test
-    void findAllNoticePagingUseCase() {
+    void findAllNoticePagingUseCaseTest() {
         //given
         for (int i = 0; i < 30; i++) {
             noticeRepository.save(
@@ -107,6 +112,44 @@ public class NoticeUseCaseTest {
 
     }
 
+    @DisplayName("공지사항 단일 조회를 테스트합니다.")
+    @Test
+    void findDetailNoticeUseCaseTest() {
+        //given
+        Notice notice = createTempNotice();
+
+        //when
+        NoticeResponse.Detail response = findDetailNoticeUseCase.execute(notice.getId());
+
+        //then
+        assertEquals(notice.getTitle(), response.getTitle());
+        assertEquals(notice.getContent(), response.getContent());
+        log.info("respose: {}", response);
+
+    }
+
+    @DisplayName("공지사항 삭제를 테스트합니다.")
+    @Test
+    void deleteNoticeUseCaseTest() {
+        //given
+        Notice notice = createTempNotice();
+
+        //when
+        deleteNoticeUseCase.execute(admin, notice.getId());
+
+        //then
+        assertThrows(Exception.class, () -> deleteNoticeUseCase.execute(member, notice.getId()));
+        assertThrows(Exception.class, () -> noticeRepository.findById(notice.getId()).orElseThrow());
+
+    }
 
 
+    private Notice createTempNotice() {
+        return noticeRepository.save(
+                Notice.builder()
+                        .title("title")
+                        .content("content")
+                        .build()
+        );
+    }
 }

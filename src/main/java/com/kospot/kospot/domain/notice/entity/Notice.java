@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,21 +31,29 @@ public class Notice extends BaseTimeEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Image> images;
+    @OneToMany(mappedBy = "notice", fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<>();
 
     //business
-    public static Notice create(String title, String content, List<Image> images) {
+    public static Notice create(String title, String content) {
         return Notice.builder()
                 .title(title)
                 .content(content)
-                .images(images)
                 .build();
     }
 
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void addImages(List<Image> images) {
+        images.forEach(this::addImage);
+    }
+
+    private void addImage(Image image) {
+        images.add(image);
+        image.setNoticeFk(this);
     }
 
 }

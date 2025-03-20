@@ -27,8 +27,11 @@ public class NoticeService {
 
     public void createNotice(NoticeRequest.Create request, List<Image> images) {
         Notice notice = Notice.create(
-                request.getTitle(), request.getContent(), images
+                request.getTitle(), request.getContent()
         );
+        if(images != null) {
+            notice.addImages(images);
+        }
         noticeRepository.save(notice);
     }
 
