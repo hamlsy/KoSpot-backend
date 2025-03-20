@@ -1,9 +1,6 @@
 package com.kospot.kospot.notice.usecase;
 
-import com.kospot.kospot.application.notice.CreateNoticeUseCase;
-import com.kospot.kospot.application.notice.DeleteNoticeUseCase;
-import com.kospot.kospot.application.notice.FindAllNoticePagingUseCase;
-import com.kospot.kospot.application.notice.FindDetailNoticeUseCase;
+import com.kospot.kospot.application.notice.*;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.member.entity.Role;
 import com.kospot.kospot.domain.member.repository.MemberRepository;
@@ -41,6 +38,9 @@ public class NoticeUseCaseTest {
 
     @Autowired
     private DeleteNoticeUseCase deleteNoticeUseCase;
+
+    @Autowired
+    private UpdateNoticeUseCase updateNoticeUseCase;
 
     //repository
     @Autowired
@@ -140,6 +140,28 @@ public class NoticeUseCaseTest {
         //then
         assertThrows(Exception.class, () -> deleteNoticeUseCase.execute(member, notice.getId()));
         assertThrows(Exception.class, () -> noticeRepository.findById(notice.getId()).orElseThrow());
+
+    }
+
+    @DisplayName("공지사항 수정을 테스트합니다.")
+    @Test
+    void updateNoticeUseCaseTest() {
+        //given
+        NoticeRequest.Update request = NoticeRequest.Update.builder()
+                .title("update")
+                .content("update")
+                .build();
+
+        Notice notice = createTempNotice();
+
+        //when
+        updateNoticeUseCase.execute(admin, notice.getId(), request);
+
+        //then
+        assertThrows(Exception.class, () -> updateNoticeUseCase.execute(member, notice.getId(), request));
+        Notice updatedNotice = noticeRepository.findById(notice.getId()).orElseThrow();
+        assertEquals(request.getTitle(), updatedNotice.getTitle());
+        assertEquals(request.getContent(), updatedNotice.getContent());
 
     }
 
