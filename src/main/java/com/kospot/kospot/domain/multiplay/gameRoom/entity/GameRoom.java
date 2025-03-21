@@ -53,6 +53,11 @@ public class GameRoom extends BaseTimeEntity {
 
 
     //business
+    public void setHost(Member host) {
+        this.host = host;
+        joinPlayer(host);
+    }
+
     //todo add general Exception
     public void joinPlayer(Member gamePlayer) {
         if(isFull()){
