@@ -10,15 +10,14 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum GameMode {
-    RANK("RANK_GAME"), PRACTICE("PRACTICE_GAME");
+    ROADVIEW("로드뷰 모드"), PHOTO("사진 모드");
 
-    private final String mode;
+    private final String type;
 
     public static GameMode fromKey(String key) {
         return Arrays.stream(GameMode.values())
                 .filter(s -> s.name().equalsIgnoreCase(key))
                 .findFirst()
-                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.GAME_MODE_NOT_FOUND));
+                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.GAME_TYPE_NOT_FOUND));
     }
-
 }

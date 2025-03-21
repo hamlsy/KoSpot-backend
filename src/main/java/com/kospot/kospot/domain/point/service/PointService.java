@@ -1,7 +1,5 @@
 package com.kospot.kospot.domain.point.service;
 
-import com.kospot.kospot.domain.game.entity.GameType;
-import com.kospot.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.kospot.domain.gameRank.entity.RankTier;
 import com.kospot.kospot.domain.member.entity.Member;
 

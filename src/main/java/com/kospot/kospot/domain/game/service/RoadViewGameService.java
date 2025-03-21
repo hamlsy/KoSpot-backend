@@ -4,7 +4,7 @@ import com.kospot.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.kospot.presentation.game.dto.request.EndGameRequest;
-import com.kospot.kospot.domain.game.entity.GameMode;
+import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.kospot.domain.member.entity.Member;
@@ -25,7 +25,7 @@ public class RoadViewGameService {
 
     public RoadViewGame startPracticeGame(Member member, String sidoKey) {
         Coordinate coordinate = coordinateService.getRandomCoordinateBySido(sidoKey);
-        RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.PRACTICE);
+        RoadViewGame game = RoadViewGame.create(coordinate, member, GameType.PRACTICE);
         repository.save(game);
 
         return game;
@@ -40,7 +40,7 @@ public class RoadViewGameService {
 
     public RoadViewGame startRankGame(Member member) {
         Coordinate coordinate = coordinateService.getRandomNationwideCoordinate();
-        RoadViewGame game = RoadViewGame.create(coordinate, member, GameMode.RANK);
+        RoadViewGame game = RoadViewGame.create(coordinate, member, GameType.RANK);
         repository.save(game);
 
         return game;

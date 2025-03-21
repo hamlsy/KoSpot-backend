@@ -28,13 +28,13 @@ public class RoadViewGame extends Game {
 
     private double score;
 
-    public static RoadViewGame create(Coordinate coordinate, Member member, GameMode gameMode) {
+    public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType) {
         return RoadViewGame.builder()
                 .targetLat(coordinate.getLat())
                 .targetLng(coordinate.getLng())
                 .member(member)
-                .gameType(GameType.ROADVIEW)
-                .gameMode(gameMode)
+                .gameMode(GameMode.ROADVIEW)
+                .gameType(gameType)
                 .poiName(coordinate.getPoiName())
                 .gameStatus(GameStatus.ABANDONED)
                 .build();

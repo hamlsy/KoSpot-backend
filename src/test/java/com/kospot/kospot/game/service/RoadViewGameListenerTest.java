@@ -5,7 +5,7 @@ import com.kospot.kospot.application.game.roadView.rank.usecase.EndRoadViewRankU
 import com.kospot.kospot.application.game.roadView.rank.listener.EndRoadViewRankEventListener;
 import com.kospot.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.kospot.domain.game.entity.GameStatus;
-import com.kospot.kospot.domain.game.entity.GameType;
+import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
@@ -97,7 +97,7 @@ public class RoadViewGameListenerTest {
                     .build();
             memberRepository.save(member);
             members.add(member);
-            GameRank gameRank = GameRank.create(member, GameType.ROADVIEW);
+            GameRank gameRank = GameRank.create(member, GameMode.ROADVIEW);
             gameRankRepository.save(gameRank);
             gameRanks.add(gameRank);
             RoadViewGame game = roadViewGameRepository.save(
@@ -147,7 +147,7 @@ public class RoadViewGameListenerTest {
         int memberPoint = member.getPoint();
         assertNotEquals(0, memberPoint);
 
-        int ratingScore = gameRankRepository.findByMemberAndGameType(member, GameType.ROADVIEW).getRatingScore();
+        int ratingScore = gameRankRepository.findByMemberAndGameType(member, GameMode.ROADVIEW).getRatingScore();
         assertNotEquals(0, ratingScore);
 
         log.info("기존 게임 종료 로직 시간: {}ms", (endTime - startTime));
@@ -184,7 +184,7 @@ public class RoadViewGameListenerTest {
         int memberPoint = member.getPoint();
         assertNotEquals(0, memberPoint);
 
-        int ratingScore = gameRankRepository.findByMemberAndGameType(member, GameType.ROADVIEW).getRatingScore();
+        int ratingScore = gameRankRepository.findByMemberAndGameType(member, GameMode.ROADVIEW).getRatingScore();
         assertNotEquals(0, ratingScore);
 
         log.info("기존 게임 종료 로직 시간: {}ms", (endTime - startTime));
@@ -207,7 +207,7 @@ public class RoadViewGameListenerTest {
         Thread.sleep(1000);
         //then
         RoadViewGame retrievedGame = roadViewGameRepository.findById(member.getId()).orElseThrow();
-        GameRank gameRank = gameRankRepository.findByMemberAndGameType(member, GameType.ROADVIEW);
+        GameRank gameRank = gameRankRepository.findByMemberAndGameType(member, GameMode.ROADVIEW);
         assertEquals(GameStatus.COMPLETED, retrievedGame.getGameStatus());
         Member persistMember = gameRank.getMember();
         assertEquals(0, persistMember.getPoint());

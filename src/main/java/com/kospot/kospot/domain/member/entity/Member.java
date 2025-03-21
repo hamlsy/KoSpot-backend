@@ -2,6 +2,7 @@ package com.kospot.kospot.domain.member.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.kospot.domain.gameRank.entity.GameRank;
+import com.kospot.kospot.domain.multiplay.gamePlayer.entity.GamePlayer;
 import com.kospot.kospot.exception.object.domain.MemberHandler;
 import com.kospot.kospot.exception.object.domain.PointHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
@@ -38,6 +39,9 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     private int point;
+
+    @OneToOne(mappedBy = "member")
+    private GamePlayer gamePlayer;
 
     //business
 

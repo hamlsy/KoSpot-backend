@@ -4,9 +4,9 @@ import com.kospot.kospot.application.game.roadView.practice.usecase.EndRoadViewP
 import com.kospot.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
 import com.kospot.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.kospot.presentation.game.dto.response.EndGameResponse;
-import com.kospot.kospot.domain.game.entity.GameMode;
-import com.kospot.kospot.domain.game.entity.GameStatus;
 import com.kospot.kospot.domain.game.entity.GameType;
+import com.kospot.kospot.domain.game.entity.GameStatus;
+import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.kospot.domain.game.service.RoadViewGameService;
@@ -68,9 +68,9 @@ public class RoadViewGameServiceTest {
                 .nickname("nick1")
                 .build());
         RoadViewGame game = roadViewGameRepository.save(RoadViewGame.builder()
-                .gameType(GameType.ROADVIEW)
+                .gameMode(GameMode.ROADVIEW)
                 .member(member)
-                .gameMode(GameMode.PRACTICE).build());
+                .gameType(GameType.PRACTICE).build());
 
         EndGameRequest.RoadView request = EndGameRequest.RoadView.builder()
                 .gameId(game.getId())
@@ -100,15 +100,15 @@ public class RoadViewGameServiceTest {
                 .nickname("nick1")
                 .build());
         RoadViewGame game = roadViewGameRepository.save(RoadViewGame.builder()
-                .gameType(GameType.ROADVIEW)
+                .gameMode(GameMode.ROADVIEW)
                 .member(member)
-                .gameMode(GameMode.RANK)
+                .gameType(GameType.RANK)
                 .gameStatus(GameStatus.ABANDONED)
                 .build());
 
         GameRank gameRank = gameRankRepository.save(GameRank.builder()
                 .member(member)
-                .gameType(GameType.ROADVIEW)
+                .gameMode(GameMode.ROADVIEW)
                 .rankTier(RankTier.SILVER)
                 .build());
 

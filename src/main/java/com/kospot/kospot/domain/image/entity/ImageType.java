@@ -13,7 +13,7 @@ import java.util.Arrays;
 public enum ImageType {
 
     ITEM("아이템"), NOTICE("공지사항"), EVENT("이벤트"),
-    BANNER("배너"), NONE("none");
+    BANNER("배너"), NONE("none"), TEMP("임시");
 
     private final String type;
 
