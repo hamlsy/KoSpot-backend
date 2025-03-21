@@ -46,15 +46,15 @@ public class GameRoom extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
-    private GamePlayer host; //방장
+    private Member host; //방장
 
     @OneToMany(mappedBy = "gameRoom")
-    private List<GamePlayer> players = new ArrayList<>();
+    private List<Member> players = new ArrayList<>();
 
 
     //business
     //todo add general Exception
-    public void joinPlayer(GamePlayer gamePlayer) {
+    public void joinPlayer(Member gamePlayer) {
         if(isFull()){
             throw new IllegalStateException();
         }
@@ -62,7 +62,7 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     //todo
-    public void playerLeave(GamePlayer gamePlayer) {
+    public void playerLeave(Member gamePlayer) {
         players.remove(gamePlayer);
         if(isHost(gamePlayer)) {
             //todo 방 폭파 이벤트 발행
@@ -73,17 +73,17 @@ public class GameRoom extends BaseTimeEntity {
         return players.size() >= maxPlayers;
     }
 
-    public void validateHost(GamePlayer gamePlayer) {
+    public void validateHost(Member gamePlayer) {
         if(isNotHost(gamePlayer)) {
             throw new IllegalStateException();
         }
     }
 
-    public boolean isHost(GamePlayer gamePlayer) {
+    public boolean isHost(Member gamePlayer) {
         return this.host.equals(gamePlayer);
     }
 
-    private boolean isNotHost(GamePlayer gamePlayer) {
+    private boolean isNotHost(Member gamePlayer) {
         return !this.host.equals(gamePlayer);
     }
 

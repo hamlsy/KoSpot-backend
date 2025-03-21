@@ -40,9 +40,9 @@ public class GamePlayer {
     private Item equippedMarker;
 
     //business
-    public void leaveGameRoom() {
+    public void leaveGameRoom(Member member) {
         if (gameRoom != null) {
-            gameRoom.playerLeave(this);
+            gameRoom.playerLeave(member);
             this.gameRoom = null;
         }
         this.status = GamePlayerStatus.NONE;
