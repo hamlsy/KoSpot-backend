@@ -12,7 +12,7 @@ import java.util.Arrays;
 public enum GameType {
     RANK("RANK_GAME"), PRACTICE("PRACTICE_GAME"), INDIVIDUAL("개인전"), COOPERATIVE("협동전");
 
-    private final String mode;
+    private final String type;
 
     public static GameType fromKey(String key) {
         return Arrays.stream(GameType.values())

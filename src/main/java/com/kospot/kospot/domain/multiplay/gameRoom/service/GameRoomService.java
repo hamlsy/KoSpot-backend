@@ -17,8 +17,6 @@ public class GameRoomService {
 
     private final GameRoomRepository gameRoomRepository;
 
-
-    //todo create room
     public GameRoom createGameRoom(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = request.toEntity();
         gameRoom.setHost(host);

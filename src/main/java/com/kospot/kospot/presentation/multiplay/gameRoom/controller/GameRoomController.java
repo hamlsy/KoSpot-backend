@@ -1,6 +1,7 @@
 package com.kospot.kospot.presentation.multiplay.gameRoom.controller;
 
 
+import com.kospot.kospot.application.multiplay.gameRoom.CreateGameRoomUseCase;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.multiplay.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
@@ -23,6 +24,8 @@ import java.util.List;
 @RequestMapping("/api/gameRoom/")
 public class GameRoomController {
 
+    private final CreateGameRoomUseCase createGameRoomUseCase;
+
     /**
      *  Test
      */
@@ -30,7 +33,9 @@ public class GameRoomController {
     @Operation(summary = "게임 방 생성", description = "멀티 게임 방을 생성합니다.")
     @PostMapping("/")
     public ApiResponseDto<?> findItemsByItemType(Member member, @RequestBody GameRoomRequest.Create request) {
-
+        return ApiResponseDto.onSuccess(createGameRoomUseCase.execute(member, request));
     }
+
+
 
 }

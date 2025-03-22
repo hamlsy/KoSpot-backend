@@ -5,7 +5,6 @@ import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.member.entity.Member;
-import com.kospot.kospot.domain.multiplay.gamePlayer.entity.GamePlayer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -49,7 +50,7 @@ public class GameRoom extends BaseTimeEntity {
     private Member host; //방장
 
     @OneToMany(mappedBy = "gameRoom")
-    private List<Member> players = new ArrayList<>();
+    private Set<Member> waitingPlayers = new HashSet<>();
 
 
     //business
@@ -63,19 +64,19 @@ public class GameRoom extends BaseTimeEntity {
         if(isFull()){
             throw new IllegalStateException();
         }
-        players.add(gamePlayer);
+        waitingPlayers.add(gamePlayer);
     }
 
     //todo
     public void playerLeave(Member gamePlayer) {
-        players.remove(gamePlayer);
+        waitingPlayers.remove(gamePlayer);
         if(isHost(gamePlayer)) {
             //todo 방 폭파 이벤트 발행
         }
     }
 
     private boolean isFull() {
-        return players.size() >= maxPlayers;
+        return waitingPlayers.size() >= maxPlayers;
     }
 
     public void validateHost(Member gamePlayer) {

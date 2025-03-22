@@ -12,7 +12,7 @@ import java.util.Arrays;
 public enum GameMode {
     ROADVIEW("로드뷰 모드"), PHOTO("사진 모드");
 
-    private final String type;
+    private final String mode;
 
     public static GameMode fromKey(String key) {
         return Arrays.stream(GameMode.values())
