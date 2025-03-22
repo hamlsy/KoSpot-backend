@@ -3,11 +3,10 @@ package com.kospot.kospot.presentation.multiplay.gameRoom.controller;
 
 import com.kospot.kospot.application.multiplay.gameRoom.CreateGameRoomUseCase;
 import com.kospot.kospot.application.multiplay.gameRoom.JoinGameRoomUseCase;
+import com.kospot.kospot.application.multiplay.gameRoom.LeaveGameRoomUseCase;
 import com.kospot.kospot.domain.member.entity.Member;
-import com.kospot.kospot.domain.multiplay.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
-import com.kospot.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.kospot.presentation.multiplay.gameRoom.dto.request.GameRoomRequest;
 import com.kospot.kospot.presentation.multiplay.gameRoom.dto.response.GameRoomResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,9 +27,10 @@ public class GameRoomController {
 
     private final CreateGameRoomUseCase createGameRoomUseCase;
     private final JoinGameRoomUseCase joinGameRoomUseCase;
+    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
 
     /**
-     *  Test
+     * Test
      */
 
     @Operation(summary = "게임 방 생성", description = "멀티 게임 방을 생성합니다.")
@@ -48,6 +47,12 @@ public class GameRoomController {
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
+    @Operation(summary = "게임 방 퇴장", description = "게임 방에서 퇴장합니다.")
+    @GetMapping("/{id}")
+    public ApiResponseDto<?> leaveGameRoom(Member member, @PathVariable("id") Long gameRoomId) {
+        leaveGameRoomUseCase.execute(member, gameRoomId);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
 
 
 }

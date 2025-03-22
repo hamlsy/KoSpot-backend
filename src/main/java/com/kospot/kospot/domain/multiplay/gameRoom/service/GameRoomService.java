@@ -33,7 +33,20 @@ public class GameRoomService {
         //todo websocket 입장 알림 전송
     }
 
+    public void leaveGameRoom(Member player, GameRoom gameRoom) {
+        //플레이어가 나간 경우
+        gameRoom.leaveRoom(player);
 
+        // 방장이 나간 경우 또는 남은 플레이어가 없는 경우
+        if (gameRoom.isHost(player) || gameRoom.isRoomEmpty()) {
+            deleteRoom(gameRoom);
+        }
+
+    }
+
+    private void deleteRoom(GameRoom gameRoom) {
+        gameRoomRepository.delete(gameRoom);
+    }
 
     //todo kick
 }

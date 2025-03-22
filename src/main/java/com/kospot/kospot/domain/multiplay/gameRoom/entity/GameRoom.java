@@ -45,11 +45,10 @@ public class GameRoom extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private GameRoomStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
     private Member host; //방장
 
-    @OneToMany(mappedBy = "gameRoom")
     private Set<Member> waitingPlayers = new HashSet<>();
 
 
@@ -68,11 +67,8 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     //todo
-    public void playerLeave(Member gamePlayer) {
+    public void leaveRoom(Member gamePlayer) {
         waitingPlayers.remove(gamePlayer);
-        if(isHost(gamePlayer)) {
-            //todo 방 폭파 이벤트 발행
-        }
     }
 
     //player
@@ -126,6 +122,10 @@ public class GameRoom extends BaseTimeEntity {
 
     private boolean isNotHost(Member gamePlayer) {
         return !this.host.equals(gamePlayer);
+    }
+
+    public boolean isRoomEmpty() {
+        return waitingPlayers.isEmpty();
     }
 
     //private room
