@@ -1,7 +1,6 @@
 package com.kospot.kospot.domain.multiplay.gameRoom.service;
 
 import com.kospot.kospot.domain.member.entity.Member;
-import com.kospot.kospot.domain.multiplay.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.kospot.domain.multiplay.gameRoom.entity.GameRoom;
 import com.kospot.kospot.domain.multiplay.gameRoom.repository.GameRoomRepository;
 import com.kospot.kospot.presentation.multiplay.gameRoom.dto.request.GameRoomRequest;
@@ -28,10 +27,9 @@ public class GameRoomService {
     //todo 동시성 해결
     public void joinGameRoom(Member player, GameRoom gameRoom, GameRoomRequest.Join request) {
         //validate join
-        gameRoom.validateJoin();
-        if(gameRoom.isPrivateRoom()){
-            gameRoom.validatePassword(request.getPassword());
-        }
+        gameRoom.validateJoinRoom(request.getPassword());
+
+
 
     }
 

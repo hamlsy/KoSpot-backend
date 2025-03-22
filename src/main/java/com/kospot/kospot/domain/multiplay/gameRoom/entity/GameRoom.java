@@ -14,9 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -78,7 +76,13 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     //player
-    public void validateJoin() {
+    public void validateJoinRoom(String inputPassword) {
+        validateRoomCapacity();
+        validatePassword(inputPassword);
+        validateRoomStatus();
+    }
+
+    private void validateRoomCapacity() {
         if(isFull()) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
         }
@@ -88,6 +92,16 @@ public class GameRoom extends BaseTimeEntity {
         if(isNotCorrectPassword(inputPassword)) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_NOT_CORRECT_PASSWORD);
         }
+    }
+
+    private void validateRoomStatus() {
+        if(isNotWaitingRoom()){
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_ALREADY_IN_PROGRESS);
+        }
+    }
+
+    private boolean isNotWaitingRoom() {
+        return !status.equals(GameRoomStatus.WAITING);
     }
 
     private boolean isFull() {

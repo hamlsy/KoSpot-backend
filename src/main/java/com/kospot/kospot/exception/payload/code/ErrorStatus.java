@@ -75,6 +75,7 @@ public enum ErrorStatus implements BaseCode {
     GAME_ROOM_NOT_FOUND(NOT_FOUND, 4301, "게임 방을 찾을 수 없습니다."),
     GAME_ROOM_IS_FULL(BAD_REQUEST, 4302, "정원이 부족합니다."),
     GAME_ROOM_IS_NOT_CORRECT_PASSWORD(BAD_REQUEST, 4303, "틀린 비밀번호 입니다."),
+    GAME_ROOM_IS_ALREADY_IN_PROGRESS(BAD_REQUEST, 4304, "게임이 이미 진행 중입니다."),
     ;
 
     private final HttpStatus httpStatus;
