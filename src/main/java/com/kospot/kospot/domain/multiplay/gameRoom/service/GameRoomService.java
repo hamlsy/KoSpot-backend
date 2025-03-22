@@ -26,11 +26,11 @@ public class GameRoomService {
 
     //todo 동시성 해결
     public void joinGameRoom(Member player, GameRoom gameRoom, GameRoomRequest.Join request) {
-        //validate join
+        //validate join, todo implement validate already in room
         gameRoom.validateJoinRoom(request.getPassword());
+        gameRoom.join(player);
 
-
-
+        //todo websocket 입장 알림 전송
     }
 
 

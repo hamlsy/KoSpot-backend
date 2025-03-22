@@ -2,8 +2,10 @@ package com.kospot.kospot.presentation.multiplay.gameRoom.controller;
 
 
 import com.kospot.kospot.application.multiplay.gameRoom.CreateGameRoomUseCase;
+import com.kospot.kospot.application.multiplay.gameRoom.JoinGameRoomUseCase;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.domain.multiplay.gameRoom.adaptor.GameRoomAdaptor;
+import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import com.kospot.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.kospot.presentation.multiplay.gameRoom.dto.request.GameRoomRequest;
@@ -26,6 +28,7 @@ import java.util.List;
 public class GameRoomController {
 
     private final CreateGameRoomUseCase createGameRoomUseCase;
+    private final JoinGameRoomUseCase joinGameRoomUseCase;
 
     /**
      *  Test
@@ -41,8 +44,10 @@ public class GameRoomController {
     @PostMapping("/{id}")
     public ApiResponseDto<?> joinGameRoom(Member member, @PathVariable("id") Long gameRoomId,
                                           @RequestBody GameRoomRequest.Join request) {
-        return ApiResponseDto.onSuccess();
+        joinGameRoomUseCase.execute(member, gameRoomId, request);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
+
 
 
 }

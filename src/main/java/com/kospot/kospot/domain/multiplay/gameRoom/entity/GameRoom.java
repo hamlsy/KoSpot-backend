@@ -56,11 +56,11 @@ public class GameRoom extends BaseTimeEntity {
     //business
     public void setHost(Member host) {
         this.host = host;
-        joinPlayer(host);
+        join(host);
     }
 
     //todo add general Exception
-    public void joinPlayer(Member gamePlayer) {
+    public void join(Member gamePlayer) {
         if(isFull()){
             throw new IllegalStateException();
         }
@@ -80,6 +80,12 @@ public class GameRoom extends BaseTimeEntity {
         validateRoomCapacity();
         validatePassword(inputPassword);
         validateRoomStatus();
+        validateMemberAlreadyInRoom();
+    }
+
+    //todo implement
+    private void validateMemberAlreadyInRoom() {
+
     }
 
     private void validateRoomCapacity() {
