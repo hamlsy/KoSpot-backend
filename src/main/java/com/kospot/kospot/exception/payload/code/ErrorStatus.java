@@ -70,6 +70,11 @@ public enum ErrorStatus implements BaseCode {
 
     // Notice Error(4291 ~ 4300)
     NOTICE_NOT_FOUND(NOT_FOUND, 4291, "해당 공지사항을 찾을 수 없습니다."),
+
+    // GameRoom Error(4301 ~ 4310)
+    GAME_ROOM_NOT_FOUND(NOT_FOUND, 4301, "게임 방을 찾을 수 없습니다."),
+    GAME_ROOM_IS_FULL(BAD_REQUEST, 4302, "정원이 부족합니다."),
+    GAME_ROOM_IS_NOT_CORRECT_PASSWORD(BAD_REQUEST, 4303, "틀린 비밀번호 입니다."),
     ;
 
     private final HttpStatus httpStatus;

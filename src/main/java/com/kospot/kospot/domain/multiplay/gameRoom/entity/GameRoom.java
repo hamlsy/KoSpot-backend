@@ -5,6 +5,8 @@ import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.kospot.domain.game.entity.GameMode;
 import com.kospot.kospot.domain.game.entity.GameType;
 import com.kospot.kospot.domain.member.entity.Member;
+import com.kospot.kospot.exception.object.domain.GameRoomHandler;
+import com.kospot.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,7 +39,7 @@ public class GameRoom extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private GameType gameType;
 
-    private Integer currentPlayers;
+    private boolean privateRoom;
 
     private int maxPlayers;
     private String password;
@@ -75,6 +77,19 @@ public class GameRoom extends BaseTimeEntity {
         }
     }
 
+    //player
+    public void validateJoin() {
+        if(isFull()) {
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
+        }
+    }
+
+    public void validatePassword(String inputPassword) {
+        if(isNotCorrectPassword(inputPassword)) {
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_NOT_CORRECT_PASSWORD);
+        }
+    }
+
     private boolean isFull() {
         return waitingPlayers.size() >= maxPlayers;
     }
@@ -91,6 +106,15 @@ public class GameRoom extends BaseTimeEntity {
 
     private boolean isNotHost(Member gamePlayer) {
         return !this.host.equals(gamePlayer);
+    }
+
+    //private room
+    public boolean isPublicRoom() {
+        return !privateRoom;
+    }
+
+    public boolean isNotCorrectPassword(String inputPassword) {
+        return !password.equals(inputPassword);
     }
 
 }

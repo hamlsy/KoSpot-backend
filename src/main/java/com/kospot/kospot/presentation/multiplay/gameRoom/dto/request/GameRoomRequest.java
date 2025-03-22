@@ -20,6 +20,7 @@ public class GameRoomRequest {
         private String gameModeKey;
         private String gameTypeKey;
         private int maxPlayers;
+        private boolean privateRoom;
 
         public GameRoom toEntity() {
             return GameRoom.builder()
@@ -29,7 +30,17 @@ public class GameRoomRequest {
                     .gameMode(GameMode.fromKey(gameModeKey))
                     .gameType(GameType.fromKey(gameTypeKey))
                     .status(GameRoomStatus.WAITING)
+                    .privateRoom(privateRoom)
                     .build();
         }
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class Join {
+        private String password;
     }
 }

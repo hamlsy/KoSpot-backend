@@ -7,6 +7,7 @@ import com.kospot.kospot.domain.multiplay.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import com.kospot.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.kospot.presentation.multiplay.gameRoom.dto.request.GameRoomRequest;
+import com.kospot.kospot.presentation.multiplay.gameRoom.dto.response.GameRoomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,10 +33,16 @@ public class GameRoomController {
 
     @Operation(summary = "게임 방 생성", description = "멀티 게임 방을 생성합니다.")
     @PostMapping("/")
-    public ApiResponseDto<?> findItemsByItemType(Member member, @RequestBody GameRoomRequest.Create request) {
+    public ApiResponseDto<GameRoomResponse> createGameRoom(Member member, @RequestBody GameRoomRequest.Create request) {
         return ApiResponseDto.onSuccess(createGameRoomUseCase.execute(member, request));
     }
 
+    @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
+    @PostMapping("/{id}")
+    public ApiResponseDto<?> joinGameRoom(Member member, @PathVariable("id") Long gameRoomId,
+                                          @RequestBody GameRoomRequest.Join request) {
+        return ApiResponseDto.onSuccess();
+    }
 
 
 }
