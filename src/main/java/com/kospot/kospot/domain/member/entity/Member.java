@@ -1,8 +1,7 @@
 package com.kospot.kospot.domain.member.entity;
 
 import com.kospot.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.kospot.domain.gameRank.entity.GameRank;
-import com.kospot.kospot.domain.multiplay.gamePlayer.entity.GamePlayer;
+import com.kospot.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.kospot.exception.object.domain.MemberHandler;
 import com.kospot.kospot.exception.object.domain.PointHandler;
 import com.kospot.kospot.exception.payload.code.ErrorStatus;
@@ -12,8 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 @Getter
 @Entity
