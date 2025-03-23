@@ -17,5 +17,6 @@ public class FindGameRoomResponse {
     private int currentPlayers;
     private String hostNickname;
     private boolean privateRoom;
+    private String gameRoomStatus;
 
 }

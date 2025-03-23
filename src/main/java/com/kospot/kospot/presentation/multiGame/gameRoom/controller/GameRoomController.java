@@ -6,6 +6,7 @@ import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.kospot.exception.payload.dto.ApiResponseDto;
 import com.kospot.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
+import com.kospot.kospot.presentation.multiGame.gameRoom.dto.response.FindGameRoomResponse;
 import com.kospot.kospot.presentation.multiGame.gameRoom.dto.response.GameRoomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Slf4j
@@ -36,7 +39,7 @@ public class GameRoomController {
     //todo search refactoring
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
     @GetMapping("/{page}")
-    public ApiResponseDto<?> findGameRoom(@RequestBody GameRoomRequest.Find request, @PathVariable("page") int page) {
+    public ApiResponseDto<List<FindGameRoomResponse>> findGameRoom(@RequestBody GameRoomRequest.Find request, @PathVariable("page") int page) {
         return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(request, page));
     }
 
