@@ -49,6 +49,22 @@ public class GameRoomRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
+    public static class Update {
+
+        private String title;
+        private String password;
+        private String gameModeKey;
+        private String gameTypeKey;
+        private int maxPlayers;
+        private boolean privateRoom;
+
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
     public static class Join {
         private String password;
     }

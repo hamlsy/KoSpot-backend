@@ -2,7 +2,6 @@ package com.kospot.presentation.multiGame.gameRoom.controller;
 
 
 import com.kospot.application.multiGame.gameRoom.*;
-import com.kospot.kospot.application.multiGame.gameRoom.*;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.exception.payload.dto.ApiResponseDto;
@@ -29,6 +28,7 @@ public class GameRoomController {
 
     private final FindAllGameRoomUseCase findAllGameRoomUseCase;
     private final CreateGameRoomUseCase createGameRoomUseCase;
+    private final UpdateGameRoomUseCase updateGameRoomUseCase;
     private final JoinGameRoomUseCase joinGameRoomUseCase;
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
     private final KickPlayerUseCase kickPlayerUseCase;
@@ -44,8 +44,6 @@ public class GameRoomController {
         return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(request, page));
     }
 
-    //todo 방 새로고침
-
     //todo 게임 방 내부 조회(입장), 실시간 플레이어들 상태(입장, 퇴장) <- websocket 고려
 
 
@@ -53,6 +51,12 @@ public class GameRoomController {
     @PostMapping("/")
     public ApiResponseDto<GameRoomResponse> createGameRoom(Member member, @RequestBody GameRoomRequest.Create request) {
         return ApiResponseDto.onSuccess(createGameRoomUseCase.execute(member, request));
+    }
+
+    @Operation(summary = "게임 방 수정", description = "멀티 게임 방을 수정합니다.")
+    @PutMapping("/{id}")
+    public ApiResponseDto<GameRoomResponse> updateGameRoom(Member member, @RequestBody GameRoomRequest.Update request, @PathVariable("id") Long gameRoomId) {
+        return ApiResponseDto.onSuccess(updateGameRoomUseCase.execute(member, request, gameRoomId));
     }
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")

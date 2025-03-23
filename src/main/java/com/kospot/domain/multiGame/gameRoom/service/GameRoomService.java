@@ -1,5 +1,7 @@
 package com.kospot.domain.multiGame.gameRoom.service;
 
+import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
@@ -22,6 +24,13 @@ public class GameRoomService {
         gameRoom.setHost(host);
 
         return gameRoomRepository.save(gameRoom);
+    }
+
+    public GameRoom updateGameRoom(Member host, GameRoomRequest.Update request, GameRoom gameRoom) {
+        gameRoom.validateHost(host);
+        gameRoom.update(request.getTitle(), GameMode.fromKey(request.getGameModeKey()), GameType.fromKey(request.getGameTypeKey()),
+                request.isPrivateRoom(), request.getMaxPlayers(), request.getPassword());
+        return gameRoom;
     }
 
     //todo 동시성 해결
