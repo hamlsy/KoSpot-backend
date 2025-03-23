@@ -49,6 +49,7 @@ public class GameRoom extends BaseTimeEntity {
     @JoinColumn(name = "host_id")
     private Member host; //방장
 
+    @OneToMany(mappedBy = "game_room")
     private Set<Member> waitingPlayers = new HashSet<>();
 
 
@@ -58,17 +59,17 @@ public class GameRoom extends BaseTimeEntity {
         join(host);
     }
 
-    //todo add general Exception
-    public void join(Member gamePlayer) {
-        if(isFull()){
-            throw new IllegalStateException();
-        }
-        waitingPlayers.add(gamePlayer);
+    public void join(Member player) {
+        waitingPlayers.add(player);
     }
 
-    //todo
-    public void leaveRoom(Member gamePlayer) {
-        waitingPlayers.remove(gamePlayer);
+    public void leaveRoom(Member player) {
+        waitingPlayers.remove(player);
+    }
+
+    public void kickPlayer(Member host, Member player) {
+        validateHost(host);
+        leaveRoom(player);
     }
 
     //player
@@ -85,19 +86,19 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     private void validateRoomCapacity() {
-        if(isFull()) {
+        if (isFull()) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
         }
     }
 
     public void validatePassword(String inputPassword) {
-        if(isNotCorrectPassword(inputPassword)) {
+        if (isNotCorrectPassword(inputPassword)) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_NOT_CORRECT_PASSWORD);
         }
     }
 
     private void validateRoomStatus() {
-        if(isNotWaitingRoom()){
+        if (isNotWaitingRoom()) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_ALREADY_IN_PROGRESS);
         }
     }
@@ -111,8 +112,8 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     public void validateHost(Member gamePlayer) {
-        if(isNotHost(gamePlayer)) {
-            throw new IllegalStateException();
+        if (isNotHost(gamePlayer)) {
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_HOST_PRIVILEGES_REQUIRED);
         }
     }
 

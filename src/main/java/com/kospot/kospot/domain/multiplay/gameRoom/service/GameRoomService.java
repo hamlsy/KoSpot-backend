@@ -37,7 +37,7 @@ public class GameRoomService {
         //플레이어가 나간 경우
         gameRoom.leaveRoom(player);
 
-        // 방장이 나간 경우 또는 남은 플레이어가 없는 경우
+        //방장이 나간 경우 또는 남은 플레이어가 없는 경우
         if (gameRoom.isHost(player) || gameRoom.isRoomEmpty()) {
             deleteRoom(gameRoom);
         }
@@ -48,5 +48,9 @@ public class GameRoomService {
         gameRoomRepository.delete(gameRoom);
     }
 
-    //todo kick
+    public void kickPlayer(Member host, Member targetPlayer, GameRoom gameRoom) {
+        gameRoom.kickPlayer(host, targetPlayer);
+    }
+
+
 }

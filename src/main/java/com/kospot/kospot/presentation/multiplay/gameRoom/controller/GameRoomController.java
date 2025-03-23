@@ -3,6 +3,7 @@ package com.kospot.kospot.presentation.multiplay.gameRoom.controller;
 
 import com.kospot.kospot.application.multiplay.gameRoom.CreateGameRoomUseCase;
 import com.kospot.kospot.application.multiplay.gameRoom.JoinGameRoomUseCase;
+import com.kospot.kospot.application.multiplay.gameRoom.KickPlayerUseCase;
 import com.kospot.kospot.application.multiplay.gameRoom.LeaveGameRoomUseCase;
 import com.kospot.kospot.domain.member.entity.Member;
 import com.kospot.kospot.exception.payload.code.SuccessStatus;
@@ -28,6 +29,7 @@ public class GameRoomController {
     private final CreateGameRoomUseCase createGameRoomUseCase;
     private final JoinGameRoomUseCase joinGameRoomUseCase;
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
+    private final KickPlayerUseCase kickPlayerUseCase;
 
     /**
      * Test
@@ -40,7 +42,7 @@ public class GameRoomController {
     }
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/join")
     public ApiResponseDto<?> joinGameRoom(Member member, @PathVariable("id") Long gameRoomId,
                                           @RequestBody GameRoomRequest.Join request) {
         joinGameRoomUseCase.execute(member, gameRoomId, request);
@@ -48,9 +50,16 @@ public class GameRoomController {
     }
 
     @Operation(summary = "게임 방 퇴장", description = "게임 방에서 퇴장합니다.")
-    @GetMapping("/{id}")
+    @PostMapping("/{id}/leave")
     public ApiResponseDto<?> leaveGameRoom(Member member, @PathVariable("id") Long gameRoomId) {
         leaveGameRoomUseCase.execute(member, gameRoomId);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
+
+    @Operation(summary = "게임 방 강퇴", description = "게임 방에서 강퇴시킵니다.")
+    @PostMapping("/{id}/kick")
+    public ApiResponseDto<?> kickPlayer(Member member, @RequestBody GameRoomRequest.Kick request,@PathVariable("id") Long gameRoomId) {
+        kickPlayerUseCase.execute(member, request, gameRoomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

@@ -23,4 +23,10 @@ public class GameRoomAdaptor {
         );
     }
 
+    public GameRoom queryByIdFetchPlayers(Long id) {
+        return repository.findByIdFetchPlayers(id).orElseThrow(
+                () -> new GameRoomHandler(ErrorStatus.GAME_ROOM_NOT_FOUND)
+        );
+    }
+
 }

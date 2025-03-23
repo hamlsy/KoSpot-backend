@@ -33,7 +33,7 @@ public class MemberItemController {
 
     //todo refactoring
     @Operation(summary = "아이템 구매", description = "상점에서 아이템을 구매합니다.")
-    @GetMapping("/purchase/{itemId}")
+    @GetMapping("/{itemId}/purchase")
     public ApiResponseDto<?> purchaseItem(Member member, @PathVariable("itemId") Long itemId) {
         purchaseItemUseCase.execute(member, itemId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);

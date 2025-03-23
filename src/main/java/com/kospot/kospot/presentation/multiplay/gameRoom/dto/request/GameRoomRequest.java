@@ -43,4 +43,13 @@ public class GameRoomRequest {
     public static class Join {
         private String password;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class Kick {
+        private Long targetPlayerId;
+    }
 }

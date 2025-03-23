@@ -19,7 +19,7 @@ public class LeaveGameRoomUseCase {
     private final GameRoomService gameRoomService;
 
     public void execute(Member player, Long gameRoomId) {
-        GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
+        GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchPlayers(gameRoomId);
         gameRoomService.leaveGameRoom(player, gameRoom);
     }
 
