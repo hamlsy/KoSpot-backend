@@ -1,7 +1,6 @@
 package com.kospot.presentation.item.controller;
 
 import com.kospot.application.item.*;
-import com.kospot.kospot.application.item.*;
 import com.kospot.domain.image.service.ImageService;
 import com.kospot.domain.item.entity.Item;
 import com.kospot.presentation.item.dto.request.ItemRequest;

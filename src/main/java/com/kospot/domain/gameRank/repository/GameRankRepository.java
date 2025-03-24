@@ -10,10 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface GameRankRepository extends JpaRepository<GameRank, Long> {
 
     @Query("select r from GameRank r join fetch r.member where r.member = :member " +
-            "and r.gameType = :gameType")
-    GameRank findByMemberAndGameType(@Param("member") Member member, @Param("gameType") GameMode gameMode);
+            "and r.gameMode = :gameMode")
+    GameRank findByMemberAndGameMode(@Param("member") Member member, @Param("gameMode") GameMode gameMode);
 
-    @Query("select r from GameRank r join fetch r.member where r.member.id = :memberId " +
-            "and r.gameType = :gameType")
-    GameRank findByMemberIdAndGameType(@Param("memberId") Long memberId, @Param("gameType") GameMode gameMode);
 }

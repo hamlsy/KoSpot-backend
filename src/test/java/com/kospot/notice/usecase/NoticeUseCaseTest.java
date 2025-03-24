@@ -1,7 +1,6 @@
 package com.kospot.notice.usecase;
 
 import com.kospot.application.notice.*;
-import com.kospot.kospot.application.notice.*;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.Role;
 import com.kospot.domain.member.repository.MemberRepository;

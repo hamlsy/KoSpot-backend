@@ -25,7 +25,7 @@ public class StartRoadViewRankUseCase {
 
     public StartGameResponse.RoadView execute(Member member){
         RoadViewGame game = roadViewGameService.startRankGame(member);
-        GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameMode.ROADVIEW);
+        GameRank gameRank = gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.ROADVIEW);
         gameRankService.applyPenaltyForAbandon(gameRank);
 
         return getEncryptedRoadViewGameResponse(game);

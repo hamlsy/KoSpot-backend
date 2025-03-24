@@ -2,7 +2,6 @@ package com.kospot.domain.coordinate.entity.converter;
 
 import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.entity.coordinates.*;
-import com.kospot.kospot.domain.coordinate.entity.coordinates.*;
 import com.kospot.exception.object.domain.CoordinateHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
 

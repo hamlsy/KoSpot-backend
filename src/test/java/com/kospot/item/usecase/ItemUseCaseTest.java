@@ -1,7 +1,6 @@
 package com.kospot.item.usecase;
 
 import com.kospot.application.item.*;
-import com.kospot.kospot.application.item.*;
 import com.kospot.domain.item.adaptor.ItemAdaptor;
 import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.item.entity.ItemType;

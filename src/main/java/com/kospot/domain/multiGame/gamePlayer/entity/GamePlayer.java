@@ -37,12 +37,11 @@ public class GamePlayer {
 
     //todo marker image, chatMessage
     //todo 연관관계, 아이템 여러개?
-    private Item equippedMarker;
+//    private Item equippedMarker;
 
     //business
     public void leaveGameRoom(Member member) {
         if (gameRoom != null) {
-            gameRoom.playerLeave(member);
             this.gameRoom = null;
         }
         this.status = GamePlayerStatus.NONE;

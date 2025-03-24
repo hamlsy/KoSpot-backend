@@ -50,7 +50,7 @@ public class GameRoom extends BaseTimeEntity {
     @JoinColumn(name = "host_id")
     private Member host; //방장
 
-    @OneToMany(mappedBy = "game_room")
+    @OneToMany
     private Set<Member> waitingPlayers = new HashSet<>();
 
 

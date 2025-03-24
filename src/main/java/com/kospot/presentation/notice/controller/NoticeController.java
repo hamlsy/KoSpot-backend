@@ -1,7 +1,6 @@
 package com.kospot.presentation.notice.controller;
 
 import com.kospot.application.notice.*;
-import com.kospot.kospot.application.notice.*;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.exception.payload.dto.ApiResponseDto;

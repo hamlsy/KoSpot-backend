@@ -2,6 +2,7 @@ package com.kospot.domain.member.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
+import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.exception.object.domain.MemberHandler;
 import com.kospot.exception.object.domain.PointHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
@@ -39,6 +40,10 @@ public class Member extends BaseTimeEntity {
 
     @OneToOne(mappedBy = "member")
     private GamePlayer gamePlayer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_room_id")
+    private GameRoom gameRoom;
 
     //business
 

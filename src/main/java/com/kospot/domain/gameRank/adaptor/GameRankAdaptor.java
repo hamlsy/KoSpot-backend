@@ -13,8 +13,8 @@ public class GameRankAdaptor {
 
     private final GameRankRepository repository;
 
-    public GameRank queryByMemberAndGameType(Member member, GameMode gameMode) {
-        return repository.findByMemberAndGameType(member, gameMode);
+    public GameRank queryByMemberAndGameMode(Member member, GameMode gameMode) {
+        return repository.findByMemberAndGameMode(member, gameMode);
     }
 
 }

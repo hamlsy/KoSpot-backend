@@ -26,7 +26,7 @@ public class EndRoadViewRankUseCase {
     private final ApplicationEventPublisher eventPublisher;
 
     public EndGameResponse.RoadViewRank execute(Member member, EndGameRequest.RoadView request) {
-        GameRank gameRank = gameRankAdaptor.queryByMemberAndGameType(member, GameMode.ROADVIEW);
+        GameRank gameRank = gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.ROADVIEW);
         RoadViewGame game = roadViewGameService.endGame(member, request);
 
         int currentRatingScore = gameRank.getRatingScore();
