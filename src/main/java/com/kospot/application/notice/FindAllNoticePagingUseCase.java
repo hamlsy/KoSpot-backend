@@ -21,11 +21,13 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class FindAllNoticePagingUseCase {
 
-    private final static int SIZE = 10;
     private final NoticeAdaptor noticeAdaptor;
 
+    private static final int SIZE = 10;
+    private static final String SORT_PROPERTIES = "createdDate";
+
     public List<NoticeResponse.Summary> execute(int page) {
-        Pageable pageable = PageRequest.of(page, SIZE, Sort.Direction.DESC, "createdDate");
+        Pageable pageable = PageRequest.of(page, SIZE, Sort.Direction.DESC, SORT_PROPERTIES);
         Page<Notice> notices = noticeAdaptor.findAllPaging(pageable);
         return notices.stream().map(NoticeResponse.Summary::from)
                 .collect(Collectors.toList());

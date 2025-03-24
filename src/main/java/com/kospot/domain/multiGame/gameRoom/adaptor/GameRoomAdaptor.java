@@ -33,7 +33,7 @@ public class GameRoomAdaptor {
         );
     }
 
-    public List<FindGameRoomResponse> queryAllByKeyword(String keyword, Pageable pageable) {
+    public List<GameRoom> queryAllByKeyword(String keyword, Pageable pageable) {
         return repository.findAllByKeywordPaging(keyword, pageable);
     }
 

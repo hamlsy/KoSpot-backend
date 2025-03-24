@@ -1,6 +1,7 @@
 package com.kospot.domain.game.entity;
 
 import com.kospot.exception.object.domain.CoordinateHandler;
+import com.kospot.exception.object.domain.GameHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,6 @@ public enum GameMode {
         return Arrays.stream(GameMode.values())
                 .filter(s -> s.name().equalsIgnoreCase(key))
                 .findFirst()
-                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.GAME_TYPE_NOT_FOUND));
+                .orElseThrow(() -> new GameHandler(ErrorStatus.GAME_TYPE_NOT_FOUND));
     }
 }

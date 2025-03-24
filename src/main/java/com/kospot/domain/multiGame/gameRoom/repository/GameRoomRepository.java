@@ -16,12 +16,7 @@ public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
     Optional<GameRoom> findByIdFetchPlayers(@Param("id") Long id);
 
     //todo search refactoring
-    //todo paging
-    //todo enum
-    @Query("select new com.kospot.presentation.multiGame.dto.response.FindGameRoomResponse(" +
-            "gr.id, gr.title, gr.gameMode, gr.gameType, gr.maxPlayers, COUNT(gr.waitingPlayers), " +
-            "h.nickname, gr.privateRoom, gr.gameRoomStatus) " +
-            "from GameRoom gr left join gr.host h where gr.title like %:keyword:% ")
-    List<FindGameRoomResponse> findAllByKeywordPaging(@Param("keyword") String keyword, Pageable pageable);
+    @Query("select gr from GameRoom gr join fetch gr.host h where gr.title like CONCAT('%', :keyword, '%') ")
+    List<GameRoom> findAllByKeywordPaging(@Param("keyword") String keyword, Pageable pageable);
 
 }

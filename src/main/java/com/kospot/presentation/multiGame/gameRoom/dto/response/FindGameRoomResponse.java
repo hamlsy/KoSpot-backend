@@ -1,5 +1,6 @@
 package com.kospot.presentation.multiGame.gameRoom.dto.response;
 
+import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import lombok.*;
 
 @Data
@@ -18,5 +19,19 @@ public class FindGameRoomResponse {
     private String hostNickname;
     private boolean privateRoom;
     private String gameRoomStatus;
+
+    public static FindGameRoomResponse from(GameRoom gameRoom) {
+        return FindGameRoomResponse.builder()
+                .gameRoomId(gameRoom.getId())
+                .title(gameRoom.getTitle())
+                .gameMode(gameRoom.getGameMode().name())
+                .gameType(gameRoom.getGameType().name())
+                .maxPlayers(gameRoom.getMaxPlayers())
+                .currentPlayers(gameRoom.getWaitingPlayers().size()) //todo refactoring
+                .hostNickname(gameRoom.getHost().getNickname())
+                .privateRoom(gameRoom.isPrivateRoom())
+                .gameRoomStatus(gameRoom.getStatus().name())
+                .build();
+    }
 
 }
