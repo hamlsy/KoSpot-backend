@@ -14,6 +14,7 @@ import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
 import com.kospot.domain.multiGame.gameRoom.service.GameRoomService;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -201,6 +202,7 @@ public class GameRoomUseCaseTest {
         //then
         assertThrows(Exception.class, ()-> gameRoomRepository.findById(gameRoom.getId()).orElseThrow());
         players.forEach(player -> assertNull(player.getGameRoom()));
+        players.forEach(Assertions::assertNotNull);
         assertNotNull(member);
 
     }
