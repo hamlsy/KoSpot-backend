@@ -8,6 +8,9 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.exception.object.domain.GameRoomHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -36,8 +39,11 @@ public class GameRoom extends BaseTimeEntity {
 
     private boolean privateRoom;
 
+    @Min(2)
+    @Max(4)
     private int maxPlayers;
 
+    @Size(min = 2, max = 10)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -50,7 +56,6 @@ public class GameRoom extends BaseTimeEntity {
     @Builder.Default
     @OneToMany(mappedBy = "gameRoom")
     private Set<Member> waitingPlayers = new HashSet<>();
-
 
 
     //business
@@ -91,7 +96,7 @@ public class GameRoom extends BaseTimeEntity {
     //player
     public void validateJoinRoom(String inputPassword) {
         validateRoomCapacity();
-        if(privateRoom) {
+        if (privateRoom) {
             validatePassword(inputPassword);
         }
         validateRoomStatus();

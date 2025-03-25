@@ -260,4 +260,26 @@ public class GameRoomUseCaseTest {
 
     //todo 비밀번호 체크 테스트
 
+    // 1. 방 참여 테스트
+    // 2. 인원 꽉 찼을 때 참여 테스트
+    // 3. 비밀번호 방 테스트
+    // 4. 비밀번호 없는 방에 비밀번호 입력했을 때 테스트
+    // 5. 이미 방에 참여한 플레이어가 다른 방에 다시 참여할 때 테스트
+
+    private GameRoom getTestPriviateGameRoom() {
+        return GameRoom.builder()
+                .title("title")
+                .host(member)
+                .gameMode(GameMode.ROADVIEW)
+                .gameType(GameType.COOPERATIVE)
+                .privateRoom(true)
+                .password("111")
+                .status(GameRoomStatus.WAITING)
+                .maxPlayers(4)
+                .build();
+    }
+
+
+
+
 }
