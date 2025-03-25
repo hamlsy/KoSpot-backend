@@ -19,8 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
@@ -61,17 +64,17 @@ public class GameRoomUseCaseTest {
     @BeforeEach
     void setUp() {
         member = Member.builder()
-                        .username("member1")
-                        .nickname("member1")
-                        .role(Role.USER)
-                        .build();
+                .username("member1")
+                .nickname("member1")
+                .role(Role.USER)
+                .build();
 
 
         adminMember = Member.builder()
-                        .username("admin1")
-                        .nickname("admin1")
-                        .role(Role.ADMIN)
-                        .build();
+                .username("admin1")
+                .nickname("admin1")
+                .role(Role.ADMIN)
+                .build();
 
         memberRepository.save(member);
         memberRepository.save(adminMember);
@@ -129,4 +132,62 @@ public class GameRoomUseCaseTest {
 
     }
 
+    @DisplayName("방에 들어와 있지 않은 플레이어가 나가려는 경우를 테스트합니다.")
+    @Test
+    void leaveGameRoom_WhenPlayerNotInRoom_Test() {
+        //given
+
+
+        //when
+
+        Member anotherPlayer = memberRepository.save(
+                Member.builder()
+                        .username("another")
+                        .nickname("another")
+                        .role(Role.USER)
+                        .build()
+        );
+        assertThrows(Exception.class, () -> leaveGameRoomUseCase.execute(anotherPlayer, gameRoom.getId()));
+
+
+        //then
+    }
+
+    @DisplayName("호스트가 방을 나가는 경우를 테스트합니다.")
+    @Test
+    void leaveGameRoom_WhenHostLeaves_Test() {
+        //given
+        //player 3, host 1
+        List<Member> players = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Member player = Member.builder()
+                    .username("player" + (i + 1))
+                    .nickname("player" + (i + 1))
+                    .role(Role.USER)
+                    .build();
+            players.add(player);
+        }
+        memberRepository.saveAll(players);
+
+        //gameRoom, host
+        GameRoom gameRoom = gameRoomRepository.save(
+                GameRoom.builder()
+                        .title("title")
+                        .host(member)
+                        .gameMode(GameMode.ROADVIEW)
+                        .gameType(GameType.COOPERATIVE)
+                        .waitingPlayers((Set<Member>) players)
+                        .maxPlayers(4)
+                        .build()
+        );
+
+        //when
+        leaveGameRoomUseCase.execute(member, gameRoom.getId());
+    }
+
+    @DisplayName("일반 플레이어가 방을 나가는 경우 남은 인원을 조회하는 테스트입니다.")
+    @Test
+    void leaveGameRoom_WhenRegularPlayerLeaves_CheckRemainingPlayers_Test() {
+        // 테스트 코드 작성
+    }
 }
