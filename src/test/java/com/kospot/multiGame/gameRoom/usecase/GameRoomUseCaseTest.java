@@ -1,6 +1,8 @@
 package com.kospot.multiGame.gameRoom.usecase;
 
 import com.kospot.application.multiGame.gameRoom.*;
+import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.Role;
 import com.kospot.domain.member.repository.MemberRepository;
@@ -18,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @Slf4j
 @SpringBootTest
@@ -91,6 +94,39 @@ public class GameRoomUseCaseTest {
         GameRoom gameRoom = gameRoomRepository.findById(1L).orElseThrow();
         assertEquals(request.getTitle(), gameRoom.getTitle());
 //        assertEquals("member1", gameRoom.getHost().getUsername());
+    }
+
+
+    @DisplayName("멀티게임 방 수정을 테스트합니다.")
+    @Test
+    void updateGameRoomUseCaseTest() {
+        //given
+        GameRoom gameRoom = gameRoomRepository.save(
+                GameRoom.builder()
+                        .title("title")
+                        .host(member)
+                        .gameMode(GameMode.ROADVIEW)
+                        .gameType(GameType.COOPERATIVE)
+                        .maxPlayers(4)
+                        .build()
+        );
+
+        GameRoomRequest.Update request = GameRoomRequest.Update.builder()
+                .title("title1")
+                .gameModeKey("roadview")
+                .gameTypeKey("individual")
+                .maxPlayers(4)
+                .build();
+
+        //when
+        updateGameRoomUseCase.execute(member, request, gameRoom.getId());
+
+        //then
+        GameRoom updatedGameRoom = gameRoomRepository.findByIdFetchHost(gameRoom.getId()).orElseThrow();
+        assertEquals(request.getTitle(), updatedGameRoom.getTitle());
+        assertEquals(GameType.INDIVIDUAL, updatedGameRoom.getGameType());
+        assertEquals(member.getUsername(), updatedGameRoom.getHost().getUsername());
+
     }
 
 }

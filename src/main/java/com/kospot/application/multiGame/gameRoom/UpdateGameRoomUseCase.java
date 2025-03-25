@@ -21,7 +21,7 @@ public class UpdateGameRoomUseCase {
     private final GameRoomService gameRoomService;
 
     public GameRoomResponse execute(Member host, GameRoomRequest.Update request, Long gameRoomId) {
-        GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
+        GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
         return GameRoomResponse.from(gameRoomService.updateGameRoom(host, request, gameRoom));
     }
 
