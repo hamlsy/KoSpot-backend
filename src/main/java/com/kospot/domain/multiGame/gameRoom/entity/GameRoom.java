@@ -52,7 +52,13 @@ public class GameRoom extends BaseTimeEntity {
     private Set<Member> waitingPlayers = new HashSet<>();
 
 
+
     //business
+    @PreRemove
+    private void preRemove() {
+        waitingPlayers.forEach(Member::leaveGameRoom);
+    }
+
     public void setHost(Member host) {
         this.host = host;
     }

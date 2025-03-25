@@ -176,6 +176,7 @@ public class GameRoomUseCaseTest {
 
     @DisplayName("호스트가 방을 나가는 경우를 테스트합니다.")
     @Test
+    @Transactional
     void leaveGameRoom_WhenHostLeaves_Test() {
         //given
         //player 3, host 1
@@ -191,21 +192,16 @@ public class GameRoomUseCaseTest {
         memberRepository.saveAll(players);
 
         //gameRoom, host
-        GameRoom gameRoom = gameRoomRepository.save(
-                GameRoom.builder()
-                        .title("title")
-                        .host(member)
-                        .gameMode(GameMode.ROADVIEW)
-                        .gameType(GameType.COOPERATIVE)
-                        .waitingPlayers((Set<Member>) players)
-                        .maxPlayers(4)
-                        .build()
-        );
+        GameRoom gameRoom = gameRoomRepository.save(getTestGameRoom());
+        players.forEach(gameRoom::join);
 
         //when
         leaveGameRoomUseCase.execute(member, gameRoom.getId());
 
         //then
+        assertThrows(Exception.class, ()-> gameRoomRepository.findById(gameRoom.getId()).orElseThrow());
+        players.forEach(player -> assertNull(player.getGameRoom()));
+        assertNotNull(member);
 
     }
 
