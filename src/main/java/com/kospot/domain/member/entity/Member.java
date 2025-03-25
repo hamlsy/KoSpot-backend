@@ -3,6 +3,7 @@ package com.kospot.domain.member.entity;
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
 import com.kospot.exception.object.domain.MemberHandler;
 import com.kospot.exception.object.domain.PointHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
@@ -62,6 +63,15 @@ public class Member extends BaseTimeEntity {
         this.point -= amount;
     }
 
+    //game room
+    public void joinGameRoom(GameRoom gameRoom) {
+        this.gameRoom = gameRoom;
+    }
+
+    public void leaveGameRoom() {
+        this.gameRoom = null;
+    }
+
     //validate
     public void validateAdmin() {
         if (isNotAdmin()) {
@@ -72,4 +82,5 @@ public class Member extends BaseTimeEntity {
     private boolean isNotAdmin() {
         return this.role != Role.ADMIN;
     }
+
 }

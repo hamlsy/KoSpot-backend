@@ -8,10 +8,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.exception.object.domain.GameRoomHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
@@ -50,7 +47,8 @@ public class GameRoom extends BaseTimeEntity {
     @JoinColumn(name = "host_id")
     private Member host; //방장
 
-    @OneToMany
+    @Builder.Default
+    @OneToMany(mappedBy = "gameRoom")
     private Set<Member> waitingPlayers = new HashSet<>();
 
 
@@ -71,10 +69,12 @@ public class GameRoom extends BaseTimeEntity {
 
     public void join(Member player) {
         waitingPlayers.add(player);
+        player.joinGameRoom(this);
     }
 
     public void leaveRoom(Member player) {
         waitingPlayers.remove(player);
+        player.leaveGameRoom();
     }
 
     public void kickPlayer(Member host, Member player) {
@@ -85,7 +85,9 @@ public class GameRoom extends BaseTimeEntity {
     //player
     public void validateJoinRoom(String inputPassword) {
         validateRoomCapacity();
-        validatePassword(inputPassword);
+        if(privateRoom) {
+            validatePassword(inputPassword);
+        }
         validateRoomStatus();
         validateMemberAlreadyInRoom();
     }

@@ -3,11 +3,15 @@ package com.kospot.multiGame.gameRoom.usecase;
 import com.kospot.application.multiGame.gameRoom.*;
 import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.game.entity.GameType;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.Role;
 import com.kospot.domain.member.repository.MemberRepository;
+import com.kospot.domain.multiGame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multiGame.gameRoom.entity.GameRoomStatus;
 import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
+import com.kospot.domain.multiGame.gameRoom.service.GameRoomService;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,12 +54,22 @@ public class GameRoomUseCaseTest {
     @Autowired
     private LeaveGameRoomUseCase leaveGameRoomUseCase;
 
-    //repository
+    //repository, adaptor
     @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
     private GameRoomRepository gameRoomRepository;
+
+    @Autowired
+    private MemberAdaptor memberAdaptor;
+
+    @Autowired
+    private GameRoomAdaptor gameRoomAdaptor;
+
+    //service
+    @Autowired
+    private GameRoomService gameRoomService;
 
 
     private Member member;
@@ -197,15 +211,55 @@ public class GameRoomUseCaseTest {
 
     @DisplayName("일반 플레이어가 방을 나가는 경우 남은 인원을 조회하는 테스트입니다.")
     @Test
+    @Transactional
     void leaveGameRoom_WhenRegularPlayerLeaves_CheckRemainingPlayers_Test() {
         //given
+        //player 3, host 1
+        List<Member> players = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Member player = Member.builder()
+                    .username("player" + (i + 1))
+                    .nickname("player" + (i + 1))
+                    .role(Role.USER)
+                    .build();
+            players.add(player);
+        }
+        memberRepository.saveAll(players);
 
+        //gameRoom, host
+        GameRoom gameRoom = gameRoomRepository.save(getTestGameRoom());
+        GameRoomRequest.Join request = GameRoomRequest.Join.builder()
+                .password(null)
+                .build();
+
+        gameRoomService.joinGameRoom(players.get(0), gameRoom, request);
+        gameRoomService.joinGameRoom(players.get(1), gameRoom, request);
+        gameRoomService.joinGameRoom(players.get(2), gameRoom, request);
 
         //when
-
+        Member player1 = memberRepository.findById(3L).orElseThrow();
+        leaveGameRoomUseCase.execute(player1, gameRoom.getId());
 
         //then
-
-
+        GameRoom updatedGameRoom = gameRoomAdaptor.queryByIdFetchPlayers(gameRoom.getId());
+        assertEquals(2, updatedGameRoom.getWaitingPlayers().size());
+        assertNull(player1.getGameRoom());
     }
+
+
+    private GameRoom getTestGameRoom() {
+        return GameRoom.builder()
+                .title("title")
+                .host(member)
+                .gameMode(GameMode.ROADVIEW)
+                .gameType(GameType.COOPERATIVE)
+                .privateRoom(false)
+                .status(GameRoomStatus.WAITING)
+                .maxPlayers(4)
+                .build();
+    }
+
+
+    //todo 비밀번호 체크 테스트
+
 }
