@@ -136,10 +136,18 @@ public class GameRoomUseCaseTest {
     @Test
     void leaveGameRoom_WhenPlayerNotInRoom_Test() {
         //given
-
+        //gameRoom, host
+        GameRoom gameRoom = gameRoomRepository.save(
+                GameRoom.builder()
+                        .title("title")
+                        .host(member)
+                        .gameMode(GameMode.ROADVIEW)
+                        .gameType(GameType.COOPERATIVE)
+                        .maxPlayers(4)
+                        .build()
+        );
 
         //when
-
         Member anotherPlayer = memberRepository.save(
                 Member.builder()
                         .username("another")
@@ -147,10 +155,9 @@ public class GameRoomUseCaseTest {
                         .role(Role.USER)
                         .build()
         );
-        assertThrows(Exception.class, () -> leaveGameRoomUseCase.execute(anotherPlayer, gameRoom.getId()));
-
 
         //then
+        assertDoesNotThrow(() -> leaveGameRoomUseCase.execute(anotherPlayer, gameRoom.getId()));
     }
 
     @DisplayName("호스트가 방을 나가는 경우를 테스트합니다.")
@@ -183,11 +190,22 @@ public class GameRoomUseCaseTest {
 
         //when
         leaveGameRoomUseCase.execute(member, gameRoom.getId());
+
+        //then
+
     }
 
     @DisplayName("일반 플레이어가 방을 나가는 경우 남은 인원을 조회하는 테스트입니다.")
     @Test
     void leaveGameRoom_WhenRegularPlayerLeaves_CheckRemainingPlayers_Test() {
-        // 테스트 코드 작성
+        //given
+
+
+        //when
+
+
+        //then
+
+
     }
 }
