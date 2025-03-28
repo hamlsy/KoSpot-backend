@@ -257,7 +257,6 @@ public class GameRoomUseCaseTest {
                 .build();
     }
 
-    // 3. 비밀번호 방 테스트
     // 4. 비밀번호 없는 방에 비밀번호 입력했을 때 테스트
     // 5. 이미 방에 참여한 플레이어가 다른 방에 다시 참여할 때 테스트
 
@@ -332,6 +331,25 @@ public class GameRoomUseCaseTest {
         //then
         GameRoom updatedGameRoom = gameRoomAdaptor.queryByIdFetchPlayers(gameRoom.getId());
         assertEquals(2, updatedGameRoom.getTotalPlayers());
+    }
+
+    @DisplayName("비밀번호 없는 방에 비밀번호를 입력했을 경우를 테스트합니다.")
+    @Test
+    @Transactional
+    void joinGameRoomUseCase_WhenNoPasswordRoom_Test() {
+        //given
+        GameRoom gameRoom = gameRoomRepository.save(getTestGameRoom());
+        Member member1 = createMember("member3");
+        GameRoomRequest.Join request = GameRoomRequest.Join.builder()
+                .password("111")
+                .build();
+
+        //when
+        assertDoesNotThrow(() -> joinGameRoomUseCase.execute(member1, gameRoom.getId(), request));
+
+        //then
+        assertNotNull(member1.getGameRoom());
+        assertEquals(2, gameRoom.getTotalPlayers());
     }
 
     private Member createMember(String username){
