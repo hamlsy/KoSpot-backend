@@ -43,7 +43,7 @@ public class GameRoom extends BaseTimeEntity {
     @Max(4)
     private int maxPlayers;
 
-    @Size(min = 2, max = 10)
+    @Size(min = 2, max = 10) //todo 공백, 특수문자 안됨
     private String password;
 
     @Enumerated(EnumType.STRING)
