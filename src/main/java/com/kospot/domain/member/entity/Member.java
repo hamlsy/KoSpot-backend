@@ -43,7 +43,7 @@ public class Member extends BaseTimeEntity {
     private GamePlayer gamePlayer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_room_id")
+    @JoinColumn(name = "game_room")
     private GameRoom gameRoom;
 
     //business

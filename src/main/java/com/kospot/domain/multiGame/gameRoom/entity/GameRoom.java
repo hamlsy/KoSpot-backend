@@ -54,7 +54,7 @@ public class GameRoom extends BaseTimeEntity {
     private Member host; //방장
 
     @Builder.Default
-    @OneToMany(mappedBy = "gameRoom")
+    @OneToMany(mappedBy = "gameRoom", fetch = FetchType.LAZY)
     private Set<Member> waitingPlayers = new HashSet<>();
 
 
@@ -105,7 +105,9 @@ public class GameRoom extends BaseTimeEntity {
 
     //todo implement
     private void validateMemberAlreadyInRoom() {
-
+//        if (isAlreadyInRoom(targetPlayer)) {
+//            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_MEMBER_ALREADY_IN_ROOM);
+//        }
     }
 
     private void validateRoomCapacity() {
