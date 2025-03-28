@@ -136,7 +136,7 @@ public class GameRoom extends BaseTimeEntity {
         return getTotalPlayers() >= maxPlayers;
     }
 
-    private int getTotalPlayers() {
+    public int getTotalPlayers() {
         return waitingPlayers.size() + 1;
     }
 
