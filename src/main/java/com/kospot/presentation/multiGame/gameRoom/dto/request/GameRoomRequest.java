@@ -56,7 +56,6 @@ public class GameRoomRequest {
         private String password;
         private String gameModeKey;
         private String gameTypeKey;
-        private int maxPlayers;
         private boolean privateRoom;
 
     }

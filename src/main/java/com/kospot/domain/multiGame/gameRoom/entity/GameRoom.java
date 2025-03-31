@@ -61,12 +61,11 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     public void update(String title, GameMode gameMode, GameType gameType,
-                       boolean privateRoom, int maxPlayers, String password) {
+                       boolean privateRoom, String password) {
         this.title = title;
         this.gameMode = gameMode;
         this.gameType = gameType;
         this.privateRoom = privateRoom;
-        this.maxPlayers = maxPlayers;
         this.password = password;
     }
 
