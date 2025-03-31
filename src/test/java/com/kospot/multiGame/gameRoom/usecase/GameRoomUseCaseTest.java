@@ -200,7 +200,7 @@ public class GameRoomUseCaseTest {
         leaveGameRoomUseCase.execute(member, gameRoom.getId());
 
         //then
-        assertThrows(Exception.class, ()-> gameRoomRepository.findById(gameRoom.getId()).orElseThrow());
+        assertThrows(Exception.class, () -> gameRoomRepository.findById(gameRoom.getId()).orElseThrow());
         players.forEach(player -> assertNull(player.getGameRoomId()));
         players.forEach(Assertions::assertNotNull);
         assertNotNull(member);
@@ -378,7 +378,7 @@ public class GameRoomUseCaseTest {
         assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
     }
 
-    private Member createMember(String username){
+    private Member createMember(String username) {
         return memberRepository.save(
                 Member.builder()
                         .username(username)

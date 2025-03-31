@@ -5,7 +5,6 @@ import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
 import com.kospot.exception.object.domain.GameRoomHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
 import com.kospot.global.annotation.adaptor.Adaptor;
-import com.kospot.presentation.multiGame.gameRoom.dto.response.FindGameRoomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -32,12 +31,6 @@ public class GameRoomAdaptor {
                 () -> new GameRoomHandler(ErrorStatus.GAME_ROOM_NOT_FOUND)
         );
     }
-
-//    public GameRoom queryByIdFetchPlayers(Long id) {
-//        return repository.findByIdFetchPlayers(id).orElseThrow(
-//                () -> new GameRoomHandler(ErrorStatus.GAME_ROOM_NOT_FOUND)
-//        );
-//    }
 
     public List<GameRoom> queryAllByKeyword(String keyword, Pageable pageable) {
         return repository.findAllByKeywordPaging(keyword, pageable);
