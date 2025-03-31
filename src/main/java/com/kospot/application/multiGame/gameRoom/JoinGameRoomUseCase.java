@@ -20,7 +20,7 @@ public class JoinGameRoomUseCase {
     private final GameRoomService gameRoomService;
 
     public void execute(Member player, Long gameRoomId, GameRoomRequest.Join request) {
-        GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchPlayers(gameRoomId);
+        GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
         gameRoomService.joinGameRoom(player, gameRoom, request);
     }
 

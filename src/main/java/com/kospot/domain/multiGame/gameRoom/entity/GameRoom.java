@@ -43,6 +43,8 @@ public class GameRoom extends BaseTimeEntity {
     @Max(4)
     private int maxPlayers;
 
+    private int currentPlayerCount; // cache
+
     @Size(min = 2, max = 10) //todo 공백, 특수문자 안됨
     private String password;
 
@@ -53,17 +55,7 @@ public class GameRoom extends BaseTimeEntity {
     @JoinColumn(name = "host_id")
     private Member host; //방장
 
-    @Builder.Default
-    @OneToMany(mappedBy = "gameRoom", fetch = FetchType.LAZY)
-    private Set<Member> waitingPlayers = new HashSet<>();
-
-
     //business
-    @PreRemove
-    private void preRemove() {
-        waitingPlayers.forEach(Member::leaveGameRoom);
-    }
-
     public void setHost(Member host) {
         this.host = host;
     }
@@ -79,13 +71,13 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     public void join(Member player) {
-        waitingPlayers.add(player);
-        player.joinGameRoom(this);
+        player.joinGameRoom(this.id);
+        currentPlayerCount++;
     }
 
     public void leaveRoom(Member player) {
-        waitingPlayers.remove(player);
         player.leaveGameRoom();
+        currentPlayerCount--;
     }
 
     public void kickPlayer(Member host, Member player) {
@@ -94,25 +86,24 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     //player
-    public void validateJoinRoom(String inputPassword) {
+    public void validateJoinRoom(String inputPassword, Member player) {
         validateRoomCapacity();
         if (privateRoom) {
             validatePassword(inputPassword);
         }
         validateRoomStatus();
-        validateMemberAlreadyInRoom();
-    }
-
-    //todo implement
-    private void validateMemberAlreadyInRoom() {
-//        if (isAlreadyInRoom(targetPlayer)) {
-//            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_MEMBER_ALREADY_IN_ROOM);
-//        }
+        validateMemberAlreadyInRoom(player);
     }
 
     private void validateRoomCapacity() {
-        if (isFull()) {
+        if (currentPlayerCount >= maxPlayers) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
+        }
+    }
+
+    private void validateMemberAlreadyInRoom(Member player) {
+        if (player.isAlreadyInGameRoom()) {
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_MEMBER_ALREADY_IN_ROOM);
         }
     }
 
@@ -128,16 +119,12 @@ public class GameRoom extends BaseTimeEntity {
         }
     }
 
+    public boolean isRoomEmpty() {
+        return currentPlayerCount == 0;
+    }
+
     private boolean isNotWaitingRoom() {
         return !status.equals(GameRoomStatus.WAITING);
-    }
-
-    private boolean isFull() {
-        return getTotalPlayers() >= maxPlayers;
-    }
-
-    public int getTotalPlayers() {
-        return waitingPlayers.size() + 1;
     }
 
     public void validateHost(Member gamePlayer) {
@@ -152,10 +139,6 @@ public class GameRoom extends BaseTimeEntity {
 
     private boolean isNotHost(Member gamePlayer) {
         return !this.host.getId().equals(gamePlayer.getId());
-    }
-
-    public boolean isRoomEmpty() {
-        return waitingPlayers.isEmpty();
     }
 
     //private room

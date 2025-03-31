@@ -201,7 +201,7 @@ public class GameRoomUseCaseTest {
 
         //then
         assertThrows(Exception.class, ()-> gameRoomRepository.findById(gameRoom.getId()).orElseThrow());
-        players.forEach(player -> assertNull(player.getGameRoom()));
+        players.forEach(player -> assertNull(player.getGameRoomId()));
         players.forEach(Assertions::assertNotNull);
         assertNotNull(member);
 
@@ -239,9 +239,9 @@ public class GameRoomUseCaseTest {
         leaveGameRoomUseCase.execute(player1, gameRoom.getId());
 
         //then
-        GameRoom updatedGameRoom = gameRoomAdaptor.queryByIdFetchPlayers(gameRoom.getId());
-        assertEquals(2, updatedGameRoom.getWaitingPlayers().size());
-        assertNull(player1.getGameRoom());
+        GameRoom updatedGameRoom = gameRoomAdaptor.queryById(gameRoom.getId());
+        assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
+        assertNull(player1.getGameRoomId());
     }
 
 
@@ -277,8 +277,8 @@ public class GameRoomUseCaseTest {
         joinGameRoomUseCase.execute(member2, gameRoom.getId(), request);
 
         //then
-        GameRoom updatedGameRoom = gameRoomAdaptor.queryByIdFetchPlayers(gameRoom.getId());
-        assertEquals(2, updatedGameRoom.getWaitingPlayers().size());
+        GameRoom updatedGameRoom = gameRoomAdaptor.queryById(gameRoom.getId());
+        assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
 
     }
 
@@ -303,7 +303,7 @@ public class GameRoomUseCaseTest {
 
         //then
         assertThrows(Exception.class, () -> joinGameRoomUseCase.execute(member5, gameRoom.getId(), request));
-        assertNull(member5.getGameRoom());
+        assertNull(member5.getGameRoomId());
     }
 
     @DisplayName("비밀번호 방 테스트를 진행합니다.")
@@ -328,8 +328,8 @@ public class GameRoomUseCaseTest {
         assertThrows(Exception.class, () -> joinGameRoomUseCase.execute(member2, gameRoom.getId(), request1));
 
         //then
-        GameRoom updatedGameRoom = gameRoomAdaptor.queryByIdFetchPlayers(gameRoom.getId());
-        assertEquals(2, updatedGameRoom.getTotalPlayers());
+        GameRoom updatedGameRoom = gameRoomAdaptor.queryById(gameRoom.getId());
+        assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
     }
 
     @DisplayName("비밀번호 없는 방에 비밀번호를 입력했을 경우를 테스트합니다.")
@@ -347,8 +347,8 @@ public class GameRoomUseCaseTest {
         assertDoesNotThrow(() -> joinGameRoomUseCase.execute(member1, gameRoom.getId(), request));
 
         //then
-        assertNotNull(member1.getGameRoom());
-        assertEquals(2, gameRoom.getTotalPlayers());
+        assertNotNull(member1.getGameRoomId());
+        assertEquals(2, gameRoom.getCurrentPlayerCount());
     }
 
     @DisplayName("이미 방에 참여한 플레이어가 다른 방에 참여하는 경우를 테스트합니다.")
@@ -372,8 +372,8 @@ public class GameRoomUseCaseTest {
         joinGameRoomUseCase.execute(member1, gameRoom1.getId(), request1);
 
         //then
-        GameRoom updatedGameRoom = gameRoomAdaptor.queryByIdFetchPlayers(gameRoom.getId());
-        assertEquals(2, updatedGameRoom.getTotalPlayers());
+        GameRoom updatedGameRoom = gameRoomAdaptor.queryById(gameRoom.getId());
+        assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
     }
 
     private Member createMember(String username){

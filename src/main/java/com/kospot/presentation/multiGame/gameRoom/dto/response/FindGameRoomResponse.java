@@ -15,7 +15,7 @@ public class FindGameRoomResponse {
     private String gameMode;
     private String gameType;
     private int maxPlayers;
-    private int currentPlayers;
+    private int currentPlayerCount;
     private String hostNickname;
     private boolean privateRoom;
     private String gameRoomStatus;
@@ -27,7 +27,7 @@ public class FindGameRoomResponse {
                 .gameMode(gameRoom.getGameMode().name())
                 .gameType(gameRoom.getGameType().name())
                 .maxPlayers(gameRoom.getMaxPlayers())
-                .currentPlayers(gameRoom.getWaitingPlayers().size()) //todo refactoring
+                .currentPlayerCount(gameRoom.getCurrentPlayerCount())
                 .hostNickname(gameRoom.getHost().getNickname())
                 .privateRoom(gameRoom.isPrivateRoom())
                 .gameRoomStatus(gameRoom.getStatus().name())

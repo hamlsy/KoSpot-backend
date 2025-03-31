@@ -33,11 +33,11 @@ public class GameRoomAdaptor {
         );
     }
 
-    public GameRoom queryByIdFetchPlayers(Long id) {
-        return repository.findByIdFetchPlayers(id).orElseThrow(
-                () -> new GameRoomHandler(ErrorStatus.GAME_ROOM_NOT_FOUND)
-        );
-    }
+//    public GameRoom queryByIdFetchPlayers(Long id) {
+//        return repository.findByIdFetchPlayers(id).orElseThrow(
+//                () -> new GameRoomHandler(ErrorStatus.GAME_ROOM_NOT_FOUND)
+//        );
+//    }
 
     public List<GameRoom> queryAllByKeyword(String keyword, Pageable pageable) {
         return repository.findAllByKeywordPaging(keyword, pageable);

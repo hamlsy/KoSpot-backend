@@ -40,6 +40,7 @@ public class GameRoomRequest {
                     .gameType(GameType.fromKey(gameTypeKey))
                     .status(GameRoomStatus.WAITING)
                     .privateRoom(privateRoom)
+                    .currentPlayerCount(1)
                     .build();
         }
     }

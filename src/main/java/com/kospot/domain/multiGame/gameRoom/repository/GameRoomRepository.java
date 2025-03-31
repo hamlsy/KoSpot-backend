@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
 
-    @Query("select gr from GameRoom gr left join fetch gr.waitingPlayers where gr.id = :id")
-    Optional<GameRoom> findByIdFetchPlayers(@Param("id") Long id);
+//    @Query("select gr from GameRoom gr left join fetch gr.waitingPlayers where gr.id = :id")
+//    Optional<GameRoom> findByIdFetchPlayers(@Param("id") Long id);
 
     @Query("select gr from GameRoom gr join fetch gr.host where gr.id = :id")
     Optional<GameRoom> findByIdFetchHost(@Param("id") Long id);

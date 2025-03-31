@@ -22,7 +22,7 @@ public class KickPlayerUseCase {
     private final MemberAdaptor memberAdaptor;
 
     public void execute(Member host, GameRoomRequest.Kick request, Long gameRoomId) {
-        GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchPlayers(gameRoomId);
+        GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
         Member targetPlayer = memberAdaptor.queryById(request.getTargetPlayerId());
         gameRoomService.kickPlayer(host, targetPlayer, gameRoom);
     }

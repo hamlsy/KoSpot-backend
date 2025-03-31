@@ -77,7 +77,7 @@ public enum ErrorStatus implements BaseCode {
     GAME_ROOM_IS_NOT_CORRECT_PASSWORD(BAD_REQUEST, 4303, "틀린 비밀번호 입니다."),
     GAME_ROOM_IS_ALREADY_IN_PROGRESS(BAD_REQUEST, 4304, "게임이 이미 진행 중입니다."),
     GAME_ROOM_HOST_PRIVILEGES_REQUIRED(FORBIDDEN, 4305, "방장 권한이 필요합니다."),
-    ;
+    GAME_ROOM_MEMBER_ALREADY_IN_ROOM(BAD_REQUEST, 4306,"이미 게임 방에 참여 중입니다.");
 
     private final HttpStatus httpStatus;
     private final Integer code;
