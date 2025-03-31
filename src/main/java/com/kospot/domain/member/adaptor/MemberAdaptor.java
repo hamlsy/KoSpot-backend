@@ -8,6 +8,8 @@ import com.kospot.global.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Adaptor
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -19,6 +21,10 @@ public class MemberAdaptor {
         return repository.findById(memberId).orElseThrow(
                 () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)
         );
+    }
+
+    public List<Member> queryAllByGameRoomId(Long gameRoomId) {
+        return repository.findAllByGameRoomId(gameRoomId);
     }
 
 }

@@ -86,13 +86,13 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     //player
-    public void validateJoinRoom(String inputPassword, Member player) {
+    public void validateJoinRoom(String inputPassword) {
         validateRoomCapacity();
         if (privateRoom) {
             validatePassword(inputPassword);
         }
         validateRoomStatus();
-        validateMemberAlreadyInRoom(player);
+//        validateMemberAlreadyInRoom(player);
     }
 
     private void validateRoomCapacity() {
@@ -101,11 +101,11 @@ public class GameRoom extends BaseTimeEntity {
         }
     }
 
-    private void validateMemberAlreadyInRoom(Member player) {
-        if (player.isAlreadyInGameRoom()) {
-            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_MEMBER_ALREADY_IN_ROOM);
-        }
-    }
+//    private void validateMemberAlreadyInRoom(Member player) {
+//        if (player.isAlreadyInGameRoom()) {
+//            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_MEMBER_ALREADY_IN_ROOM);
+//        }
+//    }
 
     public void validatePassword(String inputPassword) {
         if (isNotCorrectPassword(inputPassword)) {

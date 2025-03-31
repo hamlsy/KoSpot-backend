@@ -254,6 +254,7 @@ public class GameRoomUseCaseTest {
                 .privateRoom(false)
                 .status(GameRoomStatus.WAITING)
                 .maxPlayers(4)
+                .currentPlayerCount(1)
                 .build();
     }
 
@@ -302,6 +303,7 @@ public class GameRoomUseCaseTest {
         joinGameRoomUseCase.execute(member3, gameRoom.getId(), request);
 
         //then
+        log.info("" + gameRoom.getCurrentPlayerCount());
         assertThrows(Exception.class, () -> joinGameRoomUseCase.execute(member5, gameRoom.getId(), request));
         assertNull(member5.getGameRoomId());
     }
@@ -396,10 +398,9 @@ public class GameRoomUseCaseTest {
                 .password(password)
                 .status(GameRoomStatus.WAITING)
                 .maxPlayers(4)
+                .currentPlayerCount(1)
                 .build();
     }
-
-
 
 
 }
