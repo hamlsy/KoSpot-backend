@@ -2,14 +2,12 @@ package com.kospot.presentation.multiGame.gameRoom.dto.response;
 
 import lombok.*;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class DetailGameRoomResponse {
+public class GameRoomDetailResponse {
 
     private String title;
     private String gameMode;

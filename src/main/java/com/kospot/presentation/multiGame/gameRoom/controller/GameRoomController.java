@@ -7,6 +7,7 @@ import com.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.exception.payload.dto.ApiResponseDto;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multiGame.gameRoom.dto.response.FindGameRoomResponse;
+import com.kospot.presentation.multiGame.gameRoom.dto.response.GameRoomDetailResponse;
 import com.kospot.presentation.multiGame.gameRoom.dto.response.GameRoomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +28,7 @@ import java.util.List;
 public class GameRoomController {
 
     private final FindAllGameRoomUseCase findAllGameRoomUseCase;
+    private final FindGameRoomDetailUseCase findGameRoomDetailUseCase;
     private final CreateGameRoomUseCase createGameRoomUseCase;
     private final UpdateGameRoomUseCase updateGameRoomUseCase;
     private final JoinGameRoomUseCase joinGameRoomUseCase;
@@ -45,7 +47,11 @@ public class GameRoomController {
     }
 
     //todo 게임 방 내부 조회(입장), 실시간 플레이어들 상태(입장, 퇴장) <- websocket 고려
-
+    @Operation(summary = "게임 방 내부 조회", description = "멀티 게임 방 내부를 조회합니다.")
+    @GetMapping("/{id}")
+    public ApiResponseDto<GameRoomDetailResponse> findDetailGameRoom(@PathVariable("id") Long gameRoomId) {
+        return ApiResponseDto.onSuccess(findGameRoomDetailUseCase.execute(gameRoomId));
+    }
 
     @Operation(summary = "게임 방 생성", description = "멀티 게임 방을 생성합니다.")
     @PostMapping("/")
