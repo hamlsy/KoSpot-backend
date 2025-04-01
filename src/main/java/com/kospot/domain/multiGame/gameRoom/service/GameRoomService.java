@@ -31,7 +31,7 @@ public class GameRoomService {
     public GameRoom updateGameRoom(Member host, GameRoomRequest.Update request, GameRoom gameRoom) {
         gameRoom.validateHost(host);
         gameRoom.update(request.getTitle(), GameMode.fromKey(request.getGameModeKey()), GameType.fromKey(request.getGameTypeKey()),
-                request.isPrivateRoom(), request.getMaxPlayers(), request.getPassword());
+                request.isPrivateRoom(), request.getPassword());
         return gameRoom;
     }
 

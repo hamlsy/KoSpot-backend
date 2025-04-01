@@ -16,7 +16,9 @@ public class FindGameRoomDetailUseCase {
     private final GameRoomAdaptor gameRoomAdaptor;
 
     public GameRoomDetailResponse execute(Long gameRoomId) {
-        return null;
+        return GameRoomDetailResponse.from(
+                gameRoomAdaptor.queryById(gameRoomId)
+        );
     }
 
 }

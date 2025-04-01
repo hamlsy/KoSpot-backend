@@ -35,10 +35,6 @@ public class GameRoomController {
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
     private final KickPlayerUseCase kickPlayerUseCase;
 
-    /**
-     * Test
-     */
-
     //todo search refactoring
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
     @GetMapping("/{page}")
@@ -46,7 +42,6 @@ public class GameRoomController {
         return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(request, page));
     }
 
-    //todo 게임 방 내부 조회(입장), 실시간 플레이어들 상태(입장, 퇴장) <- websocket 고려
     @Operation(summary = "게임 방 내부 조회", description = "멀티 게임 방 내부를 조회합니다.")
     @GetMapping("/{id}")
     public ApiResponseDto<GameRoomDetailResponse> findDetailGameRoom(@PathVariable("id") Long gameRoomId) {
@@ -82,7 +77,7 @@ public class GameRoomController {
 
     @Operation(summary = "게임 방 강퇴", description = "게임 방에서 강퇴시킵니다.")
     @PostMapping("/{id}/kick")
-    public ApiResponseDto<?> kickPlayer(Member member, @RequestBody GameRoomRequest.Kick request,@PathVariable("id") Long gameRoomId) {
+    public ApiResponseDto<?> kickPlayer(Member member, @RequestBody GameRoomRequest.Kick request, @PathVariable("id") Long gameRoomId) {
         kickPlayerUseCase.execute(member, request, gameRoomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }

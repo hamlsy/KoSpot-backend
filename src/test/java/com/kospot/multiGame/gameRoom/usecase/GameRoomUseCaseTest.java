@@ -13,6 +13,7 @@ import com.kospot.domain.multiGame.gameRoom.entity.GameRoomStatus;
 import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
 import com.kospot.domain.multiGame.gameRoom.service.GameRoomService;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multiGame.gameRoom.dto.response.GameRoomDetailResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +55,9 @@ public class GameRoomUseCaseTest {
 
     @Autowired
     private LeaveGameRoomUseCase leaveGameRoomUseCase;
+
+    @Autowired
+    private FindGameRoomDetailUseCase findGameRoomDetailUseCase;
 
     //repository, adaptor
     @Autowired
@@ -133,7 +137,6 @@ public class GameRoomUseCaseTest {
                 .title("title1")
                 .gameModeKey("roadview")
                 .gameTypeKey("individual")
-                .maxPlayers(4)
                 .build();
 
         //when
@@ -376,6 +379,23 @@ public class GameRoomUseCaseTest {
         //then
         GameRoom updatedGameRoom = gameRoomAdaptor.queryById(gameRoom.getId());
         assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
+    }
+
+    @DisplayName("게임 방 내부 조회 테스트")
+    @Test
+    void findGameRoomDetailUseCaseTest() {
+        //given
+        GameRoom gameRoom = gameRoomRepository.save(getTestGameRoom());
+
+        //when
+        GameRoomRequest.Join request = GameRoomRequest.Join.builder()
+                .password(null)
+                .build();
+        joinGameRoomUseCase.execute(member, gameRoom.getId(), request);
+
+        //then
+        GameRoomDetailResponse response =  findGameRoomDetailUseCase.execute(gameRoom.getId());
+        assertEquals("title", response.getTitle());
     }
 
     private Member createMember(String username) {
