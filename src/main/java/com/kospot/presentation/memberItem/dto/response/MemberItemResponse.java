@@ -1,0 +1,21 @@
+package com.kospot.presentation.memberItem.dto.response;
+
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class MemberItemResponse {
+
+    private Long memberItemId;
+    private String name;
+    private String description;
+    private boolean isEquipped;
+    private LocalDateTime purchaseTime;
+
+}
