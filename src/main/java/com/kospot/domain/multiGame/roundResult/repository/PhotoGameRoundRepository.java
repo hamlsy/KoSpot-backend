@@ -1,4 +1,4 @@
-package com.kospot.domain.multiGame.game.repository;
+package com.kospot.domain.multiGame.roundResult.repository;
 
 import com.kospot.domain.multiGame.gameRound.entity.PhotoGameRound;
 import org.springframework.data.jpa.repository.JpaRepository;

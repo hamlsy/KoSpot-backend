@@ -1,8 +1,8 @@
 package com.kospot.domain.multiGame.submittion.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.domain.multiGame.game.util.ScoreRule;
 import com.kospot.domain.multiGame.gameRound.entity.PhotoGameRound;
-import com.kospot.domain.multiGame.game.entity.ScoreRule;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -54,7 +54,7 @@ public class PhotoPlayerSubmission extends BaseTimeEntity {
     
     // 정답 순서에 따른 점수 계산
     private void calculateScore() {
-        this.score = ScoreRule.getScoreByPhotoAnswerOrder(this.answerOrder);
+        this.score = ScoreRule.calculateScore(this.answerOrder);
         
         // 플레이어 점수 업데이트
         if (this.gamePlayer != null) {
