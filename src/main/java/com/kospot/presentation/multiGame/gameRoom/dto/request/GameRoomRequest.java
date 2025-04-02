@@ -2,6 +2,7 @@ package com.kospot.presentation.multiGame.gameRoom.dto.request;
 
 import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.game.entity.GameType;
+import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoomStatus;
 import lombok.*;
@@ -27,7 +28,7 @@ public class GameRoomRequest {
         private String title;
         private String password;
         private String gameModeKey;
-        private String gameTypeKey;
+        private String playerMatchTypeKey;
         private int maxPlayers;
         private boolean privateRoom;
 
@@ -37,7 +38,7 @@ public class GameRoomRequest {
                     .password(password)
                     .maxPlayers(maxPlayers)
                     .gameMode(GameMode.fromKey(gameModeKey))
-                    .playerMatchType(GameType.fromKey(gameTypeKey))
+                    .playerMatchType(PlayerMatchType.fromKey(playerMatchTypeKey))
                     .status(GameRoomStatus.WAITING)
                     .privateRoom(privateRoom)
                     .currentPlayerCount(1)

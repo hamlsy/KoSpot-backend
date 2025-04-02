@@ -14,7 +14,7 @@ public enum PlayerMatchType {
     INDIVIDUAL("개인전"),
     COOPERATIVE("협동전");
 
-    private final String name;
+    private final String type;
 
     public static PlayerMatchType fromKey(String key) {
         return Arrays.stream(PlayerMatchType.values())
