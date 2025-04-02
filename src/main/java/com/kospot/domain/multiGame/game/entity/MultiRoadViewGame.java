@@ -1,6 +1,7 @@
 package com.kospot.domain.multiGame.game.entity;
 
 import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import jakarta.persistence.*;
@@ -32,13 +33,16 @@ public class MultiRoadViewGame extends MultiGame {
     private List<GameRound> gameRounds = new ArrayList<>();
     
     // 생성 메서드
-    public static MultiRoadViewGame createGame(GameRoom gameRoom, GameType gameType, PlayerMatchType matchType, Integer roundCount) {
+    public static MultiRoadViewGame createGame(GameRoom gameRoom, GameType gameType, PlayerMatchType matchType, 
+                                             Integer roundCount, Boolean increasingDifficulty) {
         MultiRoadViewGame game = MultiRoadViewGame.builder()
                 .gameType(gameType)
                 .matchType(matchType)
+                .gameMode(GameMode.ROADVIEW)  // 로드뷰 모드로 고정
                 .roundCount(roundCount)
                 .currentRound(0) // 시작 전에는 0
                 .isFinished(false)
+                .increasingDifficulty(increasingDifficulty)
                 .gameRoom(gameRoom)
                 .build();
                 

@@ -40,8 +40,13 @@ public class GameRoom extends BaseTimeEntity {
     private boolean privateRoom;
 
     @Min(2)
-    @Max(4)
+    @Max(8)
     private int maxPlayers;
+    
+    // 협동전 모드에서 사용할 팀 수 (2-4)
+    @Min(2)
+    @Max(4)
+    private int teamCount;
 
     private int currentPlayerCount; // cache
 
@@ -61,12 +66,14 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     public void update(String title, GameMode gameMode, GameType gameType,
-                       boolean privateRoom, String password) {
+                       boolean privateRoom, String password, int maxPlayers, int teamCount) {
         this.title = title;
         this.gameMode = gameMode;
         this.gameType = gameType;
         this.privateRoom = privateRoom;
         this.password = password;
+        this.maxPlayers = maxPlayers;
+        this.teamCount = teamCount;
     }
 
     public void join(Member player) {

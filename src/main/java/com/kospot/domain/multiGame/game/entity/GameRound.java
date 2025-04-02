@@ -37,6 +37,9 @@ public class GameRound extends BaseTimeEntity {
     @OneToMany(mappedBy = "gameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlayerSubmission> playerSubmissions = new ArrayList<>();
     
+    @OneToMany(mappedBy = "gameRound", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamSubmission> teamSubmissions = new ArrayList<>();
+    
     private Boolean isFinished;
     
     // Business methods
@@ -46,6 +49,11 @@ public class GameRound extends BaseTimeEntity {
     
     public void addPlayerSubmission(PlayerSubmission submission) {
         this.playerSubmissions.add(submission);
+        submission.setGameRound(this);
+    }
+    
+    public void addTeamSubmission(TeamSubmission submission) {
+        this.teamSubmissions.add(submission);
         submission.setGameRound(this);
     }
     
