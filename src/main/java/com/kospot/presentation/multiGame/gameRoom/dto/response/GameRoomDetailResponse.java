@@ -20,7 +20,7 @@ public class GameRoomDetailResponse {
         return GameRoomDetailResponse.builder()
                 .title(gameRoom.getTitle())
                 .gameMode(gameRoom.getGameMode().name())
-                .gameType(gameRoom.getGameType().name())
+                .gameType(gameRoom.getPlayerMatchType().name())
                 .maxPlayers(gameRoom.getMaxPlayers())
                 .privateRoom(gameRoom.isPrivateRoom())
                 .build();

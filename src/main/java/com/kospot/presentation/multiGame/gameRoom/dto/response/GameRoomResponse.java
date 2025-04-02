@@ -22,7 +22,7 @@ public class GameRoomResponse {
                 .title(gameRoom.getTitle())
                 .maxPlayers(gameRoom.getMaxPlayers())
                 .gameMode(gameRoom.getGameMode().getMode())
-                .gameType(gameRoom.getGameType().getType())
+                .gameType(gameRoom.getPlayerMatchType().getType())
                 .build();
     }
 

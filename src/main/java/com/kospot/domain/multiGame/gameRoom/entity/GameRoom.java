@@ -5,6 +5,7 @@ import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.exception.object.domain.GameRoomHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
@@ -13,9 +14,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Entity
@@ -35,7 +33,7 @@ public class GameRoom extends BaseTimeEntity {
     private GameMode gameMode;
 
     @Enumerated(EnumType.STRING)
-    private GameType gameType;
+    private PlayerMatchType playerMatchType;
 
     private boolean privateRoom;
 
@@ -65,14 +63,13 @@ public class GameRoom extends BaseTimeEntity {
         this.host = host;
     }
 
-    public void update(String title, GameMode gameMode, GameType gameType,
-                       boolean privateRoom, String password, int maxPlayers, int teamCount) {
+    public void update(String title, GameMode gameMode, PlayerMatchType playerMatchType,
+                       boolean privateRoom, String password, int teamCount) {
         this.title = title;
         this.gameMode = gameMode;
-        this.gameType = gameType;
+        this.playerMatchType = playerMatchType;
         this.privateRoom = privateRoom;
         this.password = password;
-        this.maxPlayers = maxPlayers;
         this.teamCount = teamCount;
     }
 

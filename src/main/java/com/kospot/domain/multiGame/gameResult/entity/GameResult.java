@@ -2,8 +2,10 @@ package com.kospot.domain.multiGame.gameResult.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -37,6 +39,9 @@ public class GameResult extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private GameMode gameMode;
+
+    @Enumerated(EnumType.STRING)
+    private PlayerMatchType playerMatchType;
     
     // 최종 점수
     private Integer totalScore;

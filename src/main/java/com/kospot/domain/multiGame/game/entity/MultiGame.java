@@ -83,7 +83,6 @@ public abstract class MultiGame extends BaseTimeEntity {
         }
         
         // 난이도 증가 로직: 라운드가 진행됨에 따라 사진 수 감소
-        int remainingPhotos = Math.max(1, photosPerRound - (currentRound / 5));
-        return remainingPhotos;
+        return Math.max(1, photosPerRound - (currentRound / 5));
     }
 }

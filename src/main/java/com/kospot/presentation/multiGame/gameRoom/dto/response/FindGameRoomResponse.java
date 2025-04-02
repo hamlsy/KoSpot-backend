@@ -25,7 +25,7 @@ public class FindGameRoomResponse {
                 .gameRoomId(gameRoom.getId())
                 .title(gameRoom.getTitle())
                 .gameMode(gameRoom.getGameMode().name())
-                .gameType(gameRoom.getGameType().name())
+                .gameType(gameRoom.getPlayerMatchType().name())
                 .maxPlayers(gameRoom.getMaxPlayers())
                 .currentPlayerCount(gameRoom.getCurrentPlayerCount())
                 .hostNickname(gameRoom.getHost().getNickname())

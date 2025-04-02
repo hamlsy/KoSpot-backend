@@ -37,7 +37,7 @@ public class GameRoomRequest {
                     .password(password)
                     .maxPlayers(maxPlayers)
                     .gameMode(GameMode.fromKey(gameModeKey))
-                    .gameType(GameType.fromKey(gameTypeKey))
+                    .playerMatchType(GameType.fromKey(gameTypeKey))
                     .status(GameRoomStatus.WAITING)
                     .privateRoom(privateRoom)
                     .currentPlayerCount(1)
@@ -55,8 +55,9 @@ public class GameRoomRequest {
         private String title;
         private String password;
         private String gameModeKey;
-        private String gameTypeKey;
+        private String playerMatchTypeKey;
         private boolean privateRoom;
+        private int teamCount;
 
     }
 

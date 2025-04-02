@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -128,7 +127,7 @@ public class GameRoomUseCaseTest {
                         .title("title")
                         .host(member)
                         .gameMode(GameMode.ROADVIEW)
-                        .gameType(GameType.COOPERATIVE)
+                        .playerMatchType(GameType.COOPERATIVE)
                         .maxPlayers(4)
                         .build()
         );
@@ -145,7 +144,7 @@ public class GameRoomUseCaseTest {
         //then
         GameRoom updatedGameRoom = gameRoomRepository.findByIdFetchHost(gameRoom.getId()).orElseThrow();
         assertEquals(request.getTitle(), updatedGameRoom.getTitle());
-        assertEquals(GameType.INDIVIDUAL, updatedGameRoom.getGameType());
+        assertEquals(GameType.INDIVIDUAL, updatedGameRoom.getPlayerMatchType());
         assertEquals(member.getUsername(), updatedGameRoom.getHost().getUsername());
 
     }
@@ -160,7 +159,7 @@ public class GameRoomUseCaseTest {
                         .title("title")
                         .host(member)
                         .gameMode(GameMode.ROADVIEW)
-                        .gameType(GameType.COOPERATIVE)
+                        .playerMatchType(GameType.COOPERATIVE)
                         .maxPlayers(4)
                         .build()
         );
@@ -253,7 +252,7 @@ public class GameRoomUseCaseTest {
                 .title("title")
                 .host(member)
                 .gameMode(GameMode.ROADVIEW)
-                .gameType(GameType.COOPERATIVE)
+                .playerMatchType(GameType.COOPERATIVE)
                 .privateRoom(false)
                 .status(GameRoomStatus.WAITING)
                 .maxPlayers(4)
@@ -413,7 +412,7 @@ public class GameRoomUseCaseTest {
                 .title("title")
                 .host(adminMember)
                 .gameMode(GameMode.ROADVIEW)
-                .gameType(GameType.COOPERATIVE)
+                .playerMatchType(GameType.COOPERATIVE)
                 .privateRoom(true)
                 .password(password)
                 .status(GameRoomStatus.WAITING)
