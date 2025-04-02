@@ -1,6 +1,8 @@
-package com.kospot.domain.multiGame.game.entity;
+package com.kospot.domain.multiGame.submittion.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.domain.multiGame.gameRound.entity.PhotoGameRound;
+import com.kospot.domain.multiGame.game.entity.ScoreRule;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

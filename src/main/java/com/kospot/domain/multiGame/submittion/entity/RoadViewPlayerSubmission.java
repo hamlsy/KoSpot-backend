@@ -1,6 +1,7 @@
-package com.kospot.domain.multiGame.game.entity;
+package com.kospot.domain.multiGame.submittion.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -14,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlayerSubmission extends BaseTimeEntity {
+public class RoadViewPlayerSubmission extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +23,7 @@ public class PlayerSubmission extends BaseTimeEntity {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_round_id")
-    private GameRound gameRound;
+    private RoadViewGameRound roadViewGameRound;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_player_id")
@@ -45,8 +46,8 @@ public class PlayerSubmission extends BaseTimeEntity {
     private Integer teamNumber;
     
     // Business methods
-    public void setGameRound(GameRound gameRound) {
-        this.gameRound = gameRound;
+    public void setRoadViewGameRound(RoadViewGameRound roadViewGameRound) {
+        this.roadViewGameRound = roadViewGameRound;
     }
     
     public void assignRank(Integer rank) {
@@ -58,8 +59,8 @@ public class PlayerSubmission extends BaseTimeEntity {
     }
     
     // 생성 메서드
-    public static PlayerSubmission createSubmission(GamePlayer gamePlayer, Double latitude, Double longitude, Double distance, Integer teamNumber) {
-        return PlayerSubmission.builder()
+    public static RoadViewPlayerSubmission createSubmission(GamePlayer gamePlayer, Double latitude, Double longitude, Double distance, Integer teamNumber) {
+        return RoadViewPlayerSubmission.builder()
                 .gamePlayer(gamePlayer)
                 .latitude(latitude)
                 .longitude(longitude)

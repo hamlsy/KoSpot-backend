@@ -3,6 +3,7 @@ package com.kospot.domain.multiGame.game.entity;
 import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multiGame.gameRound.entity.PhotoGameRound;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,8 @@ public class MultiPhotoGame extends MultiGame {
     // 생성 메서드
     public static MultiPhotoGame createGame(GameRoom gameRoom, GameType gameType, PlayerMatchType matchType, 
                                            Integer roundCount, Boolean increasingDifficulty, Integer photosPerRound) {
-        MultiPhotoGame game = MultiPhotoGame.builder()
+
+        return MultiPhotoGame.builder()
                 .gameType(gameType)
                 .matchType(matchType)
                 .gameMode(GameMode.PHOTO)  // 사진 모드로 고정
@@ -45,8 +47,6 @@ public class MultiPhotoGame extends MultiGame {
                 .photosPerRound(photosPerRound)
                 .gameRoom(gameRoom)
                 .build();
-                
-        return game;
     }
     
     // 게임 라운드 추가

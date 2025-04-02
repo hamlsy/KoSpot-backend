@@ -1,6 +1,8 @@
-package com.kospot.domain.multiGame.game.entity;
+package com.kospot.domain.multiGame.gameRound.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
+import com.kospot.domain.multiGame.submittion.entity.PhotoPlayerSubmission;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,7 +12,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 @Entity
@@ -52,7 +53,7 @@ public class PhotoGameRound extends BaseTimeEntity {
         this.multiPhotoGame = multiPhotoGame;
     }
     
-    /**
+    /** todo
      * 새로운 정답자를 추가하고 정답 순서를 반환
      * 정답 처리는 프론트에서 이미 했다고 가정
      * 동시성 문제를 방지하기 위해 AtomicInteger를 사용 (실제 구현에서는 락이나 트랜잭션 처리 필요)

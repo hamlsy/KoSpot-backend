@@ -1,8 +1,8 @@
 package com.kospot.domain.multiGame.game.service;
 
 import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
-import com.kospot.domain.multiGame.game.entity.PhotoGameRound;
-import com.kospot.domain.multiGame.game.entity.PhotoPlayerSubmission;
+import com.kospot.domain.multiGame.gameRound.entity.PhotoGameRound;
+import com.kospot.domain.multiGame.submittion.entity.PhotoPlayerSubmission;
 import com.kospot.domain.multiGame.game.repository.MultiPhotoGameRepository;
 import com.kospot.domain.multiGame.game.repository.PhotoGameRoundRepository;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;

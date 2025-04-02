@@ -1,6 +1,6 @@
 package com.kospot.domain.multiGame.game.repository;
 
-import com.kospot.domain.multiGame.game.entity.PhotoGameRound;
+import com.kospot.domain.multiGame.gameRound.entity.PhotoGameRound;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

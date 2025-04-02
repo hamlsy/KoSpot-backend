@@ -1,6 +1,7 @@
-package com.kospot.domain.multiGame.game.entity;
+package com.kospot.domain.multiGame.submittion.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class TeamSubmission extends BaseTimeEntity {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_round_id")
-    private GameRound gameRound;
+    private RoadViewGameRound roadViewGameRound;
     
     // 팀 번호 (1 또는 2)
     private Integer teamNumber;
@@ -40,8 +41,8 @@ public class TeamSubmission extends BaseTimeEntity {
     private Boolean isWinner;
     
     // Business methods
-    public void setGameRound(GameRound gameRound) {
-        this.gameRound = gameRound;
+    public void setRoadViewGameRound(RoadViewGameRound roadViewGameRound) {
+        this.roadViewGameRound = roadViewGameRound;
     }
     
     public void assignRank(Integer rank) {
