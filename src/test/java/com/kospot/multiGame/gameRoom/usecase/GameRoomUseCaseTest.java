@@ -7,6 +7,7 @@ import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.Role;
 import com.kospot.domain.member.repository.MemberRepository;
+import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.domain.multiGame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoomStatus;
@@ -27,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -106,7 +106,7 @@ public class GameRoomUseCaseTest {
         GameRoomRequest.Create request = GameRoomRequest.Create.builder()
                 .title("title")
                 .gameModeKey("roadview")
-                .gameTypeKey("individual")
+                .playerMatchTypeKey("individual")
                 .maxPlayers(4)
                 .build();
         //when
@@ -128,7 +128,7 @@ public class GameRoomUseCaseTest {
                         .title("title")
                         .host(member)
                         .gameMode(GameMode.ROADVIEW)
-                        .gameType(GameType.COOPERATIVE)
+                        .playerMatchType(PlayerMatchType.COOPERATIVE)
                         .maxPlayers(4)
                         .build()
         );
@@ -136,7 +136,7 @@ public class GameRoomUseCaseTest {
         GameRoomRequest.Update request = GameRoomRequest.Update.builder()
                 .title("title1")
                 .gameModeKey("roadview")
-                .gameTypeKey("individual")
+                .playerMatchTypeKey("individual")
                 .build();
 
         //when
@@ -145,7 +145,7 @@ public class GameRoomUseCaseTest {
         //then
         GameRoom updatedGameRoom = gameRoomRepository.findByIdFetchHost(gameRoom.getId()).orElseThrow();
         assertEquals(request.getTitle(), updatedGameRoom.getTitle());
-        assertEquals(GameType.INDIVIDUAL, updatedGameRoom.getGameType());
+        assertEquals(PlayerMatchType.INDIVIDUAL, updatedGameRoom.getPlayerMatchType());
         assertEquals(member.getUsername(), updatedGameRoom.getHost().getUsername());
 
     }
@@ -160,7 +160,7 @@ public class GameRoomUseCaseTest {
                         .title("title")
                         .host(member)
                         .gameMode(GameMode.ROADVIEW)
-                        .gameType(GameType.COOPERATIVE)
+                        .playerMatchType(PlayerMatchType.COOPERATIVE)
                         .maxPlayers(4)
                         .build()
         );
@@ -253,7 +253,7 @@ public class GameRoomUseCaseTest {
                 .title("title")
                 .host(member)
                 .gameMode(GameMode.ROADVIEW)
-                .gameType(GameType.COOPERATIVE)
+                .playerMatchType(PlayerMatchType.COOPERATIVE)
                 .privateRoom(false)
                 .status(GameRoomStatus.WAITING)
                 .maxPlayers(4)
@@ -413,7 +413,7 @@ public class GameRoomUseCaseTest {
                 .title("title")
                 .host(adminMember)
                 .gameMode(GameMode.ROADVIEW)
-                .gameType(GameType.COOPERATIVE)
+                .playerMatchType(PlayerMatchType.COOPERATIVE)
                 .privateRoom(true)
                 .password(password)
                 .status(GameRoomStatus.WAITING)

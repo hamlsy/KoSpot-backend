@@ -29,6 +29,9 @@ public class GamePlayer {
     @JoinColumn(name = "game_room_id")
     private GameRoom gameRoom;
 
+    // 협동전의 경우 팀 번호 (1 또는 2)
+    private Integer teamNumber;
+
     private Integer roundRank; // 해당 라운드 순위
     private int totalScore;
 
@@ -54,5 +57,16 @@ public class GamePlayer {
     public void finishGame() {
         this.status = GamePlayerStatus.FINISHED;
     }
-
+    
+    public void assignTeam(Integer teamNumber) {
+        this.teamNumber = teamNumber;
+    }
+    
+    public void updateRoundRank(Integer rank) {
+        this.roundRank = rank;
+    }
+    
+    public void addScore(int points) {
+        this.totalScore += points;
+    }
 }

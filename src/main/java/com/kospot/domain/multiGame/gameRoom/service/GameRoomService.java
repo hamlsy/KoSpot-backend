@@ -4,6 +4,7 @@ import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
@@ -30,8 +31,8 @@ public class GameRoomService {
 
     public GameRoom updateGameRoom(Member host, GameRoomRequest.Update request, GameRoom gameRoom) {
         gameRoom.validateHost(host);
-        gameRoom.update(request.getTitle(), GameMode.fromKey(request.getGameModeKey()), GameType.fromKey(request.getGameTypeKey()),
-                request.isPrivateRoom(), request.getPassword());
+        gameRoom.update(request.getTitle(), GameMode.fromKey(request.getGameModeKey()), PlayerMatchType.fromKey(request.getPlayerMatchTypeKey()),
+                request.isPrivateRoom(), request.getPassword(), request.getTeamCount());
         return gameRoom;
     }
 

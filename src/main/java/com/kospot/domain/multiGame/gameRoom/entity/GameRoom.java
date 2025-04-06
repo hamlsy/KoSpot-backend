@@ -5,6 +5,7 @@ import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.exception.object.domain.GameRoomHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
@@ -13,9 +14,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Entity
@@ -35,13 +33,18 @@ public class GameRoom extends BaseTimeEntity {
     private GameMode gameMode;
 
     @Enumerated(EnumType.STRING)
-    private GameType gameType;
+    private PlayerMatchType playerMatchType;
 
     private boolean privateRoom;
 
     @Min(2)
-    @Max(4)
+    @Max(8)
     private int maxPlayers;
+    
+    // 협동전 모드에서 사용할 팀 수 (2-4)
+    @Min(2)
+    @Max(4)
+    private int teamCount;
 
     private int currentPlayerCount; // cache
 
@@ -60,13 +63,14 @@ public class GameRoom extends BaseTimeEntity {
         this.host = host;
     }
 
-    public void update(String title, GameMode gameMode, GameType gameType,
-                       boolean privateRoom, String password) {
+    public void update(String title, GameMode gameMode, PlayerMatchType playerMatchType,
+                       boolean privateRoom, String password, int teamCount) {
         this.title = title;
         this.gameMode = gameMode;
-        this.gameType = gameType;
+        this.playerMatchType = playerMatchType;
         this.privateRoom = privateRoom;
         this.password = password;
+        this.teamCount = teamCount;
     }
 
     public void join(Member player) {
