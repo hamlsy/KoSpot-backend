@@ -16,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeamSubmission extends BaseTimeEntity {
 
+    //로드뷰 모드 한정
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

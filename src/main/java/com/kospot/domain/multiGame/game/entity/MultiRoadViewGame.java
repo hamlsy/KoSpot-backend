@@ -25,24 +25,22 @@ public class MultiRoadViewGame extends MultiGame {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_room_id")
     private GameRoom gameRoom;
-    
+
     @OneToMany(mappedBy = "multiRoadViewGame", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadViewGameRound> roadViewGameRounds = new ArrayList<>();
     
     // 생성 메서드
-    public static MultiRoadViewGame createGame(GameRoom gameRoom, GameType gameType, PlayerMatchType matchType, 
-                                             Integer roundCount, Boolean increasingDifficulty) {
+    public static MultiRoadViewGame createGame(GameRoom gameRoom, PlayerMatchType matchType,
+                                             Integer roundCount) {
         return MultiRoadViewGame.builder()
-                .gameType(gameType)
                 .matchType(matchType)
                 .gameMode(GameMode.ROADVIEW)  // 로드뷰 모드로 고정
                 .roundCount(roundCount)
                 .currentRound(0) // 시작 전에는 0
                 .isFinished(false)
-                .increasingDifficulty(increasingDifficulty)
                 .gameRoom(gameRoom)
                 .build();
     }

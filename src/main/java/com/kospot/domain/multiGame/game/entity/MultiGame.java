@@ -20,9 +20,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @MappedSuperclass
 public abstract class MultiGame extends BaseTimeEntity {
-
-    @Enumerated(EnumType.STRING)
-    private GameType gameType;
     
     // 개인전 또는 협동전
     @Enumerated(EnumType.STRING)
@@ -37,12 +34,6 @@ public abstract class MultiGame extends BaseTimeEntity {
     private Integer roundCount;
 
     private Integer currentRound;
-    
-    // 난이도: 라운드별로 난이도가 증가할지 여부
-    private Boolean increasingDifficulty;
-    
-    // 각 라운드별 보여줄 사진 수(사진 모드에서 사용)
-    private Integer photosPerRound;
 
     private Boolean isFinished;
     
@@ -53,11 +44,11 @@ public abstract class MultiGame extends BaseTimeEntity {
     }
     
     public void moveToNextRound() {
-        if (this.currentRound < this.roundCount) {
-            this.currentRound++;
-        } else {
+        if (isLastRound()) {
             finishGame();
+            return;
         }
+        this.currentRound++;
     }
     
     public void finishGame() {
@@ -67,7 +58,7 @@ public abstract class MultiGame extends BaseTimeEntity {
     public boolean isLastRound() {
         return this.currentRound.equals(this.roundCount);
     }
-    
+
     public boolean isCooperativeMode() {
         return PlayerMatchType.COOPERATIVE.equals(this.matchType);
     }
@@ -76,13 +67,5 @@ public abstract class MultiGame extends BaseTimeEntity {
         return GameMode.PHOTO.equals(this.gameMode);
     }
     
-    // 난이도에 따른 현재 라운드의 사진 수 계산 (사진 모드에서 사용)
-    public int calculateCurrentRoundPhotos() {
-        if (!increasingDifficulty || photosPerRound == null) {
-            return photosPerRound != null ? photosPerRound : 4; // 기본값 4
-        }
-        
-        // 난이도 증가 로직: 라운드가 진행됨에 따라 사진 수 감소
-        return Math.max(1, photosPerRound - (currentRound / 5));
-    }
+
 }
