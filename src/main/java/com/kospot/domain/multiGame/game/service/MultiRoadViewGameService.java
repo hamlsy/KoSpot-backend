@@ -3,7 +3,7 @@ package com.kospot.domain.multiGame.game.service;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multiGame.game.repository.MultiRoadViewGameRepository;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
-import com.kospot.presentation.multiGame.game.dto.MultiGameRequest;
+import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,6 @@
-package com.kospot.presentation.multiGame.game.dto;
+package com.kospot.presentation.multiGame.game.dto.request;
 
 import lombok.*;
-
-import java.util.List;
 
 public class MultiGameRequest {
 
