@@ -19,15 +19,16 @@ public class StartRoadViewPracticeUseCase {
 
     public StartGameResponse.RoadView execute(Member member, String sidoKey){
         RoadViewGame game = roadViewGameService.startPracticeGame(member, sidoKey);
-        return getEncryptedRoadViewGameResponse(game);
+        return getEncryptedRoadViewGameResponse(member, game);
     }
 
     //encrypt -> response
-    private StartGameResponse.RoadView getEncryptedRoadViewGameResponse(RoadViewGame game) {
+    private StartGameResponse.RoadView getEncryptedRoadViewGameResponse(Member member, RoadViewGame game) {
         return StartGameResponse.RoadView.builder()
                 .gameId(aesService.toEncryptString(game.getId()))
                 .targetLat(aesService.toEncryptString(game.getTargetLat()))
                 .targetLng(aesService.toEncryptString(game.getTargetLng()))
+                .markerImageUrl(member.getEquippedMarkerImage().getImageUrl())
                 .build();
     }
 
