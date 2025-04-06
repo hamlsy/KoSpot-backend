@@ -14,5 +14,4 @@ public class GamePlayerAdaptor {
 
     private final GamePlayerRepository repository;
 
-
 }

@@ -14,6 +14,7 @@ import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import com.kospot.domain.multiGame.gameRound.service.RoadViewGameRoundService;
 import com.kospot.global.annotation.usecase.UseCase;
 import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;
+import com.kospot.presentation.multiGame.game.dto.response.MultiRoadViewGameResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ import java.util.List;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class StartMultiGameUseCase {
+public class StartMultiRoadViewGameUseCase {
 
     private final GameRoomAdaptor gameRoomAdaptor;
     private final MultiRoadViewGameService multiRoadViewGameService;
@@ -32,34 +33,22 @@ public class StartMultiGameUseCase {
     private final RoadViewGameRoundService roadViewGameRoundService;
     private final GamePlayerService gamePlayerService;
 
-    public void execute(Member host, MultiGameRequest.Start request) {
+    public MultiRoadViewGameResponse execute(Member host, MultiGameRequest.Start request) {
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(request.getGameRoomId());
         gameRoom.isHost(host);
-        GameMode gameMode = GameMode.fromKey(request.getGameModeKey());
-        switch (gameMode) {
-            case ROADVIEW -> startRoadViewGame(gameRoom, request);
-            case PHOTO -> startPhotoGame(gameRoom, request);
-        }
-
+        return startRoadViewGame(gameRoom, request);
     }
 
 
-    private void startRoadViewGame(GameRoom gameRoom, MultiGameRequest.Start request) {
+    private MultiRoadViewGameResponse startRoadViewGame(GameRoom gameRoom, MultiGameRequest.Start request) {
         // 로드뷰 게임 생성
         MultiRoadViewGame game = multiRoadViewGameService.createGame(gameRoom, request);
         // 라운드 생성 (모드별 파라미터 전달)
         RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1);
         // 게임 플레이어 생성
         List<GamePlayer> gamePlayers = gamePlayerService.createGamePlayers(gameRoom);
-
+        return null;
     }
 
-    private void startPhotoGame(GameRoom gameRoom, MultiGameRequest.Start request) {
-        // 포토 게임 생성
-        MultiPhotoGame game = photoGameService.createGame(gameRoom, request);
-        // 라운드 생성 (모드별 파라미터 전달)
-        roundService.createInitialRounds(game, request.getRoundCount());
-        // 게임 시작 (모드별 특수 로직)
-        photoGameService.startGame(game, gamePlayers);
-    }
+
 }

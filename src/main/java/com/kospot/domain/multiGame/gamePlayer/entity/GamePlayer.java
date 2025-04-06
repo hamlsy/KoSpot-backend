@@ -22,6 +22,8 @@ public class GamePlayer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String nickname;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -50,6 +52,7 @@ public class GamePlayer {
     //business
     public static GamePlayer create(Member member, GameRoom gameRoom) {
         return GamePlayer.builder()
+                .nickname(member.getNickname())
                 .member(member)
                 .gameRoom(gameRoom)
                 .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
