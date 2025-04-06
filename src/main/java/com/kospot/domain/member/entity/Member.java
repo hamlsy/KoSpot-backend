@@ -1,6 +1,7 @@
 package com.kospot.domain.member.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.exception.object.domain.MemberHandler;
 import com.kospot.exception.object.domain.PointHandler;
@@ -44,6 +45,10 @@ public class Member extends BaseTimeEntity {
 
     private int point;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image equippedMarkerImage;
+
     @OneToOne(mappedBy = "member")
     private GamePlayer gamePlayer;
 
@@ -52,10 +57,12 @@ public class Member extends BaseTimeEntity {
 
     //business
 
-    /**
-     * Point
-     */
+    //marker
+    public void equippedMarkerImage(Image image) {
+        this.equippedMarkerImage = image;
+    }
 
+    //point
     public void addPoint(int amount) {
         this.point += amount;
     }

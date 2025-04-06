@@ -39,9 +39,13 @@ public class GamePlayer {
     @Enumerated(EnumType.STRING)
     private GamePlayerStatus status;
 
-    //todo marker image, chatMessage
-    //todo 연관관계, 아이템 여러개?
-//    private Item equippedMarker;
+    //todo chatMessage
+
+    // rank 표시 보류
+//    private String rankTier;
+//    private String rankLevel;
+
+    private String equippedMarkerImageUrl;
 
     //business
     public static GamePlayer create(Member member, GameRoom gameRoom) {
