@@ -57,7 +57,7 @@ public class Member extends BaseTimeEntity {
 
     //business
 
-    //marker
+    //set marker
     public void equippedMarkerImage(Image image) {
         this.equippedMarkerImage = image;
     }

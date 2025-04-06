@@ -23,6 +23,10 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
     @Query("select mi from MemberItem mi join fetch mi.item where mi.id = :id")
     Optional<MemberItem> findByIdFetchItem(@Param("id") Long id);
 
+    @Query("select mi from MemberItem mi join fetch mi.item i " +
+            "left join fetch i.image where mi.id = :id")
+    Optional<MemberItem> findByIdFetchItemAndImage(@Param("id") Long id);
+
     @Query("select mi from MemberItem mi join fetch mi.item where mi.item.id = :itemId")
     Optional<MemberItem> findByItemIdFetchItem(@Param("itemId") Long itemId);
 

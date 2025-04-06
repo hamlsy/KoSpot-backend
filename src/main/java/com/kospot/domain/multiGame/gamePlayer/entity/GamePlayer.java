@@ -52,6 +52,7 @@ public class GamePlayer {
         return GamePlayer.builder()
                 .member(member)
                 .gameRoom(gameRoom)
+                .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
                 .status(GamePlayerStatus.PLAYING)
                 .build();
     }
