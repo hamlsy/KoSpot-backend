@@ -2,6 +2,7 @@ package com.kospot.domain.multiGame.gamePlayer.entity;
 
 import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multiGame.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -43,6 +44,14 @@ public class GamePlayer {
 //    private Item equippedMarker;
 
     //business
+    public static GamePlayer create(Member member, GameRoom gameRoom) {
+        return GamePlayer.builder()
+                .member(member)
+                .gameRoom(gameRoom)
+                .status(GamePlayerStatus.PLAYING)
+                .build();
+    }
+
     public void leaveGameRoom(Member member) {
         if (gameRoom != null) {
             this.gameRoom = null;
