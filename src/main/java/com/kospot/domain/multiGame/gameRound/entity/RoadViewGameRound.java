@@ -38,10 +38,10 @@ public class RoadViewGameRound extends BaseTimeEntity {
     @JoinColumn(name = "coordinate_id")
     private CoordinateNationwide targetCoordinate;
     
-    @OneToMany(mappedBy = "gameRound", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadViewPlayerSubmission> roadViewPlayerSubmissions = new ArrayList<>();
     
-    @OneToMany(mappedBy = "gameRound", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamSubmission> teamSubmissions = new ArrayList<>();
     
     private Boolean isFinished;

@@ -1,7 +1,11 @@
 package com.kospot.multiGame.game.usecase;
 
+import com.kospot.application.coordinate.ImportCoordinateUseCase;
 import com.kospot.application.multiGame.game.StartMultiRoadViewGameUseCase;
+import com.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.image.entity.Image;
+import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.Role;
 import com.kospot.domain.member.repository.MemberRepository;
@@ -15,6 +19,7 @@ import com.kospot.domain.multiGame.gameRound.repository.RoadViewGameRoundReposit
 
 import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multiGame.game.dto.response.MultiRoadViewGameResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
 public class MultiGameUseCaseTest {
@@ -53,26 +59,44 @@ public class MultiGameUseCaseTest {
     
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
-    
+
+    @Autowired
+    private ImportCoordinateUseCase importCoordinateUseCase;
+
+    @Autowired
+    private ImageRepository imageRepository;
+
     private Member hostMember;
     private List<Member> players;
     private GameRoom gameRoom;
+    private Image image;
     
     @BeforeEach
     void setUp() {
+        memberRepository.deleteAll();
+        // 마커 이미지 생성
+        image = Image.builder()
+                .imageUrl("http://example.com/image.jpg")
+                .build();
+        imageRepository.save(image);
+
         // 멤버 생성
-        hostMember = createAndSaveMember("host", "host123", Role.USER);
+        hostMember = createAndSaveMember("host", "host123", Role.USER, image);
         players = new ArrayList<>();
         players.add(hostMember);
-        
+        log.info("{}", hostMember);
+
         // 추가 플레이어 생성
         for (int i = 1; i <= 3; i++) {
-            Member player = createAndSaveMember("player" + i, "player" + i, Role.USER);
+            Member player = createAndSaveMember("player" + i, "nick" + i, Role.USER, image);
+            log.info("{}", player);
             players.add(player);
         }
         
         // 게임룸 생성
         gameRoom = createAndSaveGameRoom(hostMember, players);
+
+        importCoordinateUseCase.execute("test_coordinates_excel.xlsx");
     }
     
     @Test
@@ -206,13 +230,13 @@ public class MultiGameUseCaseTest {
         
         // 여러 개의 게임룸과 호스트 생성
         for (int i = 0; i < roomCount; i++) {
-            Member host = createAndSaveMember("host" + i, "host" + i, Role.USER);
+            Member host = createAndSaveMember("host" + i, "host" + i, Role.USER, image);
             hosts.add(host);
             
             List<Member> roomPlayers = new ArrayList<>();
             roomPlayers.add(host);
             for (int j = 0; j < 3; j++) {
-                Member player = createAndSaveMember("player" + i + j, "player" + i + j, Role.USER);
+                Member player = createAndSaveMember("player" + i + j, "player" + i + j, Role.USER, image);
                 roomPlayers.add(player);
             }
             
@@ -247,10 +271,11 @@ public class MultiGameUseCaseTest {
     }
     
     // 헬퍼 메소드
-    private Member createAndSaveMember(String username, String nickname, Role role) {
+    private Member createAndSaveMember(String username, String nickname, Role role, Image image) {
         Member member = Member.builder()
                 .username(username)
                 .nickname(nickname)
+                .equippedMarkerImage(image)
                 .role(role)
                 .build();
         return memberRepository.save(member);

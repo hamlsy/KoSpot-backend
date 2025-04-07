@@ -42,13 +42,13 @@ public class GameRoom extends BaseTimeEntity {
     private int maxPlayers;
     
     // 협동전 모드에서 사용할 팀 수 (2-4)
-    @Min(2)
-    @Max(4)
+//    @Min(2)
+//    @Max(4)
     private int teamCount;
 
     private int currentPlayerCount; // cache
 
-    @Size(min = 2, max = 10) //todo 공백, 특수문자 안됨
+//    @Size(min = 2, max = 10) //todo 공백, 특수문자 안됨
     private String password;
 
     @Enumerated(EnumType.STRING)

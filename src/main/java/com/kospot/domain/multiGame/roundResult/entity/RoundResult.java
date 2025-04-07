@@ -1,7 +1,6 @@
 package com.kospot.domain.multiGame.roundResult.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.multiGame.game.entity.MultiGame;
 import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import jakarta.persistence.*;
@@ -31,8 +30,7 @@ public class RoundResult extends BaseTimeEntity {
     @JoinColumn(name = "multi_photo_game_id")
     private MultiPhotoGame multiPhotoGame;
 
-
-    private Integer roundNumber;
+    private Integer totalRounds;
 
     @OneToMany(mappedBy = "roundResult", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlayerRoundResult> playerResults = new ArrayList<>();

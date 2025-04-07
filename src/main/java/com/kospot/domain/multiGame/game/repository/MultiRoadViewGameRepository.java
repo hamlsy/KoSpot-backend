@@ -13,7 +13,7 @@ public interface MultiRoadViewGameRepository extends JpaRepository<MultiRoadView
     @Query("SELECT g FROM MultiRoadViewGame g WHERE g.gameRoom.id = :gameRoomId")
     Optional<MultiRoadViewGame> findByGameRoomId(@Param("gameRoomId") Long gameRoomId);
     
-    @Query("SELECT g FROM MultiRoadViewGame g LEFT JOIN FETCH g.gameRounds WHERE g.id = :gameId")
+    @Query("SELECT g FROM MultiRoadViewGame g LEFT JOIN FETCH g.roadViewGameRounds WHERE g.id = :gameId")
     Optional<MultiRoadViewGame> findWithRoundsById(@Param("gameId") Long gameId);
 
     List<MultiRoadViewGame> findAllByGameRoomId(Long id);
