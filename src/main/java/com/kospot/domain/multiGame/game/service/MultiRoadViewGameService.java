@@ -1,6 +1,7 @@
 package com.kospot.domain.multiGame.game.service;
 
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.domain.multiGame.game.repository.MultiRoadViewGameRepository;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;
@@ -19,9 +20,9 @@ public class MultiRoadViewGameService {
     private final MultiRoadViewGameRepository multiRoadViewGameRepository;
 
     public MultiRoadViewGame createGame(GameRoom gameRoom, MultiGameRequest.Start request) {
-        MultiRoadViewGame game = MultiRoadViewGame.builder()
-                .gameRoom(gameRoom)
-                .build();
+        PlayerMatchType matchType = PlayerMatchType.fromKey(request.getPlayerMatchTypeKey());
+        int totalRounds = request.getTotalRounds();
+        MultiRoadViewGame game = MultiRoadViewGame.createGame(gameRoom, matchType, totalRounds);
         return multiRoadViewGameRepository.save(game);
     }
 

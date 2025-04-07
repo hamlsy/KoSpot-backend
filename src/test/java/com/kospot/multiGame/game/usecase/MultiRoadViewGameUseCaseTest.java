@@ -2,7 +2,6 @@ package com.kospot.multiGame.game.usecase;
 
 import com.kospot.application.coordinate.ImportCoordinateUseCase;
 import com.kospot.application.multiGame.game.StartMultiRoadViewGameUseCase;
-import com.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
@@ -10,6 +9,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.Role;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.domain.multiGame.game.repository.MultiRoadViewGameRepository;
 import com.kospot.domain.multiGame.gamePlayer.repository.GamePlayerRepository;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
-public class MultiGameUseCaseTest {
+public class MultiRoadViewGameUseCaseTest {
 
     @Autowired
     private StartMultiRoadViewGameUseCase startMultiRoadViewGameUseCase;
@@ -286,6 +286,7 @@ public class MultiGameUseCaseTest {
                 .host(host)
                 .gameMode(GameMode.ROADVIEW)
                 .maxPlayers(6)
+                .playerMatchType(PlayerMatchType.INDIVIDUAL)
                 .title("Test Game Room")
                 .build();
         
@@ -318,6 +319,8 @@ public class MultiGameUseCaseTest {
     private MultiGameRequest.Start createStartRequest(Long gameRoomId) {
         MultiGameRequest.Start request = new MultiGameRequest.Start();
         request.setGameRoomId(gameRoomId);
+        request.setTotalRounds(10);
+        request.setPlayerMatchTypeKey("individual");
         return request;
     }
 }

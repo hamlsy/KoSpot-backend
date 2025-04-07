@@ -45,7 +45,7 @@ public class Member extends BaseTimeEntity {
 
     private int point;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image equippedMarkerImage;
 

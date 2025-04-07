@@ -13,7 +13,7 @@ public class MultiGameRequest {
 
         private Long gameRoomId;
         private String playerMatchTypeKey;
-        private int roundCount;
+        private int totalRounds;
 
     }
 }
