@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MultiRoadViewGameRepository extends JpaRepository<MultiRoadViewGame, Long> {
@@ -14,4 +15,6 @@ public interface MultiRoadViewGameRepository extends JpaRepository<MultiRoadView
     
     @Query("SELECT g FROM MultiRoadViewGame g LEFT JOIN FETCH g.gameRounds WHERE g.id = :gameId")
     Optional<MultiRoadViewGame> findWithRoundsById(@Param("gameId") Long gameId);
-} 
+
+    List<MultiRoadViewGame> findAllByGameRoomId(Long id);
+}

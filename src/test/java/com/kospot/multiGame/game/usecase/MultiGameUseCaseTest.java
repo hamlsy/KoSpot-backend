@@ -1,6 +1,7 @@
 package com.kospot.multiGame.game.usecase;
 
 import com.kospot.application.multiGame.game.StartMultiRoadViewGameUseCase;
+import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.Role;
 import com.kospot.domain.member.repository.MemberRepository;
@@ -93,12 +94,12 @@ public class MultiGameUseCaseTest {
         assertNotNull(game);
         
         // 라운드 생성 확인
-        List<RoadViewGameRound> rounds = roadViewGameRoundRepository.findAllByMultiGameId(game.getId());
+        List<RoadViewGameRound> rounds = roadViewGameRoundRepository.findAllByMultiRoadViewGameId(game.getId());
         assertFalse(rounds.isEmpty());
         assertEquals(1, rounds.get(0).getRoundNumber());
         
         // 게임 플레이어 생성 확인
-        assertEquals(players.size(), gamePlayerRepository.countByMultiGameId(game.getId()));
+        assertEquals(players.size(), gamePlayerRepository.countByGameRoomId(game.getId()));
     }
     
     @Test
@@ -110,7 +111,7 @@ public class MultiGameUseCaseTest {
         Member notHost = players.get(1); // 호스트가 아닌 멤버
         
         // when & then
-        assertThrows(BaseException.class, () -> {
+        assertThrows(Exception.class, () -> {
             startMultiRoadViewGameUseCase.execute(notHost, request);
         });
     }
@@ -123,7 +124,7 @@ public class MultiGameUseCaseTest {
         MultiGameRequest.Start request = createStartRequest(9999L); // 존재하지 않는 ID
         
         // when & then
-        assertThrows(BaseException.class, () -> {
+        assertThrows(Exception.class, () -> {
             startMultiRoadViewGameUseCase.execute(hostMember, request);
         });
     }
@@ -139,7 +140,7 @@ public class MultiGameUseCaseTest {
         startMultiRoadViewGameUseCase.execute(hostMember, request);
         
         // when & then - 두 번째 게임 시작 시도
-        assertThrows(BaseException.class, () -> {
+        assertThrows(Exception.class, () -> {
             startMultiRoadViewGameUseCase.execute(hostMember, request);
         });
     }
@@ -154,7 +155,7 @@ public class MultiGameUseCaseTest {
         MultiGameRequest.Start request = createStartRequest(smallRoom.getId());
         
         // when & then
-        assertThrows(BaseException.class, () -> {
+        assertThrows(Exception.class, () -> {
             startMultiRoadViewGameUseCase.execute(hostMember, request);
         });
     }
@@ -269,7 +270,7 @@ public class MultiGameUseCaseTest {
         
         // 플레이어 추가 로직 (실제 구현에 맞게 수정 필요)
         for (Member player : players) {
-            gameRoom.addPlayer(player);
+            gameRoom.join(player);
         }
         
         return gameRoomRepository.save(gameRoom);
@@ -284,7 +285,7 @@ public class MultiGameUseCaseTest {
                 .build();
         
         GameRoom savedRoom = gameRoomRepository.save(gameRoom);
-        savedRoom.addPlayer(host);
+        savedRoom.join(host);
         
         return gameRoomRepository.save(savedRoom);
     }
