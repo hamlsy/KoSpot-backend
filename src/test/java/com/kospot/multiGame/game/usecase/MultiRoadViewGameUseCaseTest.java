@@ -83,7 +83,7 @@ public class MultiRoadViewGameUseCaseTest {
 
         // 멤버 생성
         hostMember = createAndSaveMember("host", "host123", Role.USER, image);
-        hostMember1 = createAndSaveMember("host1", "host1234", Role.USER, image);
+        hostMember1 = createAndSaveMember("temp host1", "host1234", Role.USER, image);
         players = new ArrayList<>();
         players.add(hostMember);
         log.info("{}", hostMember);
