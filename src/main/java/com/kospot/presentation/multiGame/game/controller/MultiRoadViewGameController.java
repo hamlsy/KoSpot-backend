@@ -4,6 +4,7 @@ import com.kospot.application.multiGame.game.StartMultiRoadViewGameUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.exception.payload.dto.ApiResponseDto;
 import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;
+import com.kospot.presentation.multiGame.game.dto.response.MultiRoadViewGameResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +25,7 @@ public class MultiRoadViewGameController {
 
     @Operation(summary = "멀티 로드뷰 게임 시작", description = "멀티 로드뷰 게임을 시작합니다.")
     @PostMapping("/")
-    public ApiResponseDto<?> startGame(Member member, @RequestBody MultiGameRequest.Start request) {
+    public ApiResponseDto<MultiRoadViewGameResponse.Start> startGame(Member member, @RequestBody MultiGameRequest.Start request) {
         return ApiResponseDto.onSuccess(startMultiRoadViewGameUseCase.execute(member, request));
     }
 
