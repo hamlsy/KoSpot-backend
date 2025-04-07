@@ -29,25 +29,24 @@ public class StartMultiRoadViewGameUseCase {
 
     private final GameRoomAdaptor gameRoomAdaptor;
     private final MultiRoadViewGameService multiRoadViewGameService;
-    private final PhotoGameService photoGameService;
     private final RoadViewGameRoundService roadViewGameRoundService;
     private final GamePlayerService gamePlayerService;
 
-    public MultiRoadViewGameResponse execute(Member host, MultiGameRequest.Start request) {
+    public MultiRoadViewGameResponse.Start execute(Member host, MultiGameRequest.Start request) {
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(request.getGameRoomId());
         gameRoom.isHost(host);
         return startRoadViewGame(gameRoom, request);
     }
 
 
-    private MultiRoadViewGameResponse startRoadViewGame(GameRoom gameRoom, MultiGameRequest.Start request) {
+    private MultiRoadViewGameResponse.Start startRoadViewGame(GameRoom gameRoom, MultiGameRequest.Start request) {
         // 로드뷰 게임 생성
         MultiRoadViewGame game = multiRoadViewGameService.createGame(gameRoom, request);
         // 라운드 생성 (모드별 파라미터 전달)
         RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1);
         // 게임 플레이어 생성
         List<GamePlayer> gamePlayers = gamePlayerService.createGamePlayers(gameRoom);
-        return null;
+        return MultiRoadViewGameResponse.Start.from(game, roadViewGameRound, gamePlayers);
     }
 
 

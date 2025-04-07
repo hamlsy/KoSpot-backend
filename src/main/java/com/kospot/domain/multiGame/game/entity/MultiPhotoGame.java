@@ -1,7 +1,6 @@
 package com.kospot.domain.multiGame.game.entity;
 
 import com.kospot.domain.game.entity.GameMode;
-import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multiGame.gameRound.entity.PhotoGameRound;
 import jakarta.persistence.*;
@@ -42,7 +41,7 @@ public class MultiPhotoGame extends MultiGame {
         return MultiPhotoGame.builder()
                 .matchType(matchType)
                 .gameMode(GameMode.PHOTO)  // 사진 모드로 고정
-                .roundCount(roundCount)
+                .totalRounds(roundCount)
                 .currentRound(0) // 시작 전에는 0
                 .isFinished(false)
                 .photosPerRound(photosPerRound)
