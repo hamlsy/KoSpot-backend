@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
 @Tag(name = "Image Api", description = "이미지 API")
-@RequestMapping("/api/image")
+@RequestMapping("/image")
 public class ImageController {
 
     private final UpdateImageUseCase updateImageUseCase;

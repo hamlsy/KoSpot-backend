@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
 @Tag(name = "MemberItem Api", description = "멤버 아이템 API")
-@RequestMapping("/api/memberItem")
+@RequestMapping("/memberItem")
 public class MemberItemController {
 
     private final EquipMemberItemUseCase equipMemberItemUseCase;

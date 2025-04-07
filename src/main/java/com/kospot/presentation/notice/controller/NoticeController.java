@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
 @Tag(name = "Notice Api", description = "공지사항 API")
-@RequestMapping("/api/notice")
+@RequestMapping("/notice")
 public class NoticeController {
 
     private final FindAllNoticePagingUseCase findAllNoticePagingUseCase;

@@ -17,15 +17,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
 @Tag(name = "MultiRoadViewGame Api", description = "멀티 로드뷰 게임 API")
-@RequestMapping("/api/multiRoadView/")
+@RequestMapping("/multiRoadView/")
 public class MultiRoadViewGameController {
 
     private final StartMultiRoadViewGameUseCase startMultiRoadViewGameUseCase;
 
-    @Operation(summary = "멀티 게임 시작", description = "멀티 게임을 시작합니다.")
+    @Operation(summary = "멀티 로드뷰 게임 시작", description = "멀티 로드뷰 게임을 시작합니다.")
     @PostMapping("/")
-    public ApiResponseDto<?> startGame(Member member, @RequestBody MultiGameRequest request) {
-        return ApiResponseDto.onSuccess(null);
+    public ApiResponseDto<?> startGame(Member member, @RequestBody MultiGameRequest.Start request) {
+        return ApiResponseDto.onSuccess(startMultiRoadViewGameUseCase.execute(member, request));
     }
+
+
 
 }

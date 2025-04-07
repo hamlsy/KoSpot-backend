@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
 @Tag(name = "PointHistory Api", description = "포인트 기록 API")
-@RequestMapping("/api/pointHistory")
+@RequestMapping("/pointHistory")
 public class PointHistoryController {
 
     private final PointHistoryAdaptor adaptor;

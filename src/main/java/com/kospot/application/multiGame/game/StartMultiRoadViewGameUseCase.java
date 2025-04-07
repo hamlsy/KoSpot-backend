@@ -1,11 +1,8 @@
 package com.kospot.application.multiGame.game;
 
-import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multiGame.game.service.MultiRoadViewGameService;
-import com.kospot.domain.multiGame.game.service.PhotoGameService;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multiGame.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multiGame.gameRoom.adaptor.GameRoomAdaptor;
@@ -37,7 +34,6 @@ public class StartMultiRoadViewGameUseCase {
         gameRoom.isHost(host);
         return startRoadViewGame(gameRoom, request);
     }
-
 
     private MultiRoadViewGameResponse.Start startRoadViewGame(GameRoom gameRoom, MultiGameRequest.Start request) {
         // 로드뷰 게임 생성
