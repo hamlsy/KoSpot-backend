@@ -31,7 +31,7 @@ public class StartMultiRoadViewGameUseCase {
 
     public MultiRoadViewGameResponse.Start execute(Member host, MultiGameRequest.Start request) {
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(request.getGameRoomId());
-        gameRoom.isHost(host);
+        gameRoom.validateGameStart(host);
         return startRoadViewGame(gameRoom, request);
     }
 

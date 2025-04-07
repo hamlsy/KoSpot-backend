@@ -97,6 +97,13 @@ public class GameRoom extends BaseTimeEntity {
         validateRoomStatus();
     }
 
+    //room
+    public void validateGameStart(Member host) {
+        validatePlayerCount();
+        validateHost(host);
+        validateRoomStatus();
+    }
+
     private void validateRoomCapacity() {
         if (currentPlayerCount >= maxPlayers) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
@@ -112,6 +119,13 @@ public class GameRoom extends BaseTimeEntity {
     private void validateRoomStatus() {
         if (isNotWaitingRoom()) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_ALREADY_IN_PROGRESS);
+        }
+    }
+
+
+    private void validatePlayerCount() {
+        if(currentPlayerCount < 2) {
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_NOT_ENOUGH_PLAYER);
         }
     }
 

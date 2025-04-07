@@ -78,11 +78,11 @@ public enum ErrorStatus implements BaseCode {
     GAME_ROOM_IS_ALREADY_IN_PROGRESS(BAD_REQUEST, 4304, "게임이 이미 진행 중입니다."),
     GAME_ROOM_HOST_PRIVILEGES_REQUIRED(FORBIDDEN, 4305, "방장 권한이 필요합니다."),
     GAME_ROOM_MEMBER_ALREADY_IN_ROOM(BAD_REQUEST, 4306,"이미 게임 방에 참여 중입니다."),
+    GAME_ROOM_IS_NOT_ENOUGH_PLAYER(BAD_REQUEST, 4307, "게임 방에 참여할 플레이어가 부족합니다."),
 
     // MultiGame Error(4311 ~ 4320)
-    PLAYER_MATCH_TYPE_NOT_FOUND(NOT_FOUND, 4311, "해당 플레이어 매치 타입을 찾을 수 없습니다."),
+    PLAYER_MATCH_TYPE_NOT_FOUND(NOT_FOUND, 4311, "해당 플레이어 매치 타입을 찾을 수 없습니다."),;
 
-    ;
 
     private final HttpStatus httpStatus;
     private final Integer code;

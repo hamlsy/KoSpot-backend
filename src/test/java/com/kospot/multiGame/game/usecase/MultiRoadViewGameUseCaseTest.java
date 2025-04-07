@@ -67,6 +67,7 @@ public class MultiRoadViewGameUseCaseTest {
     private ImageRepository imageRepository;
 
     private Member hostMember;
+    private Member hostMember1;
     private List<Member> players;
     private GameRoom gameRoom;
     private Image image;
@@ -82,6 +83,7 @@ public class MultiRoadViewGameUseCaseTest {
 
         // 멤버 생성
         hostMember = createAndSaveMember("host", "host123", Role.USER, image);
+        hostMember1 = createAndSaveMember("host1", "host1234", Role.USER, image);
         players = new ArrayList<>();
         players.add(hostMember);
         log.info("{}", hostMember);
@@ -175,12 +177,12 @@ public class MultiRoadViewGameUseCaseTest {
     void startGameWithInsufficientPlayers() {
         // given
         // 1명만 있는 게임룸 생성
-        GameRoom smallRoom = createGameRoomWithOnePlayer(hostMember);
+        GameRoom smallRoom = createGameRoomWithOnePlayer(hostMember1);
         MultiGameRequest.Start request = createStartRequest(smallRoom.getId());
         
         // when & then
         assertThrows(Exception.class, () -> {
-            startMultiRoadViewGameUseCase.execute(hostMember, request);
+            startMultiRoadViewGameUseCase.execute(hostMember1, request);
         });
     }
     
@@ -307,7 +309,7 @@ public class MultiRoadViewGameUseCaseTest {
                 .host(host)
                 .gameMode(GameMode.ROADVIEW)
                 .maxPlayers(6)
-                .title("Test Game Room")
+                .title("Test Game Room1")
                 .build();
         
         GameRoom savedRoom = gameRoomRepository.save(gameRoom);
