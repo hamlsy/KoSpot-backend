@@ -43,9 +43,6 @@ public abstract class BasePlayerRoundResult extends BaseTimeEntity {
         this.rank = rank;
     }
 
-    // 점수 계산 추상 메서드 - 각 게임 모드별로 구현
-    public abstract void calculateScore();
-
     // 플레이어 점수 적용
     protected void applyScoreToPlayer() {
         if (this.gamePlayer != null && this.score != null) {

@@ -27,33 +27,6 @@ public class RoadViewPlayerRoundResult extends BasePlayerRoundResult {
         this.roundResult = roundResult;
     }
 
-    @Override
-    public void calculateScore() {
-        if (!getIsCorrect()) {
-            this.score = 0;
-            return;
-        }
-
-        // 거리에 따른 기본 점수 계산
-        int distanceScore;
-        if (this.distance <= 50) {
-            distanceScore = 100;
-        } else if (this.distance <= 200) {
-            distanceScore = 80;
-        } else {
-            distanceScore = Math.max(0, 100 - (int)(this.distance / 10));
-        }
-        
-        // 순위에 따른 추가 점수
-        int rankScore = ScoreRule.calculateScore(getRank());
-        
-        // 최종 점수 계산
-        int finalScore = distanceScore + rankScore;
-        
-        this.score = finalScore;
-        applyScoreToPlayer();
-    }
-
     // 생성 메서드
     public static RoadViewPlayerRoundResult createResult(GamePlayer gamePlayer, 
                                                       Long submissionTime,

@@ -17,4 +17,6 @@ public interface MultiRoadViewGameRepository extends JpaRepository<MultiRoadView
     Optional<MultiRoadViewGame> findWithRoundsById(@Param("gameId") Long gameId);
 
     List<MultiRoadViewGame> findAllByGameRoomId(Long id);
+
+
 }

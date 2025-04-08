@@ -16,7 +16,5 @@ public interface RoadViewRoundResultRepository extends JpaRepository<RoadViewRou
     
     @Query("SELECT r FROM RoadViewRoundResult r WHERE r.game.id = :gameId AND r.roundNumber = :roundNumber")
     Optional<RoadViewRoundResult> findByGameIdAndRoundNumber(@Param("gameId") Long gameId, @Param("roundNumber") Integer roundNumber);
-    
-    @Query("SELECT g FROM MultiRoadViewGame g WHERE g.id = :gameId")
-    Optional<MultiRoadViewGame> findGameById(@Param("gameId") Long gameId);
+
 } 

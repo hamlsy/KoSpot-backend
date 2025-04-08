@@ -27,30 +27,6 @@ public class PhotoPlayerRoundResult extends BasePlayerRoundResult {
         this.roundResult = roundResult;
     }
 
-    @Override
-    public void calculateScore() {
-        if (!getIsCorrect()) {
-            this.score = 0;
-            return;
-        }
-
-        // 답변 순서에 따른 점수 계산
-        switch (answerOrder) {
-            case 1:
-                this.score = ScoreRule.PHOTO_FIRST_ANSWER;
-                break;
-            case 2:
-                this.score = ScoreRule.PHOTO_SECOND_ANSWER;
-                break;
-            case 3:
-                this.score = ScoreRule.PHOTO_THIRD_ANSWER;
-                break;
-            default:
-                this.score = ScoreRule.PHOTO_OTHER_ANSWER;
-        }
-        
-        applyScoreToPlayer();
-    }
 
     // 생성 메서드
     public static PhotoPlayerRoundResult createResult(GamePlayer gamePlayer, 
