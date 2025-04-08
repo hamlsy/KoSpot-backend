@@ -13,6 +13,7 @@ import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.domain.multiGame.game.repository.MultiRoadViewGameRepository;
 import com.kospot.domain.multiGame.gamePlayer.repository.GamePlayerRepository;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multiGame.gameRoom.entity.GameRoomStatus;
 import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
 import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import com.kospot.domain.multiGame.gameRound.repository.RoadViewGameRoundRepository;
@@ -40,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
-public class MultiRoadViewGameUseCaseTest {
+public class StartMultiRoadViewGameUseCaseTest {
 
     @Autowired
     private StartMultiRoadViewGameUseCase startMultiRoadViewGameUseCase;
@@ -289,6 +290,7 @@ public class MultiRoadViewGameUseCaseTest {
                 .gameMode(GameMode.ROADVIEW)
                 .maxPlayers(6)
                 .playerMatchType(PlayerMatchType.INDIVIDUAL)
+                .status(GameRoomStatus.WAITING)
                 .title("Test Game Room")
                 .build();
         

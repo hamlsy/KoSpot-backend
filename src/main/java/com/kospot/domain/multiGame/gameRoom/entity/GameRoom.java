@@ -52,6 +52,11 @@ public class GameRoom extends BaseTimeEntity {
     private Member host;
 
     //business
+    public void start(Member host) {
+        validateGameStart(host);
+        this.status = GameRoomStatus.PLAYING;
+    }
+
     public void setHost(Member host) {
         this.host = host;
     }
