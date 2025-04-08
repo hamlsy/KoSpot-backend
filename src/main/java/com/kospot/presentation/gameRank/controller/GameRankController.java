@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
 @Tag(name = "GameRank Api", description = "게임 랭크 API")
-@RequestMapping("/api/gameRank/")
+@RequestMapping("/gameRank/")
 public class GameRankController {
 
     /**

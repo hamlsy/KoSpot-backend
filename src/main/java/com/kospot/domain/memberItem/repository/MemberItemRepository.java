@@ -1,5 +1,6 @@
 package com.kospot.domain.memberItem.repository;
 
+import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.item.entity.ItemType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberItem.entity.MemberItem;
@@ -14,12 +15,17 @@ import java.util.Optional;
 
 public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
 
+
     @Modifying
     @Query("delete from MemberItem mi where mi.item.id = :itemId")
     void deleteAllByItemId(@Param("itemId") Long itemId);
 
     @Query("select mi from MemberItem mi join fetch mi.item where mi.id = :id")
     Optional<MemberItem> findByIdFetchItem(@Param("id") Long id);
+
+    @Query("select mi from MemberItem mi join fetch mi.item i " +
+            "left join fetch i.image where mi.id = :id")
+    Optional<MemberItem> findByIdFetchItemAndImage(@Param("id") Long id);
 
     @Query("select mi from MemberItem mi join fetch mi.item where mi.item.id = :itemId")
     Optional<MemberItem> findByItemIdFetchItem(@Param("itemId") Long itemId);
@@ -39,5 +45,6 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
             "where mi.member = :member and mi.item.itemType = :itemType")
     List<MemberItemResponse> findAllByMemberAndItemTypeFetch(@Param("member") Member member,
                                                              @Param("itemType") ItemType itemType);
+
 
 }

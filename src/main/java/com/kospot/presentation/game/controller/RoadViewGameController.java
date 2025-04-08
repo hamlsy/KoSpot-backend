@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
 @Tag(name = "RoadViewGame Api", description = "로드뷰 게임 API")
-@RequestMapping("/api/roadView")
+@RequestMapping("/roadView")
 public class RoadViewGameController {
 
     private final StartRoadViewPracticeUseCase startRoadViewPracticeUseCase;

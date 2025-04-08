@@ -2,6 +2,7 @@ package com.kospot.domain.multiGame.gameRound.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multiGame.submittion.entity.RoadViewPlayerSubmission;
 import com.kospot.domain.multiGame.submittion.entity.TeamSubmission;
@@ -35,12 +36,12 @@ public class RoadViewGameRound extends BaseTimeEntity {
     // 라운드에 사용되는 정답 좌표
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coordinate_id")
-    private Coordinate targetCoordinate;
+    private CoordinateNationwide targetCoordinate;
     
-    @OneToMany(mappedBy = "gameRound", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadViewPlayerSubmission> roadViewPlayerSubmissions = new ArrayList<>();
     
-    @OneToMany(mappedBy = "gameRound", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamSubmission> teamSubmissions = new ArrayList<>();
     
     private Boolean isFinished;
@@ -65,7 +66,7 @@ public class RoadViewGameRound extends BaseTimeEntity {
     }
     
     // 생성 메서드
-    public static RoadViewGameRound createRound(Integer roundNumber, Coordinate targetCoordinate) {
+    public static RoadViewGameRound createRound(Integer roundNumber, CoordinateNationwide targetCoordinate) {
         return RoadViewGameRound.builder()
                 .roundNumber(roundNumber)
                 .targetCoordinate(targetCoordinate)

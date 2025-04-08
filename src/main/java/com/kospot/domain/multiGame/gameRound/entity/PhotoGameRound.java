@@ -76,20 +76,6 @@ public class PhotoGameRound extends BaseTimeEntity {
         this.isFinished = true;
     }
     
-    // 현재 라운드에 표시할 사진 수 계산
-    public List<String> getDisplayPhotos() {
-        if (multiPhotoGame == null || photoUrls.isEmpty()) {
-            return photoUrls;
-        }
-        
-        int photosToShow = multiPhotoGame.calculateCurrentRoundPhotos();
-        if (photosToShow >= photoUrls.size()) {
-            return photoUrls;
-        }
-        
-        return photoUrls.subList(0, photosToShow);
-    }
-    
     // 모든 플레이어가 정답을 맞췄는지 확인
     public boolean allPlayersAnsweredCorrectly(int totalPlayers) {
         return correctAnswersCount >= totalPlayers;

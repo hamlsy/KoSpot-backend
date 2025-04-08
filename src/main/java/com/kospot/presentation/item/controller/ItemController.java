@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
 @Tag(name = "Item Api", description = "아이템 API")
-@RequestMapping("/api/item")
+@RequestMapping("/item")
 public class ItemController {
 
     private final FindAllItemsByTypeUseCase findAllItemsByTypeUseCase;

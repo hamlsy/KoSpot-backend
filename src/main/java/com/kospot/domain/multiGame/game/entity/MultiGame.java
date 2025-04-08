@@ -2,7 +2,6 @@ package com.kospot.domain.multiGame.game.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.entity.GameMode;
-import com.kospot.domain.game.entity.GameType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
@@ -31,7 +30,7 @@ public abstract class MultiGame extends BaseTimeEntity {
 
     @Min(1)
     @Max(20)
-    private Integer roundCount;
+    private Integer totalRounds;
 
     private Integer currentRound;
 
@@ -56,7 +55,7 @@ public abstract class MultiGame extends BaseTimeEntity {
     }
     
     public boolean isLastRound() {
-        return this.currentRound.equals(this.roundCount);
+        return this.currentRound.equals(this.totalRounds);
     }
 
     public boolean isCooperativeMode() {

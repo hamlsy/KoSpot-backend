@@ -27,4 +27,9 @@ public class MemberAdaptor {
         return repository.findAllByGameRoomId(gameRoomId);
     }
 
+    public Member queryByUsernameFetchEquippedMarkerImage(String username) {
+        return repository.findByUsernameFetchEquippedMarkerImage(username).orElseThrow(
+                () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)
+        );
+    }
 }

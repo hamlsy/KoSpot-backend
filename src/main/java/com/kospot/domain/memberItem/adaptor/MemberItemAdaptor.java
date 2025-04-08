@@ -32,6 +32,12 @@ public class MemberItemAdaptor {
         );
     }
 
+    public MemberItem queryByIdFetchItemAndImage(Long id) {
+        return repository.findByIdFetchItemAndImage(id).orElseThrow(
+                () -> new MemberItemHandler(ErrorStatus.ITEM_NOT_FOUND)
+        );
+    }
+
     public MemberItem queryByItemIdFetchItem(Long itemId) {
         return repository.findByItemIdFetchItem(itemId).orElseThrow(
                 () -> new MemberItemHandler(ErrorStatus.ITEM_NOT_FOUND)
@@ -41,5 +47,6 @@ public class MemberItemAdaptor {
     public List<MemberItemResponse> queryByMemberAndItemTypeFetch(Member member, ItemType itemType) {
         return repository.findAllByMemberAndItemTypeFetch(member, itemType);
     }
+
 
 }

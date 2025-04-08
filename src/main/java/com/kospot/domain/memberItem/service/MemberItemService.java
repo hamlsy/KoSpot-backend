@@ -23,9 +23,12 @@ public class MemberItemService {
     private final MemberItemRepository memberItemRepository;
 
     public void equipItem(Member member, Long memberItemId) {
-        MemberItem memberItem = memberItemAdaptor.queryByIdFetchItem(memberItemId);
+        MemberItem memberItem = memberItemAdaptor.queryByIdFetchItemAndImage(memberItemId);
 
         ItemType memberItemType = memberItem.getItem().getItemType();
+        if(memberItemType.equals(ItemType.MARKER)) {
+            member.equippedMarkerImage(memberItem.getItem().getImage());
+        }
 
         // unEquip
         unEquippedItems(member, memberItemType);

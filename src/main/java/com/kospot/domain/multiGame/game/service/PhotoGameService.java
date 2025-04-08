@@ -2,9 +2,9 @@ package com.kospot.domain.multiGame.game.service;
 
 import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
 import com.kospot.domain.multiGame.gameRound.entity.PhotoGameRound;
+import com.kospot.domain.multiGame.gameRound.repository.PhotoGameRoundRepository;
 import com.kospot.domain.multiGame.submittion.entity.PhotoPlayerSubmission;
 import com.kospot.domain.multiGame.game.repository.MultiPhotoGameRepository;
-import com.kospot.domain.multiGame.roundResult.repository.PhotoGameRoundRepository;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.exception.object.domain.GameHandler;

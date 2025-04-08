@@ -12,7 +12,7 @@ public class StartGameResponse {
         private String gameId;
         private String targetLat;
         private String targetLng;
-
+        private String markerImageUrl;
     }
 
 }

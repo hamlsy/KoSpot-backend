@@ -1,7 +1,8 @@
 package com.kospot.domain.multiGame.roundResult.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.multiGame.game.entity.MultiGame;
+import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
+import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,10 +23,14 @@ public class RoundResult extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_id")
-    private MultiGame game;
+    @JoinColumn(name = "multi_road_view_game_id")
+    private MultiRoadViewGame multiRoadViewGame;
 
-    private Integer roundNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "multi_photo_game_id")
+    private MultiPhotoGame multiPhotoGame;
+
+    private Integer totalRounds;
 
     @OneToMany(mappedBy = "roundResult", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlayerRoundResult> playerResults = new ArrayList<>();
@@ -43,11 +48,5 @@ public class RoundResult extends BaseTimeEntity {
     }
 
     // 생성 메서드
-    public static RoundResult createRoundResult(MultiGame game, Integer roundNumber) {
-        return RoundResult.builder()
-                .game(game)
-                .roundNumber(roundNumber)
-                .isProcessed(false)
-                .build();
-    }
+
 } 

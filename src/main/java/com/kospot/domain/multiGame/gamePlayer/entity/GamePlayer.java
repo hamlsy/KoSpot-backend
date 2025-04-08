@@ -2,6 +2,7 @@ package com.kospot.domain.multiGame.gamePlayer.entity;
 
 import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multiGame.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,6 +22,8 @@ public class GamePlayer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String nickname;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -38,11 +41,25 @@ public class GamePlayer {
     @Enumerated(EnumType.STRING)
     private GamePlayerStatus status;
 
-    //todo marker image, chatMessage
-    //todo 연관관계, 아이템 여러개?
-//    private Item equippedMarker;
+    //todo chatMessage
+
+    // rank 표시 보류
+//    private String rankTier;
+//    private String rankLevel;
+
+    private String equippedMarkerImageUrl;
 
     //business
+    public static GamePlayer create(Member member, GameRoom gameRoom) {
+        return GamePlayer.builder()
+                .nickname(member.getNickname())
+                .member(member)
+                .gameRoom(gameRoom)
+                .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
+                .status(GamePlayerStatus.PLAYING)
+                .build();
+    }
+
     public void leaveGameRoom(Member member) {
         if (gameRoom != null) {
             this.gameRoom = null;

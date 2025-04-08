@@ -1,9 +1,7 @@
 package com.kospot.domain.multiGame.gameRoom.entity;
 
-
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.entity.GameMode;
-import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
 import com.kospot.exception.object.domain.GameRoomHandler;
@@ -11,7 +9,6 @@ import com.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -40,15 +37,11 @@ public class GameRoom extends BaseTimeEntity {
     @Min(2)
     @Max(8)
     private int maxPlayers;
-    
-    // 협동전 모드에서 사용할 팀 수 (2-4)
-    @Min(2)
-    @Max(4)
+
     private int teamCount;
 
-    private int currentPlayerCount; // cache
+    private int currentPlayerCount;
 
-    @Size(min = 2, max = 10) //todo 공백, 특수문자 안됨
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -56,9 +49,14 @@ public class GameRoom extends BaseTimeEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
-    private Member host; //방장
+    private Member host;
 
     //business
+    public void start(Member host) {
+        validateGameStart(host);
+        this.status = GameRoomStatus.PLAYING;
+    }
+
     public void setHost(Member host) {
         this.host = host;
     }
@@ -88,12 +86,18 @@ public class GameRoom extends BaseTimeEntity {
         leaveRoom(player);
     }
 
-    //player
+    //validate
     public void validateJoinRoom(String inputPassword) {
         validateRoomCapacity();
         if (privateRoom) {
             validatePassword(inputPassword);
         }
+        validateRoomStatus();
+    }
+
+    public void validateGameStart(Member host) {
+        validatePlayerCount();
+        validateHost(host);
         validateRoomStatus();
     }
 
@@ -112,6 +116,12 @@ public class GameRoom extends BaseTimeEntity {
     private void validateRoomStatus() {
         if (isNotWaitingRoom()) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_ALREADY_IN_PROGRESS);
+        }
+    }
+
+    private void validatePlayerCount() {
+        if (currentPlayerCount < 2) {
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_NOT_ENOUGH_PLAYER);
         }
     }
 
@@ -137,7 +147,6 @@ public class GameRoom extends BaseTimeEntity {
         return !this.host.getId().equals(gamePlayer.getId());
     }
 
-    //private room
     public boolean isPublicRoom() {
         return !privateRoom;
     }
@@ -145,5 +154,4 @@ public class GameRoom extends BaseTimeEntity {
     public boolean isNotCorrectPassword(String inputPassword) {
         return !password.equals(inputPassword);
     }
-
 }
