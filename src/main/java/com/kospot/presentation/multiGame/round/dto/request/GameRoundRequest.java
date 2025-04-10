@@ -16,4 +16,15 @@ public class GameRoundRequest {
 
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class EndRound {
+        private Long multiGameId;
+        private int currentRound;
+        
+    }
+
 }

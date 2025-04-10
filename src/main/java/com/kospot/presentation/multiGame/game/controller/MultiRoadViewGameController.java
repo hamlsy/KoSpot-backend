@@ -32,10 +32,18 @@ public class MultiRoadViewGameController {
         return ApiResponseDto.onSuccess(startMultiRoadViewGameUseCase.execute(member, request));
     }
 
+    @Operation(summary = "멀티 로드뷰 라운드 종료", description = "멀티 로드뷰 게임의 라운드를 종료합니다.")
+    @PostMapping("/endRound")
+    public ApiResponseDto<MultiRoadViewGameResponse.EndRound> endRound(@RequestBody GameRoundRequest.EndRound request) {
+        return ApiResponseDto.onSuccess(endRoundRoadViewUseCase.execute(request));
+    }
+    
 
+    //todo 순위 정보를 end game response로 옮김
     @Operation(summary = "멀티 로드뷰 다음 라운드", description = "멀티 로드뷰 게임의 다음 라운드를 시작합니다.")
     @PostMapping("/nextRound")
     public ApiResponseDto<MultiRoadViewGameResponse.NextRound> nextRound(@RequestBody GameRoundRequest.NextRound request) {
         return ApiResponseDto.onSuccess(nextRoundRoadViewUseCase.execute(request));
     }
+
 }
