@@ -1,7 +1,6 @@
 package com.kospot.domain.multiGame.gameRound.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multiGame.submittion.entity.RoadViewPlayerSubmission;
@@ -27,7 +26,7 @@ public class RoadViewGameRound extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private Integer roundNumber;
+    private Integer currentRound;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "multi_road_view_game_id")
@@ -68,7 +67,7 @@ public class RoadViewGameRound extends BaseTimeEntity {
     // 생성 메서드
     public static RoadViewGameRound createRound(Integer roundNumber, CoordinateNationwide targetCoordinate) {
         return RoadViewGameRound.builder()
-                .roundNumber(roundNumber)
+                .currentRound(roundNumber)
                 .targetCoordinate(targetCoordinate)
                 .isFinished(false)
                 .build();

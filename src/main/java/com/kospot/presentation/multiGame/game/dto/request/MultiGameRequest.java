@@ -16,4 +16,6 @@ public class MultiGameRequest {
         private int totalRounds;
 
     }
+
+
 }

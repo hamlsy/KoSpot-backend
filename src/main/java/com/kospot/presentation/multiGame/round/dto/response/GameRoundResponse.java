@@ -19,7 +19,7 @@ public class GameRoundResponse {
         public static RoadViewInfo from(RoadViewGameRound round) {
             return RoadViewInfo.builder()
                     .roundId(round.getId())
-                    .roundNumber(round.getRoundNumber())
+                    .roundNumber(round.getCurrentRound())
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())
                     .build();

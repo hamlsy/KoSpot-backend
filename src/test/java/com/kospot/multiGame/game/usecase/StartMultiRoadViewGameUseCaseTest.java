@@ -123,7 +123,7 @@ public class StartMultiRoadViewGameUseCaseTest {
         // 라운드 생성 확인
         List<RoadViewGameRound> rounds = roadViewGameRoundRepository.findAllByMultiRoadViewGameId(game.getId());
         assertFalse(rounds.isEmpty());
-        assertEquals(1, rounds.get(0).getRoundNumber());
+        assertEquals(1, rounds.get(0).getCurrentRound());
         
         // 게임 플레이어 생성 확인
         assertEquals(players.size(), gamePlayerRepository.countByGameRoomId(game.getId()));

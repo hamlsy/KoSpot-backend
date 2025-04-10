@@ -1,10 +1,12 @@
 package com.kospot.presentation.multiGame.game.controller;
 
+import com.kospot.application.multiGame.game.NextRoundRoadViewUseCase;
 import com.kospot.application.multiGame.game.StartMultiRoadViewGameUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.exception.payload.dto.ApiResponseDto;
 import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multiGame.game.dto.response.MultiRoadViewGameResponse;
+import com.kospot.presentation.multiGame.round.dto.request.GameRoundRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class MultiRoadViewGameController {
 
     private final StartMultiRoadViewGameUseCase startMultiRoadViewGameUseCase;
+    private final NextRoundRoadViewUseCase nextRoundRoadViewUseCase;
 
     @Operation(summary = "멀티 로드뷰 게임 시작", description = "멀티 로드뷰 게임을 시작합니다.")
     @PostMapping("/")
@@ -30,5 +33,9 @@ public class MultiRoadViewGameController {
     }
 
 
-
+    @Operation(summary = "멀티 로드뷰 다음 라운드", description = "멀티 로드뷰 게임의 다음 라운드를 시작합니다.")
+    @PostMapping("/nextRound")
+    public ApiResponseDto<MultiRoadViewGameResponse.NextRound> nextRound(@RequestBody GameRoundRequest.NextRound request) {
+        return ApiResponseDto.onSuccess(nextRoundRoadViewUseCase.execute(request));
+    }
 }

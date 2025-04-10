@@ -40,4 +40,31 @@ public class MultiRoadViewGameResponse {
 
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class NextRound {
+
+        private Long gameId;
+        private int currentRound;
+
+        private GameRoundResponse.RoadViewInfo roundInfo;
+        private List<GamePlayerResponse> gamePlayers;
+
+        public static NextRound from(MultiRoadViewGame game, RoadViewGameRound round, List<GamePlayer> players) {
+            return NextRound.builder()
+                    .gameId(game.getId())
+                    .currentRound(game.getCurrentRound())
+                    .roundInfo(GameRoundResponse.RoadViewInfo.from(round))
+                    .gamePlayers(
+                            players.stream().map(GamePlayerResponse::from).collect(Collectors.toList())
+                    )
+                    .build();
+        }
+
+    }
+
+
 }
