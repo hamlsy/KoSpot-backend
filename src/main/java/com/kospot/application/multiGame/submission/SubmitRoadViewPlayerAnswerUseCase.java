@@ -1,7 +1,6 @@
 package com.kospot.application.multiGame.submission;
 
 import com.kospot.domain.multiGame.game.adaptor.MultiRoadViewGameAdaptor;
-import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multiGame.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multiGame.gameRound.adaptor.RoadViewGameRoundAdaptor;
@@ -24,7 +23,7 @@ public class SubmitRoadViewPlayerAnswerUseCase {
     private final GamePlayerAdaptor gamePlayerAdaptor;
     private final RoadViewPlayerSubmissionService roadViewPlayerSubmissionService;
 
-    public void execute(Long roundId, SubmissionRequest.RoadView request) {
+    public void execute(Long roundId, SubmissionRequest.RoadViewPlayer request) {
         RoadViewGameRound gameRound = roadViewGameRoundAdaptor.queryById(roundId);
         GamePlayer gamePlayer = gamePlayerAdaptor.queryById(request.getPlayerId());
         roadViewPlayerSubmissionService.createSubmission(gameRound, gamePlayer, request);

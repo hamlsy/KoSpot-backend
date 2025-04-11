@@ -1,6 +1,5 @@
 package com.kospot.domain.multiGame.submission.service;
 
-import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubmission;
@@ -19,7 +18,7 @@ public class RoadViewPlayerSubmissionService {
 
     private final RoadViewPlayerSubmissionRepository roadViewPlayerSubmissionRepository;
 
-    public void createSubmission(RoadViewGameRound roadViewGameRound, GamePlayer gamePlayer, SubmissionRequest.RoadView request) {
+    public void createSubmission(RoadViewGameRound roadViewGameRound, GamePlayer gamePlayer, SubmissionRequest.RoadViewPlayer request) {
         RoadViewPlayerSubmission submission = RoadViewPlayerSubmission.createSubmission(
                 gamePlayer, request.getLat(),request.getLng(), request.getDistance()
         );

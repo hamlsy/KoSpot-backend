@@ -9,7 +9,7 @@ public class SubmissionRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class RoadView {
+    public static class RoadViewPlayer {
         
         private Long playerId;
         private Double lat;
@@ -17,5 +17,20 @@ public class SubmissionRequest {
         private Double distance;
 
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class RoadViewTeam {
+
+        private Long teamId;
+        private Double lat;
+        private Double lng;
+        private Double distance;
+
+    }
+
 
 }

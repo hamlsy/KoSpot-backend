@@ -37,16 +37,36 @@ public class MultiRoadViewGameController {
 
     @Operation(summary = "멀티 로드뷰 개인 정답 제출", description = "로드뷰 게임 개인 정답을 제출합니다.")
     @PostMapping("/rounds/{roundId}/player-submissions")
-    public ApiResponseDto<?> submitGuess(
+    public ApiResponseDto<?> submitPlayerAnswer(
             @PathVariable("roundId") Long roundId,
-            @RequestBody SubmissionRequest.RoadView request) {
+            @RequestBody SubmissionRequest.RoadViewPlayer request) {
         submitRoadViewPlayerAnswerUseCase.execute(roundId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
-    @Operation(summary = "멀티 로드뷰 라운드 종료", description = "멀티 로드뷰 게임의 라운드를 종료합니다.")
-    @PostMapping("/{multiGameId}/rounds/{roundId}/end")
-    public ApiResponseDto<?> endRound(
+    @Operation(summary = "멀티 로드뷰 팀 정답 제출", description = "로드뷰 게임 팀 정답을 제출합니다.")
+    @PostMapping("/rounds/{roundId}/team-submissions")
+    public ApiResponseDto<?> submitTeamAnswer(
+            @PathVariable("roundId") Long roundId,
+            @RequestBody SubmissionRequest.RoadViewPlayer request) {
+        //todo implement
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
+
+    @Operation(summary = "멀티 로드뷰 개인 라운드 종료", description = "멀티 로드뷰 게임 개인 라운드를 종료합니다.")
+    @PostMapping("/{multiGameId}/rounds/{roundId}/endPlayerRound")
+    public ApiResponseDto<?> endPlayerRound(
+            @PathVariable("multiGameId") Long multiGameId,
+            @PathVariable("roundId") Long roundId) {
+
+        // TODO: EndRoundRoadViewUseCase 구현 필요
+        // 현재 MultiRoadViewGameResponse.EndRound 클래스가 없음
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
+
+    @Operation(summary = "멀티 로드뷰 팀 라운드 종료", description = "멀티 로드뷰 게임 팀 라운드를 종료합니다.")
+    @PostMapping("/{multiGameId}/rounds/{roundId}/endTeamRound")
+    public ApiResponseDto<?> endTeamRound(
             @PathVariable("multiGameId") Long multiGameId,
             @PathVariable("roundId") Long roundId) {
 
