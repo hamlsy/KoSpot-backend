@@ -18,10 +18,8 @@ public class RoadViewPlayerSubmissionService {
 
     private final RoadViewPlayerSubmissionRepository roadViewPlayerSubmissionRepository;
 
-    public void createSubmission(RoadViewGameRound roadViewGameRound, GamePlayer gamePlayer, SubmissionRequest.RoadViewPlayer request) {
-        RoadViewPlayerSubmission submission = RoadViewPlayerSubmission.createSubmission(
-                gamePlayer, request.getLat(),request.getLng(), request.getDistance()
-        );
+    public void createSubmission(RoadViewGameRound roadViewGameRound, GamePlayer gamePlayer, RoadViewPlayerSubmission submission) {
+        submission.setGamePlayer(gamePlayer);
         submission.setRoadViewGameRound(roadViewGameRound);
         roadViewPlayerSubmissionRepository.save(submission);
     }

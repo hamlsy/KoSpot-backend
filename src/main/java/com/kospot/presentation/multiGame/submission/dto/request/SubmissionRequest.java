@@ -1,5 +1,6 @@
 package com.kospot.presentation.multiGame.submission.dto.request;
 
+import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubmission;
 import lombok.*;
 
 public class SubmissionRequest {
@@ -15,6 +16,14 @@ public class SubmissionRequest {
         private Double lat;
         private Double lng;
         private Double distance;
+
+        public RoadViewPlayerSubmission toEntity() {
+            return RoadViewPlayerSubmission.builder()
+                    .latitude(lat)
+                    .longitude(lng)
+                    .distance(distance)
+                    .build();
+        }
 
     }
 

@@ -56,6 +56,10 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
         this.score = score;
     }
 
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
+    }
+
     // 생성 메서드
     public static RoadViewPlayerSubmission createSubmission(
             GamePlayer gamePlayer, Double latitude, Double longitude, Double distance) {
