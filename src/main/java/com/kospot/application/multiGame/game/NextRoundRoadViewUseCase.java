@@ -23,6 +23,7 @@ public class NextRoundRoadViewUseCase {
 
     public MultiRoadViewGameResponse.NextRound execute(Long multiGameId, int nextRound) {
         MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(multiGameId);
+        game.moveToNextRound();
         RoadViewGameRound round = roadViewGameRoundService.createGameRound(game, nextRound);
         return MultiRoadViewGameResponse.NextRound.from(game, round);
     }

@@ -48,6 +48,7 @@ public class RoadViewGameRound extends BaseTimeEntity {
     // Business methods
     public void setMultiRoadViewGame(MultiRoadViewGame multiRoadViewGame) {
         this.multiRoadViewGame = multiRoadViewGame;
+        multiRoadViewGame.getRoadViewGameRounds().add(this);
     }
     
     public void addPlayerSubmission(RoadViewPlayerSubmission submission) {

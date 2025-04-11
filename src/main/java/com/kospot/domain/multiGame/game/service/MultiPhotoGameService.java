@@ -17,7 +17,7 @@ import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
-public class PhotoGameService {
+public class MultiPhotoGameService {
 
     private final MultiPhotoGameRepository multiPhotoGameRepository;
     private final PhotoGameRoundRepository photoGameRoundRepository;

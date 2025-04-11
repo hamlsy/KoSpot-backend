@@ -28,6 +28,4 @@ public class RoadViewGameRoundService {
         return roundRepository.save(gameRound);
     }
 
-
-
 }

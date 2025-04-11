@@ -74,15 +74,15 @@ public class GamePlayer {
     public void finishGame() {
         this.status = GamePlayerStatus.FINISHED;
     }
-    
+
     public void assignTeam(Integer teamNumber) {
         this.teamNumber = teamNumber;
     }
-    
+
     public void updateRoundRank(Integer rank) {
         this.roundRank = rank;
     }
-    
+
     public void addScore(int points) {
         this.totalScore += points;
     }

@@ -38,6 +38,8 @@ public class StartMultiRoadViewGameUseCase {
     private MultiRoadViewGameResponse.Start startRoadViewGame(GameRoom gameRoom, MultiGameRequest.Start request) {
         // 로드뷰 게임 생성
         MultiRoadViewGame game = multiRoadViewGameService.createGame(gameRoom, request);
+        // 게임 시작
+        game.startGame();
         // 라운드 생성 (모드별 파라미터 전달)
         RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1);
         // 게임 플레이어 생성
