@@ -21,9 +21,9 @@ public class NextRoundRoadViewUseCase {
     private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
     private final RoadViewGameRoundService roadViewGameRoundService;
 
-    public MultiRoadViewGameResponse.NextRound execute(GameRoundRequest.NextRound request) {
-        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(request.getMultiGameId());
-        RoadViewGameRound round = roadViewGameRoundService.createGameRound(game, request.getCurrentRound());
+    public MultiRoadViewGameResponse.NextRound execute(Long multiGameId, int nextRound) {
+        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(multiGameId);
+        RoadViewGameRound round = roadViewGameRoundService.createGameRound(game, nextRound);
         return MultiRoadViewGameResponse.NextRound.from(game, round);
     }
 

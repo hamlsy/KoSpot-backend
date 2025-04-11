@@ -1,4 +1,4 @@
-package com.kospot.domain.multiGame.submittion.entity;
+package com.kospot.domain.multiGame.submission.entity.photo;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.multiGame.game.util.ScoreRule;

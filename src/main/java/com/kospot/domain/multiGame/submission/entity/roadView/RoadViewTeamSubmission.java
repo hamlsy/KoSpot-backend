@@ -1,4 +1,4 @@
-package com.kospot.domain.multiGame.submittion.entity;
+package com.kospot.domain.multiGame.submission.entity.roadView;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TeamSubmission extends BaseTimeEntity {
+public class RoadViewTeamSubmission extends BaseTimeEntity {
 
     //로드뷰 모드 한정
     @Id
@@ -55,8 +55,8 @@ public class TeamSubmission extends BaseTimeEntity {
     }
     
     // 생성 메서드
-    public static TeamSubmission createSubmission(Integer teamNumber, Double latitude, Double longitude, Double distance) {
-        return TeamSubmission.builder()
+    public static RoadViewTeamSubmission createSubmission(Integer teamNumber, Double latitude, Double longitude, Double distance) {
+        return RoadViewTeamSubmission.builder()
                 .teamNumber(teamNumber)
                 .latitude(latitude)
                 .longitude(longitude)

@@ -2,7 +2,7 @@ package com.kospot.domain.multiGame.gameRound.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
-import com.kospot.domain.multiGame.submittion.entity.PhotoPlayerSubmission;
+import com.kospot.domain.multiGame.submission.entity.photo.PhotoPlayerSubmission;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

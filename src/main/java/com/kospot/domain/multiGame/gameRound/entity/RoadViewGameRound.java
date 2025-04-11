@@ -3,8 +3,8 @@ package com.kospot.domain.multiGame.gameRound.entity;
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multiGame.submittion.entity.RoadViewPlayerSubmission;
-import com.kospot.domain.multiGame.submittion.entity.TeamSubmission;
+import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubmission;
+import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewTeamSubmission;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,7 +41,7 @@ public class RoadViewGameRound extends BaseTimeEntity {
     private List<RoadViewPlayerSubmission> roadViewPlayerSubmissions = new ArrayList<>();
     
     @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TeamSubmission> teamSubmissions = new ArrayList<>();
+    private List<RoadViewTeamSubmission> roadViewTeamSubmissions = new ArrayList<>();
     
     private Boolean isFinished;
     
@@ -55,8 +55,8 @@ public class RoadViewGameRound extends BaseTimeEntity {
         submission.setRoadViewGameRound(this);
     }
     
-    public void addTeamSubmission(TeamSubmission submission) {
-        this.teamSubmissions.add(submission);
+    public void addTeamSubmission(RoadViewTeamSubmission submission) {
+        this.roadViewTeamSubmissions.add(submission);
         submission.setRoadViewGameRound(this);
     }
     

@@ -81,8 +81,14 @@ public enum ErrorStatus implements BaseCode {
     GAME_ROOM_IS_NOT_ENOUGH_PLAYER(BAD_REQUEST, 4307, "게임 방에 참여할 플레이어가 부족합니다."),
 
     // MultiGame Error(4311 ~ 4320)
-    PLAYER_MATCH_TYPE_NOT_FOUND(NOT_FOUND, 4311, "해당 플레이어 매치 타입을 찾을 수 없습니다."),;
+    PLAYER_MATCH_TYPE_NOT_FOUND(NOT_FOUND, 4311, "해당 플레이어 매치 타입을 찾을 수 없습니다."),
 
+    // Game Round Error(4321 ~ 4330)
+    GAME_ROUND_NOT_FOUND(NOT_FOUND, 4321, "해당 게임 라운드를 찾을 수 없습니다."),
+
+    // Game Player Error(4331 ~ 4340)
+    GAME_PLAYER_NOT_FOUND(NOT_FOUND, 4331, "해당 게임 플레이어를 찾을 수 없습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final Integer code;

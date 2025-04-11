@@ -4,27 +4,4 @@ import lombok.*;
 
 public class GameRoundRequest {
 
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @ToString
-    public static class NextRound {
-
-        private Long multiGameId;
-        private int currentRound;
-
-    }
-
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @ToString
-    public static class EndRound {
-        private Long multiGameId;
-        private int currentRound;
-        
-    }
-
 }
