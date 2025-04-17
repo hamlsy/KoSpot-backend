@@ -43,7 +43,7 @@ public class StartMultiRoadViewGameUseCase {
         // 라운드 생성 (모드별 파라미터 전달)
         RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1);
         // 게임 플레이어 생성
-        List<GamePlayer> gamePlayers = gamePlayerService.createGamePlayers(gameRoom);
+        List<GamePlayer> gamePlayers = gamePlayerService.createRoadViewGamePlayers(gameRoom, game);
         return MultiRoadViewGameResponse.Start.from(game, roadViewGameRound, gamePlayers);
     }
 

@@ -29,7 +29,6 @@ public class RoadViewGameRoundService {
     }
 
     public RoadViewGameRound endGameRound(RoadViewGameRound round) {
-        //전체 게임 플레이어 점수 계산
         round.endRound();
     }
 

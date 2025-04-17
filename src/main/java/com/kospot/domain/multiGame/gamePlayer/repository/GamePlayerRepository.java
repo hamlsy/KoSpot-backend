@@ -13,4 +13,7 @@ public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
     List<GamePlayer> findAllByGameRoomId(@Param("gameRoomId") Long gameRoomId);
 
     int countByGameRoomId(Long id);
+
+    @Query("SELECT gp FROM GamePlayer gp WHERE gp.multiRoadViewGame.id = :gameId")
+    List<GamePlayer> findAllByMultiRoadViewGameId(@Param("gameId") Long gameId);
 }

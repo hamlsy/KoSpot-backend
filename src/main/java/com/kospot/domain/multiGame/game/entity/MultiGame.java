@@ -29,7 +29,7 @@ public abstract class MultiGame extends BaseTimeEntity {
     private GameMode gameMode;
 
     @Min(1)
-    @Max(20)
+    @Max(15)
     private Integer totalRounds;
 
     private Integer currentRound;

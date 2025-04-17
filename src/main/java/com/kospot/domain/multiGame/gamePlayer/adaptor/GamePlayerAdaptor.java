@@ -29,4 +29,8 @@ public class GamePlayerAdaptor {
         );
     }
 
+
+    public List<GamePlayer> queryByMultiRoadViewGameId(Long gameId) {
+        return repository.findAllByMultiRoadViewGameId(gameId);
+    }
 }
