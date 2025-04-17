@@ -1,5 +1,6 @@
 package com.kospot.presentation.multiGame.game.controller;
 
+import com.kospot.application.multiGame.game.EndPlayerRoundRoadViewUseCase;
 import com.kospot.application.multiGame.game.NextRoundRoadViewUseCase;
 import com.kospot.application.multiGame.game.StartMultiRoadViewGameUseCase;
 import com.kospot.application.multiGame.submission.SubmitRoadViewPlayerAnswerUseCase;
@@ -28,6 +29,7 @@ public class MultiRoadViewGameController {
     private final StartMultiRoadViewGameUseCase startMultiRoadViewGameUseCase;
     private final SubmitRoadViewPlayerAnswerUseCase submitRoadViewPlayerAnswerUseCase;
     private final NextRoundRoadViewUseCase nextRoundRoadViewUseCase;
+    private final EndPlayerRoundRoadViewUseCase endPlayerRoundRoadViewUseCase;
 
     @Operation(summary = "멀티 로드뷰 게임 시작", description = "멀티 로드뷰 게임을 시작합니다.")
     @PostMapping("/")
@@ -61,6 +63,7 @@ public class MultiRoadViewGameController {
 
         // TODO: EndRoundRoadViewUseCase 구현 필요
         // 현재 MultiRoadViewGameResponse.EndRound 클래스가 없음
+        endPlayerRoundRoadViewUseCase.execute(roundId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

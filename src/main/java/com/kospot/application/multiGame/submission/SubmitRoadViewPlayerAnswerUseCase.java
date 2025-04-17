@@ -23,10 +23,11 @@ public class SubmitRoadViewPlayerAnswerUseCase {
     private final RoadViewPlayerSubmissionService roadViewPlayerSubmissionService;
 
     public void execute(Long roundId, SubmissionRequest.RoadViewPlayer request) {
-        RoadViewGameRound gameRound = roadViewGameRoundAdaptor.queryById(roundId);
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
+        round.validateRoundNotFinished();
         GamePlayer gamePlayer = gamePlayerAdaptor.queryById(request.getPlayerId());
         RoadViewPlayerSubmission submission = request.toEntity();
-        roadViewPlayerSubmissionService.createSubmission(gameRound, gamePlayer, submission);
+        roadViewPlayerSubmissionService.createSubmission(round, gamePlayer, submission);
     }
 
 }

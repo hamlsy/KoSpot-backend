@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import static com.kospot.domain.multiGame.game.util.ScoreRule.calculateScore;
+
 @Getter
 @Entity
 @SuperBuilder
@@ -42,17 +44,26 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
     // 순위에 따른 점수
     private Integer score;
 
+    // 정답까지 걸린 시간(밀리초 단위)
+    private Double timeToAnswer;
+
+
     // Business methods
     public void setRoadViewGameRound(RoadViewGameRound roadViewGameRound) {
         this.roadViewGameRound = roadViewGameRound;
         roadViewGameRound.addPlayerSubmission(this);
     }
 
-    public void assignRank(Integer rank) {
+    public void assignRankAndScore(Integer rank) {
+        assignRank(rank);
+        assignScore(calculateScore(rank));
+    }
+
+    private void assignRank(Integer rank) {
         this.rank = rank;
     }
 
-    public void assignScore(Integer score) {
+    private void assignScore(Integer score) {
         this.score = score;
     }
 
@@ -62,12 +73,13 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
 
     // 생성 메서드
     public static RoadViewPlayerSubmission createSubmission(
-            GamePlayer gamePlayer, Double latitude, Double longitude, Double distance) {
+            GamePlayer gamePlayer, Double latitude, Double longitude, Double distance, Double timeToAnswer) {
         return RoadViewPlayerSubmission.builder()
                 .gamePlayer(gamePlayer)
                 .latitude(latitude)
                 .longitude(longitude)
                 .distance(distance)
+                .timeToAnswer(timeToAnswer)
                 .build();
     }
 } 

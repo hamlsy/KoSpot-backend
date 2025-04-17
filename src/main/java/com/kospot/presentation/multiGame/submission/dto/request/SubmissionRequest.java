@@ -16,12 +16,14 @@ public class SubmissionRequest {
         private Double lat;
         private Double lng;
         private Double distance;
+        private Double timeToAnswer;
 
         public RoadViewPlayerSubmission toEntity() {
             return RoadViewPlayerSubmission.builder()
                     .latitude(lat)
                     .longitude(lng)
                     .distance(distance)
+                    .timeToAnswer(timeToAnswer)
                     .build();
         }
 

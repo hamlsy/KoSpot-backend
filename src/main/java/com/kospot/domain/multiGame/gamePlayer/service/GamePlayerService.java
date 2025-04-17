@@ -27,4 +27,10 @@ public class GamePlayerService {
                 m -> GamePlayer.create(m, gameRoom)).toList();
         return gamePlayerRepository.saveAll(players);
     }
+
+    public List<GamePlayer> updateTotalRank(List<GamePlayer> gamePlayers) {
+        
+        return gamePlayers;
+    }
+
 }
