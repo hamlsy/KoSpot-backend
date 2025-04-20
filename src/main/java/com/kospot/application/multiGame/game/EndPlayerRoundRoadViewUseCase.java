@@ -37,17 +37,16 @@ public class EndPlayerRoundRoadViewUseCase {
         List<RoadViewPlayerSubmission> submission = roadViewPlayerSubmissionService.updateRankAndScore(round.getRoadViewPlayerSubmissions());
 
         // 라운드 종료 처리 및 전체 순위 처리(이전 점수는 프론트가 기억) - service
-        //todo game player 전체 순위 처리
         roadViewGameRoundService.endGameRound(round);
 
-        //todo game player는 어떻게 가져올것?
         List<GamePlayer> players = gamePlayerAdaptor.queryByMultiRoadViewGameId(gameId);
-        
+        List<GamePlayer> updatedPlayers = gamePlayerService.updateTotalRank(players);
+
         // 라운드 결과 response - dto convert, 각 플레이어가 제출한 좌표 포함
         GameRoundResponse.RoadViewPlayerRoundResult.from(
                 round,
                 submission,
-                players
+                updatedPlayers
         );
     }
 

@@ -29,8 +29,9 @@ public class GamePlayerService {
         return gamePlayerRepository.saveAll(players);
     }
 
+    //todo implement bulk update
     public List<GamePlayer> updateTotalRank(List<GamePlayer> gamePlayers) {
-        // score 로 정렬
+        // score 로 내림차순 정렬
         gamePlayers.sort((a, b) -> b.getTotalScore() - a.getTotalScore());
 
         int rank = 1;
