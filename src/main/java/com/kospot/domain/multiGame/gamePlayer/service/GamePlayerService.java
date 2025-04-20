@@ -29,30 +29,29 @@ public class GamePlayerService {
         return gamePlayerRepository.saveAll(players);
     }
 
-    //todo refactoring
     public List<GamePlayer> updateTotalRank(List<GamePlayer> gamePlayers) {
+        // score 로 정렬
         gamePlayers.sort((a, b) -> b.getTotalScore() - a.getTotalScore());
 
         int rank = 1;
-        int sameRankCount = 1;
-        int previousScore = gamePlayers.get(0).getTotalScore();
+        gamePlayers.get(0).updateRoundRank(rank);
 
-        for (int i = 0; i < gamePlayers.size(); i++) {
+        // 이전 플레이어 점수와 같을 경우 동일 순위 부여
+        for (int i = 1; i < gamePlayers.size(); i++) {
             GamePlayer currentPlayer = gamePlayers.get(i);
-            int currentScore = currentPlayer.getTotalScore();
-
-            if (currentScore < previousScore) {
-                rank = i + 1;
-                sameRankCount = 1;
-            } else {
-                sameRankCount++;
+            GamePlayer previousPlayer = gamePlayers.get(i - 1);
+            int previousRank = previousPlayer.getRoundRank();
+            if (hasSameScoreAsPreviousPlayer(currentPlayer, previousPlayer)) {
+                currentPlayer.updateRoundRank(previousRank);
+                continue;
             }
-
-            currentPlayer.updateRoundRank(rank);
-            previousScore = currentScore;
+            // next rank
+            currentPlayer.updateRoundRank(previousRank + 1);
         }
-
         return gamePlayers;
     }
 
+    private boolean hasSameScoreAsPreviousPlayer(GamePlayer current, GamePlayer previous) {
+        return current.getTotalScore() == previous.getTotalScore();
+    }
 }
