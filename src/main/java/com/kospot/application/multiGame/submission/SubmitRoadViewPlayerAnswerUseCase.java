@@ -26,6 +26,7 @@ public class SubmitRoadViewPlayerAnswerUseCase {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
         round.validateRoundNotFinished();
         GamePlayer gamePlayer = gamePlayerAdaptor.queryById(request.getPlayerId());
+        //todo refactor 제출 여러 번 안 되게 조정
         RoadViewPlayerSubmission submission = request.toEntity();
         roadViewPlayerSubmissionService.createSubmission(round, gamePlayer, submission);
     }
