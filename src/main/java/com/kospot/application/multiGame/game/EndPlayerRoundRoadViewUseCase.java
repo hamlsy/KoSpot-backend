@@ -30,7 +30,6 @@ public class EndPlayerRoundRoadViewUseCase {
 
     public void execute(Long gameId, Long roundId) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchPlayerSubmissionAndPlayers(roundId);
-
         //todo 제출 못 한 플레이어 0점처리 - service
 
         // 플레이어 간 거리 순으로 순위 점수 처리 - service

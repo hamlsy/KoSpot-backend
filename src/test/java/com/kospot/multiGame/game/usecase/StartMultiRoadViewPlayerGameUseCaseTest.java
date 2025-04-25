@@ -1,7 +1,7 @@
 package com.kospot.multiGame.game.usecase;
 
 import com.kospot.application.coordinate.ImportCoordinateUseCase;
-import com.kospot.application.multiGame.game.StartMultiRoadViewGameUseCase;
+import com.kospot.application.multiGame.game.StartMultiRoadViewPlayerGameUseCase;
 import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
@@ -41,10 +41,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
-public class StartMultiRoadViewGameUseCaseTest {
+public class StartMultiRoadViewPlayerGameUseCaseTest {
 
     @Autowired
-    private StartMultiRoadViewGameUseCase startMultiRoadViewGameUseCase;
+    private StartMultiRoadViewPlayerGameUseCase startMultiRoadViewPlayerGameUseCase;
     
     @Autowired
     private GameRoomRepository gameRoomRepository;
@@ -110,7 +110,7 @@ public class StartMultiRoadViewGameUseCaseTest {
         MultiGameRequest.Start request = createStartRequest(gameRoom.getId());
         
         // when
-        MultiRoadViewGameResponse.Start response = startMultiRoadViewGameUseCase.execute(hostMember, request);
+        MultiRoadViewGameResponse.StartPlayerGame response = startMultiRoadViewPlayerGameUseCase.execute(hostMember, request);
         
         // then
         assertNotNull(response);
@@ -139,7 +139,7 @@ public class StartMultiRoadViewGameUseCaseTest {
         
         // when & then
         assertThrows(Exception.class, () -> {
-            startMultiRoadViewGameUseCase.execute(notHost, request);
+            startMultiRoadViewPlayerGameUseCase.execute(notHost, request);
         });
     }
     
@@ -152,7 +152,7 @@ public class StartMultiRoadViewGameUseCaseTest {
         
         // when & then
         assertThrows(Exception.class, () -> {
-            startMultiRoadViewGameUseCase.execute(hostMember, request);
+            startMultiRoadViewPlayerGameUseCase.execute(hostMember, request);
         });
     }
     
@@ -164,11 +164,11 @@ public class StartMultiRoadViewGameUseCaseTest {
         MultiGameRequest.Start request = createStartRequest(gameRoom.getId());
         
         // 첫 번째 게임 시작
-        startMultiRoadViewGameUseCase.execute(hostMember, request);
+        startMultiRoadViewPlayerGameUseCase.execute(hostMember, request);
         
         // when & then - 두 번째 게임 시작 시도
         assertThrows(Exception.class, () -> {
-            startMultiRoadViewGameUseCase.execute(hostMember, request);
+            startMultiRoadViewPlayerGameUseCase.execute(hostMember, request);
         });
     }
     
@@ -183,7 +183,7 @@ public class StartMultiRoadViewGameUseCaseTest {
         
         // when & then
         assertThrows(Exception.class, () -> {
-            startMultiRoadViewGameUseCase.execute(hostMember1, request);
+            startMultiRoadViewPlayerGameUseCase.execute(hostMember1, request);
         });
     }
     
@@ -202,7 +202,7 @@ public class StartMultiRoadViewGameUseCaseTest {
         for (int i = 0; i < threadCount; i++) {
             executorService.execute(() -> {
                 try {
-                    startMultiRoadViewGameUseCase.execute(hostMember, request);
+                    startMultiRoadViewPlayerGameUseCase.execute(hostMember, request);
                     successCount.incrementAndGet();
                 } catch (Exception e) {
                     exceptionCount.incrementAndGet();
@@ -257,7 +257,7 @@ public class StartMultiRoadViewGameUseCaseTest {
             executorService.execute(() -> {
                 try {
                     MultiGameRequest.Start request = createStartRequest(rooms.get(index).getId());
-                    startMultiRoadViewGameUseCase.execute(hosts.get(index), request);
+                    startMultiRoadViewPlayerGameUseCase.execute(hosts.get(index), request);
                     successCount.incrementAndGet();
                 } catch (Exception e) {
                     System.err.println("Error in room " + index + ": " + e.getMessage());

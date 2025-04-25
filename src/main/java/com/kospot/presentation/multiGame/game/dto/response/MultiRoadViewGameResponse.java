@@ -17,7 +17,7 @@ public class MultiRoadViewGameResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class Start {
+    public static class StartPlayerGame {
 
         private Long gameId;
         private int totalRounds;
@@ -26,8 +26,8 @@ public class MultiRoadViewGameResponse {
         private GameRoundResponse.RoadViewInfo roundInfo;
         private List<GamePlayerResponse> gamePlayers;
 
-        public static Start from(MultiRoadViewGame game, RoadViewGameRound round, List<GamePlayer> players) {
-            return Start.builder()
+        public static StartPlayerGame from(MultiRoadViewGame game, RoadViewGameRound round, List<GamePlayer> players) {
+            return StartPlayerGame.builder()
                     .gameId(game.getId())
                     .totalRounds(game.getTotalRounds())
                     .currentRound(game.getCurrentRound())

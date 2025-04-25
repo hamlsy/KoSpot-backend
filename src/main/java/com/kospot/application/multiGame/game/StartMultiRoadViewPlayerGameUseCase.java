@@ -22,20 +22,20 @@ import java.util.List;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class StartMultiRoadViewGameUseCase {
+public class StartMultiRoadViewPlayerGameUseCase {
 
     private final GameRoomAdaptor gameRoomAdaptor;
     private final MultiRoadViewGameService multiRoadViewGameService;
     private final RoadViewGameRoundService roadViewGameRoundService;
     private final GamePlayerService gamePlayerService;
 
-    public MultiRoadViewGameResponse.Start execute(Member host, MultiGameRequest.Start request) {
+    public MultiRoadViewGameResponse.StartPlayerGame execute(Member host, MultiGameRequest.Start request) {
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(request.getGameRoomId());
         gameRoom.start(host);
         return startRoadViewGame(gameRoom, request);
     }
 
-    private MultiRoadViewGameResponse.Start startRoadViewGame(GameRoom gameRoom, MultiGameRequest.Start request) {
+    private MultiRoadViewGameResponse.StartPlayerGame startRoadViewGame(GameRoom gameRoom, MultiGameRequest.Start request) {
         // 로드뷰 게임 생성
         MultiRoadViewGame game = multiRoadViewGameService.createGame(gameRoom, request);
         // 게임 시작
@@ -44,7 +44,7 @@ public class StartMultiRoadViewGameUseCase {
         RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1);
         // 게임 플레이어 생성
         List<GamePlayer> gamePlayers = gamePlayerService.createRoadViewGamePlayers(gameRoom, game);
-        return MultiRoadViewGameResponse.Start.from(game, roadViewGameRound, gamePlayers);
+        return MultiRoadViewGameResponse.StartPlayerGame.from(game, roadViewGameRound, gamePlayers);
     }
 
 
