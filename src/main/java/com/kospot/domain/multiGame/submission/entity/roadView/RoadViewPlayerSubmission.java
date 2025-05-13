@@ -31,9 +31,9 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
     @JoinColumn(name = "game_player_id")
     private GamePlayer gamePlayer;
 
-    private Double latitude;
+    private Double lat;
 
-    private Double longitude;
+    private Double lng;
 
     // 프론트에서 계산된 정답과의 거리 (미터 단위)
     private Double distance;
@@ -76,8 +76,8 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
             GamePlayer gamePlayer, Double latitude, Double longitude, Double distance, Double timeToAnswer) {
         return RoadViewPlayerSubmission.builder()
                 .gamePlayer(gamePlayer)
-                .latitude(latitude)
-                .longitude(longitude)
+                .lat(latitude)
+                .lng(longitude)
                 .distance(distance)
                 .timeToAnswer(timeToAnswer)
                 .build();

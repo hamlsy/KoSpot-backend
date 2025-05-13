@@ -19,7 +19,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @MappedSuperclass
 public abstract class MultiGame extends BaseTimeEntity {
-    
+
+    // 방 제목
+    private String title;
+
     // 개인전 또는 협동전
     @Enumerated(EnumType.STRING)
     private PlayerMatchType matchType;
