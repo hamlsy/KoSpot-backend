@@ -20,8 +20,8 @@ public class SubmissionResponse {
 
         public static RoadViewPlayer from(RoadViewPlayerSubmission submission) {
             return RoadViewPlayer.builder()
-                    .lat(submission.getLatitude())
-                    .lng(submission.getLongitude())
+                    .lat(submission.getLat())
+                    .lng(submission.getLng())
                     .rank(submission.getRank())
                     .distance(submission.getDistance())
                     .timeToAnswer(submission.getTimeToAnswer())

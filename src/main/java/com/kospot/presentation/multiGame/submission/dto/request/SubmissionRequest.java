@@ -20,8 +20,8 @@ public class SubmissionRequest {
 
         public RoadViewPlayerSubmission toEntity() {
             return RoadViewPlayerSubmission.builder()
-                    .latitude(lat)
-                    .longitude(lng)
+                    .lat(lat)
+                    .lng(lng)
                     .distance(distance)
                     .timeToAnswer(timeToAnswer)
                     .build();
