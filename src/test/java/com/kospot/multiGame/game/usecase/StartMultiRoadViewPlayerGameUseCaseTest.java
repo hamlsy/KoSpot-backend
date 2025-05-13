@@ -126,7 +126,7 @@ public class StartMultiRoadViewPlayerGameUseCaseTest {
         assertEquals(1, rounds.get(0).getCurrentRound());
         
         // 게임 플레이어 생성 확인
-        assertEquals(players.size(), gamePlayerRepository.countByGameRoomId(game.getId()));
+        assertEquals(players.size(), gamePlayerRepository.countByMultiRoadViewGameId(game.getId()));
     }
     
     @Test

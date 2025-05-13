@@ -19,10 +19,6 @@ public class GamePlayerAdaptor {
 
     private final GamePlayerRepository repository;
 
-    public List<GamePlayer> queryByGameRoomId(Long gameRoomId) {
-        return repository.findAllByGameRoomId(gameRoomId);
-    }
-
     public GamePlayer queryById(Long id) {
         return repository.findById(id).orElseThrow(
                 () -> new GamePlayerHandler(ErrorStatus.GAME_PLAYER_NOT_FOUND)

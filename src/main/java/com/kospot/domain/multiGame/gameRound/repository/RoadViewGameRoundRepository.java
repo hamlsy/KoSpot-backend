@@ -13,7 +13,7 @@ public interface RoadViewGameRoundRepository extends JpaRepository<RoadViewGameR
 
     @Query("select r from RoadViewGameRound r " +
             "join fetch r.roadViewPlayerSubmissions rps " +
-            "left join fetch ps.gamePlayer gp " +
+            "left join fetch rps.gamePlayer gp " +
             "where r.id = :id")
     Optional<RoadViewGameRound> findByIdFetchPlayerSubmissionAndPlayers(@Param("id") Long id);
 

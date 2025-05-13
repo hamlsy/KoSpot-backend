@@ -9,10 +9,8 @@ import java.util.List;
 
 public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
 
-    @Query("select gr from GamePlayer gr where gr.gameRoom.id = :gameRoomId")
-    List<GamePlayer> findAllByGameRoomId(@Param("gameRoomId") Long gameRoomId);
-
-    int countByGameRoomId(Long id);
+    @Query("select count(gr) from GamePlayer gr where gr.multiRoadViewGame.id = :gameId")
+    int countByMultiRoadViewGameId(@Param("gameId") Long id);
 
     @Query("SELECT gp FROM GamePlayer gp WHERE gp.multiRoadViewGame.id = :gameId")
     List<GamePlayer> findAllByMultiRoadViewGameId(@Param("gameId") Long gameId);

@@ -38,7 +38,7 @@ public class MultiRoadViewGameController {
     }
 
     @Operation(summary = "멀티 로드뷰 팀 게임 시작", description = "멀티 로드뷰 팀 게임을 시작합니다.")
-    @PostMapping("/player/start")
+    @PostMapping("/team/start")
     //todo team 구현
     public ApiResponseDto<MultiRoadViewGameResponse.StartPlayerGame> startTeamGame(Member member, @RequestBody MultiGameRequest.Start request) {
         return ApiResponseDto.onSuccess(startMultiRoadViewPlayerGameUseCase.execute(member, request));

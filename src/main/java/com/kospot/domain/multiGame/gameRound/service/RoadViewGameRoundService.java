@@ -1,7 +1,5 @@
 package com.kospot.domain.multiGame.gameRound.service;
 
-import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.converter.CoordinateConverter;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 import com.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
@@ -28,7 +26,7 @@ public class RoadViewGameRoundService {
         return roundRepository.save(gameRound);
     }
 
-    public RoadViewGameRound endGameRound(RoadViewGameRound round) {
+    public void endGameRound(RoadViewGameRound round) {
         round.endRound();
     }
 
