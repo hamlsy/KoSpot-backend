@@ -33,7 +33,7 @@ import static org.mockito.Mockito.*;
 
 @Slf4j
 @SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Repl                                                                                                                                                                                                                                                                                                                        ace.NONE)
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class SubmitRoadViewPlayerAnswerUseCaseTest {
