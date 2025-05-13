@@ -4,4 +4,7 @@ import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubm
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoadViewPlayerSubmissionRepository extends JpaRepository<RoadViewPlayerSubmission, Long> {
+
+    boolean existsByRoundIdAndGamePlayerId(Long roundId, Long playerId);
+    
 }

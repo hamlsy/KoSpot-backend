@@ -86,6 +86,7 @@ public enum ErrorStatus implements BaseCode {
     // Game Round Error(4321 ~ 4330)
     GAME_ROUND_NOT_FOUND(NOT_FOUND, 4321, "해당 게임 라운드를 찾을 수 없습니다."),
     ROUND_ALREADY_FINISHED(BAD_REQUEST, 4322, "이미 종료된 라운드입니다."),
+    ROUND_ALREADY_SUBMITTED(BAD_REQUEST, 4323, "해당 라운드에는 이미 제출했습니다."),
 
     // Game Player Error(4331 ~ 4340)
     GAME_PLAYER_NOT_FOUND(NOT_FOUND, 4331, "해당 게임 플레이어를 찾을 수 없습니다."),

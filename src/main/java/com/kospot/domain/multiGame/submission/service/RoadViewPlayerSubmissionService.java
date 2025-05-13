@@ -4,6 +4,9 @@ import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubmission;
 import com.kospot.domain.multiGame.submission.repository.RoadViewPlayerSubmissionRepository;
+
+import com.kospot.exception.object.domain.GameRoundHandler;
+import com.kospot.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,13 @@ public class RoadViewPlayerSubmissionService {
             gamePlayer.addScore(submission.getScore());
         });
         return submissions;
+    }
+
+    public void validateSubmissionAllowed(RoadViewGameRound round, Long playerId) {
+        round.validateRoundNotFinished();
+        if (roadViewPlayerSubmissionRepository.existsByRoundIdAndGamePlayerId(round.getId(), playerId)) {
+            throw new GameRoundHandler(ErrorStatus.ROUND_ALREADY_SUBMITTED);
+        }
     }
 
 }
