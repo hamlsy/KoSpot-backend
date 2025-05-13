@@ -25,7 +25,6 @@ public class SubmitRoadViewPlayerAnswerUseCase {
     public void execute(Long roundId, SubmissionRequest.RoadViewPlayer request) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
         GamePlayer gamePlayer = gamePlayerAdaptor.queryById(request.getPlayerId());
-        roadViewPlayerSubmissionService.validateSubmissionAllowed(round, gamePlayer.getId());
 
         RoadViewPlayerSubmission submission = request.toEntity();
         roadViewPlayerSubmissionService.createSubmission(round, gamePlayer, submission);

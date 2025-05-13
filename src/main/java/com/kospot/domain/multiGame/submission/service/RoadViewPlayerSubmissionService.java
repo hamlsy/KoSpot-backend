@@ -24,9 +24,11 @@ public class RoadViewPlayerSubmissionService {
 
     private final RoadViewPlayerSubmissionRepository roadViewPlayerSubmissionRepository;
 
-    public void createSubmission(RoadViewGameRound roadViewGameRound, GamePlayer gamePlayer, RoadViewPlayerSubmission submission) {
+    public void createSubmission(RoadViewGameRound round, GamePlayer gamePlayer, RoadViewPlayerSubmission submission) {
+        validateSubmissionAllowed(round, gamePlayer.getId());
+
         submission.setGamePlayer(gamePlayer);
-        submission.setRoadViewGameRound(roadViewGameRound);
+        submission.setRoadViewGameRound(round);
         roadViewPlayerSubmissionRepository.save(submission);
     }
 
@@ -43,7 +45,7 @@ public class RoadViewPlayerSubmissionService {
         return submissions;
     }
 
-    public void validateSubmissionAllowed(RoadViewGameRound round, Long playerId) {
+    private void validateSubmissionAllowed(RoadViewGameRound round, Long playerId) {
         round.validateRoundNotFinished();
         if (roadViewPlayerSubmissionRepository.existsByRoundIdAndGamePlayerId(round.getId(), playerId)) {
             throw new GameRoundHandler(ErrorStatus.ROUND_ALREADY_SUBMITTED);
