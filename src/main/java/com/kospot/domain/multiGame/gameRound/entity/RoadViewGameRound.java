@@ -8,10 +8,7 @@ import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewTeamSubmis
 import com.kospot.exception.object.domain.GameRoundHandler;
 import com.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -39,9 +36,11 @@ public class RoadViewGameRound extends BaseTimeEntity {
     @JoinColumn(name = "coordinate_id")
     private CoordinateNationwide targetCoordinate;
 
+    @Builder.Default
     @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadViewPlayerSubmission> roadViewPlayerSubmissions = new ArrayList<>();
-    
+
+    @Builder.Default
     @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadViewTeamSubmission> roadViewTeamSubmissions = new ArrayList<>();
     
