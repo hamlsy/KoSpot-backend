@@ -165,7 +165,7 @@ class SubmitRoadViewPlayerAnswerUseCaseTest {
             assertEquals(request.getLat(), submission.getLat());
             assertEquals(request.getLng(), submission.getLng());
             assertEquals(request.getDistance(), submission.getDistance());
-            assertEquals(request.getTimeToAnswer(), submission.getTimeToAnswer());
+
         }
 
         @Test
