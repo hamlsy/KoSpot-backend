@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class RoadViewGameRoundAdaptor {
 
-    private RoadViewGameRoundRepository repository;
+    private final RoadViewGameRoundRepository repository;
 
     public RoadViewGameRound queryById(Long id) {
         return repository.findById(id).orElseThrow(
