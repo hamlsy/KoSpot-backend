@@ -59,7 +59,7 @@ public class RoadViewGameController {
 
     @Operation(summary = "로드뷰 연습 게임 종료", description = "로드뷰 연습 게임을 종료합니다.")
     @PostMapping("/practice/end")
-    public ApiResponseDto<?> endPracticeGame(Member member, @RequestBody EndGameRequest.RoadView request) {
+    public ApiResponseDto<EndGameResponse.RoadViewPractice> endPracticeGame(Member member, @RequestBody EndGameRequest.RoadView request) {
         return ApiResponseDto.onSuccess(endRoadViewPracticeUseCase.execute(member, request));
     }
 

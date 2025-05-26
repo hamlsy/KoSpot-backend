@@ -82,7 +82,6 @@ public class MultiRoadViewGameController {
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
-    //todo 순위 정보를 end game response로 옮김
     @Operation(summary = "멀티 로드뷰 다음 라운드", description = "멀티 로드뷰 게임의 다음 라운드를 시작합니다.")
     @PostMapping("/{multiGameId}/rounds/nextRound/next")
     public ApiResponseDto<MultiRoadViewGameResponse.NextRound> nextRound(
