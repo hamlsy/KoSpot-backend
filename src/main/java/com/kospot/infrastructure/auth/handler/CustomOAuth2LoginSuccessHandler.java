@@ -25,7 +25,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final String REDIRECT_URI = "https://plogging-buddy.vercel.app/oauth/callback/kakao";
+    private final String REDIRECT_URI = "localhost:8080/oauth2/callback";
     private final TokenService tokenService;
 
     @Override
@@ -46,7 +46,7 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
 
         String url = UriComponentsBuilder.fromHttpUrl(REDIRECT_URI)
                 .queryParam("code", jwtToken.getAccessToken())
-                .queryParam("provider", provider)
+                .queryParam("provider", provider) //todo refresh token
                 .build()
                 .toUriString();
         response.addHeader("Authorization",

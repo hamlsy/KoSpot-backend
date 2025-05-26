@@ -1,5 +1,6 @@
 package com.kospot.infrastructure.security.service;
 
+import com.kospot.infrastructure.security.dto.JwtToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
