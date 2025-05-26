@@ -49,9 +49,6 @@ public class Member extends BaseTimeEntity {
     @JoinColumn(name = "image_id")
     private Image equippedMarkerImage;
 
-    @OneToOne(mappedBy = "member")
-    private GamePlayer gamePlayer;
-
     @Column(name = "game_room_id")
     private Long gameRoomId; //fk
 
@@ -91,7 +88,6 @@ public class Member extends BaseTimeEntity {
     public void leaveGameRoom() {
         this.gameRoomId = null;
     }
-
 
     //validate
     public boolean isAlreadyInGameRoom() {

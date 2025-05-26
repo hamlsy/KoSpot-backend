@@ -77,11 +77,20 @@ public enum ErrorStatus implements BaseCode {
     GAME_ROOM_IS_NOT_CORRECT_PASSWORD(BAD_REQUEST, 4303, "틀린 비밀번호 입니다."),
     GAME_ROOM_IS_ALREADY_IN_PROGRESS(BAD_REQUEST, 4304, "게임이 이미 진행 중입니다."),
     GAME_ROOM_HOST_PRIVILEGES_REQUIRED(FORBIDDEN, 4305, "방장 권한이 필요합니다."),
-    GAME_ROOM_MEMBER_ALREADY_IN_ROOM(BAD_REQUEST, 4306,"이미 게임 방에 참여 중입니다."),
+    GAME_ROOM_MEMBER_ALREADY_IN_ROOM(BAD_REQUEST, 4306, "이미 게임 방에 참여 중입니다."),
     GAME_ROOM_IS_NOT_ENOUGH_PLAYER(BAD_REQUEST, 4307, "게임 방에 참여할 플레이어가 부족합니다."),
 
     // MultiGame Error(4311 ~ 4320)
-    PLAYER_MATCH_TYPE_NOT_FOUND(NOT_FOUND, 4311, "해당 플레이어 매치 타입을 찾을 수 없습니다."),;
+    PLAYER_MATCH_TYPE_NOT_FOUND(NOT_FOUND, 4311, "해당 플레이어 매치 타입을 찾을 수 없습니다."),
+
+    // Game Round Error(4321 ~ 4330)
+    GAME_ROUND_NOT_FOUND(NOT_FOUND, 4321, "해당 게임 라운드를 찾을 수 없습니다."),
+    ROUND_ALREADY_FINISHED(BAD_REQUEST, 4322, "이미 종료된 라운드입니다."),
+    ROUND_ALREADY_SUBMITTED(BAD_REQUEST, 4323, "해당 라운드에는 이미 제출했습니다."),
+
+    // Game Player Error(4331 ~ 4340)
+    GAME_PLAYER_NOT_FOUND(NOT_FOUND, 4331, "해당 게임 플레이어를 찾을 수 없습니다."),
+    ;
 
 
     private final HttpStatus httpStatus;

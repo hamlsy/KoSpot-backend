@@ -1,9 +1,8 @@
 package com.kospot.domain.multiGame.gamePlayer.entity;
 
-import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.multiGame.gamePlayer.adaptor.GamePlayerAdaptor;
-import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
+import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,10 +28,14 @@ public class GamePlayer {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_room_id")
-    private GameRoom gameRoom;
+    @JoinColumn(name = "multi_road_view_game_id")
+    private MultiRoadViewGame multiRoadViewGame;
 
-    // 협동전의 경우 팀 번호 (1 또는 2)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "multi_photo_game_id")
+    private MultiPhotoGame multiPhotoGame;
+
+    // 협동전의 경우 팀 번호 (1 또는 2) todo color team 으로 수정
     private Integer teamNumber;
 
     private Integer roundRank; // 해당 라운드 순위
@@ -50,22 +53,26 @@ public class GamePlayer {
     private String equippedMarkerImageUrl;
 
     //business
-    public static GamePlayer create(Member member, GameRoom gameRoom) {
+    public static GamePlayer createRoadViewGamePlayer(Member member, MultiRoadViewGame game) {
         return GamePlayer.builder()
                 .nickname(member.getNickname())
                 .member(member)
-                .gameRoom(gameRoom)
                 .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
+                .multiRoadViewGame(game)
                 .status(GamePlayerStatus.PLAYING)
                 .build();
     }
 
-    public void leaveGameRoom(Member member) {
-        if (gameRoom != null) {
-            this.gameRoom = null;
-        }
-        this.status = GamePlayerStatus.NONE;
+    public static GamePlayer createPhotoGamePlayer(Member member, MultiPhotoGame game) {
+        return GamePlayer.builder()
+                .nickname(member.getNickname())
+                .member(member)
+                .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
+                .multiPhotoGame(game)
+                .status(GamePlayerStatus.PLAYING)
+                .build();
     }
+
 
     public void startGame() {
         this.status = GamePlayerStatus.PLAYING;
@@ -74,15 +81,15 @@ public class GamePlayer {
     public void finishGame() {
         this.status = GamePlayerStatus.FINISHED;
     }
-    
+
     public void assignTeam(Integer teamNumber) {
         this.teamNumber = teamNumber;
     }
-    
+
     public void updateRoundRank(Integer rank) {
         this.roundRank = rank;
     }
-    
+
     public void addScore(int points) {
         this.totalScore += points;
     }

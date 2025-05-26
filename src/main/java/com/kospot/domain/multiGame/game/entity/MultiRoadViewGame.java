@@ -4,10 +4,7 @@ import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -28,6 +25,7 @@ public class MultiRoadViewGame extends MultiGame {
     @JoinColumn(name = "game_room_id")
     private GameRoom gameRoom;
 
+    @Builder.Default
     @OneToMany(mappedBy = "multiRoadViewGame", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadViewGameRound> roadViewGameRounds = new ArrayList<>();
     

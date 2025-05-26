@@ -1,16 +1,14 @@
 package com.kospot.domain.multiGame.gameRound.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multiGame.submittion.entity.RoadViewPlayerSubmission;
-import com.kospot.domain.multiGame.submittion.entity.TeamSubmission;
+import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubmission;
+import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewTeamSubmission;
+import com.kospot.exception.object.domain.GameRoundHandler;
+import com.kospot.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ public class RoadViewGameRound extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private Integer roundNumber;
+    private Integer currentRound;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "multi_road_view_game_id")
@@ -37,18 +35,26 @@ public class RoadViewGameRound extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coordinate_id")
     private CoordinateNationwide targetCoordinate;
-    
+
+    @Builder.Default
     @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadViewPlayerSubmission> roadViewPlayerSubmissions = new ArrayList<>();
-    
+
+    @Builder.Default
     @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TeamSubmission> teamSubmissions = new ArrayList<>();
+    private List<RoadViewTeamSubmission> roadViewTeamSubmissions = new ArrayList<>();
     
     private Boolean isFinished;
     
     // Business methods
+    public void endRound() {
+        validateRoundNotFinished();
+        this.isFinished = true;
+    }
+
     public void setMultiRoadViewGame(MultiRoadViewGame multiRoadViewGame) {
         this.multiRoadViewGame = multiRoadViewGame;
+        multiRoadViewGame.getRoadViewGameRounds().add(this);
     }
     
     public void addPlayerSubmission(RoadViewPlayerSubmission submission) {
@@ -56,21 +62,24 @@ public class RoadViewGameRound extends BaseTimeEntity {
         submission.setRoadViewGameRound(this);
     }
     
-    public void addTeamSubmission(TeamSubmission submission) {
-        this.teamSubmissions.add(submission);
+    public void addTeamSubmission(RoadViewTeamSubmission submission) {
+        this.roadViewTeamSubmissions.add(submission);
         submission.setRoadViewGameRound(this);
     }
     
-    public void finishRound() {
-        this.isFinished = true;
-    }
-    
-    // 생성 메서드
+    // create method
     public static RoadViewGameRound createRound(Integer roundNumber, CoordinateNationwide targetCoordinate) {
         return RoadViewGameRound.builder()
-                .roundNumber(roundNumber)
+                .currentRound(roundNumber)
                 .targetCoordinate(targetCoordinate)
                 .isFinished(false)
                 .build();
+    }
+
+    // validate
+    public void validateRoundNotFinished() {
+        if (this.isFinished) {
+            throw new GameRoundHandler(ErrorStatus.ROUND_ALREADY_FINISHED);
+        }
     }
 } 

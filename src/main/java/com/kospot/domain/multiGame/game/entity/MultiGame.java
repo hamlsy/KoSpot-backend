@@ -19,7 +19,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @MappedSuperclass
 public abstract class MultiGame extends BaseTimeEntity {
-    
+
+    // 방 제목
+    private String title;
+
     // 개인전 또는 협동전
     @Enumerated(EnumType.STRING)
     private PlayerMatchType matchType;
@@ -29,7 +32,7 @@ public abstract class MultiGame extends BaseTimeEntity {
     private GameMode gameMode;
 
     @Min(1)
-    @Max(20)
+    @Max(15)
     private Integer totalRounds;
 
     private Integer currentRound;

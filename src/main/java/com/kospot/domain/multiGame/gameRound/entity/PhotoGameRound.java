@@ -2,12 +2,9 @@ package com.kospot.domain.multiGame.gameRound.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
-import com.kospot.domain.multiGame.submittion.entity.PhotoPlayerSubmission;
+import com.kospot.domain.multiGame.submission.entity.photo.PhotoPlayerSubmission;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -31,6 +28,7 @@ public class PhotoGameRound extends BaseTimeEntity {
     private MultiPhotoGame multiPhotoGame;
     
     // 라운드에 사용되는 사진들의 URL 목록
+    @Builder.Default
     @ElementCollection
     @CollectionTable(name = "photo_game_round_images", 
                     joinColumns = @JoinColumn(name = "photo_game_round_id"))
@@ -42,7 +40,8 @@ public class PhotoGameRound extends BaseTimeEntity {
     
     // 현재 정답자 수 
     private Integer correctAnswersCount = 0;
-    
+
+    @Builder.Default
     @OneToMany(mappedBy = "photoGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhotoPlayerSubmission> playerSubmissions = new ArrayList<>();
     
