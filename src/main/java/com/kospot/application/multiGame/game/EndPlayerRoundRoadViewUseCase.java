@@ -9,7 +9,7 @@ import com.kospot.domain.multiGame.gameRound.service.RoadViewGameRoundService;
 import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubmission;
 import com.kospot.domain.multiGame.submission.service.RoadViewPlayerSubmissionService;
 import com.kospot.global.annotation.usecase.UseCase;
-import com.kospot.presentation.multiGame.round.dto.response.GameRoundResponse;
+import com.kospot.presentation.multiGame.round.dto.response.RoadViewRoundResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class EndPlayerRoundRoadViewUseCase {
     private final GamePlayerService gamePlayerService;
     private final RoadViewPlayerSubmissionService roadViewPlayerSubmissionService;
 
-    public void execute(Long gameId, Long roundId) {
+    public RoadViewRoundResponse.PlayerResult execute(Long gameId, Long roundId) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchPlayerSubmissionAndPlayers(roundId);
         //todo 제출 못 한 플레이어 0점처리 - service
 
@@ -42,7 +42,7 @@ public class EndPlayerRoundRoadViewUseCase {
         List<GamePlayer> updatedPlayers = gamePlayerService.updateTotalRank(players);
 
         // 라운드 결과 response - dto convert, 각 플레이어가 제출한 좌표 포함
-        GameRoundResponse.RoadViewPlayerRoundResult.from(
+        return RoadViewRoundResponse.PlayerResult.from(
                 round,
                 submission,
                 updatedPlayers

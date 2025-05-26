@@ -9,21 +9,21 @@ import lombok.*;
 
 import java.util.List;
 
-public class GameRoundResponse {
+public class RoadViewRoundResponse {
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class RoadViewInfo {
+    public static class Info {
         private Long roundId;
         private int roundNumber;
         private double targetLat;
         private double targetLng;
 
-        public static RoadViewInfo from(RoadViewGameRound round) {
-            return RoadViewInfo.builder()
+        public static Info from(RoadViewGameRound round) {
+            return Info.builder()
                     .roundId(round.getId())
                     .roundNumber(round.getCurrentRound())
                     .targetLat(round.getTargetCoordinate().getLat())
@@ -37,17 +37,17 @@ public class GameRoundResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class RoadViewPlayerRoundResult {
+    public static class PlayerResult {
         private int roundNumber;
         private double targetLat;
         private double targetLng;
         private List<SubmissionResponse.RoadViewPlayer> playerSubmissionResults;
         private List<GamePlayerResponse> playerTotalResults;
 
-        public static RoadViewPlayerRoundResult from(RoadViewGameRound round,
-                                                     List<RoadViewPlayerSubmission> submissions,
-                                                     List<GamePlayer> players) {
-            return RoadViewPlayerRoundResult.builder()
+        public static PlayerResult from(RoadViewGameRound round,
+                                        List<RoadViewPlayerSubmission> submissions,
+                                        List<GamePlayer> players) {
+            return PlayerResult.builder()
                     .roundNumber(round.getCurrentRound())
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())

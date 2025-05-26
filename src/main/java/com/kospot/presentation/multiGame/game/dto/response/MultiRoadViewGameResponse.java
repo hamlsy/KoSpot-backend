@@ -7,7 +7,7 @@ import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import com.kospot.presentation.multiGame.gamePlayer.dto.response.GamePlayerResponse;
-import com.kospot.presentation.multiGame.round.dto.response.GameRoundResponse;
+import com.kospot.presentation.multiGame.round.dto.response.RoadViewRoundResponse;
 import lombok.*;
 
 public class MultiRoadViewGameResponse {
@@ -23,7 +23,7 @@ public class MultiRoadViewGameResponse {
         private int totalRounds;
         private int currentRound;
 
-        private GameRoundResponse.RoadViewInfo roundInfo;
+        private RoadViewRoundResponse.Info roundInfo;
         private List<GamePlayerResponse> gamePlayers;
 
         public static StartPlayerGame from(MultiRoadViewGame game, RoadViewGameRound round, List<GamePlayer> players) {
@@ -31,7 +31,7 @@ public class MultiRoadViewGameResponse {
                     .gameId(game.getId())
                     .totalRounds(game.getTotalRounds())
                     .currentRound(game.getCurrentRound())
-                    .roundInfo(GameRoundResponse.RoadViewInfo.from(round))
+                    .roundInfo(RoadViewRoundResponse.Info.from(round))
                     .gamePlayers(
                             players.stream().map(GamePlayerResponse::from).collect(Collectors.toList())
                     )
@@ -50,13 +50,13 @@ public class MultiRoadViewGameResponse {
         private Long gameId;
         private int currentRound;
 
-        private GameRoundResponse.RoadViewInfo roundInfo;
+        private RoadViewRoundResponse.Info roundInfo;
 
         public static NextRound from(MultiRoadViewGame game, RoadViewGameRound round) {
             return NextRound.builder()
                     .gameId(game.getId())
                     .currentRound(game.getCurrentRound())
-                    .roundInfo(GameRoundResponse.RoadViewInfo.from(round))
+                    .roundInfo(RoadViewRoundResponse.Info.from(round))
                     .build();
         }
 

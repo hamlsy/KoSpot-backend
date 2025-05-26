@@ -9,6 +9,7 @@ import com.kospot.exception.payload.code.SuccessStatus;
 import com.kospot.exception.payload.dto.ApiResponseDto;
 import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multiGame.game.dto.response.MultiRoadViewGameResponse;
+import com.kospot.presentation.multiGame.round.dto.response.RoadViewRoundResponse;
 import com.kospot.presentation.multiGame.submission.dto.request.SubmissionRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -64,12 +65,10 @@ public class MultiRoadViewGameController {
 
     @Operation(summary = "멀티 로드뷰 개인 라운드 종료", description = "멀티 로드뷰 게임 개인 라운드를 종료합니다.")
     @PostMapping("/{multiGameId}/rounds/{roundId}/endPlayerRound")
-    public ApiResponseDto<?> endPlayerRound(
+    public ApiResponseDto<RoadViewRoundResponse.PlayerResult> endPlayerRound(
             @PathVariable("multiGameId") Long multiGameId,
             @PathVariable("roundId") Long roundId) {
-
-        endPlayerRoundRoadViewUseCase.execute(multiGameId, roundId);
-        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+        return ApiResponseDto.onSuccess(endPlayerRoundRoadViewUseCase.execute(multiGameId, roundId));
     }
 
     @Operation(summary = "멀티 로드뷰 팀 라운드 종료", description = "멀티 로드뷰 게임 팀 라운드를 종료합니다.")
