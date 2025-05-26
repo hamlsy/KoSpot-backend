@@ -1,11 +1,8 @@
 package com.kospot.domain.multiGame.gamePlayer.entity;
 
-import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multiGame.gamePlayer.adaptor.GamePlayerAdaptor;
-import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

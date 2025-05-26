@@ -38,9 +38,6 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
     // 프론트에서 계산된 정답과의 거리 (미터 단위)
     private Double distance;
 
-    // 라운드에서의 순위
-    private Integer rank;
-
     // 순위에 따른 점수
     private Integer score;
 
@@ -55,12 +52,7 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
     }
 
     public void assignRankAndScore(Integer rank) {
-        assignRank(rank);
         assignScore(calculateScore(rank));
-    }
-
-    private void assignRank(Integer rank) {
-        this.rank = rank;
     }
 
     private void assignScore(Integer score) {
@@ -73,11 +65,11 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
 
     // 생성 메서드
     public static RoadViewPlayerSubmission createSubmission(
-            GamePlayer gamePlayer, Double latitude, Double longitude, Double distance, Double timeToAnswer) {
+            GamePlayer gamePlayer, Double lat, Double lng, Double distance, Double timeToAnswer) {
         return RoadViewPlayerSubmission.builder()
                 .gamePlayer(gamePlayer)
-                .lat(latitude)
-                .lng(longitude)
+                .lat(lat)
+                .lng(lng)
                 .distance(distance)
                 .timeToAnswer(timeToAnswer)
                 .build();

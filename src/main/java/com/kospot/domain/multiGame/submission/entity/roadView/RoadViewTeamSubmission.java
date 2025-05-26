@@ -28,15 +28,12 @@ public class RoadViewTeamSubmission extends BaseTimeEntity {
     // 팀 번호 (1 또는 2)
     private Integer teamNumber;
     
-    private Double latitude;
+    private Double lat;
     
-    private Double longitude;
+    private Double lng;
     
     // 프론트에서 계산된 정답과의 거리 (미터 단위)
     private Double distance;
-    
-    // 라운드에서의 팀 순위
-    private Integer rank;
     
     // 승패 여부 (협동전에서 사용)
     private Boolean isWinner;
@@ -46,20 +43,16 @@ public class RoadViewTeamSubmission extends BaseTimeEntity {
         this.roadViewGameRound = roadViewGameRound;
     }
     
-    public void assignRank(Integer rank) {
-        this.rank = rank;
-    }
-    
     public void setWinner(Boolean isWinner) {
         this.isWinner = isWinner;
     }
     
     // 생성 메서드
-    public static RoadViewTeamSubmission createSubmission(Integer teamNumber, Double latitude, Double longitude, Double distance) {
+    public static RoadViewTeamSubmission createSubmission(Integer teamNumber, Double lat, Double lng, Double distance) {
         return RoadViewTeamSubmission.builder()
                 .teamNumber(teamNumber)
-                .latitude(latitude)
-                .longitude(longitude)
+                .lat(lat)
+                .lng(lng)
                 .distance(distance)
                 .build();
     }
