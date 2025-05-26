@@ -32,4 +32,10 @@ public class MemberAdaptor {
                 () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)
         );
     }
+
+    public Member queryByUsername(String username) {
+        return repository.findByUsername(username).orElseThrow(
+                () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)
+        );
+    }
 }

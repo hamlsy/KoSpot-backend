@@ -15,4 +15,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m left join fetch m.equippedMarkerImage where m.username = :username")
     Optional<Member> findByUsernameFetchEquippedMarkerImage(@Param("username") String username);
 
+    Optional<Member> findByUsername(String username);
+
 }
