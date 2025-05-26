@@ -1,9 +1,6 @@
 package com.kospot.infrastructure.security.filter;
 
-package com.ploggingbuddy.security.filter;
-
 import com.kospot.infrastructure.security.service.TokenService;
-import com.ploggingbuddy.security.service.TokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,6 +22,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
