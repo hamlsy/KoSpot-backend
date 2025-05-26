@@ -39,7 +39,7 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
     private Double distance;
 
     // 순위에 따른 점수
-    private Integer score;
+    private Integer earnedScore;
 
     // 정답까지 걸린 시간(밀리초 단위)
     private Double timeToAnswer;
@@ -51,12 +51,12 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
         roadViewGameRound.addPlayerSubmission(this);
     }
 
-    public void assignRankAndScore(Integer rank) {
-        assignScore(calculateScore(rank));
+    public void assignRankAndScore(Integer roundRank) {
+        assignScore(calculateScore(roundRank));
     }
 
     private void assignScore(Integer score) {
-        this.score = score;
+        this.earnedScore = score;
     }
 
     public void setGamePlayer(GamePlayer gamePlayer) {

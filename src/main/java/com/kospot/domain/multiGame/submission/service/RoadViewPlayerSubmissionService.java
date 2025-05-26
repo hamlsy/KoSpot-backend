@@ -40,7 +40,7 @@ public class RoadViewPlayerSubmissionService {
         //game player 점수 계산
         submissions.forEach(submission -> {
             GamePlayer gamePlayer = submission.getGamePlayer();
-            gamePlayer.addScore(submission.getScore());
+            gamePlayer.addScore(submission.getEarnedScore());
         });
         return submissions;
     }
