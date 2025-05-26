@@ -2,8 +2,8 @@ package com.kospot.presentation.notice.controller;
 
 import com.kospot.application.notice.*;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.exception.payload.code.SuccessStatus;
-import com.kospot.exception.payload.dto.ApiResponseDto;
+import com.kospot.global.exception.payload.code.SuccessStatus;
+import com.kospot.global.exception.payload.dto.ApiResponseDto;
 import com.kospot.presentation.notice.dto.request.NoticeRequest;
 import com.kospot.presentation.notice.dto.response.NoticeResponse;
 import io.swagger.v3.oas.annotations.Operation;

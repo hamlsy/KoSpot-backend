@@ -6,7 +6,7 @@ import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.event.RoadViewPracticeEvent;
 import com.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

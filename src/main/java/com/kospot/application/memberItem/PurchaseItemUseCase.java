@@ -8,7 +8,7 @@ import com.kospot.domain.memberItem.service.MemberItemService;
 import com.kospot.domain.point.entity.PointHistoryType;
 import com.kospot.domain.point.service.PointHistoryService;
 import com.kospot.domain.point.service.PointService;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

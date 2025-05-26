@@ -5,8 +5,8 @@ import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubmission;
 import com.kospot.domain.multiGame.submission.repository.RoadViewPlayerSubmissionRepository;
 
-import com.kospot.exception.object.domain.GameRoundHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.GameRoundHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

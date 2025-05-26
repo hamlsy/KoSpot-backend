@@ -2,7 +2,7 @@ package com.kospot.application.image;
 
 import com.kospot.domain.image.service.ImageService;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.image.dto.request.ImageRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

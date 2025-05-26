@@ -2,8 +2,8 @@ package com.kospot.domain.item.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.image.entity.Image;
-import com.kospot.exception.object.domain.ItemHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.ItemHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

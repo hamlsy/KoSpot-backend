@@ -5,7 +5,7 @@ import com.kospot.domain.item.entity.Item;
 import com.kospot.presentation.item.dto.request.ItemRequest;
 import com.kospot.domain.item.service.ItemService;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 

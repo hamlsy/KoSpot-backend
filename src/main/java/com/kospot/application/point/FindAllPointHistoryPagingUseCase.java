@@ -3,7 +3,7 @@ package com.kospot.application.point;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.domain.point.entity.PointHistory;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.point.dto.response.PointHistoryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

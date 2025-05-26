@@ -2,8 +2,8 @@ package com.kospot.domain.game.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.exception.object.domain.GameHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.GameHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

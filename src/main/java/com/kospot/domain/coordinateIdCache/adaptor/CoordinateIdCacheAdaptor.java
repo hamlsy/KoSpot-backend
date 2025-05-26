@@ -3,10 +3,10 @@ package com.kospot.domain.coordinateIdCache.adaptor;
 import com.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.domain.coordinateIdCache.entity.CoordinateIdCache;
 import com.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
-import com.kospot.exception.object.domain.CoordinateIdCacheHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.CoordinateIdCacheHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 
-import com.kospot.global.annotation.adaptor.Adaptor;
+import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 

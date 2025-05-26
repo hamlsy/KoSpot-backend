@@ -10,7 +10,7 @@ import com.kospot.presentation.game.dto.response.StartGameResponse;
 import com.kospot.domain.game.service.AESService;
 import com.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.exception.payload.dto.ApiResponseDto;
+import com.kospot.global.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

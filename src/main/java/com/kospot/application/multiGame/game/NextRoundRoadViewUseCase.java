@@ -4,7 +4,7 @@ import com.kospot.domain.multiGame.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import com.kospot.domain.multiGame.gameRound.service.RoadViewGameRoundService;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.multiGame.game.dto.response.MultiRoadViewGameResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

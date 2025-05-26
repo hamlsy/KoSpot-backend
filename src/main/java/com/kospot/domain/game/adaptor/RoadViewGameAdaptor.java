@@ -2,9 +2,9 @@ package com.kospot.domain.game.adaptor;
 
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.repository.RoadViewGameRepository;
-import com.kospot.exception.object.domain.GameHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
-import com.kospot.global.annotation.adaptor.Adaptor;
+import com.kospot.global.exception.object.domain.GameHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
