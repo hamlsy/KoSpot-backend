@@ -13,17 +13,17 @@ import java.time.Duration;
 public class RedisService {
     private final RedisTemplate redisTemplate;
 
-    public void setValue(String token, String username) {
+    public void setToken(String token, String username) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
         values.set(token, username, Duration.ofDays(7));
     }
 
-    public String getValue(String token) {
+    public String getToken(String token) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
         return values.get(token);
     }
 
-    public void deleteValue(String token) {
+    public void deleteToken(String token) {
         if (token != null && token.startsWith("Bearer ")) {
             // "Bearer " 접두사 제거
             token = token.substring(7);

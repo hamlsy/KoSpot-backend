@@ -1,7 +1,6 @@
 package com.kospot.infrastructure.security.service;
 
 import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.global.exception.object.general.GeneralException;
 import com.kospot.global.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.dto.JwtToken;
@@ -17,7 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -59,7 +57,7 @@ public class TokenService {
         }
 
         // 이전 리프레시 토큰 삭제
-        redisService.deleteValue(refreshToken);
+        redisService.deleteToken(refreshToken);
 
         // 새로운 Authentication 객체 생성
         Claims claims = parseClaims(refreshToken);
@@ -98,7 +96,7 @@ public class TokenService {
                 .compact();
 
         // 새 리프레시 토큰을 Redis에 저장
-        redisService.setValue(refreshToken, authentication.getName());
+        redisService.setToken(refreshToken, authentication.getName());
 
         return JwtToken.builder()
                 .grantType("Bearer")
@@ -108,12 +106,12 @@ public class TokenService {
     }
 
     public boolean logout(String refreshToken) {
-        redisService.deleteValue(refreshToken);
+        redisService.deleteToken(refreshToken);
         return true;
     }
 
     public boolean existsRefreshToken(String refreshToken) {
-        return redisService.getValue(refreshToken) != null;
+        return redisService.getToken(refreshToken) != null;
     }
 
     public Authentication getAuthentication(String accessToken) {
