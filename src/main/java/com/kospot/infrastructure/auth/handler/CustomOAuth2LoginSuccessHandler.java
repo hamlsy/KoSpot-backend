@@ -50,8 +50,9 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
         }
 
         String url = UriComponentsBuilder.fromHttpUrl(REDIRECT_URI)
-                .queryParam("code", jwtToken.getAccessToken())
-                .queryParam("provider", provider) //todo refresh token
+                .queryParam("accessToken", jwtToken.getAccessToken())
+                .queryParam("refreshToken", jwtToken.getRefreshToken())
+                .queryParam("provider", provider)
                 .build()
                 .toUriString();
         response.addHeader("Authorization",

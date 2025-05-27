@@ -1,6 +1,12 @@
 package com.kospot.infrastructure.security.service;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
+import com.kospot.domain.member.entity.Member;
+import com.kospot.global.exception.object.general.GeneralException;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.dto.JwtToken;
+import com.kospot.infrastructure.security.vo.CustomUserDetails;
+import com.kospot.infrastructure.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,24 +30,47 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class TokenService{
+public class TokenService {
     private final Key key;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserDetailsService userDetailsService;
+    private final MemberAdaptor memberAdaptor;
+    private final RedisService redisService;
 
     private final static int ACCESS_TOKEN_EXPIRATION_TIME = 1800000;
     private final static int REFRESH_TOKEN_EXPIRATION_TIME = 604800000;
 
     public TokenService(@Value("${app.jwt.secret}") String key,
                         AuthenticationManagerBuilder authenticationManagerBuilder,
-                        UserDetailsService userDetailsService) {
+                        UserDetailsService userDetailsService, MemberAdaptor memberAdaptor,
+                        RedisService redisService) {
         byte[] keyBytes = Decoders.BASE64.decode(key);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
+        this.memberAdaptor = memberAdaptor;
+        this.redisService = redisService;
     }
 
-    //todo - add issueToken method
+    public JwtToken issueTokens(String refreshToken) {
+        // Refresh Token 유효성 검사
+        if (!validateToken(refreshToken) || !existsRefreshToken(refreshToken)) {
+            throw new GeneralException(ErrorStatus.AUTH_INVALID_REFRESH_TOKEN);
+        }
+
+        // 이전 리프레시 토큰 삭제
+        redisService.deleteValue(refreshToken);
+
+        // 새로운 Authentication 객체 생성
+        Claims claims = parseClaims(refreshToken);
+        String username = claims.getSubject();
+        CustomUserDetails customUserDetails = new CustomUserDetails(memberAdaptor.queryByUsername(username));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, "",
+                customUserDetails.getAuthorities());
+
+        // 새 토큰 생성
+        return generateToken(authentication);
+    }
 
     public JwtToken generateToken(Authentication authentication) {
         // 권한 가져오기
@@ -61,11 +90,30 @@ public class TokenService{
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRATION_TIME))    // 7일
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        // 새 리프레시 토큰을 Redis에 저장
+        redisService.setValue(refreshToken, authentication.getName());
 
         return JwtToken.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
+    }
+
+    public boolean logout(String refreshToken) {
+        redisService.deleteValue(refreshToken);
+        return true;
+    }
+
+    public boolean existsRefreshToken(String refreshToken) {
+        return redisService.getValue(refreshToken) != null;
     }
 
     public Authentication getAuthentication(String accessToken) {
