@@ -29,8 +29,8 @@ public class TokenService{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserDetailsService userDetailsService;
 
-    // 임시로 기한 길게 설정
-    private final static int ACCESS_TOKEN_EXPIRATION_TIME = 180000000;
+    private final static int ACCESS_TOKEN_EXPIRATION_TIME = 1800000;
+    private final static int REFRESH_TOKEN_EXPIRATION_TIME = 604800000;
 
     public TokenService(@Value("${app.jwt.secret}") String key,
                         AuthenticationManagerBuilder authenticationManagerBuilder,
@@ -40,6 +40,8 @@ public class TokenService{
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
     }
+
+    //todo - add issueToken method
 
     public JwtToken generateToken(Authentication authentication) {
         // 권한 가져오기
