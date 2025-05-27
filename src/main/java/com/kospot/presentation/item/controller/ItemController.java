@@ -3,6 +3,7 @@ package com.kospot.presentation.item.controller;
 import com.kospot.application.item.*;
 import com.kospot.domain.image.service.ImageService;
 import com.kospot.domain.item.entity.Item;
+import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.item.dto.request.ItemRequest;
 import com.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.domain.item.service.ItemService;
@@ -53,27 +54,27 @@ public class ItemController {
 
     @Operation(summary = "아이템 타입 별 조회", description = "타입 별 아이템들을 조회합니다.")
     @GetMapping("/{itemTypeKey}")
-    public ApiResponseDto<List<ItemResponse>> findItemsByItemType(Member member, @PathVariable("itemTypeKey") String itemTypeKey) {
+    public ApiResponseDto<List<ItemResponse>> findItemsByItemType(@CurrentMember Member member, @PathVariable("itemTypeKey") String itemTypeKey) {
         return ApiResponseDto.onSuccess(findAllItemsByTypeUseCase.execute(member, itemTypeKey));
     }
 
     @Operation(summary = "아이템 등록", description = "아이템을 등록합니다.")
     @PostMapping("/")
-    public ApiResponseDto<?> registerItem(Member member, @ModelAttribute ItemRequest.Create request) {
+    public ApiResponseDto<?> registerItem(@CurrentMember Member member, @ModelAttribute ItemRequest.Create request) {
         registerItemUseCase.execute(member, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 상점 삭제", description = "아이템을 상점에서 삭제합니다.")
     @PutMapping("/{id}/deleteShop")
-    public ApiResponseDto<?> deleteItemFromShop(Member member, @PathVariable("id") Long id) {
+    public ApiResponseDto<?> deleteItemFromShop(@CurrentMember Member member, @PathVariable("id") Long id) {
         deleteItemFromShopUseCase.execute(member, id);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 상점 재등록", description = "아이템을 상점에 재등록합니다.")
     @PutMapping("/{id}/restoreShop")
-    public ApiResponseDto<?> restoreItemToShop(Member member, @PathVariable("id") Long id) {
+    public ApiResponseDto<?> restoreItemToShop(@CurrentMember Member member, @PathVariable("id") Long id) {
         restoreItemToShopUseCase.execute(member, id);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
@@ -81,14 +82,14 @@ public class ItemController {
     //todo update item
     @Operation(summary = "아이템 정보 업데이트", description = "아이템 정보를 업데이트 합니다.")
     @PutMapping("/info")
-    public ApiResponseDto<?> updateItemInfo(Member member, @RequestBody ItemRequest.UpdateInfo request) {
+    public ApiResponseDto<?> updateItemInfo(@CurrentMember Member member, @RequestBody ItemRequest.UpdateInfo request) {
         updateItemInfoUseCase.execute(member, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 삭제", description = "아이템을 삭제합니다.")
     @DeleteMapping("/{id}")
-    public ApiResponseDto<?> deleteItem(Member member, @PathVariable("id") Long itemId) {
+    public ApiResponseDto<?> deleteItem(@CurrentMember Member member, @PathVariable("id") Long itemId) {
         deleteItemUseCase.execute(member, itemId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }

@@ -4,6 +4,7 @@ import com.kospot.application.game.roadView.practice.usecase.EndRoadViewPractice
 import com.kospot.application.game.roadView.practice.usecase.StartRoadViewPracticeUseCase;
 import com.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
 import com.kospot.application.game.roadView.rank.usecase.StartRoadViewRankUseCase;
+import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.presentation.game.dto.response.EndGameResponse;
 import com.kospot.presentation.game.dto.response.StartGameResponse;
@@ -53,13 +54,13 @@ public class RoadViewGameController {
 
     @Operation(summary = "로드뷰 연습 게임 시작", description = "로드뷰 연습 게임을 시작합니다.")
     @PostMapping("/practice/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(Member member, @RequestParam("sido") String sidoKey) {
+    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@CurrentMember Member member, @RequestParam("sido") String sidoKey) {
         return ApiResponseDto.onSuccess(startRoadViewPracticeUseCase.execute(member, sidoKey));
     }
 
     @Operation(summary = "로드뷰 연습 게임 종료", description = "로드뷰 연습 게임을 종료합니다.")
     @PostMapping("/practice/end")
-    public ApiResponseDto<EndGameResponse.RoadViewPractice> endPracticeGame(Member member, @RequestBody EndGameRequest.RoadView request) {
+    public ApiResponseDto<EndGameResponse.RoadViewPractice> endPracticeGame(@CurrentMember Member member, @RequestBody EndGameRequest.RoadView request) {
         return ApiResponseDto.onSuccess(endRoadViewPracticeUseCase.execute(member, request));
     }
 
@@ -72,13 +73,13 @@ public class RoadViewGameController {
      */
     @Operation(summary = "로드뷰 랭크 게임 시작", description = "로드뷰 랭크 게임을 시작합니다.")
     @PostMapping("/rank/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startRankGame(Member member) {
+    public ApiResponseDto<StartGameResponse.RoadView> startRankGame(@CurrentMember Member member) {
         return ApiResponseDto.onSuccess(startRoadViewRankUseCase.execute(member));
     }
 
     @Operation(summary = "로드뷰 랭크 게임 종료", description = "로드뷰 랭크 게임을 종료합니다.")
     @PostMapping("/rank/end")
-    public ApiResponseDto<EndGameResponse.RoadViewRank> endRankGame(Member member, @RequestBody EndGameRequest.RoadView request) {
+    public ApiResponseDto<EndGameResponse.RoadViewRank> endRankGame(@CurrentMember Member member, @RequestBody EndGameRequest.RoadView request) {
         return ApiResponseDto.onSuccess(endRoadViewRankUseCase.execute(member, request));
     }
 

@@ -7,6 +7,7 @@ import com.kospot.application.multiGame.submission.SubmitRoadViewPlayerAnswerUse
 import com.kospot.domain.member.entity.Member;
 import com.kospot.global.exception.payload.code.SuccessStatus;
 import com.kospot.global.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multiGame.game.dto.response.MultiRoadViewGameResponse;
 import com.kospot.presentation.multiGame.round.dto.response.RoadViewRoundResponse;
@@ -34,14 +35,14 @@ public class MultiRoadViewGameController {
 
     @Operation(summary = "멀티 로드뷰 개인전 게임 시작", description = "멀티 로드뷰 개인전 게임을 시작합니다.")
     @PostMapping("/player/start")
-    public ApiResponseDto<MultiRoadViewGameResponse.StartPlayerGame> startPlayerGame(Member member, @RequestBody MultiGameRequest.Start request) {
+    public ApiResponseDto<MultiRoadViewGameResponse.StartPlayerGame> startPlayerGame(@CurrentMember Member member, @RequestBody MultiGameRequest.Start request) {
         return ApiResponseDto.onSuccess(startMultiRoadViewPlayerGameUseCase.execute(member, request));
     }
 
     @Operation(summary = "멀티 로드뷰 팀 게임 시작", description = "멀티 로드뷰 팀 게임을 시작합니다.")
     @PostMapping("/team/start")
     //todo team 구현
-    public ApiResponseDto<MultiRoadViewGameResponse.StartPlayerGame> startTeamGame(Member member, @RequestBody MultiGameRequest.Start request) {
+    public ApiResponseDto<MultiRoadViewGameResponse.StartPlayerGame> startTeamGame(@CurrentMember Member member, @RequestBody MultiGameRequest.Start request) {
         return ApiResponseDto.onSuccess(startMultiRoadViewPlayerGameUseCase.execute(member, request));
     }
 
