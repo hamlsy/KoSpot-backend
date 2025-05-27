@@ -22,11 +22,16 @@ import java.util.Collection;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final String REDIRECT_URI = "localhost:8080/oauth2/callback";
+    private final String REDIRECT_URI;
     private final TokenService tokenService;
+
+    public CustomOAuth2LoginSuccessHandler(
+            @Value("${app.oauth2.redirect-uri}") String redirectUri, TokenService tokenService) {
+        this.REDIRECT_URI = redirectUri;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -45,8 +50,9 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
         }
 
         String url = UriComponentsBuilder.fromHttpUrl(REDIRECT_URI)
-                .queryParam("code", jwtToken.getAccessToken())
-                .queryParam("provider", provider) //todo refresh token
+                .queryParam("accessToken", jwtToken.getAccessToken())
+                .queryParam("refreshToken", jwtToken.getRefreshToken())
+                .queryParam("provider", provider)
                 .build()
                 .toUriString();
         response.addHeader("Authorization",
