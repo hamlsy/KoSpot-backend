@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 
 import java.lang.annotation.*;
 
-@Target({ElementType.PARAMETER, ElementType.TYPE})
+@Target({ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Parameter(hidden = true)

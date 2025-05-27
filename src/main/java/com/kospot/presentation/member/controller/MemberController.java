@@ -38,8 +38,8 @@ public class MemberController {
 
     @Operation(summary = "테스트용 멤버 조회", description = "테스트용 멤버 조회")
     @GetMapping("/me")
-    public ApiResponseDto<Member> testCurrentMember(@CurrentMember Member member) {
-        return ApiResponseDto.onSuccess(member);
+    public ApiResponseDto<String> testCurrentMember(@CurrentMember Member member) {
+        return ApiResponseDto.onSuccess(member.getUsername());
     }
 
 }
