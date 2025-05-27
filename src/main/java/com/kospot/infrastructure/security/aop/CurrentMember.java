@@ -1,7 +1,6 @@
 package com.kospot.infrastructure.security.aop;
 
 import io.swagger.v3.oas.annotations.Parameter;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.lang.annotation.*;
 
