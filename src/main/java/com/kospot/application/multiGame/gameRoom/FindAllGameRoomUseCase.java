@@ -2,7 +2,7 @@ package com.kospot.application.multiGame.gameRoom;
 
 import com.kospot.domain.multiGame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multiGame.gameRoom.dto.response.FindGameRoomResponse;
 import lombok.RequiredArgsConstructor;

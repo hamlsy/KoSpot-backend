@@ -15,8 +15,8 @@ import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
 import com.kospot.domain.multiGame.gameRound.repository.RoadViewGameRoundRepository;
 import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubmission;
 import com.kospot.domain.multiGame.submission.repository.RoadViewPlayerSubmissionRepository;
-import com.kospot.exception.object.domain.GameRoundHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.GameRoundHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 import com.kospot.presentation.multiGame.submission.dto.request.SubmissionRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -27,11 +27,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

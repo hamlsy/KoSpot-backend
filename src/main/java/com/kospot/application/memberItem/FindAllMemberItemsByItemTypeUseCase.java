@@ -3,7 +3,7 @@ package com.kospot.application.memberItem;
 import com.kospot.domain.item.entity.ItemType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberItem.adaptor.MemberItemAdaptor;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 
 import com.kospot.presentation.memberItem.dto.response.MemberItemResponse;
 import lombok.RequiredArgsConstructor;

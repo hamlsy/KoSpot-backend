@@ -1,7 +1,7 @@
 package com.kospot.domain.game.entity;
 
-import com.kospot.exception.object.domain.CoordinateHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.CoordinateHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

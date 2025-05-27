@@ -5,7 +5,7 @@ import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.entity.ImageType;
 import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.item.entity.Item;
-import com.kospot.global.service.AwsS3Service;
+import com.kospot.infrastructure.service.AwsS3Service;
 import com.kospot.presentation.image.dto.request.ImageRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

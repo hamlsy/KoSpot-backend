@@ -2,8 +2,9 @@ package com.kospot.presentation.notice.controller;
 
 import com.kospot.application.notice.*;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.exception.payload.code.SuccessStatus;
-import com.kospot.exception.payload.dto.ApiResponseDto;
+import com.kospot.global.exception.payload.code.SuccessStatus;
+import com.kospot.global.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.notice.dto.request.NoticeRequest;
 import com.kospot.presentation.notice.dto.response.NoticeResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +48,7 @@ public class NoticeController {
     //todo html notice create(insert image) - admin
     @Operation(summary = "공지사항 생성", description = "공지사항을 생성합니다.")
     @PostMapping("/")
-    public ApiResponseDto<?> createNotice(Member member, @ModelAttribute NoticeRequest.Create request) {
+    public ApiResponseDto<?> createNotice(@CurrentMember Member member, @ModelAttribute NoticeRequest.Create request) {
         createNoticeUseCase.execute(member, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
@@ -55,7 +56,7 @@ public class NoticeController {
     //todo html notice update - admin
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
     @PutMapping("/{id}")
-    public ApiResponseDto<?> updateNotice(Member member, @PathVariable("id") Long noticeId, @ModelAttribute NoticeRequest.Update request) {
+    public ApiResponseDto<?> updateNotice(@CurrentMember Member member, @PathVariable("id") Long noticeId, @ModelAttribute NoticeRequest.Update request) {
         updateNoticeUseCase.execute(member, noticeId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }

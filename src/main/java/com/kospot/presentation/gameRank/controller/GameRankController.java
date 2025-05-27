@@ -1,7 +1,7 @@
 package com.kospot.presentation.gameRank.controller;
 
 import com.kospot.domain.gameRank.util.RatingScoreCalculator;
-import com.kospot.exception.payload.dto.ApiResponseDto;
+import com.kospot.global.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

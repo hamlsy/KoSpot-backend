@@ -4,7 +4,7 @@ import com.kospot.domain.item.adaptor.ItemAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.domain.item.entity.ItemType;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

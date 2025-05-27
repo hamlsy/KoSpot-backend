@@ -2,8 +2,8 @@ package com.kospot.domain.coordinate.entity.converter;
 
 import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.entity.coordinates.*;
-import com.kospot.exception.object.domain.CoordinateHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.CoordinateHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 
 public class CoordinateConverter {
     public static Coordinate convertToDetailCoordinate(CoordinateNationwide coordinate){

@@ -2,9 +2,9 @@ package com.kospot.domain.member.adaptor;
 
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.repository.MemberRepository;
-import com.kospot.exception.object.domain.MemberHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
-import com.kospot.global.annotation.adaptor.Adaptor;
+import com.kospot.global.exception.object.domain.MemberHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +29,12 @@ public class MemberAdaptor {
 
     public Member queryByUsernameFetchEquippedMarkerImage(String username) {
         return repository.findByUsernameFetchEquippedMarkerImage(username).orElseThrow(
+                () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)
+        );
+    }
+
+    public Member queryByUsername(String username) {
+        return repository.findByUsername(username).orElseThrow(
                 () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)
         );
     }

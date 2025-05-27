@@ -2,7 +2,7 @@ package com.kospot.application.memberItem;
 
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberItem.service.MemberItemService;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 

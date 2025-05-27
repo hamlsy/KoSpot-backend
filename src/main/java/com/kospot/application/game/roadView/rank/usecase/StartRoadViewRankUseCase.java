@@ -9,7 +9,7 @@ import com.kospot.domain.gameRank.adaptor.GameRankAdaptor;
 import com.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.domain.gameRank.service.GameRankService;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 

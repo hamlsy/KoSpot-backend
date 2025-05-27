@@ -4,10 +4,10 @@ import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.domain.coordinate.repository.nationwide.CoordinateNationwideRepository;
 import com.kospot.domain.coordinate.service.DynamicCoordinateRepositoryFactory;
-import com.kospot.exception.object.domain.CoordinateHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.CoordinateHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 
-import com.kospot.global.annotation.adaptor.Adaptor;
+import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 

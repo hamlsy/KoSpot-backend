@@ -3,8 +3,9 @@ package com.kospot.presentation.multiGame.gameRoom.controller;
 
 import com.kospot.application.multiGame.gameRoom.*;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.exception.payload.code.SuccessStatus;
-import com.kospot.exception.payload.dto.ApiResponseDto;
+import com.kospot.global.exception.payload.code.SuccessStatus;
+import com.kospot.global.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multiGame.gameRoom.dto.response.FindGameRoomResponse;
 import com.kospot.presentation.multiGame.gameRoom.dto.response.GameRoomDetailResponse;
@@ -50,19 +51,19 @@ public class GameRoomController {
 
     @Operation(summary = "게임 방 생성", description = "멀티 게임 방을 생성합니다.")
     @PostMapping("/")
-    public ApiResponseDto<GameRoomResponse> createGameRoom(Member member, @RequestBody GameRoomRequest.Create request) {
+    public ApiResponseDto<GameRoomResponse> createGameRoom(@CurrentMember Member member, @RequestBody GameRoomRequest.Create request) {
         return ApiResponseDto.onSuccess(createGameRoomUseCase.execute(member, request));
     }
 
     @Operation(summary = "게임 방 수정", description = "멀티 게임 방을 수정합니다.")
     @PutMapping("/{id}")
-    public ApiResponseDto<GameRoomResponse> updateGameRoom(Member member, @RequestBody GameRoomRequest.Update request, @PathVariable("id") Long gameRoomId) {
+    public ApiResponseDto<GameRoomResponse> updateGameRoom(@CurrentMember Member member, @RequestBody GameRoomRequest.Update request, @PathVariable("id") Long gameRoomId) {
         return ApiResponseDto.onSuccess(updateGameRoomUseCase.execute(member, request, gameRoomId));
     }
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
     @PostMapping("/{id}/join")
-    public ApiResponseDto<?> joinGameRoom(Member member, @PathVariable("id") Long gameRoomId,
+    public ApiResponseDto<?> joinGameRoom(@CurrentMember Member member, @PathVariable("id") Long gameRoomId,
                                           @RequestBody GameRoomRequest.Join request) {
         joinGameRoomUseCase.execute(member, gameRoomId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
@@ -70,14 +71,14 @@ public class GameRoomController {
 
     @Operation(summary = "게임 방 퇴장", description = "게임 방에서 퇴장합니다.")
     @PostMapping("/{id}/leave")
-    public ApiResponseDto<?> leaveGameRoom(Member member, @PathVariable("id") Long gameRoomId) {
+    public ApiResponseDto<?> leaveGameRoom(@CurrentMember Member member, @PathVariable("id") Long gameRoomId) {
         leaveGameRoomUseCase.execute(member, gameRoomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "게임 방 강퇴", description = "게임 방에서 강퇴시킵니다.")
     @PostMapping("/{id}/kick")
-    public ApiResponseDto<?> kickPlayer(Member member, @RequestBody GameRoomRequest.Kick request, @PathVariable("id") Long gameRoomId) {
+    public ApiResponseDto<?> kickPlayer(@CurrentMember Member member, @RequestBody GameRoomRequest.Kick request, @PathVariable("id") Long gameRoomId) {
         kickPlayerUseCase.execute(member, request, gameRoomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }

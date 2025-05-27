@@ -4,8 +4,9 @@ import com.kospot.application.memberItem.EquipMemberItemUseCase;
 import com.kospot.application.memberItem.FindAllMemberItemsByItemTypeUseCase;
 import com.kospot.application.memberItem.PurchaseItemUseCase;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.exception.payload.code.SuccessStatus;
-import com.kospot.exception.payload.dto.ApiResponseDto;
+import com.kospot.global.exception.payload.code.SuccessStatus;
+import com.kospot.global.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.memberItem.dto.response.MemberItemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,14 +35,14 @@ public class MemberItemController {
     //todo refactoring
     @Operation(summary = "아이템 구매", description = "상점에서 아이템을 구매합니다.")
     @GetMapping("/{itemId}/purchase")
-    public ApiResponseDto<?> purchaseItem(Member member, @PathVariable("itemId") Long itemId) {
+    public ApiResponseDto<?> purchaseItem(@CurrentMember Member member, @PathVariable("itemId") Long itemId) {
         purchaseItemUseCase.execute(member, itemId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 장착", description = "인벤토리에서 아이템을 장착합니다.")
     @GetMapping("/{memberItemId}")
-    public ApiResponseDto<?> equipItem(Member member, @PathVariable("memberItemId") Long memberItemId) {
+    public ApiResponseDto<?> equipItem(@CurrentMember Member member, @PathVariable("memberItemId") Long memberItemId) {
         equipMemberItemUseCase.execute(member, memberItemId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
@@ -49,7 +50,7 @@ public class MemberItemController {
     @Operation(summary = "내 아이템 조회", description = "내 인벤토리에서 타입 별 아이템들을 조회합니다.")
     @GetMapping("/{itemType}")
     public ApiResponseDto<List<MemberItemResponse>> findAllMemberItemByItemType(
-            Member member, @PathVariable("itemType") String itemType) {
+            @CurrentMember Member member, @PathVariable("itemType") String itemType) {
         return ApiResponseDto.onSuccess(findAllMemberItemsByItemTypeUseCase.execute(member, itemType));
     }
 

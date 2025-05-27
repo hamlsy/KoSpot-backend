@@ -1,7 +1,7 @@
 package com.kospot.domain.game.service;
 
-import com.kospot.exception.object.domain.GameHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.GameHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

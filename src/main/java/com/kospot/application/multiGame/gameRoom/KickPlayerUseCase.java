@@ -5,7 +5,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multiGame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multiGame.gameRoom.service.GameRoomService;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

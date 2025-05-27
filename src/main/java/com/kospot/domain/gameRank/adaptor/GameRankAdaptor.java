@@ -4,7 +4,7 @@ import com.kospot.domain.game.entity.GameMode;
 import com.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.domain.gameRank.repository.GameRankRepository;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.global.annotation.adaptor.Adaptor;
+import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 
 @Adaptor

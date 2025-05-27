@@ -4,7 +4,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.notice.adaptor.NoticeAdaptor;
 import com.kospot.domain.notice.entity.Notice;
 import com.kospot.domain.notice.service.NoticeService;
-import com.kospot.global.annotation.usecase.UseCase;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.notice.dto.request.NoticeRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

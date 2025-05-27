@@ -7,8 +7,8 @@ import com.kospot.domain.coordinate.entity.converter.CoordinateConverter;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 import com.kospot.domain.coordinate.entity.sido.Sido;
 import com.kospot.domain.coordinateIdCache.service.CoordinateIdCacheService;
-import com.kospot.exception.object.domain.CoordinateHandler;
-import com.kospot.exception.payload.code.ErrorStatus;
+import com.kospot.global.exception.object.domain.CoordinateHandler;
+import com.kospot.global.exception.payload.code.ErrorStatus;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
