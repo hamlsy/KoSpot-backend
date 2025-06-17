@@ -38,11 +38,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
-    /**
-     * 메시지 브로커 설정
-     * Simple Broker를 사용하여 메모리 기반 메시지 브로킹 제공
-     * todo 프로덕션 환경에서는 Redis Pub/Sub으로 확장 가능
-     */
+
+    //Simple Broker Settings
+    //todo 프로덕션 환경에서는 Redis Pub/Sub으로 확장 가능
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // 클라이언트가 구독할 목적지 프리픽스 설정
@@ -59,18 +57,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     }
 
-    /**
-     * WebSocket 전송 설정 최적화
-     */
     @Override
     public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
-        // 메시지 크기 제한 (32KB) - 게임 데이터 전송 최적화
         registry.setMessageSizeLimit(32 * 1024);
-
-        // 첫 메시지 수신 타임아웃 (30초)
         registry.setTimeToFirstMessage(30000);
-
-        // Send 버퍼 크기 제한 (512KB) - 동시 다발적 메시지 처리
         registry.setSendBufferSizeLimit(512 * 1024);
     }
 
@@ -78,9 +68,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.taskExecutor()
-                .corePoolSize(2)    // 기본 스레드 수
-                .maxPoolSize(4)     // 최대 스레드 수
-                .keepAliveSeconds(60);  // 유휴 스레드 유지 시간(초)
+                .corePoolSize(2)
+                .maxPoolSize(4)
+                .keepAliveSeconds(60);
     }
 
     @Override
