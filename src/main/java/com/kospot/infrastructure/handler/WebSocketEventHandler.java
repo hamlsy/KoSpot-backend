@@ -38,7 +38,7 @@ public class WebSocketEventHandler {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
         try {
-            // 세션에서 사용자 정보 추출하여 게임방에서 제거
+            // todo 세션에서 사용자 정보 추출하여 게임방에서 제거
 //            gameRoomService.handlePlayerDisconnect(sessionId);
 
             // Redis에서 세션 정보 삭제
