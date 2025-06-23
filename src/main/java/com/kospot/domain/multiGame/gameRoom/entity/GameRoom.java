@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.Where;
 
 @Getter
@@ -18,7 +19,7 @@ import org.hibernate.annotations.Where;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "deleted = false")
+@SQLRestriction("deleted = false")
 public class GameRoom extends BaseTimeEntity {
 
     @Id

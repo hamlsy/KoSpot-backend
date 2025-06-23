@@ -14,6 +14,7 @@ import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
 import com.kospot.domain.multiGame.gameRoom.service.GameRoomService;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multiGame.gameRoom.dto.response.GameRoomDetailResponse;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,6 +76,8 @@ public class GameRoomUseCaseTest {
     @Autowired
     private GameRoomService gameRoomService;
 
+    @Autowired
+    private EntityManager entityManager;
 
     private Member member;
     private Member adminMember;
@@ -196,12 +199,17 @@ public class GameRoomUseCaseTest {
 
         //gameRoom, host
         GameRoom gameRoom = gameRoomRepository.save(getTestGameRoom());
-        players.forEach(gameRoom::join);
+        players.forEach(
+                p -> gameRoom.join(p, null)
+        );
 
         //when
         leaveGameRoomUseCase.execute(member, gameRoom.getId());
 
+        entityManager.clear();
+
         //then
+//        assertEquals(true, gameRoomRepository.findById(gameRoom.getId()).orElseThrow().getDeleted());
         assertThrows(Exception.class, () -> gameRoomRepository.findById(gameRoom.getId()).orElseThrow());
         players.forEach(player -> assertNull(player.getGameRoomId()));
         players.forEach(Assertions::assertNotNull);

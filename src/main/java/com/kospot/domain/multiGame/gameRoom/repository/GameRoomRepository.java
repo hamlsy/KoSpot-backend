@@ -27,7 +27,7 @@ public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
     List<GameRoom> findAllPaging(Pageable pageable);
 
     @EntityGraph(attributePaths = {"host"})
-    @Query("select gr from GameRoom " +
+    @Query("select gr from GameRoom gr " +
             "order by " +
             "case when gr.status = 'WAITING' then 0 else 1 end, gr.createdDate desc")
     List<GameRoom> findAllWithWaitingFirst(Pageable pageable);
