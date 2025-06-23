@@ -300,7 +300,7 @@ public class StartMultiRoadViewPlayerGameUseCaseTest {
         
         // 플레이어 추가 로직 (실제 구현에 맞게 수정 필요)
         for (Member player : players) {
-            gameRoom.join(player);
+            gameRoom.join(player, null);
         }
         
         return gameRoomRepository.save(gameRoom);
@@ -315,7 +315,7 @@ public class StartMultiRoadViewPlayerGameUseCaseTest {
                 .build();
         
         GameRoom savedRoom = gameRoomRepository.save(gameRoom);
-        savedRoom.join(host);
+        savedRoom.join(host, null);
         
         return gameRoomRepository.save(savedRoom);
     }
