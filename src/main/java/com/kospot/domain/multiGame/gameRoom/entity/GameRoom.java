@@ -78,7 +78,8 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     //todo websocket ---
-    public void join(Member player) {
+    public void join(Member player, String inputPassword) {
+        validateJoinRoom(player, inputPassword);
         player.joinGameRoom(this.id);
         currentPlayerCount++;
     }
@@ -100,12 +101,19 @@ public class GameRoom extends BaseTimeEntity {
     //--- todo websocket
 
     //validate
-    public void validateJoinRoom(String inputPassword) {
+    public void validateJoinRoom(Member player, String inputPassword) {
         validateRoomCapacity();
         if (privateRoom) {
             validatePassword(inputPassword);
         }
         validateRoomStatus();
+        validatePlayerNotInOtherRoom(player);
+    }
+
+    private void validatePlayerNotInOtherRoom(Member player) {
+        if (player.isAlreadyInGameRoom()) {
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_MEMBER_ALREADY_IN_ROOM);
+        }
     }
 
     public void validateGameStart(Member host) {
@@ -128,7 +136,7 @@ public class GameRoom extends BaseTimeEntity {
 
     private void validateRoomStatus() {
         if (isNotWaitingRoom()) {
-            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_ALREADY_IN_PROGRESS);
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_CANNOT_JOIN_NOW);
         }
     }
 
