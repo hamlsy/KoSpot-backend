@@ -36,4 +36,12 @@ public class GameRoomAdaptor {
         return repository.findAllByKeywordPaging(keyword, pageable);
     }
 
+    public List<GameRoom> queryAllPaging(Pageable pageable) {
+        return repository.findAllPaging(pageable);
+    }
+
+    public List<GameRoom> queryAllWithWaitingFirst(Pageable pageable) {
+        return repository.findAllWithWaitingFirst(pageable);
+    }
+
 }

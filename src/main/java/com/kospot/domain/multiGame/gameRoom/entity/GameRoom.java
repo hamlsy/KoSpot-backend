@@ -11,12 +11,14 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Where;
 
 @Getter
 @Entity
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "deleted = false")
 public class GameRoom extends BaseTimeEntity {
 
     @Id
@@ -47,6 +49,10 @@ public class GameRoom extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private GameRoomStatus status;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean deleted = false;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
     private Member host;
@@ -71,6 +77,7 @@ public class GameRoom extends BaseTimeEntity {
         this.teamCount = teamCount;
     }
 
+    //todo websocket ---
     public void join(Member player) {
         player.joinGameRoom(this.id);
         currentPlayerCount++;
@@ -85,6 +92,12 @@ public class GameRoom extends BaseTimeEntity {
         validateHost(host);
         leaveRoom(player);
     }
+
+    public void deleteRoom() {
+        this.deleted = true;
+    }
+
+    //--- todo websocket
 
     //validate
     public void validateJoinRoom(String inputPassword) {

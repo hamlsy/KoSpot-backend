@@ -2,7 +2,6 @@ package com.kospot.multiGame.gameRoom.usecase;
 
 import com.kospot.application.multiGame.gameRoom.*;
 import com.kospot.domain.game.entity.GameMode;
-import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.Role;
@@ -128,7 +127,7 @@ public class GameRoomUseCaseTest {
                         .title("title")
                         .host(member)
                         .gameMode(GameMode.ROADVIEW)
-                        .playerMatchType(PlayerMatchType.COOPERATIVE)
+                        .playerMatchType(PlayerMatchType.TEAM)
                         .maxPlayers(4)
                         .build()
         );
@@ -160,7 +159,7 @@ public class GameRoomUseCaseTest {
                         .title("title")
                         .host(member)
                         .gameMode(GameMode.ROADVIEW)
-                        .playerMatchType(PlayerMatchType.COOPERATIVE)
+                        .playerMatchType(PlayerMatchType.TEAM)
                         .maxPlayers(4)
                         .build()
         );
@@ -253,7 +252,7 @@ public class GameRoomUseCaseTest {
                 .title("title")
                 .host(member)
                 .gameMode(GameMode.ROADVIEW)
-                .playerMatchType(PlayerMatchType.COOPERATIVE)
+                .playerMatchType(PlayerMatchType.TEAM)
                 .privateRoom(false)
                 .status(GameRoomStatus.WAITING)
                 .maxPlayers(4)
@@ -413,7 +412,7 @@ public class GameRoomUseCaseTest {
                 .title("title")
                 .host(adminMember)
                 .gameMode(GameMode.ROADVIEW)
-                .playerMatchType(PlayerMatchType.COOPERATIVE)
+                .playerMatchType(PlayerMatchType.TEAM)
                 .privateRoom(true)
                 .password(password)
                 .status(GameRoomStatus.WAITING)

@@ -62,7 +62,7 @@ public abstract class MultiGame extends BaseTimeEntity {
     }
 
     public boolean isCooperativeMode() {
-        return PlayerMatchType.COOPERATIVE.equals(this.matchType);
+        return PlayerMatchType.TEAM.equals(this.matchType);
     }
     
     public boolean isPhotoMode() {
