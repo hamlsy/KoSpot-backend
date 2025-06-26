@@ -19,13 +19,19 @@ public class Message extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long memberSenderId;
+    @Column(nullable = false, length = 50)
+    private String messageId; // 메시지 ID, UUID 등으로 생성하여 중복 방지
 
-    private Long gamePlayerSenderId;
+    @Enumerated(EnumType.STRING)
+    private ChannelType channelType;
+
+    private Long memberId;
+
+    private Long gamePlayerId;
 
     private Long gameRoomId;
 
-    private String senderNickname;
+    private String nickname;
 
     @Column(nullable = false, length = 500)
     private String content;
@@ -41,8 +47,8 @@ public class Message extends BaseTimeEntity {
     public static Message createLobbyChat(Long gameRoomId, Long memberSenderId, String senderNickname, String content) {
         return Message.builder()
                 .gameRoomId(gameRoomId)
-                .memberSenderId(memberSenderId)
-                .senderNickname(senderNickname)
+                .memberId(memberSenderId)
+                .nickname(senderNickname)
                 .messageType(MessageType.LOBBY_CHAT)
                 .content(content)
                 .build();
@@ -52,8 +58,8 @@ public class Message extends BaseTimeEntity {
                                          String content) {
         return Message.builder()
                 .gameRoomId(gameRoomId)
-                .gamePlayerSenderId(gamePlayerId)
-                .senderNickname(senderNickname)
+                .gamePlayerId(gamePlayerId)
+                .nickname(senderNickname)
                 .messageType(MessageType.GAME_CHAT)
                 .content(content)
                 .build();
@@ -63,8 +69,8 @@ public class Message extends BaseTimeEntity {
                                          String teamId, String content) {
         return Message.builder()
                 .gameRoomId(gameRoomId)
-                .gamePlayerSenderId(gamePlayerId)
-                .senderNickname(senderNickname)
+                .gamePlayerId(gamePlayerId)
+                .nickname(senderNickname)
                 .messageType(MessageType.TEAM_CHAT)
                 .content(content)
                 .teamId(teamId)
@@ -74,7 +80,7 @@ public class Message extends BaseTimeEntity {
     public static Message createSystemMessage(Long gameRoomId, String content) {
         return Message.builder()
                 .gameRoomId(gameRoomId)
-                .memberSenderId(0L)  // 시스템 메시지는 특별한 ID 사용
+                .memberId(0L)  // 시스템 메시지는 특별한 ID 사용
                 .messageType(MessageType.SYSTEM_MESSAGE)
                 .content(content)
                 .build();

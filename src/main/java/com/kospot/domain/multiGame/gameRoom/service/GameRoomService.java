@@ -52,10 +52,8 @@ public class GameRoomService {
 
     }
 
-    // soft delete로 전환
     // todo soft delete scheduling
     private void deleteRoom(GameRoom gameRoom) {
-//        gameRoomRepository.delete(gameRoom);
         gameRoom.deleteRoom();
         //남은 인원들 game room fk 초기화
         memberAdaptor.queryAllByGameRoomId(gameRoom.getId()).forEach(Member::leaveGameRoom);
