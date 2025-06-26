@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.UUID;
+
 @Getter
 @Entity
 @SuperBuilder
@@ -86,5 +88,12 @@ public class Message extends BaseTimeEntity {
                 .build();
     }
 
+    //uuid 생성
+    @PrePersist
+    void prePersist() {
+        if(messageId == null) {
+            messageId = UUID.randomUUID().toString();
+        }
+    }
 
 }
