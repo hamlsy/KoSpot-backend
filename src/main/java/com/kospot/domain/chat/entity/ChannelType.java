@@ -1,4 +1,4 @@
-package com.kospot.domain.message.entity;
+package com.kospot.domain.chat.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

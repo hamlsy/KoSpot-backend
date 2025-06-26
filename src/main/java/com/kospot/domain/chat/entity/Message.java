@@ -1,4 +1,4 @@
-package com.kospot.domain.message.entity;
+package com.kospot.domain.chat.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import jakarta.persistence.*;

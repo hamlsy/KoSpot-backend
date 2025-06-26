@@ -1,7 +1,6 @@
 package com.kospot.domain.multiGame.gamePlayer.entity;
 
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.message.entity.Message;
 import com.kospot.domain.multiGame.game.entity.MultiPhotoGame;
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import jakarta.persistence.*;
@@ -10,9 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
