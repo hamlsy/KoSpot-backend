@@ -24,11 +24,12 @@ public class FindAllGameRoomUseCase {
     private final GameRoomAdaptor gameRoomAdaptor;
 
     private static final String SORT_PROPERTIES = "createdDate";
-    private static final int SIZE = 15;
+    private static final int SIZE = 10;
 
-    public List<FindGameRoomResponse> execute(GameRoomRequest.Find request, int page) {
+    public List<FindGameRoomResponse> execute(int page) {
         Pageable pageable = PageRequest.of(page, SIZE, Sort.Direction.DESC, SORT_PROPERTIES);
-        List<GameRoom> gameRooms = gameRoomAdaptor.queryAllByKeyword(request.getKeyword(), pageable);
+        List<GameRoom> gameRooms = gameRoomAdaptor.queryAllWithWaitingFirst(pageable);
+
         return gameRooms.stream().map(FindGameRoomResponse::from)
                 .collect(Collectors.toList());
     }

@@ -28,7 +28,7 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
     private final TokenService tokenService;
 
     public CustomOAuth2LoginSuccessHandler(
-            @Value("${app.oauth2.redirect-uri}") String redirectUri, TokenService tokenService) {
+            @Value("${auth.success-redirect-uri}") String redirectUri, TokenService tokenService) {
         this.REDIRECT_URI = redirectUri;
         this.tokenService = tokenService;
     }

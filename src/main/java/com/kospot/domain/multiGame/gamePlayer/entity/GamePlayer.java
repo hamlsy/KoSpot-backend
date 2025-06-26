@@ -48,9 +48,6 @@ public class GamePlayer {
     @Enumerated(EnumType.STRING)
     private GamePlayerStatus status;
 
-    @OneToMany(mappedBy = "gamePlayerSender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Message> gameMessages = new ArrayList<>();
-
     // rank 표시 보류
 //    private String rankTier;
 //    private String rankLevel;

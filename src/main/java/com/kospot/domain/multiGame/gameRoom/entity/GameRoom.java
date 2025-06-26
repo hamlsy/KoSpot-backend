@@ -11,12 +11,15 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.Where;
 
 @Getter
 @Entity
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLRestriction("deleted = false")
 public class GameRoom extends BaseTimeEntity {
 
     @Id
@@ -47,6 +50,10 @@ public class GameRoom extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private GameRoomStatus status;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean deleted = false;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
     private Member host;
@@ -71,7 +78,9 @@ public class GameRoom extends BaseTimeEntity {
         this.teamCount = teamCount;
     }
 
-    public void join(Member player) {
+    //todo websocket ---
+    public void join(Member player, String inputPassword) {
+        validateJoinRoom(player, inputPassword);
         player.joinGameRoom(this.id);
         currentPlayerCount++;
     }
@@ -86,13 +95,26 @@ public class GameRoom extends BaseTimeEntity {
         leaveRoom(player);
     }
 
+    public void deleteRoom() {
+        this.deleted = true;
+    }
+
+    //--- todo websocket
+
     //validate
-    public void validateJoinRoom(String inputPassword) {
+    public void validateJoinRoom(Member player, String inputPassword) {
         validateRoomCapacity();
         if (privateRoom) {
             validatePassword(inputPassword);
         }
         validateRoomStatus();
+        validatePlayerNotInOtherRoom(player);
+    }
+
+    private void validatePlayerNotInOtherRoom(Member player) {
+        if (player.isAlreadyInGameRoom()) {
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_MEMBER_ALREADY_IN_ROOM);
+        }
     }
 
     public void validateGameStart(Member host) {
@@ -115,7 +137,7 @@ public class GameRoom extends BaseTimeEntity {
 
     private void validateRoomStatus() {
         if (isNotWaitingRoom()) {
-            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_ALREADY_IN_PROGRESS);
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_CANNOT_JOIN_NOW);
         }
     }
 

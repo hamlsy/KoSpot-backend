@@ -1,7 +1,6 @@
 package com.kospot.domain.multiGame.gameRoom.service;
 
 import com.kospot.domain.game.entity.GameMode;
-import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
@@ -38,10 +37,7 @@ public class GameRoomService {
 
     //todo 동시성 해결
     public void joinGameRoom(Member player, GameRoom gameRoom, GameRoomRequest.Join request) {
-        //validate join, todo implement validate already in room
-        gameRoom.validateJoinRoom(request.getPassword());
-        gameRoom.join(player);
-
+        gameRoom.join(player, request.getPassword());
         //todo websocket 입장 알림 전송
     }
 
@@ -56,8 +52,11 @@ public class GameRoomService {
 
     }
 
+    // soft delete로 전환
+    // todo soft delete scheduling
     private void deleteRoom(GameRoom gameRoom) {
-        gameRoomRepository.delete(gameRoom);
+//        gameRoomRepository.delete(gameRoom);
+        gameRoom.deleteRoom();
         //남은 인원들 game room fk 초기화
         memberAdaptor.queryAllByGameRoomId(gameRoom.getId()).forEach(Member::leaveGameRoom);
     }

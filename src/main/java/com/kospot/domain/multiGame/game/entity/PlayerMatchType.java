@@ -11,7 +11,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum PlayerMatchType {
     INDIVIDUAL("개인전"),
-    COOPERATIVE("협동전");
+    TEAM("협동전");
 
     private final String type;
 

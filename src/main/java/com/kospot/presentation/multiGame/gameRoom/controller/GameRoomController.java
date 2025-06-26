@@ -39,14 +39,8 @@ public class GameRoomController {
     //todo search refactoring
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
     @GetMapping("/{page}")
-    public ApiResponseDto<List<FindGameRoomResponse>> findGameRoom(@RequestBody GameRoomRequest.Find request, @PathVariable("page") int page) {
-        return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(request, page));
-    }
-
-    @Operation(summary = "게임 방 내부 조회", description = "멀티 게임 방 내부를 조회합니다.")
-    @GetMapping("/{id}")
-    public ApiResponseDto<GameRoomDetailResponse> findDetailGameRoom(@PathVariable("id") Long gameRoomId) {
-        return ApiResponseDto.onSuccess(findGameRoomDetailUseCase.execute(gameRoomId));
+    public ApiResponseDto<List<FindGameRoomResponse>> findGameRoom(@PathVariable("page") int page) {
+        return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(page));
     }
 
     @Operation(summary = "게임 방 생성", description = "멀티 게임 방을 생성합니다.")
@@ -59,6 +53,13 @@ public class GameRoomController {
     @PutMapping("/{id}")
     public ApiResponseDto<GameRoomResponse> updateGameRoom(@CurrentMember Member member, @RequestBody GameRoomRequest.Update request, @PathVariable("id") Long gameRoomId) {
         return ApiResponseDto.onSuccess(updateGameRoomUseCase.execute(member, request, gameRoomId));
+    }
+
+    //todo implement websocket ----
+    @Operation(summary = "게임 방 내부 조회", description = "멀티 게임 방 내부를 조회합니다.")
+    @GetMapping("/{id}")
+    public ApiResponseDto<GameRoomDetailResponse> findDetailGameRoom(@PathVariable("id") Long gameRoomId) {
+        return ApiResponseDto.onSuccess(findGameRoomDetailUseCase.execute(gameRoomId));
     }
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
@@ -82,6 +83,6 @@ public class GameRoomController {
         kickPlayerUseCase.execute(member, request, gameRoomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
-
+    //---- todo websocket
 
 }

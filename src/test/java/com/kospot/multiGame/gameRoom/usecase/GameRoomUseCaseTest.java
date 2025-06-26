@@ -2,7 +2,6 @@ package com.kospot.multiGame.gameRoom.usecase;
 
 import com.kospot.application.multiGame.gameRoom.*;
 import com.kospot.domain.game.entity.GameMode;
-import com.kospot.domain.game.entity.GameType;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.Role;
@@ -15,6 +14,7 @@ import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
 import com.kospot.domain.multiGame.gameRoom.service.GameRoomService;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multiGame.gameRoom.dto.response.GameRoomDetailResponse;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,6 +76,8 @@ public class GameRoomUseCaseTest {
     @Autowired
     private GameRoomService gameRoomService;
 
+    @Autowired
+    private EntityManager entityManager;
 
     private Member member;
     private Member adminMember;
@@ -128,7 +130,7 @@ public class GameRoomUseCaseTest {
                         .title("title")
                         .host(member)
                         .gameMode(GameMode.ROADVIEW)
-                        .playerMatchType(PlayerMatchType.COOPERATIVE)
+                        .playerMatchType(PlayerMatchType.TEAM)
                         .maxPlayers(4)
                         .build()
         );
@@ -160,7 +162,7 @@ public class GameRoomUseCaseTest {
                         .title("title")
                         .host(member)
                         .gameMode(GameMode.ROADVIEW)
-                        .playerMatchType(PlayerMatchType.COOPERATIVE)
+                        .playerMatchType(PlayerMatchType.TEAM)
                         .maxPlayers(4)
                         .build()
         );
@@ -197,12 +199,17 @@ public class GameRoomUseCaseTest {
 
         //gameRoom, host
         GameRoom gameRoom = gameRoomRepository.save(getTestGameRoom());
-        players.forEach(gameRoom::join);
+        players.forEach(
+                p -> gameRoom.join(p, null)
+        );
 
         //when
         leaveGameRoomUseCase.execute(member, gameRoom.getId());
 
+        entityManager.clear();
+
         //then
+//        assertEquals(true, gameRoomRepository.findById(gameRoom.getId()).orElseThrow().getDeleted());
         assertThrows(Exception.class, () -> gameRoomRepository.findById(gameRoom.getId()).orElseThrow());
         players.forEach(player -> assertNull(player.getGameRoomId()));
         players.forEach(Assertions::assertNotNull);
@@ -253,7 +260,7 @@ public class GameRoomUseCaseTest {
                 .title("title")
                 .host(member)
                 .gameMode(GameMode.ROADVIEW)
-                .playerMatchType(PlayerMatchType.COOPERATIVE)
+                .playerMatchType(PlayerMatchType.TEAM)
                 .privateRoom(false)
                 .status(GameRoomStatus.WAITING)
                 .maxPlayers(4)
@@ -413,7 +420,7 @@ public class GameRoomUseCaseTest {
                 .title("title")
                 .host(adminMember)
                 .gameMode(GameMode.ROADVIEW)
-                .playerMatchType(PlayerMatchType.COOPERATIVE)
+                .playerMatchType(PlayerMatchType.TEAM)
                 .privateRoom(true)
                 .password(password)
                 .status(GameRoomStatus.WAITING)

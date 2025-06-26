@@ -27,7 +27,7 @@ public class GameRoomRequest {
         private String title;
         private String password;
         private String gameModeKey;
-        private String playerMatchTypeKey;
+        private String playerMatchTypeKey; //individual or team
         private int maxPlayers;
         private boolean privateRoom;
 

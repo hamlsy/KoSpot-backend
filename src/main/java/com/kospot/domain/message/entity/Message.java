@@ -25,7 +25,6 @@ public class Message extends BaseTimeEntity {
 
     private Long gameRoomId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private String senderNickname;
 
     @Column(nullable = false, length = 500)
