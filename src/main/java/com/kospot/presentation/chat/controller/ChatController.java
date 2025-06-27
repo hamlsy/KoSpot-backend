@@ -3,6 +3,8 @@ package com.kospot.presentation.chat.controller;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.chat.service.ChatService;
 import com.kospot.infrastructure.security.aop.CurrentMember;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@ApiResponse(responseCode = "2000", description = "OK")
+@Tag(name = "Chat Api", description = "채팅 API")
 public class ChatController {
 
     private final ChatService chatService;

@@ -1,6 +1,6 @@
 package com.kospot.domain.chat.service;
 
-import com.kospot.domain.chat.repository.MessageRepository;
+import com.kospot.domain.chat.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class ChatService {
-    private final MessageRepository messageRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     public void processGlobalChatMessage(Member member, String content) {
         try {
