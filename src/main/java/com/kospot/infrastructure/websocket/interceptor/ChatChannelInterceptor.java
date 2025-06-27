@@ -3,6 +3,7 @@ package com.kospot.infrastructure.websocket.interceptor;
 import com.kospot.infrastructure.exception.object.domain.ChatHandler;
 import com.kospot.infrastructure.exception.object.domain.MemberHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,8 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -23,6 +26,7 @@ import java.time.Duration;
 public class ChatChannelInterceptor implements ChannelInterceptor {
 
     private final RedisTemplate<String, String> redisTemplate;
+    private final TokenService tokenService;
     //todo 공통 상수화
     private static final int RATE_LIMIT = 60; // 1분에 허용되는 메시지 수
 
@@ -31,9 +35,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) { // websocket 연결시
             String token = accessor.getFirstNativeHeader("Authorization");
-            if (isNotValidToken(token)) {
-                throw new MemberHandler(ErrorStatus.AUTH_INVALID_TOKEN);
-            }
+            tokenService.validateToken(token);
 
             Long memberId = extractMemberIdFromToken(token);
             accessor.setUser(new ChatMemberPrincipal(memberId)); // 사용자 정보 설정
@@ -47,16 +49,13 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         return message;
     }
 
-    private boolean isNotValidToken(String token) {
-        return token == null || !token.startsWith("Bearer ");
-    }
-
+    // 토큰에서 memberId 추출
     private Long extractMemberIdFromToken(String token) {
-        // 토큰에서 멤버 ID 추출 로직 구현
-        // 예: JWT 토큰에서 ID 추출
-        return 1L; // 임시로 1L 반환, 실제 구현 필요
+        Authentication authentication = tokenService.getAuthentication(token);
+        return Long.parseLong(authentication.getName());
     }
 
+    // 채팅 제한
     private boolean isRateLimit(Long memberId) {
         String key = "rate_limit:chat:" + memberId;
         String count = redisTemplate.opsForValue().get(key);
