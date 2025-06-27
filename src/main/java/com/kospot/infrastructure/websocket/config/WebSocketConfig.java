@@ -1,5 +1,7 @@
 package com.kospot.infrastructure.websocket.config;
 
+import com.kospot.infrastructure.websocket.interceptor.ChatChannelInterceptor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -18,9 +20,12 @@ import java.util.List;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final List<String> ALLOWED_ORIGINS;
+    private final ChatChannelInterceptor chatChannelInterceptor;
 
-    public WebSocketConfig(@Value("${websocket.allowed-origins}") List<String> ALLOWED_ORIGINS) {
+    public WebSocketConfig(@Value("${websocket.allowed-origins}") List<String> ALLOWED_ORIGINS,
+                           ChatChannelInterceptor chatChannelInterceptor) {
         this.ALLOWED_ORIGINS = ALLOWED_ORIGINS;
+        this.chatChannelInterceptor = chatChannelInterceptor;
     }
 
     // STOMP Endpoints
@@ -67,6 +72,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     //ec2 single core instance 설정 반영
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(chatChannelInterceptor);
         registration.taskExecutor()
                 .corePoolSize(2)
                 .maxPoolSize(4)
