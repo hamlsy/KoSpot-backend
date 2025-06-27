@@ -2,6 +2,7 @@ package com.kospot.infrastructure.auth.domain;
 
 import com.kospot.infrastructure.auth.dto.OAuth2UserInfo;
 import com.kospot.infrastructure.auth.utils.OAuth2Utils;
+import com.kospot.infrastructure.auth.vo.SocialType;
 import lombok.Builder;
 import lombok.Getter;
 

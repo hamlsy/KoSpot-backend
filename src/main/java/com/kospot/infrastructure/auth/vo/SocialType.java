@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.auth.domain;
+package com.kospot.infrastructure.auth.vo;
 
 public enum SocialType {
     NAVER, GOOGLE, KAKAO

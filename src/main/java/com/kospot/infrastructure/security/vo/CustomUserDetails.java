@@ -26,7 +26,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return member.getUsername();
+        return String.valueOf(member.getId()); // memberId 반환
     }
 
     @Override

@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
             Authentication authentication = tokenService.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            request.setAttribute("username", authentication.getName());
+            request.setAttribute("memberId", authentication.getName());
             log.info("set Authentication to security context for '{}', uri: '{}', Role '{}'",
                     authentication.getName(), ((HttpServletRequest) request).getRequestURI(), authentication.getAuthorities());
         } else {

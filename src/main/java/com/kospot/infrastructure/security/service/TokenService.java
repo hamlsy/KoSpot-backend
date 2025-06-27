@@ -61,8 +61,8 @@ public class TokenService {
 
         // 새로운 Authentication 객체 생성
         Claims claims = parseClaims(refreshToken);
-        String username = claims.getSubject();
-        CustomUserDetails customUserDetails = new CustomUserDetails(memberAdaptor.queryByUsername(username));
+        String memberId = claims.getSubject();
+        CustomUserDetails customUserDetails = new CustomUserDetails(memberAdaptor.queryById(Long.parseLong(memberId)));
         Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, "",
                 customUserDetails.getAuthorities());
 
@@ -129,7 +129,8 @@ public class TokenService {
                 .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication return
-        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
+        String memberId = claims.getSubject();
+        UserDetails principal = userDetailsService.loadUserByUsername(memberId);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
