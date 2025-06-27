@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-public class MessageDto {
+public class ChatMessageDto {
 
     private Long memberId;
     private String nickname;

@@ -1,10 +1,16 @@
 package com.kospot.domain.chat.service;
 
 import com.kospot.domain.chat.repository.ChatMessageRepository;
+import com.kospot.domain.member.entity.Member;
+import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
 
 @Slf4j
 @Service
@@ -13,22 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
 
-    public void processGlobalChatMessage(Member member, String content) {
+    public void processGlobalChatMessage(Member member, String content, ChatMessageDto chatMessageDto) {
         try {
             // 메시지 고유 ID 생성 (중복 방지용)
             String messageId = UUID.randomUUID().toString();
-
-            // DTO 생성 (전송용 객체)
-            MessageDto messageDto = MessageDto.builder()
-                    .messageId(messageId)
-                    .channelType(ChannelType.GLOBAL_LOBBY)
-                    .channelId(GLOBAL_LOBBY_CHANNEL)
-                    .userId(member.getId())
-                    .username(member.getUsername()) // Member에서 닉네임 조회
-                    .messageType(MessageType.CHAT)
-                    .content(content)
-                    .timestamp(System.currentTimeMillis())
-                    .build();
 
             // Redis를 이용한 중복 메시지 방지 (네트워크 지연으로 인한 중복 전송 대응)
             String deduplicationKey = "dedup:" + messageId;
@@ -40,13 +34,13 @@ public class ChatService {
             }
 
             // 1단계: 즉시 실시간 브로드캐스트 (사용자 경험 우선)
-            messagingTemplate.convertAndSend("/topic/chat.global", messageDto);
+            messagingTemplate.convertAndSend("/topic/chat.global", chatMessageDto);
 
             // 2단계: 비동기 DB 저장을 위해 배치 큐에 추가 (성능 최적화)
-            batchService.addMessageToQueue(messageDto);
+            batchService.addMessageToQueue(chatMessageDto);
 
             // 3단계: Redis에 최근 메시지 캐시 저장 (빠른 히스토리 조회용)
-            cacheRecentMessage(messageDto);
+            cacheRecentMessage(chatMessageDto);
 
             log.debug("Global chat message processed: {} by user {}", messageId, member.getId());
 
@@ -61,7 +55,7 @@ public class ChatService {
             redisTemplate.opsForHash().put(REDIS_LOBBY_USERS, sessionId, userId.toString());
 
             // 최근 채팅 히스토리 전송 (사용자 편의성 향상)
-            List<MessageDto> recentMessages = getRecentMessages(GLOBAL_LOBBY_CHANNEL, 50);
+            List<ChatMessageDto> recentMessages = getRecentMessages(GLOBAL_LOBBY_CHANNEL, 50);
 
             if (!recentMessages.isEmpty()) {
                 // 개인 큐로 히스토리 전송
