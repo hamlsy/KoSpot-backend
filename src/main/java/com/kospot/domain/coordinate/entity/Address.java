@@ -1,6 +1,6 @@
 package com.kospot.domain.coordinate.entity;
 
-import com.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.domain.coordinate.vo.Sido;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

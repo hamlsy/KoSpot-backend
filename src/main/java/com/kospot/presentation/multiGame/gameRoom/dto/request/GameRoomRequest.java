@@ -1,9 +1,9 @@
 package com.kospot.presentation.multiGame.gameRoom.dto.request;
 
-import com.kospot.domain.game.entity.GameMode;
-import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
+import com.kospot.domain.game.vo.GameMode;
+import com.kospot.domain.multiGame.game.vo.PlayerMatchType;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multiGame.gameRoom.entity.GameRoomStatus;
+import com.kospot.domain.multiGame.gameRoom.vo.GameRoomStatus;
 import lombok.*;
 
 public class GameRoomRequest {

@@ -1,7 +1,7 @@
 package com.kospot.presentation.item.dto.request;
 
 import com.kospot.domain.item.entity.Item;
-import com.kospot.domain.item.entity.ItemType;
+import com.kospot.domain.item.vo.ItemType;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 

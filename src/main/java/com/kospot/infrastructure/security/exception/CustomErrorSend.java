@@ -1,8 +1,8 @@
 package com.kospot.infrastructure.security.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kospot.global.exception.payload.code.ErrorStatus;
-import com.kospot.global.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;

@@ -1,11 +1,11 @@
 package com.kospot.domain.memberItem.adaptor;
 
-import com.kospot.domain.item.entity.ItemType;
+import com.kospot.domain.item.vo.ItemType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberItem.entity.MemberItem;
 import com.kospot.domain.memberItem.repository.MemberItemRepository;
-import com.kospot.global.exception.object.domain.MemberItemHandler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.object.domain.MemberItemHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import com.kospot.presentation.memberItem.dto.response.MemberItemResponse;
 import lombok.RequiredArgsConstructor;

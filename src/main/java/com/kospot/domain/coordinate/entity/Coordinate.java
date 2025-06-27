@@ -2,6 +2,7 @@ package com.kospot.domain.coordinate.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
+import com.kospot.domain.coordinate.vo.LocationType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,7 @@
 package com.kospot.application.member;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.entity.Role;
+import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.security.dto.JwtToken;

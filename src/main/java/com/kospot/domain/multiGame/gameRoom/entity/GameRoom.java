@@ -1,18 +1,18 @@
 package com.kospot.domain.multiGame.gameRoom.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
-import com.kospot.global.exception.object.domain.GameRoomHandler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.domain.multiGame.game.vo.PlayerMatchType;
+import com.kospot.domain.multiGame.gameRoom.vo.GameRoomStatus;
+import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.Where;
 
 @Getter
 @Entity

@@ -2,7 +2,7 @@ package com.kospot.presentation.auth.controller;
 
 import com.kospot.application.auth.LogoutUseCase;
 import com.kospot.application.auth.ReIssueRefreshTokenUseCase;
-import com.kospot.global.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.presentation.auth.dto.AuthRequest;
 import io.swagger.v3.oas.annotations.Operation;

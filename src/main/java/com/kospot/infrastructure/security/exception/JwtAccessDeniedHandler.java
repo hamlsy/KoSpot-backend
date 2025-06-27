@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.security.exception;
 
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

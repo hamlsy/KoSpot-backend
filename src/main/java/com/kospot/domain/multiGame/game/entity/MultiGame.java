@@ -1,7 +1,8 @@
 package com.kospot.domain.multiGame.game.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.vo.GameMode;
+import com.kospot.domain.multiGame.game.vo.PlayerMatchType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;

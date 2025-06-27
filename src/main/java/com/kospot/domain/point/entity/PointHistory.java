@@ -2,6 +2,7 @@ package com.kospot.domain.point.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.point.vo.PointHistoryType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

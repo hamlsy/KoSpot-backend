@@ -2,8 +2,8 @@ package com.kospot.domain.multiGame.game.adaptor;
 
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multiGame.game.repository.MultiRoadViewGameRepository;
-import com.kospot.global.exception.object.domain.GameHandler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.object.domain.GameHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

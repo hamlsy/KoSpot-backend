@@ -1,6 +1,6 @@
 package com.kospot.application.game.roadView.rank.usecase;
 
-import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.event.RoadViewRankEvent;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.presentation.game.dto.response.EndGameResponse;

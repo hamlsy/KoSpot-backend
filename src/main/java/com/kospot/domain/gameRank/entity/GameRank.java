@@ -1,7 +1,9 @@
 package com.kospot.domain.gameRank.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.vo.GameMode;
+import com.kospot.domain.gameRank.vo.RankLevel;
+import com.kospot.domain.gameRank.vo.RankTier;
 import com.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package com.kospot.domain.coordinateIdCache.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.domain.coordinate.vo.Sido;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

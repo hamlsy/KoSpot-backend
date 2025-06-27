@@ -4,7 +4,7 @@ import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
-import com.kospot.domain.game.entity.GameType;
+import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.domain.member.entity.Member;

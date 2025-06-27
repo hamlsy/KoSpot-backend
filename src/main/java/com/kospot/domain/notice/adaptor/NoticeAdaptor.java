@@ -2,8 +2,8 @@ package com.kospot.domain.notice.adaptor;
 
 import com.kospot.domain.notice.entity.Notice;
 import com.kospot.domain.notice.repository.NoticeRepository;
-import com.kospot.global.exception.object.domain.NoticeHandler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.object.domain.NoticeHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

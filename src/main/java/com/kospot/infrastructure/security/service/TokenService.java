@@ -1,8 +1,8 @@
 package com.kospot.infrastructure.security.service;
 
 import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.global.exception.object.general.GeneralException;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.object.general.GeneralException;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.vo.CustomUserDetails;
 import com.kospot.infrastructure.service.RedisService;

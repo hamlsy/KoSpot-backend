@@ -5,7 +5,7 @@ import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.item.service.ItemService;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberItem.service.MemberItemService;
-import com.kospot.domain.point.entity.PointHistoryType;
+import com.kospot.domain.point.vo.PointHistoryType;
 import com.kospot.domain.point.service.PointHistoryService;
 import com.kospot.domain.point.service.PointService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;

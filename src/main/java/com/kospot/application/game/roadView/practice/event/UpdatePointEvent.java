@@ -4,7 +4,7 @@ package com.kospot.application.game.roadView.practice.event;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.point.entity.PointHistoryType;
+import com.kospot.domain.point.vo.PointHistoryType;
 import com.kospot.domain.point.service.PointHistoryService;
 import com.kospot.domain.point.service.PointService;
 import com.kospot.domain.point.util.PointCalculator;

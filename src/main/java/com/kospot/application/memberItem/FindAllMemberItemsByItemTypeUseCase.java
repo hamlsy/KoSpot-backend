@@ -1,6 +1,6 @@
 package com.kospot.application.memberItem;
 
-import com.kospot.domain.item.entity.ItemType;
+import com.kospot.domain.item.vo.ItemType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberItem.adaptor.MemberItemAdaptor;
 import com.kospot.infrastructure.annotation.usecase.UseCase;

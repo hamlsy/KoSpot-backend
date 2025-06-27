@@ -2,7 +2,7 @@ package com.kospot.multiGame.gameRoom.usecase;
 
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multiGame.gameRoom.entity.GameRoomStatus;
+import com.kospot.domain.multiGame.gameRoom.vo.GameRoomStatus;
 import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

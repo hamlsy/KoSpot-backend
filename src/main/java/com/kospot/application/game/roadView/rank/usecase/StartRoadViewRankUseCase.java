@@ -1,7 +1,7 @@
 package com.kospot.application.game.roadView.rank.usecase;
 
 import com.kospot.presentation.game.dto.response.StartGameResponse;
-import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.service.AESService;
 import com.kospot.domain.game.service.RoadViewGameService;

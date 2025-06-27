@@ -7,8 +7,8 @@ import com.kospot.domain.multiGame.submission.entity.photo.PhotoPlayerSubmission
 import com.kospot.domain.multiGame.game.repository.MultiPhotoGameRepository;
 import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
-import com.kospot.global.exception.object.domain.GameHandler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.object.domain.GameHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

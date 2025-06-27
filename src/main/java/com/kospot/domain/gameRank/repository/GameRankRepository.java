@@ -1,6 +1,6 @@
 package com.kospot.domain.gameRank.repository;
 
-import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

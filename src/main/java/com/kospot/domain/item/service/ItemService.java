@@ -1,7 +1,7 @@
 package com.kospot.domain.item.service;
 
 import com.kospot.domain.item.adaptor.ItemAdaptor;
-import com.kospot.domain.item.entity.ItemType;
+import com.kospot.domain.item.vo.ItemType;
 import com.kospot.presentation.item.dto.request.ItemRequest;
 import com.kospot.domain.item.entity.Item;
 

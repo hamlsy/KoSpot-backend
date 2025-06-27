@@ -2,7 +2,7 @@ package com.kospot.presentation.coordinate.dto.response;
 
 import com.kospot.domain.coordinate.entity.Address;
 import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.LocationType;
+import com.kospot.domain.coordinate.vo.LocationType;
 import lombok.Builder;
 import lombok.Getter;
 

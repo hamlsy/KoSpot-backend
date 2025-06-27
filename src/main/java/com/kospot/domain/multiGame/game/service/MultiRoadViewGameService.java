@@ -1,7 +1,7 @@
 package com.kospot.domain.multiGame.game.service;
 
 import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multiGame.game.entity.PlayerMatchType;
+import com.kospot.domain.multiGame.game.vo.PlayerMatchType;
 import com.kospot.domain.multiGame.game.repository.MultiRoadViewGameRepository;
 import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
 import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;

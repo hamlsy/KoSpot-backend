@@ -2,8 +2,8 @@ package com.kospot.gameRank.service;
 
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.gameRank.entity.GameRank;
-import com.kospot.domain.gameRank.entity.RankLevel;
-import com.kospot.domain.gameRank.entity.RankTier;
+import com.kospot.domain.gameRank.vo.RankLevel;
+import com.kospot.domain.gameRank.vo.RankTier;
 import com.kospot.domain.gameRank.service.GameRankService;
 import com.kospot.domain.gameRank.util.RatingScoreCalculator;
 import org.junit.jupiter.api.DisplayName;

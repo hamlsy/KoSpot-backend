@@ -1,6 +1,6 @@
 package com.kospot.domain.gameRank.adaptor;
 
-import com.kospot.domain.game.entity.GameMode;
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.gameRank.entity.GameRank;
 import com.kospot.domain.gameRank.repository.GameRankRepository;
 import com.kospot.domain.member.entity.Member;

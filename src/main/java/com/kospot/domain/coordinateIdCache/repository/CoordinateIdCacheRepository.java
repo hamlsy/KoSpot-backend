@@ -1,6 +1,6 @@
 package com.kospot.domain.coordinateIdCache.repository;
 
-import com.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.domain.coordinate.vo.Sido;
 import com.kospot.domain.coordinateIdCache.entity.CoordinateIdCache;
 import org.springframework.data.jpa.repository.JpaRepository;
 

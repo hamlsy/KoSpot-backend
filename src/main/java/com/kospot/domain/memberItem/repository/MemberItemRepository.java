@@ -1,7 +1,6 @@
 package com.kospot.domain.memberItem.repository;
 
-import com.kospot.domain.image.entity.Image;
-import com.kospot.domain.item.entity.ItemType;
+import com.kospot.domain.item.vo.ItemType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberItem.entity.MemberItem;
 import com.kospot.presentation.memberItem.dto.response.MemberItemResponse;

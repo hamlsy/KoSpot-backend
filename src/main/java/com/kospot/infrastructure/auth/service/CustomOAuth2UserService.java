@@ -1,7 +1,7 @@
 package com.kospot.infrastructure.auth.service;
 
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.entity.Role;
+import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.infrastructure.auth.domain.CustomOAuthUser;
 import com.kospot.infrastructure.auth.domain.OAuth2Attributes;

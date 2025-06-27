@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.security.filter;
-import com.kospot.global.exception.payload.code.ErrorStatus;
-import com.kospot.global.exception.payload.security.JwtAuthenticationException;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.payload.security.JwtAuthenticationException;
 import com.kospot.infrastructure.security.exception.CustomErrorSend;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,6 +1,5 @@
 package com.kospot.application.auth;
 
-import com.kospot.global.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.service.TokenService;

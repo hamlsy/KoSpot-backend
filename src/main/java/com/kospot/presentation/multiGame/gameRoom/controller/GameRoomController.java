@@ -3,8 +3,8 @@ package com.kospot.presentation.multiGame.gameRoom.controller;
 
 import com.kospot.application.multiGame.gameRoom.*;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.global.exception.payload.code.SuccessStatus;
-import com.kospot.global.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
+import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.multiGame.gameRoom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multiGame.gameRoom.dto.response.FindGameRoomResponse;

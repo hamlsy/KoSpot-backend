@@ -1,7 +1,7 @@
 package com.kospot.domain.coordinateIdCache.service;
 
 import com.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
-import com.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.domain.coordinate.vo.Sido;
 import com.kospot.domain.coordinateIdCache.entity.CoordinateIdCache;
 import com.kospot.domain.coordinateIdCache.repository.CoordinateIdCacheRepository;
 

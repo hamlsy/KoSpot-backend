@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.annotation.api;
 
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

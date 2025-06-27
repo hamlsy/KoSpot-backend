@@ -1,6 +1,7 @@
 package com.kospot.domain.image.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.domain.image.vo.ImageType;
 import com.kospot.domain.notice.entity.Notice;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

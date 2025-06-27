@@ -7,7 +7,7 @@ import com.kospot.application.memberItem.PurchaseItemUseCase;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.item.entity.Item;
-import com.kospot.domain.item.entity.ItemType;
+import com.kospot.domain.item.vo.ItemType;
 import com.kospot.domain.item.repository.ItemRepository;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.repository.MemberRepository;

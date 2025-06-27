@@ -1,6 +1,8 @@
 package com.kospot.domain.chat.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.domain.chat.vo.ChannelType;
+import com.kospot.domain.chat.vo.MessageType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
