@@ -15,7 +15,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -28,7 +27,8 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
     private final RedisTemplate<String, String> redisTemplate;
     private final TokenService tokenService;
     //todo 공통 상수화
-    private static final int RATE_LIMIT = 60; // 1분에 허용되는 메시지 수
+    private static final int RATE_LIMIT = 40; // 1분에 허용되는 메시지 수
+    private static final String RATE_LIMIT_KEY = "rate_limit:chat:";
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -57,7 +57,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 
     // 채팅 제한
     private boolean isRateLimit(Long memberId) {
-        String key = "rate_limit:chat:" + memberId;
+        String key = RATE_LIMIT_KEY + memberId;
         String count = redisTemplate.opsForValue().get(key);
         if (count == null) {
             redisTemplate.opsForValue().set(key, "1", Duration.ofMinutes(1));
