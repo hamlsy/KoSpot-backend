@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
+import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -26,9 +28,6 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final TokenService tokenService;
-    //todo 공통 상수화
-    private static final int RATE_LIMIT = 40; // 1분에 허용되는 메시지 수
-    private static final String RATE_LIMIT_KEY = "rate_limit:chat:";
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {

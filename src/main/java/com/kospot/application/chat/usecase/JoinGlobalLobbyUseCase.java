@@ -1,5 +1,6 @@
 package com.kospot.application.chat.usecase;
 
+import com.kospot.domain.chat.service.ChatService;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import lombok.RequiredArgsConstructor;
@@ -11,16 +12,14 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 @RequiredArgsConstructor
 public class JoinGlobalLobbyUseCase {
 
-    private static final String REDIS_LOBBY_MEMBERS = "lobby:members";
-    private static final String GLOBAL_LOBBY_CHANNEL = "global_lobby";
+    private final ChatService chatService;
 
     public void execute(Member member,
                         SimpMessageHeaderAccessor headerAccessor) {
         //todo
         // 1.Redis에 회원 세션 추가
         // 2 최근 채팅 히스토리 전송 (Redis 캐시에서)
-
-
+        chatService.joinGlobalLobby(member.getId(), headerAccessor.getSessionId());
     }
 
 }

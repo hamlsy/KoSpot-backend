@@ -22,7 +22,7 @@ public class ChatController {
     private final ChatService chatService;
 
     //global lobby chat
-    @MessageMapping("/message.global")
+    @MessageMapping("/chat.global")
     public void sendGlobalMessage(@Payload MessageDto messageDto, @CurrentMember Member member) {
         try {
             // 메시지 유효성 검증

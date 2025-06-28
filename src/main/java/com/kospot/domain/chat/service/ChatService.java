@@ -1,15 +1,19 @@
 package com.kospot.domain.chat.service;
 
+import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.repository.ChatMessageRepository;
+import com.kospot.domain.chat.vo.ChannelType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -17,7 +21,12 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class ChatService {
+
     private final ChatMessageRepository chatMessageRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    private static final String GLOBAL_LOBBY_CHANNEL = "global_lobby";
+    private static final String REDIS_LOBBY_USERS = "lobby:users";
 
     public void processGlobalChatMessage(Member member, String content, ChatMessageDto chatMessageDto) {
         try {
@@ -82,5 +91,36 @@ public class ChatService {
         } catch (Exception e) {
             log.error("Error leaving global lobby for user: " + userId, e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<MessageDto> getRecentMessages(String channelId, int limit) {
+        // 1차: Redis 캐시에서 조회 (빠른 응답)
+        String cacheKey = "chat:recent:" + channelId;
+        List<Object> cached = redisTemplate.opsForList().range(cacheKey, -limit, -1);
+
+        if (cached != null && !cached.isEmpty()) {
+            return cached.stream()
+                    .map(obj -> (MessageDto) obj)
+                    .collect(Collectors.toList());
+        }
+
+        // 2차: Redis에 없으면 DB에서 조회 후 캐시에 저장
+        List<ChatMessage> dbMessages = chatMessageRepository
+                .findRecentMessagesByChannel(ChannelType.GLOBAL_LOBBY, channelId, limit);
+
+        List<MessageDto> messageDtos = dbMessages.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+
+        // 조회 결과를 Redis에 캐시 (다음 조회 성능 향상)
+        if (!messageDtos.isEmpty()) {
+            messageDtos.forEach(msg ->
+                    redisTemplate.opsForList().rightPush(cacheKey, msg)
+            );
+            redisTemplate.expire(cacheKey, Duration.ofHours(1)); // 1시간 TTL
+        }
+
+        return messageDtos;
     }
 }
