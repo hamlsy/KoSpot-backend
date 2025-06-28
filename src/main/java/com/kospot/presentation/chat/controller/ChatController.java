@@ -25,7 +25,7 @@ public class ChatController {
     private final JoinGlobalLobbyUseCase joinGlobalLobbyUseCase;
 
     //global lobby chat
-    @MessageMapping("/chat.global")
+    @MessageMapping("/chat.message.lobby")
     public void sendGlobalMessage(@Payload MessageDto messageDto, @CurrentMember Member member) {
         try {
             // 메시지 유효성 검증

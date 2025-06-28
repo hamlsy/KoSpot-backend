@@ -40,8 +40,8 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
             accessor.setUser(new ChatMemberPrincipal(memberId)); // 사용자 정보 설정
         } else if (StompCommand.SEND.equals(accessor.getCommand())) { // 메시지 보낼때
             // rate limiting 체크
-            Long memberd = ((ChatMemberPrincipal) accessor.getUser()).getMemberId();
-            if (isRateLimit(memberd)) {
+            Long memberId = ((ChatMemberPrincipal) accessor.getUser()).getMemberId();
+            if (isRateLimit(memberId)) {
                 throw new ChatHandler(ErrorStatus.CHAT_RATE_LIMIT_EXCEEDED);
             }
         }

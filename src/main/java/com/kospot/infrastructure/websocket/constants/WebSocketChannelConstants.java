@@ -5,7 +5,7 @@ public final class WebSocketChannelConstants {
 
     }
     //channel
-    public static final String GLOBAL_LOBBY_CHANNEL = "global_lobby";
+    public static final String GLOBAL_LOBBY_CHANNEL = "lobby";
 
     //redis
     public static final String REDIS_LOBBY_USERS = "lobby:users";
