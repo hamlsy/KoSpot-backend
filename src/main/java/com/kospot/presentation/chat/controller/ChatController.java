@@ -1,8 +1,10 @@
 package com.kospot.presentation.chat.controller;
 
+import com.kospot.application.chat.usecase.JoinGlobalLobbyUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.chat.service.ChatService;
 import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +18,11 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
-@Tag(name = "Chat Api", description = "채팅 API")
+@Tag(name = "Chat Websocket", description = "채팅 소켓")
 public class ChatController {
 
     private final ChatService chatService;
+    private final JoinGlobalLobbyUseCase joinGlobalLobbyUseCase;
 
     //global lobby chat
     @MessageMapping("/chat.global")
@@ -41,17 +44,15 @@ public class ChatController {
         }
     }
 
-    // 글로벌 로비 입장
     @MessageMapping("/chat.join.lobby")
-    public void joinGlobalLobby(@CurrentMember Member member,
-                                SimpMessageHeaderAccessor headerAccessor) {
-        chatService.joinGlobalLobby(member.getId(), headerAccessor.getSessionId());
+    public void joinGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
+        ChatMemberPrincipal chatMemberPrincipal = (ChatMemberPrincipal) headerAccessor.getUser();
+        joinGlobalLobbyUseCase.execute(headerAccessor);
     }
 
     // 글로벌 로비 퇴장
     @MessageMapping("/chat.leave.lobby")
-    public void leaveGlobalLobby(@CurrentMember Member member,
-                                 SimpMessageHeaderAccessor headerAccessor) {
+    public void leaveGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
         chatService.leaveGlobalLobby(member.getId(), headerAccessor.getSessionId());
     }
 }

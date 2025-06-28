@@ -11,9 +11,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.GLOBAL_LOBBY_CHANNEL;
+import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.REDIS_LOBBY_USERS;
 
 
 @Slf4j
@@ -22,11 +26,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChatService {
 
+
     private final ChatMessageRepository chatMessageRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private static final String GLOBAL_LOBBY_CHANNEL = "global_lobby";
-    private static final String REDIS_LOBBY_USERS = "lobby:users";
+    public static final int CACHE_HOURS = 1;
 
     public void processGlobalChatMessage(Member member, String content, ChatMessageDto chatMessageDto) {
         try {
@@ -58,27 +62,26 @@ public class ChatService {
         }
     }
 
-    public void joinGlobalLobby(Long userId, String sessionId) {
+    public void joinGlobalLobby(Long memberId, String sessionId) {
         try {
-            // Redis Hash를 이용한 활성 사용자 세션 관리
-            redisTemplate.opsForHash().put(REDIS_LOBBY_USERS, sessionId, userId.toString());
+            // 활성 사용자 세션 관리
+            redisTemplate.opsForHash().put(REDIS_LOBBY_USERS, sessionId, memberId.toString());
 
-            // 최근 채팅 히스토리 전송 (사용자 편의성 향상)
-            List<ChatMessageDto> recentMessages = getRecentMessages(GLOBAL_LOBBY_CHANNEL, 50);
+            // todo 최근 채팅 히스토리 전송
+//            List<ChatMessageDto> recentMessages = getRecentMessages(GLOBAL_LOBBY_CHANNEL, 50);
+//            if (!recentMessages.isEmpty()) {
+//                // 개인 큐로 히스토리 전송
+//                messagingTemplate.convertAndSendToUser(
+//                        String.valueOf(memberId),
+//                        "/queue/chat.history",
+//                        recentMessages
+//                );
+//            }
 
-            if (!recentMessages.isEmpty()) {
-                // 개인 큐로 히스토리 전송
-                messagingTemplate.convertAndSendToUser(
-                        String.valueOf(userId),
-                        "/queue/chat.history",
-                        recentMessages
-                );
-            }
-
-            log.info("User {} joined global lobby with session {}", userId, sessionId);
+            log.info("User {} joined global lobby with session {}", memberId, sessionId);
 
         } catch (Exception e) {
-            log.error("Error joining global lobby for user: " + userId, e);
+            log.error("Error joining global lobby for user: " + memberId, e);
         }
     }
 
@@ -94,14 +97,14 @@ public class ChatService {
     }
 
     @SuppressWarnings("unchecked")
-    private List<MessageDto> getRecentMessages(String channelId, int limit) {
+    private List<ChatMessageDto> getRecentMessages(String channelId, int limit) {
         // 1차: Redis 캐시에서 조회 (빠른 응답)
         String cacheKey = "chat:recent:" + channelId;
         List<Object> cached = redisTemplate.opsForList().range(cacheKey, -limit, -1);
 
         if (cached != null && !cached.isEmpty()) {
             return cached.stream()
-                    .map(obj -> (MessageDto) obj)
+                    .map(obj -> (ChatMessageDto) obj)
                     .collect(Collectors.toList());
         }
 
@@ -109,7 +112,7 @@ public class ChatService {
         List<ChatMessage> dbMessages = chatMessageRepository
                 .findRecentMessagesByChannel(ChannelType.GLOBAL_LOBBY, channelId, limit);
 
-        List<MessageDto> messageDtos = dbMessages.stream()
+        List<ChatMessageDto> messageDtos = dbMessages.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
 
@@ -118,7 +121,7 @@ public class ChatService {
             messageDtos.forEach(msg ->
                     redisTemplate.opsForList().rightPush(cacheKey, msg)
             );
-            redisTemplate.expire(cacheKey, Duration.ofHours(1)); // 1시간 TTL
+            redisTemplate.expire(cacheKey, Duration.ofHours(HOURS)); // 1시간 TTL
         }
 
         return messageDtos;
