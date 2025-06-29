@@ -1,6 +1,7 @@
 package com.kospot.infrastructure.security.service;
 
 import com.kospot.domain.member.adaptor.MemberAdaptor;
+import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.security.vo.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
-        return new CustomUserDetails(memberAdaptor.queryById(Long.parseLong(memberId)));
+        Member member = memberAdaptor.queryById(Long.parseLong(memberId));
+        return CustomUserDetails.from(member);
     }
 
 }
