@@ -4,6 +4,7 @@ import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.repository.ChatMessageRepository;
 import com.kospot.domain.chat.vo.ChannelType;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
+import com.kospot.presentation.chat.dto.response.ChatMessageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -38,9 +39,15 @@ public class ChatService {
                 log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
                 return;
             }
-            simpMessagingTemplate.convertAndSend(PREFIX_CHAT + GLOBAL_LOBBY_CHANNEL, chatMessage);
-
+            //save message todo -> batch save
             chatMessageRepository.save(chatMessage);
+
+            //convert response dto
+            ChatMessageResponse.GlobalLobby response = ChatMessageResponse.GlobalLobby.from(chatMessage);
+
+            //send to global lobby channel
+            simpMessagingTemplate.convertAndSend(PREFIX_CHAT + GLOBAL_LOBBY_CHANNEL, response);
+
 //            todo 비동기 DB 저장을 위해 배치 큐에 추가 (성능 최적화)
 //            batchService.addMessageToQueue(chatMessageDto);
 

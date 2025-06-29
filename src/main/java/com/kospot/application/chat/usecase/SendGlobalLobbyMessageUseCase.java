@@ -23,7 +23,6 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class SendGlobalLobbyMessageUseCase {
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatService chatService;
 
     @Async("chatRoomExecutor")
