@@ -11,8 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
+
+import java.security.Principal;
 
 @Slf4j
 @Controller
@@ -26,22 +29,11 @@ public class ChatController {
 
     //global lobby chat
     @MessageMapping("/chat.message.lobby")
-    public void sendGlobalMessage(@Payload MessageDto messageDto, @CurrentMember Member member) {
-        try {
-            // 메시지 유효성 검증
-            if (messageDto.getContent() == null || messageDto.getContent().trim().isEmpty()) {
-                return;
-            }
+    @SendTo("/topic/lobby")
+    public void sendGlobalMessage(@Payload MessageDto messageDto, Principal principal) {
 
-            // 욕설 필터링 적용
-            String filteredContent = chatService.filterProfanity(messageDto.getContent());
 
-            // 글로벌 채팅 메시지 처리 (Member 정보 전달)
-            chatService.processGlobalChatMessage(member, filteredContent);
-
-        } catch (Exception e) {
-            log.error("Error processing global chat message", e);
-        }
+        sendGlobalLobbyMessageUseCase.execute(command);
     }
 
     @MessageMapping("/chat.join.lobby")

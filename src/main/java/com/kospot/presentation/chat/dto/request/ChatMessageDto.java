@@ -14,23 +14,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ChatMessageDto {
 
-    private Long memberId;
-    private String nickname;
     private String messageType;
     private String channelType;
     private String content;
     private String teamId;
-    private LocalDateTime timeStamp;
-
-    public ChatMessage toGlobalMessage() {
-        return ChatMessage.builder()
-                .memberId(memberId)
-                .nickname(nickname)
-                .messageType(MessageType.GLOBAL_CHAT)
-                .channelType(ChannelType.GLOBAL_LOBBY)
-                .content(content)
-                .teamId(null)
-                .build();
-    }
 
 }
