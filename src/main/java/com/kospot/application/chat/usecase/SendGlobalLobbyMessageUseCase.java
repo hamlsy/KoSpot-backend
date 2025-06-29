@@ -11,6 +11,7 @@ import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
@@ -23,10 +24,10 @@ public class SendGlobalLobbyMessageUseCase {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatService chatService;
 
+    @Async("chatRoomExecutor")
     public void execute(ChatMessageDto dto, Principal principal) {
         ChatMemberPrincipal chatMemberPrincipal = (ChatMemberPrincipal) principal;
         SendGlobalLobbyMessageCommand command = SendGlobalLobbyMessageCommand.from(dto, chatMemberPrincipal);
-        //todo validate
         validateCommand(command);
         ChatMessage chatMessage = createChatMessage(command);
         chatService.sendGlobalLobbyMessage(chatMessage);
@@ -43,6 +44,7 @@ public class SendGlobalLobbyMessageUseCase {
     }
 
     private void validateCommand(SendGlobalLobbyMessageCommand command) {
+        //todo custom exception
         if (command.getContent() == null || command.getContent().isEmpty()) {
             throw new IllegalArgumentException("Message content cannot be empty");
         }
