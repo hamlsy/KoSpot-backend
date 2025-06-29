@@ -29,21 +29,19 @@ public class ChatMessage extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ChannelType channelType;
 
-    private Long memberId;
-
-    private Long gamePlayerId;
-
-    private Long gameRoomId;
+    @Enumerated(EnumType.STRING)
+    private MessageType messageType;
 
     private String nickname;
 
     @Column(nullable = false, length = 500)
     private String content;
 
-    @Enumerated(EnumType.STRING)
-    private MessageType messageType;
+    private Long memberId;
 
-    private String roomCode;
+    private Long gamePlayerId;
+
+    private Long gameRoomId;
 
     private String teamId; // 팀 채팅일 경우 ID
 

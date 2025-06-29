@@ -20,7 +20,9 @@ public class ChatMessageDto {
     private String messageType;
     private String channelType;
 
-    private String roomId;
+    private Long roomId;
     private String teamId;
+    private Long gamePlayerId;
+    private Long gameRoomId;
 
 }
