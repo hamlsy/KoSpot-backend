@@ -6,6 +6,8 @@ import com.kospot.domain.chat.service.ChatService;
 import com.kospot.domain.chat.vo.ChannelType;
 import com.kospot.domain.chat.vo.MessageType;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.exception.object.domain.ChatHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
@@ -44,13 +46,12 @@ public class SendGlobalLobbyMessageUseCase {
     }
 
     private void validateCommand(SendGlobalLobbyMessageCommand command) {
-        //todo custom exception
         if (command.getContent() == null || command.getContent().isEmpty()) {
-            throw new IllegalArgumentException("Message content cannot be empty");
+            throw new ChatHandler(ErrorStatus.CHAT_MESSAGE_CONTENT_EMPTY);
         }
         if (command.getChannelType() == null || !ChannelType.GLOBAL_LOBBY.equals(command.getChannelType())) {
-            throw new IllegalArgumentException("Invalid channel type for global lobby");
+            throw new ChatHandler(ErrorStatus.CHAT_INVALID_CHANNEL_TYPE);
         }
-        // Additional validations can be added here
+        // todo Additional validations
     }
 }

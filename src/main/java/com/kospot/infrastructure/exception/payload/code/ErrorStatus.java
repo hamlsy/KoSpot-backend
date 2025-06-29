@@ -93,7 +93,9 @@ public enum ErrorStatus implements BaseCode {
     GAME_PLAYER_NOT_FOUND(NOT_FOUND, 4331, "해당 게임 플레이어를 찾을 수 없습니다."),
 
     // Chat Error(4341 ~ 4350)
-    CHAT_RATE_LIMIT_EXCEEDED(BAD_REQUEST, 4341, "채팅 속도 제한을 초과했습니다."),;
+    CHAT_RATE_LIMIT_EXCEEDED(BAD_REQUEST, 4341, "채팅 속도 제한을 초과했습니다."),
+    CHAT_MESSAGE_CONTENT_EMPTY(BAD_REQUEST, 4342, "채팅 메시지 내용이 비어있습니다."),
+    CHAT_INVALID_CHANNEL_TYPE(BAD_REQUEST, 4343, "유효하지 않은 채널 타입입니다."),;
 
 
     private final HttpStatus httpStatus;
