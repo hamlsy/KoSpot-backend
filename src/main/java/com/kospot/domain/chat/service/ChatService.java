@@ -26,8 +26,6 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public static final int CACHE_HOURS = 1;
-
     public void sendGlobalLobbyMessage(ChatMessage chatMessage) {
         // 디버깅용 try-catch
         try {
@@ -51,9 +49,6 @@ public class ChatService {
 //            todo 비동기 DB 저장을 위해 배치 큐에 추가 (성능 최적화)
 //            batchService.addMessageToQueue(chatMessageDto);
 
-//            todo Redis에 최근 메시지 캐시 저장 (빠른 히스토리 조회용)
-//            cacheRecentMessage(chatMessageDto);
-
             log.debug("Global chat message processed: {} by user {}", chatMessage.getMessageId(), chatMessage.getMemberId());
 
         }catch (Exception e) {
@@ -66,18 +61,6 @@ public class ChatService {
         try {
             // 활성 사용자 세션 관리
             redisTemplate.opsForHash().put(REDIS_LOBBY_USERS, sessionId, memberId.toString());
-
-            // todo 최근 채팅 히스토리 전송
-//            List<ChatMessageDto> recentMessages = getRecentMessages(GLOBAL_LOBBY_CHANNEL, 50);
-//            if (!recentMessages.isEmpty()) {
-//                // 개인 큐로 히스토리 전송
-//                messagingTemplate.convertAndSendToUser(
-//                        String.valueOf(memberId),
-//                        "/queue/chat.history",
-//                        recentMessages
-//                );
-//            }
-
             log.info("User {} joined global lobby with session {}", memberId, sessionId);
 
         } catch (Exception e) {
@@ -95,35 +78,4 @@ public class ChatService {
             log.error("Error leaving global lobby for user: " + userId, e);
         }
     }
-
-//    @SuppressWarnings("unchecked")
-//    private List<ChatMessageDto> getRecentMessages(String channelId, int limit) {
-//        // 1차: Redis 캐시에서 조회 (빠른 응답)
-//        String cacheKey = "chat:recent:" + channelId;
-//        List<Object> cached = redisTemplate.opsForList().range(cacheKey, -limit, -1);
-//
-//        if (cached != null && !cached.isEmpty()) {
-//            return cached.stream()
-//                    .map(obj -> (ChatMessageDto) obj)
-//                    .collect(Collectors.toList());
-//        }
-//
-//        // 2차: Redis에 없으면 DB에서 조회 후 캐시에 저장
-//        List<ChatMessage> dbMessages = chatMessageRepository
-//                .findRecentMessagesByChannel(ChannelType.GLOBAL_LOBBY, channelId, limit);
-//
-//        List<ChatMessageDto> messageDtos = dbMessages.stream()
-//                .map(this::convertToDto)
-//                .collect(Collectors.toList());
-//
-//        // 조회 결과를 Redis에 캐시 (다음 조회 성능 향상)
-//        if (!messageDtos.isEmpty()) {
-//            messageDtos.forEach(msg ->
-//                    redisTemplate.opsForList().rightPush(cacheKey, msg)
-//            );
-//            redisTemplate.expire(cacheKey, Duration.ofHours(HOURS)); // 1시간 TTL
-//        }
-//
-//        return messageDtos;
-//    }
 }

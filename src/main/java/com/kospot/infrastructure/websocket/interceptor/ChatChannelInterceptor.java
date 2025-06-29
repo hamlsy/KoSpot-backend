@@ -1,7 +1,6 @@
 package com.kospot.infrastructure.websocket.interceptor;
 
 import com.kospot.infrastructure.exception.object.domain.ChatHandler;
-import com.kospot.infrastructure.exception.object.domain.MemberHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
@@ -14,7 +13,6 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
