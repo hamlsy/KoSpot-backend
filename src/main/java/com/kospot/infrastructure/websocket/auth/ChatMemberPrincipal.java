@@ -9,6 +9,9 @@ import java.security.Principal;
 @AllArgsConstructor
 public class ChatMemberPrincipal implements Principal {
     private final Long memberId;
+    private final String nickname;
+    private final String email;
+    private final String role;
 
     @Override
     public String getName() {

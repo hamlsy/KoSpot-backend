@@ -36,8 +36,12 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
             String token = accessor.getFirstNativeHeader("Authorization");
             tokenService.validateToken(token);
 
-            Long memberId = extractMemberIdFromToken(token);
-            accessor.setUser(new ChatMemberPrincipal(memberId)); // 사용자 정보 설정
+            Long memberId = tokenService.getMemberIdFromToken(token);
+            String nickname = tokenService.getNicknameFromToken(token);
+            String email = tokenService.getEmailFromToken(token);
+            String role = tokenService.getRoleFromToken(token);
+            accessor.setUser(new ChatMemberPrincipal(memberId, nickname, email, role)); // 사용자 정보 설정
+
         } else if (StompCommand.SEND.equals(accessor.getCommand())) { // 메시지 보낼때
             // rate limiting 체크
             Long memberId = ((ChatMemberPrincipal) accessor.getUser()).getMemberId();
@@ -46,12 +50,6 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
             }
         }
         return message;
-    }
-
-    // 토큰에서 memberId 추출
-    private Long extractMemberIdFromToken(String token) {
-        Authentication authentication = tokenService.getAuthentication(token);
-        return Long.parseLong(authentication.getName());
     }
 
     // 채팅 제한

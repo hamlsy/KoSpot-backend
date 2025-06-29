@@ -78,12 +78,19 @@ public class TokenService {
 
         long now = (new Date()).getTime();
 
+        // 추가 정보 추출
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRATION_TIME);   // 30분
         log.info("date = {}", accessTokenExpiresIn);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(authentication.getName()) // = customUserDetails.getUsername()
                 .claim("auth", authorities)
+                .claim("memberId", userDetails.getMemberId())
+                .claim("nickname", userDetails.getNickname())
+                .claim("email", userDetails.getEmail())
+                .claim("role", userDetails.getRole())
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -167,5 +174,36 @@ public class TokenService {
             return e.getClaims();
         }
     }
+
+    // JWT에서 memberId 추출
+    public Long getMemberIdFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("memberId", Long.class);
+    }
+
+    // JWT에서 nickname 추출
+    public String getNicknameFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("nickname", String.class);
+    }
+
+    // JWT에서 email 추출
+    public String getEmailFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("email", String.class);
+    }
+
+    // JWT에서 role 추출 (String으로 반환)
+    public String getRoleFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("role", String.class);
+    }
+
+    // JWT에서 권한 정보 추출
+    public String getAuthoritiesFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("auth", String.class);
+    }
+
 
 }
