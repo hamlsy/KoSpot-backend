@@ -4,6 +4,9 @@ public final class WebSocketChannelConstants {
     private WebSocketChannelConstants() {
 
     }
+    //prefix
+    public static final String PREFIX_TOPIC = "/topic/";
+
     //channel
     public static final String GLOBAL_LOBBY_CHANNEL = "lobby";
 

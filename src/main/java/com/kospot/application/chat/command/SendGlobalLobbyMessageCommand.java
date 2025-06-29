@@ -16,7 +16,6 @@ public class SendGlobalLobbyMessageCommand {
     private String messageType;
     private String channelType;
     private String content;
-    private LocalDateTime timeStamp;
 
     public static SendGlobalLobbyMessageCommand from(ChatMessageDto dto, ChatMemberPrincipal principal) {
         return SendGlobalLobbyMessageCommand.builder()
@@ -25,7 +24,6 @@ public class SendGlobalLobbyMessageCommand {
                 .messageType(dto.getMessageType())
                 .channelType(dto.getChannelType())
                 .content(dto.getContent())
-                .timeStamp(LocalDateTime.now())
                 .build();
     }
 

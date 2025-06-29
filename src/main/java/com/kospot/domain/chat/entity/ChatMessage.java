@@ -91,6 +91,10 @@ public class ChatMessage extends BaseTimeEntity {
     }
 
     //uuid 생성
+    public void generateMessageId() {
+        this.messageId = UUID.randomUUID().toString();
+    }
+
     @PrePersist
     void prePersist() {
         if(messageId == null) {
