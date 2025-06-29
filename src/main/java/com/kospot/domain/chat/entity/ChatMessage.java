@@ -47,49 +47,6 @@ public class ChatMessage extends BaseTimeEntity {
 
     private String teamId; // 팀 채팅일 경우 ID
 
-    // Factory Methods
-    public static ChatMessage createLobbyChat(Long gameRoomId, Long memberSenderId, String senderNickname, String content) {
-        return ChatMessage.builder()
-                .gameRoomId(gameRoomId)
-                .memberId(memberSenderId)
-                .nickname(senderNickname)
-                .messageType(MessageType.LOBBY_CHAT)
-                .content(content)
-                .build();
-    }
-
-    public static ChatMessage createGameChat(Long gameRoomId, Long gamePlayerId, String senderNickname,
-                                             String content) {
-        return ChatMessage.builder()
-                .gameRoomId(gameRoomId)
-                .gamePlayerId(gamePlayerId)
-                .nickname(senderNickname)
-                .messageType(MessageType.GAME_CHAT)
-                .content(content)
-                .build();
-    }
-
-    public static ChatMessage createTeamChat(Long gameRoomId, Long gamePlayerId, String senderNickname,
-                                             String teamId, String content) {
-        return ChatMessage.builder()
-                .gameRoomId(gameRoomId)
-                .gamePlayerId(gamePlayerId)
-                .nickname(senderNickname)
-                .messageType(MessageType.TEAM_CHAT)
-                .content(content)
-                .teamId(teamId)
-                .build();
-    }
-
-    public static ChatMessage createSystemMessage(Long gameRoomId, String content) {
-        return ChatMessage.builder()
-                .gameRoomId(gameRoomId)
-                .memberId(0L)  // 시스템 메시지는 특별한 ID 사용
-                .messageType(MessageType.SYSTEM_MESSAGE)
-                .content(content)
-                .build();
-    }
-
     //uuid 생성
     public void generateMessageId() {
         this.messageId = UUID.randomUUID().toString();

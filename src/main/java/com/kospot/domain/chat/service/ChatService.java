@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
 
@@ -33,19 +31,20 @@ public class ChatService {
         // 디버깅용 try-catch
         try {
             chatMessage.generateMessageId();
-
+            //todo to constants
             String deduplicationKey = "dedup:" + chatMessage.getMessageId();
             Boolean isNew = redisTemplate.opsForValue().setIfAbsent(deduplicationKey, "1", Duration.ofMinutes(5));
             if (!Boolean.TRUE.equals(isNew)) {
                 log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
                 return;
             }
-            simpMessagingTemplate.convertAndSend(PREFIX_TOPIC + GLOBAL_LOBBY_CHANNEL, chatMessage);
+            simpMessagingTemplate.convertAndSend(PREFIX_CHAT + GLOBAL_LOBBY_CHANNEL, chatMessage);
 
-            // todo 비동기 DB 저장을 위해 배치 큐에 추가 (성능 최적화)
+            chatMessageRepository.save(chatMessage);
+//            todo 비동기 DB 저장을 위해 배치 큐에 추가 (성능 최적화)
 //            batchService.addMessageToQueue(chatMessageDto);
 
-            // todo Redis에 최근 메시지 캐시 저장 (빠른 히스토리 조회용)
+//            todo Redis에 최근 메시지 캐시 저장 (빠른 히스토리 조회용)
 //            cacheRecentMessage(chatMessageDto);
 
             log.debug("Global chat message processed: {} by user {}", chatMessage.getMessageId(), chatMessage.getMemberId());

@@ -7,6 +7,7 @@ import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -31,7 +32,7 @@ public class ChatController {
     //global lobby chat
     @MessageMapping("/chat.message.lobby")
     @SendTo("/topic/lobby")
-    public void sendGlobalMessage(@Payload ChatMessageDto dto, Principal principal) {
+    public void sendGlobalMessage(@Valid @Payload ChatMessageDto dto, Principal principal) {
         sendGlobalLobbyMessageUseCase.execute(dto, principal);
     }
 
