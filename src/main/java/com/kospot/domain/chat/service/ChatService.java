@@ -2,8 +2,6 @@ package com.kospot.domain.chat.service;
 
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.repository.ChatMessageRepository;
-import com.kospot.domain.chat.vo.ChannelType;
-import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import com.kospot.presentation.chat.dto.response.ChatMessageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

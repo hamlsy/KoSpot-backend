@@ -1,14 +1,9 @@
 package com.kospot.presentation.chat.dto.request;
 
-import com.kospot.domain.chat.entity.ChatMessage;
-import com.kospot.domain.chat.vo.ChannelType;
-import com.kospot.domain.chat.vo.MessageType;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
