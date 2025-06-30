@@ -59,8 +59,8 @@ public class ChatService {
 
     public void joinGlobalLobby(Long memberId, String sessionId) {
         try {
-            // 활성 사용자 세션 관리
-            redisTemplate.opsForHash().put(REDIS_LOBBY_USERS, sessionId, memberId.toString());
+            // 활성 사용자 세션 관리, 중복 세션 방지 -> field: memberId
+            redisTemplate.opsForHash().put(REDIS_LOBBY_USERS, memberId.toString(),sessionId);
             log.info("User {} joined global lobby with session {}", memberId, sessionId);
 
         } catch (Exception e) {
@@ -68,14 +68,14 @@ public class ChatService {
         }
     }
 
-    public void leaveGlobalLobby(Long userId, String sessionId) {
+    public void leaveGlobalLobby(Long memberId) {
         try {
             // 세션 정보 정리
-            redisTemplate.opsForHash().delete(REDIS_LOBBY_USERS, sessionId);
-            log.info("User {} left global lobby", userId);
+            redisTemplate.opsForHash().delete(REDIS_LOBBY_USERS, memberId);
+            log.info("User {} left global lobby", memberId);
 
         } catch (Exception e) {
-            log.error("Error leaving global lobby for user: " + userId, e);
+            log.error("Error leaving global lobby for user: " + memberId, e);
         }
     }
 }

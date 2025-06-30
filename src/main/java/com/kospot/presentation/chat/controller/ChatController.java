@@ -25,7 +25,6 @@ import java.security.Principal;
 @Tag(name = "Chat Websocket", description = "채팅 소켓")
 public class ChatController {
 
-    private final ChatService chatService;
     private final JoinGlobalLobbyUseCase joinGlobalLobbyUseCase;
     private final SendGlobalLobbyMessageUseCase sendGlobalLobbyMessageUseCase;
 
@@ -43,8 +42,8 @@ public class ChatController {
     }
 
     // 글로벌 로비 퇴장
-//    @MessageMapping("/chat.leave.lobby")
-//    public void leaveGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
-//        chatService.leaveGlobalLobby(member.getId(), headerAccessor.getSessionId());
-//    }
+    @MessageMapping("/chat.leave.lobby")
+    public void leaveGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
+
+    }
 }
