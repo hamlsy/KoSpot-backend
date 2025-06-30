@@ -43,12 +43,21 @@ public class SendGlobalLobbyMessageUseCase {
     }
 
     private void validateCommand(SendGlobalLobbyMessageCommand command) {
+        validateContent(command);
+        validateMessageType(command);
+        // todo Additional validations
+    }
+
+    private void validateContent(SendGlobalLobbyMessageCommand command) {
         if (command.getContent() == null || command.getContent().isEmpty()) {
             throw new ChatHandler(ErrorStatus.CHAT_MESSAGE_CONTENT_EMPTY);
         }
-        if (command.getChannelType() == null || !ChannelType.GLOBAL_LOBBY.equals(command.getChannelType())) {
+    }
+
+    private void validateMessageType(SendGlobalLobbyMessageCommand command) {
+        if (command.getMessageType() == null || !MessageType.GLOBAL_CHAT.equals(command.getMessageType())) {
             throw new ChatHandler(ErrorStatus.CHAT_INVALID_CHANNEL_TYPE);
         }
-        // todo Additional validations
     }
+
 }

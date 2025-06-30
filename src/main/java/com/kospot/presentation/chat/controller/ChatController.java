@@ -1,6 +1,7 @@
 package com.kospot.presentation.chat.controller;
 
 import com.kospot.application.chat.lobby.usecase.JoinGlobalLobbyUseCase;
+import com.kospot.application.chat.lobby.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.application.chat.lobby.usecase.SendGlobalLobbyMessageUseCase;
 import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
@@ -26,8 +27,8 @@ public class ChatController {
 
     private final JoinGlobalLobbyUseCase joinGlobalLobbyUseCase;
     private final SendGlobalLobbyMessageUseCase sendGlobalLobbyMessageUseCase;
+    private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
 
-    //global lobby chat
     @MessageMapping("/chat.message.lobby")
     @SendTo("/topic/lobby")
     public void sendGlobalMessage(@Valid @Payload ChatMessageDto dto, Principal principal) {
@@ -40,9 +41,8 @@ public class ChatController {
         joinGlobalLobbyUseCase.execute(headerAccessor);
     }
 
-    // 글로벌 로비 퇴장
     @MessageMapping("/chat.leave.lobby")
     public void leaveGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
-
+        leaveGlobalLobbyUseCase.execute(headerAccessor);
     }
 }

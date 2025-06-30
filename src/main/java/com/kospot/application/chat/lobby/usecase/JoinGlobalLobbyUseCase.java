@@ -1,7 +1,6 @@
 package com.kospot.application.chat.lobby.usecase;
 
 import com.kospot.domain.chat.service.ChatService;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
 import lombok.RequiredArgsConstructor;

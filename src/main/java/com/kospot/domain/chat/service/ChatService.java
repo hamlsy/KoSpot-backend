@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 
+import static com.kospot.infrastructure.redis.constants.RedisKeyConstants.REDIS_LOBBY_USERS;
 import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
 
 @Slf4j

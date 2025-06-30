@@ -5,7 +5,7 @@ import com.kospot.infrastructure.exception.object.general.GeneralException;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.vo.CustomUserDetails;
-import com.kospot.infrastructure.service.RedisService;
+import com.kospot.infrastructure.redis.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

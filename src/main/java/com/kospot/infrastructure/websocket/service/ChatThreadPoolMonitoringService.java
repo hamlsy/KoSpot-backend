@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Component
 @RequiredArgsConstructor
 public class ChatThreadPoolMonitoringService {
-    //todo implement thread pool monitoring logic
+
     private final ThreadPoolTaskExecutor chatRoomExecutor;
     private final ThreadPoolTaskExecutor chatMessageExecutor;
     private final ThreadPoolTaskExecutor chatBroadcastExecutor;
