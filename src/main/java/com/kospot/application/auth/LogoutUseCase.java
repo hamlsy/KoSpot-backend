@@ -1,7 +1,6 @@
 package com.kospot.application.auth;
 
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.presentation.auth.dto.AuthRequest;
 import lombok.RequiredArgsConstructor;

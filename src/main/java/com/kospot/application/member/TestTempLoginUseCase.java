@@ -6,6 +6,7 @@ import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.service.TokenService;
+import com.kospot.infrastructure.security.vo.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,14 @@ public class TestTempLoginUseCase {
         Member member = memberRepository.findByUsername(username)
                 .orElseGet(() -> memberRepository.save(createTemporary(username)));
 
+        CustomUserDetails userDetails = CustomUserDetails.from(member);
+
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                member.getUsername(),
+
+                userDetails,
                 null,
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                List.of(new SimpleGrantedAuthority(
+                        "ROLE_USER"))
         );
 
         return tokenService.generateToken(auth);

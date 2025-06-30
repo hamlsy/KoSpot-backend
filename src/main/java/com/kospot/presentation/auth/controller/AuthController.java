@@ -3,6 +3,7 @@ package com.kospot.presentation.auth.controller;
 import com.kospot.application.auth.LogoutUseCase;
 import com.kospot.application.auth.ReIssueRefreshTokenUseCase;
 import com.kospot.application.member.TestTempLoginUseCase;
+import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.presentation.auth.dto.AuthRequest;
@@ -36,7 +37,6 @@ public class AuthController {
         return ApiResponseDto.onSuccess(testTempLoginUseCase.testLogin(username));
     }
 
-
     @Operation(summary = "토큰 재발급", description = "토큰 재발급")
     @PostMapping("/reIssue")
     public ApiResponseDto<JwtToken> reIssueRefreshToken(@RequestBody AuthRequest.ReIssue request) {
@@ -46,7 +46,8 @@ public class AuthController {
     @Operation(summary = "로그아웃", description = "로그아웃")
     @PostMapping("/logout")
     public ApiResponseDto<?> logout(@RequestBody AuthRequest.Logout request) {
-        return ApiResponseDto.onSuccess(logoutUseCase);
+        logoutUseCase.execute(request);
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
 }
