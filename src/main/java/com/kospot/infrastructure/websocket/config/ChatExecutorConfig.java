@@ -7,11 +7,12 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
+// ec2 t3.micro 기준
 @Configuration
 public class ChatExecutorConfig {
 
     @Bean("chatRoomExecutor")
-    public Executor chatRoomExecutor() {
+    public ThreadPoolTaskExecutor chatRoomExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(1);
         executor.setMaxPoolSize(2);
@@ -25,7 +26,7 @@ public class ChatExecutorConfig {
     }
 
     @Bean("chatMessageExecutor")
-    public Executor chatMessageExecutor() {
+    public ThreadPoolTaskExecutor chatMessageExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(1);
         executor.setMaxPoolSize(3);
@@ -39,7 +40,7 @@ public class ChatExecutorConfig {
     }
 
     @Bean("chatBroadcastExecutor")
-    public Executor chatBroadcastExecutor() {
+    public ThreadPoolTaskExecutor chatBroadcastExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(1);
         executor.setMaxPoolSize(2);
