@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.websocket.listner;
 
-import com.kospot.application.chat.usecase.LeaveGlobalLobbyUseCase;
+import com.kospot.application.chat.lobby.usecase.LeaveGlobalLobbyUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

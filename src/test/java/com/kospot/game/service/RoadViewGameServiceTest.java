@@ -1,7 +1,7 @@
 package com.kospot.game.service;
 
-import com.kospot.application.game.roadView.practice.usecase.EndRoadViewPracticeUseCase;
-import com.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
+import com.kospot.application.game.roadview.practice.usecase.EndRoadViewPracticeUseCase;
+import com.kospot.application.game.roadview.rank.usecase.EndRoadViewRankUseCase;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.presentation.game.dto.response.EndGameResponse;
 import com.kospot.domain.game.vo.GameType;
@@ -10,9 +10,9 @@ import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.domain.game.service.RoadViewGameService;
-import com.kospot.domain.gameRank.entity.GameRank;
-import com.kospot.domain.gameRank.vo.RankTier;
-import com.kospot.domain.gameRank.repository.GameRankRepository;
+import com.kospot.domain.gamerank.entity.GameRank;
+import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.domain.gamerank.repository.GameRankRepository;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.point.service.PointHistoryService;

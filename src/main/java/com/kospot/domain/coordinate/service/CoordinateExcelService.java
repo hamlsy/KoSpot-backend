@@ -6,7 +6,7 @@ import com.kospot.domain.coordinate.vo.LocationType;
 import com.kospot.domain.coordinate.entity.converter.CoordinateConverter;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 import com.kospot.domain.coordinate.vo.Sido;
-import com.kospot.domain.coordinateIdCache.service.CoordinateIdCacheService;
+import com.kospot.domain.coordinateidcache.service.CoordinateIdCacheService;
 import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 

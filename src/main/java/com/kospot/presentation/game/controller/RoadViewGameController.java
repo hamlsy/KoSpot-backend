@@ -1,9 +1,9 @@
 package com.kospot.presentation.game.controller;
 
-import com.kospot.application.game.roadView.practice.usecase.EndRoadViewPracticeUseCase;
-import com.kospot.application.game.roadView.practice.usecase.StartRoadViewPracticeUseCase;
-import com.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
-import com.kospot.application.game.roadView.rank.usecase.StartRoadViewRankUseCase;
+import com.kospot.application.game.roadview.practice.usecase.EndRoadViewPracticeUseCase;
+import com.kospot.application.game.roadview.practice.usecase.StartRoadViewPracticeUseCase;
+import com.kospot.application.game.roadview.rank.usecase.EndRoadViewRankUseCase;
+import com.kospot.application.game.roadview.rank.usecase.StartRoadViewRankUseCase;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.presentation.game.dto.response.EndGameResponse;

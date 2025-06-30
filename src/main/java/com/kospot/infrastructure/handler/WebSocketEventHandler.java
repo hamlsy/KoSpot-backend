@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.handler;
 
-import com.kospot.domain.multiGame.gameRoom.service.GameRoomService;
+import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

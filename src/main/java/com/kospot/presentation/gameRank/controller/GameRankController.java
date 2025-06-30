@@ -1,6 +1,6 @@
 package com.kospot.presentation.gameRank.controller;
 
-import com.kospot.domain.gameRank.util.RatingScoreCalculator;
+import com.kospot.domain.gamerank.util.RatingScoreCalculator;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

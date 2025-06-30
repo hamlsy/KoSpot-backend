@@ -1,6 +1,6 @@
 package com.kospot.gameRank.util;
 
-import com.kospot.domain.gameRank.util.RatingScoreCalculator;
+import com.kospot.domain.gamerank.util.RatingScoreCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

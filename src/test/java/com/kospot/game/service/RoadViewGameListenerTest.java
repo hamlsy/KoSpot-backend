@@ -1,17 +1,17 @@
 package com.kospot.game.service;
 
-import com.kospot.application.game.roadView.rank.event.UpdatePointAndRankEvent;
-import com.kospot.application.game.roadView.rank.usecase.EndRoadViewRankUseCase;
-import com.kospot.application.game.roadView.rank.listener.EndRoadViewRankEventListener;
+import com.kospot.application.game.roadview.rank.event.UpdatePointAndRankEvent;
+import com.kospot.application.game.roadview.rank.usecase.EndRoadViewRankUseCase;
+import com.kospot.application.game.roadview.rank.listener.EndRoadViewRankEventListener;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.domain.game.vo.GameStatus;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.domain.game.service.RoadViewGameService;
-import com.kospot.domain.gameRank.entity.GameRank;
-import com.kospot.domain.gameRank.vo.RankTier;
-import com.kospot.domain.gameRank.repository.GameRankRepository;
+import com.kospot.domain.gamerank.entity.GameRank;
+import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.domain.gamerank.repository.GameRankRepository;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.point.adaptor.PointHistoryAdaptor;

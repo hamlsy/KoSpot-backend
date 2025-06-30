@@ -1,25 +1,25 @@
 package com.kospot.multiGame.game.usecase;
 
 import com.kospot.application.coordinate.ImportCoordinateUseCase;
-import com.kospot.application.multiGame.game.StartMultiRoadViewPlayerGameUseCase;
+import com.kospot.application.multiplayer.game.StartMultiRoadViewPlayerGameUseCase;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.member.repository.MemberRepository;
-import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multiGame.game.vo.PlayerMatchType;
-import com.kospot.domain.multiGame.game.repository.MultiRoadViewGameRepository;
-import com.kospot.domain.multiGame.gamePlayer.repository.GamePlayerRepository;
-import com.kospot.domain.multiGame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multiGame.gameRoom.vo.GameRoomStatus;
-import com.kospot.domain.multiGame.gameRoom.repository.GameRoomRepository;
-import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
-import com.kospot.domain.multiGame.gameRound.repository.RoadViewGameRoundRepository;
+import com.kospot.domain.multigame.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multigame.game.vo.PlayerMatchType;
+import com.kospot.domain.multigame.game.repository.MultiRoadViewGameRepository;
+import com.kospot.domain.multigame.gamePlayer.repository.GamePlayerRepository;
+import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multigame.gameRoom.vo.GameRoomStatus;
+import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
+import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
+import com.kospot.domain.multigame.gameRound.repository.RoadViewGameRoundRepository;
 
-import com.kospot.presentation.multiGame.game.dto.request.MultiGameRequest;
-import com.kospot.presentation.multiGame.game.dto.response.MultiRoadViewGameResponse;
+import com.kospot.presentation.multigame.game.dto.request.MultiGameRequest;
+import com.kospot.presentation.multigame.game.dto.response.MultiRoadViewGameResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

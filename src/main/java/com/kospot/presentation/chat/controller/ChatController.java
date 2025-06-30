@@ -1,8 +1,7 @@
 package com.kospot.presentation.chat.controller;
 
-import com.kospot.application.chat.usecase.JoinGlobalLobbyUseCase;
-import com.kospot.application.chat.usecase.SendGlobalLobbyMessageUseCase;
-import com.kospot.domain.chat.service.ChatService;
+import com.kospot.application.chat.lobby.usecase.JoinGlobalLobbyUseCase;
+import com.kospot.application.chat.lobby.usecase.SendGlobalLobbyMessageUseCase;
 import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
