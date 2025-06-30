@@ -2,6 +2,7 @@ package com.kospot.infrastructure.websocket.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
@@ -10,12 +11,20 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class ChatThreadPoolMonitoringService {
 
     private final ThreadPoolTaskExecutor chatRoomExecutor;
     private final ThreadPoolTaskExecutor chatMessageExecutor;
     private final ThreadPoolTaskExecutor chatBroadcastExecutor;
+
+    public ChatThreadPoolMonitoringService(
+            @Qualifier("chatRoomExecutor") ThreadPoolTaskExecutor chatRoomExecutor,
+            @Qualifier("chatMessageExecutor") ThreadPoolTaskExecutor chatMessageExecutor,
+            @Qualifier("chatBroadcastExecutor") ThreadPoolTaskExecutor chatBroadcastExecutor) {
+        this.chatRoomExecutor = chatRoomExecutor;
+        this.chatMessageExecutor = chatMessageExecutor;
+        this.chatBroadcastExecutor = chatBroadcastExecutor;
+    }
 
     @Scheduled(fixedDelay = 30000) // 30초마다 실행
     public void monitorChatThreadPools() {

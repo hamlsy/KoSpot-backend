@@ -38,7 +38,7 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
                                                          @Param("itemType") ItemType itemType);
 
 
-    @Query("select new com.kospot.presentation.memberItem.dto.response.MemberItemResponse(" +
+    @Query("select new com.kospot.presentation.memberitem.dto.response.MemberItemResponse(" +
             "mi.id, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
             "from MemberItem mi join mi.item " +
             "where mi.member = :member and mi.item.itemType = :itemType")
