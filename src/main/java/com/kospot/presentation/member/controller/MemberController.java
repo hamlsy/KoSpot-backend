@@ -20,17 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member")
 public class MemberController {
 
-    private final TestTempLoginUseCase testTempLoginUseCase;
-
-    /**
-     *  Test
-     */
-    @Operation(summary = "테스트용 임시 로그인", description = "테스트용 임시 로그인")
-    @GetMapping("/tempLogin/{username}")
-    public ApiResponseDto<JwtToken> tempLogin(@PathVariable("username") String username) {
-        return ApiResponseDto.onSuccess(testTempLoginUseCase.testLogin(username));
-    }
-
     @Operation(summary = "테스트용 멤버 조회", description = "테스트용 멤버 조회")
     @GetMapping("/me")
     public ApiResponseDto<String> testCurrentMember(@CurrentMember Member member) {

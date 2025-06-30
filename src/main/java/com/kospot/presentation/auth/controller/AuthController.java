@@ -2,6 +2,7 @@ package com.kospot.presentation.auth.controller;
 
 import com.kospot.application.auth.LogoutUseCase;
 import com.kospot.application.auth.ReIssueRefreshTokenUseCase;
+import com.kospot.application.member.TestTempLoginUseCase;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.presentation.auth.dto.AuthRequest;
@@ -22,6 +23,19 @@ public class AuthController {
 
     private final ReIssueRefreshTokenUseCase reIssueRefreshTokenUseCase;
     private final LogoutUseCase logoutUseCase;
+
+    //test
+    private final TestTempLoginUseCase testTempLoginUseCase;
+
+    /**
+     *  Test
+     */
+    @Operation(summary = "테스트용 임시 로그인", description = "테스트용 임시 로그인")
+    @GetMapping("/tempLogin/{username}")
+    public ApiResponseDto<JwtToken> tempLogin(@PathVariable("username") String username) {
+        return ApiResponseDto.onSuccess(testTempLoginUseCase.testLogin(username));
+    }
+
 
     @Operation(summary = "토큰 재발급", description = "토큰 재발급")
     @PostMapping("/reIssue")
