@@ -112,9 +112,8 @@ public class TokenService {
                 .build();
     }
 
-    public boolean logout(String refreshToken) {
+    public void logout(String refreshToken) {
         redisService.deleteToken(refreshToken);
-        return true;
     }
 
     public boolean existsRefreshToken(String refreshToken) {
