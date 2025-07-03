@@ -37,7 +37,6 @@ public class ChatController {
 
     @MessageMapping("/chat.join.lobby")
     public void joinGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
-        ChatMemberPrincipal chatMemberPrincipal = (ChatMemberPrincipal) headerAccessor.getUser();
         joinGlobalLobbyUseCase.execute(headerAccessor);
     }
 

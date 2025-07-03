@@ -16,6 +16,7 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.Map;
 
 import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
 
@@ -29,10 +30,17 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+//        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message); // stomp
+
         if (StompCommand.CONNECT.equals(accessor.getCommand())) { // websocket 연결시
-            String token = accessor.getFirstNativeHeader("Authorization");
+
+            Map<String, Object> headers = accessor.getMessageHeaders();
+            String token = (String) headers.get("Authorization");
+
+//            String token = accessor.getFirstNativeHeader("Authorization");
             tokenService.validateToken(token);
+
 
             Long memberId = tokenService.getMemberIdFromToken(token);
             String nickname = tokenService.getNicknameFromToken(token);
@@ -67,6 +75,8 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         redisTemplate.opsForValue().increment(key);
         return false;
     }
+
+
 }
 
 
