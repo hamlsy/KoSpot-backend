@@ -30,17 +30,13 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-//        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message); // stomp
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) { // websocket 연결시
 
-            Map<String, Object> headers = accessor.getMessageHeaders();
-            String token = (String) headers.get("Authorization");
-
-//            String token = accessor.getFirstNativeHeader("Authorization");
+            String nativeToken = accessor.getFirstNativeHeader("Authorization");
+            String token = removeBearerHeader(nativeToken);
             tokenService.validateToken(token);
-
 
             Long memberId = tokenService.getMemberIdFromToken(token);
             String nickname = tokenService.getNicknameFromToken(token);
@@ -76,6 +72,13 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         return false;
     }
 
+    //remove bearer header method
+    private String removeBearerHeader(String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            return token.substring(7);
+        }
+        return token;
+    }
 
 }
 

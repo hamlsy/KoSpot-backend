@@ -142,6 +142,7 @@ public class TokenService {
 
     public boolean validateToken(String token) {
         try {
+            token = removeBearerHeader(token);
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
@@ -161,6 +162,15 @@ public class TokenService {
             throw new IllegalArgumentException("JWT claims string is empty.");
         }
     }
+
+    // remove bearer header method
+    public String removeBearerHeader(String token) {
+        if (token.startsWith("Bearer ")) {
+            return token.substring(7);
+        }
+        return token;
+    }
+
 
     private Claims parseClaims(String accessToken) {
         try {
