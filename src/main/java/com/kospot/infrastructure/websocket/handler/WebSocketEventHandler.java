@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.handler;
+package com.kospot.infrastructure.websocket.handler;
 
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
 import lombok.RequiredArgsConstructor;
