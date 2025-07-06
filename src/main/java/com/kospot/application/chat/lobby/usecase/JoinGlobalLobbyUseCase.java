@@ -15,7 +15,7 @@ public class JoinGlobalLobbyUseCase {
     private final ChatService chatService;
 
     public void execute(SimpMessageHeaderAccessor headerAccessor) {
-        ChatMemberPrincipal chatMemberPrincipal = (ChatMemberPrincipal) headerAccessor.getUser();
+        ChatMemberPrincipal chatMemberPrincipal = (ChatMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
         chatService.joinGlobalLobby(chatMemberPrincipal.getMemberId(), headerAccessor.getSessionId());
     }
 

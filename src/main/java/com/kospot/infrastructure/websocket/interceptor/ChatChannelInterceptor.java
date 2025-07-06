@@ -42,11 +42,14 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
             String nickname = tokenService.getNicknameFromToken(token);
             String email = tokenService.getEmailFromToken(token);
             String role = tokenService.getRoleFromToken(token);
-            accessor.setUser(new ChatMemberPrincipal(memberId, nickname, email, role)); // 사용자 정보 설정
-
+            ChatMemberPrincipal principal = new ChatMemberPrincipal(memberId, nickname, email, role);
+            accessor.setUser(principal);
+            accessor.getSessionAttributes().put("user", principal);
         } else if (StompCommand.SEND.equals(accessor.getCommand())) { // 메시지 보낼때
             // rate limiting 체크
-            Long memberId = ((ChatMemberPrincipal) accessor.getUser()).getMemberId();
+            ChatMemberPrincipal principal = (ChatMemberPrincipal) accessor.getSessionAttributes().get("user");
+            Long memberId = principal.getMemberId();
+            log.info("Chat message from memberId: {}", memberId);
             if (isRateLimit(memberId)) {
                 throw new ChatHandler(ErrorStatus.CHAT_RATE_LIMIT_EXCEEDED);
             }
