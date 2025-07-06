@@ -15,8 +15,8 @@ public class LeaveGlobalLobbyUseCase {
     private final ChatService chatService;
 
     public void execute(SimpMessageHeaderAccessor headerAccessor) {
-        ChatMemberPrincipal chatMemberPrincipal = (ChatMemberPrincipal) headerAccessor.getUser();
-        chatService.leaveGlobalLobby(chatMemberPrincipal.getMemberId());
+        //todo session 기반으로 변경
+        chatService.leaveGlobalLobby(headerAccessor.getSessionId());
     }
 
 }
