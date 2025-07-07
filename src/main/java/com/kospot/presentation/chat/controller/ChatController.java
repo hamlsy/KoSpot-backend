@@ -31,8 +31,8 @@ public class ChatController {
 
     @MessageMapping("/chat.message.lobby")
     @SendTo("/topic/lobby")
-    public void sendGlobalMessage(@Valid @Payload ChatMessageDto dto, Principal principal) {
-        sendGlobalLobbyMessageUseCase.execute(dto, principal);
+    public void sendGlobalMessage(@Valid @Payload ChatMessageDto dto, SimpMessageHeaderAccessor headerAccessor) {
+        sendGlobalLobbyMessageUseCase.execute(dto, headerAccessor);
     }
 
     @MessageMapping("/chat.join.lobby")

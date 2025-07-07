@@ -12,6 +12,7 @@ import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.scheduling.annotation.Async;
 
 import java.security.Principal;
@@ -24,8 +25,8 @@ public class SendGlobalLobbyMessageUseCase {
     private final ChatService chatService;
 
     @Async("chatRoomExecutor")
-    public void execute(ChatMessageDto dto, Principal principal) {
-        ChatMemberPrincipal chatMemberPrincipal = (ChatMemberPrincipal) principal;
+    public void execute(ChatMessageDto dto, SimpMessageHeaderAccessor headerAccessor) {
+        ChatMemberPrincipal chatMemberPrincipal = (ChatMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
         SendGlobalLobbyMessageCommand command = SendGlobalLobbyMessageCommand.from(dto, chatMemberPrincipal);
         validateCommand(command);
         ChatMessage chatMessage = createChatMessage(command);
@@ -44,19 +45,12 @@ public class SendGlobalLobbyMessageUseCase {
 
     private void validateCommand(SendGlobalLobbyMessageCommand command) {
         validateContent(command);
-        validateMessageType(command);
         // todo Additional validations
     }
 
     private void validateContent(SendGlobalLobbyMessageCommand command) {
         if (command.getContent() == null || command.getContent().isEmpty()) {
             throw new ChatHandler(ErrorStatus.CHAT_MESSAGE_CONTENT_EMPTY);
-        }
-    }
-
-    private void validateMessageType(SendGlobalLobbyMessageCommand command) {
-        if (command.getMessageType() == null || !MessageType.GLOBAL_CHAT.equals(command.getMessageType())) {
-            throw new ChatHandler(ErrorStatus.CHAT_INVALID_CHANNEL_TYPE);
         }
     }
 

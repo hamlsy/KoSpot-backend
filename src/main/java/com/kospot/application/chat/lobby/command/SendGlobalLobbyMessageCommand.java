@@ -11,16 +11,12 @@ public class SendGlobalLobbyMessageCommand {
 
     private Long memberId;
     private String nickname;
-    private String messageType;
-    private String channelType;
     private String content;
 
     public static SendGlobalLobbyMessageCommand from(ChatMessageDto dto, ChatMemberPrincipal principal) {
         return SendGlobalLobbyMessageCommand.builder()
                 .memberId(principal.getMemberId())
                 .nickname(principal.getNickname())
-                .messageType(dto.getMessageType())
-                .channelType(dto.getChannelType())
                 .content(dto.getContent())
                 .build();
     }

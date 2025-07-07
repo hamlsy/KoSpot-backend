@@ -4,16 +4,16 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ChatMessageDto {
 
     @NotEmpty
     private String content;
-    private String messageType;
-    private String channelType;
 
     private Long roomId;
     private String teamId;
