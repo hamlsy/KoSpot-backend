@@ -16,6 +16,7 @@ public class ChatMessageResponse {
     @NoArgsConstructor
     public static class GlobalLobby {
 
+        private Long senderId;
         private String messageId;
         private String nickname;
         private String content;
@@ -25,6 +26,7 @@ public class ChatMessageResponse {
 
         public static GlobalLobby from(ChatMessage chatMessage) {
             return GlobalLobby.builder()
+                    .senderId(chatMessage.getMemberId())
                     .messageId(chatMessage.getMessageId())
                     .nickname(chatMessage.getNickname())
                     .content(chatMessage.getContent())

@@ -1,10 +1,8 @@
 package com.kospot.presentation.member.controller;
 
-import com.kospot.application.member.TestTempLoginUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
-import com.kospot.infrastructure.security.dto.JwtToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

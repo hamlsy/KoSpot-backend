@@ -2,11 +2,12 @@ package com.kospot.presentation.auth.controller;
 
 import com.kospot.application.auth.LogoutUseCase;
 import com.kospot.application.auth.ReIssueRefreshTokenUseCase;
-import com.kospot.application.member.TestTempLoginUseCase;
+import com.kospot.application.auth.TestTempLoginUseCase;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.dto.JwtToken;
-import com.kospot.presentation.auth.dto.AuthRequest;
+import com.kospot.presentation.auth.dto.request.AuthRequest;
+import com.kospot.presentation.auth.dto.response.AuthResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,7 +34,7 @@ public class AuthController {
      */
     @Operation(summary = "테스트용 임시 로그인", description = "테스트용 임시 로그인")
     @GetMapping("/tempLogin/{username}")
-    public ApiResponseDto<JwtToken> tempLogin(@PathVariable("username") String username) {
+    public ApiResponseDto<AuthResponse.TempLogin> tempLogin(@PathVariable("username") String username) {
         return ApiResponseDto.onSuccess(testTempLoginUseCase.testLogin(username));
     }
 

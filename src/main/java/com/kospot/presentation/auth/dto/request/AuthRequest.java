@@ -1,4 +1,4 @@
-package com.kospot.presentation.auth.dto;
+package com.kospot.presentation.auth.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

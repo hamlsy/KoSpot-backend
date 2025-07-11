@@ -3,7 +3,7 @@ package com.kospot.application.auth;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.service.TokenService;
-import com.kospot.presentation.auth.dto.AuthRequest;
+import com.kospot.presentation.auth.dto.request.AuthRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

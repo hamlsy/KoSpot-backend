@@ -1,4 +1,4 @@
-package com.kospot.application.member;
+package com.kospot.application.auth;
 
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.vo.Role;
@@ -7,6 +7,7 @@ import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.security.vo.CustomUserDetails;
+import com.kospot.presentation.auth.dto.response.AuthResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class TestTempLoginUseCase {
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
 
-    public JwtToken testLogin(String username) {
+    public AuthResponse.TempLogin testLogin(String username) {
         Member member = memberRepository.findByUsername(username)
                 .orElseGet(() -> memberRepository.save(createTemporary(username)));
 
@@ -38,7 +39,9 @@ public class TestTempLoginUseCase {
                         "ROLE_USER"))
         );
 
-        return tokenService.generateToken(auth);
+        JwtToken jwtToken = tokenService.generateToken(auth);
+
+        return AuthResponse.TempLogin.from(jwtToken, member.getId());
     }
 
     private Member createTemporary(String username){
