@@ -6,7 +6,7 @@ import com.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.point.dto.response.PointHistoryResponse;
 import com.kospot.domain.point.service.PointHistoryService;
-import com.kospot.global.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

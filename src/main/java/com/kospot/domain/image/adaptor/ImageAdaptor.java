@@ -2,8 +2,8 @@ package com.kospot.domain.image.adaptor;
 
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
-import com.kospot.global.exception.object.domain.S3Handler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.object.domain.S3Handler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

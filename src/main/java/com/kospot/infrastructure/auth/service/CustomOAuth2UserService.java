@@ -1,11 +1,11 @@
 package com.kospot.infrastructure.auth.service;
 
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.entity.Role;
+import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.infrastructure.auth.domain.CustomOAuthUser;
 import com.kospot.infrastructure.auth.domain.OAuth2Attributes;
-import com.kospot.infrastructure.auth.domain.SocialType;
+import com.kospot.infrastructure.auth.vo.SocialType;
 import com.kospot.infrastructure.auth.dto.OAuth2UserInfo;
 import com.kospot.infrastructure.auth.utils.OAuth2Utils;
 import lombok.RequiredArgsConstructor;

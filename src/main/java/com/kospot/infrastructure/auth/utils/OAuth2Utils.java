@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.auth.utils;
 
-import com.kospot.infrastructure.auth.domain.SocialType;
+import com.kospot.infrastructure.auth.vo.SocialType;
 import com.kospot.infrastructure.auth.dto.GoogleUserInfo;
 import com.kospot.infrastructure.auth.dto.KakaoUserInfo;
 import com.kospot.infrastructure.auth.dto.NaverUserInfo;

@@ -1,10 +1,10 @@
 package com.kospot.domain.coordinate.service;
 
 import com.kospot.domain.coordinate.aop.SidoRepository;
-import com.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.domain.coordinate.vo.Sido;
 import com.kospot.domain.coordinate.repository.base.CoordinateRepository;
-import com.kospot.global.exception.object.domain.CoordinateHandler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;

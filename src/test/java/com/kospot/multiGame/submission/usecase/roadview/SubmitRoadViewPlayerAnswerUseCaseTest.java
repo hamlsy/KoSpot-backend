@@ -1,23 +1,23 @@
 package com.kospot.multiGame.submission.usecase.roadview;
 
-import com.kospot.application.multiGame.submission.SubmitRoadViewPlayerAnswerUseCase;
+import com.kospot.application.multiplayer.submission.SubmitRoadViewPlayerAnswerUseCase;
 import com.kospot.domain.coordinate.entity.Address;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 
-import com.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.domain.coordinate.vo.Sido;
 import com.kospot.domain.coordinate.repository.nationwide.CoordinateNationwideRepository;
-import com.kospot.domain.multiGame.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multiGame.game.repository.MultiRoadViewGameRepository;
-import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multiGame.gamePlayer.entity.GamePlayerStatus;
-import com.kospot.domain.multiGame.gamePlayer.repository.GamePlayerRepository;
-import com.kospot.domain.multiGame.gameRound.entity.RoadViewGameRound;
-import com.kospot.domain.multiGame.gameRound.repository.RoadViewGameRoundRepository;
-import com.kospot.domain.multiGame.submission.entity.roadView.RoadViewPlayerSubmission;
-import com.kospot.domain.multiGame.submission.repository.RoadViewPlayerSubmissionRepository;
-import com.kospot.global.exception.object.domain.GameRoundHandler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
-import com.kospot.presentation.multiGame.submission.dto.request.SubmissionRequest;
+import com.kospot.domain.multigame.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multigame.game.repository.MultiRoadViewGameRepository;
+import com.kospot.domain.multigame.gamePlayer.entity.GamePlayer;
+import com.kospot.domain.multigame.gamePlayer.vo.GamePlayerStatus;
+import com.kospot.domain.multigame.gamePlayer.repository.GamePlayerRepository;
+import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
+import com.kospot.domain.multigame.gameRound.repository.RoadViewGameRoundRepository;
+import com.kospot.domain.multigame.submission.entity.roadView.RoadViewPlayerSubmission;
+import com.kospot.domain.multigame.submission.repository.RoadViewPlayerSubmissionRepository;
+import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.presentation.multigame.submission.dto.request.SubmissionRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;

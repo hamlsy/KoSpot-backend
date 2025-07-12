@@ -1,10 +1,8 @@
 package com.kospot.presentation.member.controller;
 
-import com.kospot.application.member.TestTempLoginUseCase;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.global.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
-import com.kospot.infrastructure.security.dto.JwtToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,17 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Member Api", description = "회원 API")
 @RequestMapping("/member")
 public class MemberController {
-
-    private final TestTempLoginUseCase testTempLoginUseCase;
-
-    /**
-     *  Test
-     */
-    @Operation(summary = "테스트용 임시 로그인", description = "테스트용 임시 로그인")
-    @GetMapping("/tempLogin/{username}")
-    public ApiResponseDto<JwtToken> tempLogin(@PathVariable("username") String username) {
-        return ApiResponseDto.onSuccess(testTempLoginUseCase.testLogin(username));
-    }
 
     @Operation(summary = "테스트용 멤버 조회", description = "테스트용 멤버 조회")
     @GetMapping("/me")

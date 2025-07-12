@@ -2,13 +2,13 @@ package com.kospot.domain.coordinate.service;
 
 import com.kospot.domain.coordinate.entity.Address;
 import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.LocationType;
+import com.kospot.domain.coordinate.vo.LocationType;
 import com.kospot.domain.coordinate.entity.converter.CoordinateConverter;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
-import com.kospot.domain.coordinate.entity.sido.Sido;
-import com.kospot.domain.coordinateIdCache.service.CoordinateIdCacheService;
-import com.kospot.global.exception.object.domain.CoordinateHandler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.domain.coordinate.vo.Sido;
+import com.kospot.domain.coordinateidcache.service.CoordinateIdCacheService;
+import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;

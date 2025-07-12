@@ -2,7 +2,7 @@ package com.kospot.domain.image.service;
 
 import com.kospot.domain.image.adaptor.ImageAdaptor;
 import com.kospot.domain.image.entity.Image;
-import com.kospot.domain.image.entity.ImageType;
+import com.kospot.domain.image.vo.ImageType;
 import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.item.entity.Item;
 import com.kospot.infrastructure.service.AwsS3Service;

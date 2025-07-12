@@ -1,22 +1,35 @@
 package com.kospot.infrastructure.security.vo;
 
 import com.kospot.domain.member.entity.Member;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
+@Getter
+@AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
-    private final Member member;
+    private final Long memberId;
+    private final String nickname;
+    private final String email;
+    private final String role;
 
-    public CustomUserDetails(Member member) {
-        this.member = member;
+    public static CustomUserDetails from(Member member) {
+        return new CustomUserDetails(
+                member.getId(),
+                member.getNickname(),
+                member.getEmail(),
+                member.getRole().getName()
+        );
+
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> member.getRole().getName());
+        return List.of(() -> role);
     }
 
     @Override
@@ -26,7 +39,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return member.getUsername();
+        return String.valueOf(memberId); // memberId 반환
     }
 
     @Override
@@ -49,7 +62,5 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    public Member getMember() {
-        return member;
-    }
+
 }

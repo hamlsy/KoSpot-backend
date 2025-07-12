@@ -1,11 +1,11 @@
 package com.kospot.domain.coordinate.adaptor;
 
 import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.domain.coordinate.vo.Sido;
 import com.kospot.domain.coordinate.repository.nationwide.CoordinateNationwideRepository;
 import com.kospot.domain.coordinate.service.DynamicCoordinateRepositoryFactory;
-import com.kospot.global.exception.object.domain.CoordinateHandler;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;

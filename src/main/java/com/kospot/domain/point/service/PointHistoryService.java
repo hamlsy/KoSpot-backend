@@ -4,7 +4,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.presentation.point.dto.response.PointHistoryResponse;
 import com.kospot.domain.point.entity.PointHistory;
-import com.kospot.domain.point.entity.PointHistoryType;
+import com.kospot.domain.point.vo.PointHistoryType;
 import com.kospot.domain.point.repository.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

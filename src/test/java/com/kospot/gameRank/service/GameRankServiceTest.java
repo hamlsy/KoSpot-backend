@@ -1,11 +1,11 @@
 package com.kospot.gameRank.service;
 
 import com.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.domain.gameRank.entity.GameRank;
-import com.kospot.domain.gameRank.entity.RankLevel;
-import com.kospot.domain.gameRank.entity.RankTier;
-import com.kospot.domain.gameRank.service.GameRankService;
-import com.kospot.domain.gameRank.util.RatingScoreCalculator;
+import com.kospot.domain.gamerank.entity.GameRank;
+import com.kospot.domain.gamerank.vo.RankLevel;
+import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.domain.gamerank.service.GameRankService;
+import com.kospot.domain.gamerank.util.RatingScoreCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

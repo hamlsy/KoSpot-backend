@@ -2,7 +2,10 @@ package com.kospot.domain.game.entity;
 
 import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.game.util.ScoreCalculator;
-import com.kospot.domain.gameRank.util.RatingScoreCalculator;
+import com.kospot.domain.game.vo.GameMode;
+import com.kospot.domain.game.vo.GameStatus;
+import com.kospot.domain.game.vo.GameType;
+import com.kospot.domain.gamerank.util.RatingScoreCalculator;
 import com.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

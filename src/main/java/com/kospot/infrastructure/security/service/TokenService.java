@@ -1,11 +1,11 @@
 package com.kospot.infrastructure.security.service;
 
 import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.global.exception.object.general.GeneralException;
-import com.kospot.global.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.exception.object.general.GeneralException;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.vo.CustomUserDetails;
-import com.kospot.infrastructure.service.RedisService;
+import com.kospot.infrastructure.redis.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -61,8 +61,8 @@ public class TokenService {
 
         // 새로운 Authentication 객체 생성
         Claims claims = parseClaims(refreshToken);
-        String username = claims.getSubject();
-        CustomUserDetails customUserDetails = new CustomUserDetails(memberAdaptor.queryByUsername(username));
+        String memberId = claims.getSubject();
+        CustomUserDetails customUserDetails = CustomUserDetails.from(memberAdaptor.queryById(Long.parseLong(memberId)));
         Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, "",
                 customUserDetails.getAuthorities());
 
@@ -78,12 +78,19 @@ public class TokenService {
 
         long now = (new Date()).getTime();
 
+        // 추가 정보 추출
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRATION_TIME);   // 30분
         log.info("date = {}", accessTokenExpiresIn);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(authentication.getName()) // = customUserDetails.getUsername()
                 .claim("auth", authorities)
+                .claim("memberId", userDetails.getMemberId())
+                .claim("nickname", userDetails.getNickname())
+                .claim("email", userDetails.getEmail())
+                .claim("role", userDetails.getRole())
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -105,9 +112,8 @@ public class TokenService {
                 .build();
     }
 
-    public boolean logout(String refreshToken) {
+    public void logout(String refreshToken) {
         redisService.deleteToken(refreshToken);
-        return true;
     }
 
     public boolean existsRefreshToken(String refreshToken) {
@@ -129,12 +135,14 @@ public class TokenService {
                 .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication return
-        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
+        String memberId = claims.getSubject();
+        UserDetails principal = userDetailsService.loadUserByUsername(memberId);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
     public boolean validateToken(String token) {
         try {
+            token = removeBearerHeader(token);
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
@@ -155,6 +163,15 @@ public class TokenService {
         }
     }
 
+    // remove bearer header method
+    public String removeBearerHeader(String token) {
+        if (token.startsWith("Bearer ")) {
+            return token.substring(7);
+        }
+        return token;
+    }
+
+
     private Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder()
@@ -166,5 +183,36 @@ public class TokenService {
             return e.getClaims();
         }
     }
+
+    // JWT에서 memberId 추출
+    public Long getMemberIdFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("memberId", Long.class);
+    }
+
+    // JWT에서 nickname 추출
+    public String getNicknameFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("nickname", String.class);
+    }
+
+    // JWT에서 email 추출
+    public String getEmailFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("email", String.class);
+    }
+
+    // JWT에서 role 추출 (String으로 반환)
+    public String getRoleFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("role", String.class);
+    }
+
+    // JWT에서 권한 정보 추출
+    public String getAuthoritiesFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("auth", String.class);
+    }
+
 
 }

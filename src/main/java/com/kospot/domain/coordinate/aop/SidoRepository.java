@@ -1,6 +1,6 @@
 package com.kospot.domain.coordinate.aop;
 
-import com.kospot.domain.coordinate.entity.sido.Sido;
+import com.kospot.domain.coordinate.vo.Sido;
 
 import java.lang.annotation.*;
 

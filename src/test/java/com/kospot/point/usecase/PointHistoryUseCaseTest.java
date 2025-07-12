@@ -4,7 +4,7 @@ import com.kospot.application.point.FindAllPointHistoryPagingUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.point.entity.PointHistory;
-import com.kospot.domain.point.entity.PointHistoryType;
+import com.kospot.domain.point.vo.PointHistoryType;
 import com.kospot.domain.point.repository.PointHistoryRepository;
 import com.kospot.presentation.point.dto.response.PointHistoryResponse;
 import lombok.extern.slf4j.Slf4j;
