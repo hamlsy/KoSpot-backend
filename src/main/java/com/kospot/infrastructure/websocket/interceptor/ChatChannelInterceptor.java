@@ -4,6 +4,7 @@ import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
+import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -70,6 +71,16 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         }
         validateSubscriptionAccess(principal, destination);
         processSubscription(principal, destination, accessor.getSessionId());
+    }
+
+    private void validateSubscriptionAccess(WebSocketMemberPrincipal principal, String destination) {
+        if(destination.startsWith(PREFIX_GAME_ROOM)) {
+
+        }else if(destination.startsWith(PREFIX_CHAT)) {
+
+        } else {
+            throw new WebSocketHandler(ErrorStatus.INVALID_DESTINATION);
+        }
     }
 
     private WebSocketMemberPrincipal getPrincipal(StompHeaderAccessor accessor) {
