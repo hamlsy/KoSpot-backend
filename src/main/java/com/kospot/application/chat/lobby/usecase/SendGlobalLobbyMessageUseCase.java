@@ -6,7 +6,7 @@ import com.kospot.domain.chat.service.ChatService;
 import com.kospot.domain.chat.vo.ChannelType;
 import com.kospot.domain.chat.vo.MessageType;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.infrastructure.exception.object.domain.ChatHandler;
+import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
@@ -48,7 +48,7 @@ public class SendGlobalLobbyMessageUseCase {
 
     private void validateContent(SendGlobalLobbyMessageCommand command) {
         if (command.getContent() == null || command.getContent().isEmpty()) {
-            throw new ChatHandler(ErrorStatus.CHAT_MESSAGE_CONTENT_EMPTY);
+            throw new WebSocketHandler(ErrorStatus.CHAT_MESSAGE_CONTENT_EMPTY);
         }
     }
 

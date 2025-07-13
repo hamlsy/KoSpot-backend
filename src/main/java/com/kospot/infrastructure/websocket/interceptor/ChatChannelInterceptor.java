@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.websocket.interceptor;
 
-import com.kospot.infrastructure.exception.object.domain.ChatHandler;
+import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
@@ -58,20 +58,24 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         Long memberId = principal.getMemberId();
         log.info("Chat message from memberId: {}", memberId);
         if (isRateLimit(memberId)) {
-            throw new ChatHandler(ErrorStatus.CHAT_RATE_LIMIT_EXCEEDED);
+            throw new WebSocketHandler(ErrorStatus.CHAT_RATE_LIMIT_EXCEEDED);
         }
     }
 
     private void handleSubscribe(StompHeaderAccessor accessor) {
         WebSocketMemberPrincipal principal = getPrincipal(accessor);
         String destination = accessor.getDestination();
-
+        if (destination == null) {
+            throw new WebSocketHandler(ErrorStatus.INVALID_DESTINATION);
+        }
+        validateSubscriptionAccess(principal, destination);
+        processSubscription(principal, destination, accessor.getSessionId());
     }
 
     private WebSocketMemberPrincipal getPrincipal(StompHeaderAccessor accessor) {
         WebSocketMemberPrincipal principal = (WebSocketMemberPrincipal) accessor.getSessionAttributes().get("user");
         if(principal == null) {
-            throw new ChatHandler(ErrorStatus.UNAUTHORIZED);
+            throw new WebSocketHandler(ErrorStatus.UNAUTHORIZED); //todo implement custom exception
         }
         return principal;
     }
