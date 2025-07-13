@@ -3,7 +3,6 @@ package com.kospot.presentation.chat.controller;
 import com.kospot.application.chat.lobby.usecase.JoinGlobalLobbyUseCase;
 import com.kospot.application.chat.lobby.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.application.chat.lobby.usecase.SendGlobalLobbyMessageUseCase;
-import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,8 +14,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-
-import java.security.Principal;
 
 @Slf4j
 @Controller

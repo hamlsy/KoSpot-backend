@@ -8,14 +8,12 @@ import com.kospot.domain.chat.vo.MessageType;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.ChatHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
+import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.scheduling.annotation.Async;
-
-import java.security.Principal;
 
 @Slf4j
 @UseCase
@@ -26,8 +24,8 @@ public class SendGlobalLobbyMessageUseCase {
 
     @Async("chatRoomExecutor")
     public void execute(ChatMessageDto dto, SimpMessageHeaderAccessor headerAccessor) {
-        ChatMemberPrincipal chatMemberPrincipal = (ChatMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
-        SendGlobalLobbyMessageCommand command = SendGlobalLobbyMessageCommand.from(dto, chatMemberPrincipal);
+        WebSocketMemberPrincipal webSocketMemberPrincipal = (WebSocketMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
+        SendGlobalLobbyMessageCommand command = SendGlobalLobbyMessageCommand.from(dto, webSocketMemberPrincipal);
         validateCommand(command);
         ChatMessage chatMessage = createChatMessage(command);
         chatService.sendGlobalLobbyMessage(chatMessage);

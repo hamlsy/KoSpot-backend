@@ -3,7 +3,7 @@ package com.kospot.infrastructure.websocket.interceptor;
 import com.kospot.infrastructure.exception.object.domain.ChatHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.service.TokenService;
-import com.kospot.infrastructure.websocket.auth.ChatMemberPrincipal;
+import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,11 +12,9 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.Map;
 
 import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
 
@@ -32,25 +30,50 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message); // stomp
 
+        switch (accessor.getCommand()) {
+            case CONNECT -> handleConnect(accessor);
+            case SEND -> handleSend(accessor);
+            case SUBSCRIBE -> handleSubscribe();
+        }
+
         if (StompCommand.CONNECT.equals(accessor.getCommand())) { // websocket 연결시
             handleConnect(accessor);
         } else if (StompCommand.SEND.equals(accessor.getCommand())) { // 메시지 보낼때
-            // rate limiting 체크
-            ChatMemberPrincipal principal = (ChatMemberPrincipal) accessor.getSessionAttributes().get("user");
-            Long memberId = principal.getMemberId();
-            log.info("Chat message from memberId: {}", memberId);
-            if (isRateLimit(memberId)) {
-                throw new ChatHandler(ErrorStatus.CHAT_RATE_LIMIT_EXCEEDED);
-            }
+            handleSend(accessor);
         }
         return message;
     }
 
     private void handleConnect(StompHeaderAccessor accessor) {
         String token = extractToken(accessor);
-        ChatMemberPrincipal principal = createPrincipalFromToken(token);
+        WebSocketMemberPrincipal principal = createPrincipalFromToken(token);
         accessor.setUser(principal);
         accessor.getSessionAttributes().put("user", principal);
+    }
+
+    public void handleSend(StompHeaderAccessor accessor) {
+        // 메시지 전송 시 처리 로직 (예: 메시지 검증, 로깅 등)
+        // 현재는 rate limiting만 처리 중
+        WebSocketMemberPrincipal principal = (WebSocketMemberPrincipal) accessor.getSessionAttributes().get("user");
+        Long memberId = principal.getMemberId();
+        log.info("Chat message from memberId: {}", memberId);
+        if (isRateLimit(memberId)) {
+            throw new ChatHandler(ErrorStatus.CHAT_RATE_LIMIT_EXCEEDED);
+        }
+    }
+
+    private void handleSubscribe(StompHeaderAccessor accessor) {
+        WebSocketMemberPrincipal principal = getPrincipal(accessor);
+        String destination = accessor.getDestination();
+
+    }
+
+    private WebSocketMemberPrincipal getPrincipal(StompHeaderAccessor accessor) {
+        WebSocketMemberPrincipal principal = (WebSocketMemberPrincipal) accessor.getSessionAttributes().get("user");
+        if(principal == null) {
+            throw new ChatHandler(ErrorStatus.UNAUTHORIZED);
+        }
+        return principal;
     }
 
     private String extractToken(StompHeaderAccessor accessor) {
@@ -60,12 +83,12 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         return token;
     }
 
-    private ChatMemberPrincipal createPrincipalFromToken(String token) {
+    private WebSocketMemberPrincipal createPrincipalFromToken(String token) {
         Long memberId = tokenService.getMemberIdFromToken(token);
         String nickname = tokenService.getNicknameFromToken(token);
         String email = tokenService.getEmailFromToken(token);
         String role = tokenService.getRoleFromToken(token);
-        return new ChatMemberPrincipal(memberId, nickname, email, role);
+        return new WebSocketMemberPrincipal(memberId, nickname, email, role);
     }
 
     // 채팅 제한
