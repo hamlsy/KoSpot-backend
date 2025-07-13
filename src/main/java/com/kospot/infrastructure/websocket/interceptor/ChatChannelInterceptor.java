@@ -33,18 +33,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message); // stomp
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) { // websocket 연결시
-
-            String nativeToken = accessor.getFirstNativeHeader("Authorization");
-            String token = removeBearerHeader(nativeToken);
-            tokenService.validateToken(token);
-
-            Long memberId = tokenService.getMemberIdFromToken(token);
-            String nickname = tokenService.getNicknameFromToken(token);
-            String email = tokenService.getEmailFromToken(token);
-            String role = tokenService.getRoleFromToken(token);
-            ChatMemberPrincipal principal = new ChatMemberPrincipal(memberId, nickname, email, role);
-            accessor.setUser(principal);
-            accessor.getSessionAttributes().put("user", principal);
+            handleConnect(accessor);
         } else if (StompCommand.SEND.equals(accessor.getCommand())) { // 메시지 보낼때
             // rate limiting 체크
             ChatMemberPrincipal principal = (ChatMemberPrincipal) accessor.getSessionAttributes().get("user");
@@ -55,6 +44,28 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
             }
         }
         return message;
+    }
+
+    private void handleConnect(StompHeaderAccessor accessor) {
+        String token = extractToken(accessor);
+        ChatMemberPrincipal principal = createPrincipalFromToken(token);
+        accessor.setUser(principal);
+        accessor.getSessionAttributes().put("user", principal);
+    }
+
+    private String extractToken(StompHeaderAccessor accessor) {
+        String nativeToken = accessor.getFirstNativeHeader("Authorization");
+        String token = removeBearerHeader(nativeToken);
+        tokenService.validateToken(token);
+        return token;
+    }
+
+    private ChatMemberPrincipal createPrincipalFromToken(String token) {
+        Long memberId = tokenService.getMemberIdFromToken(token);
+        String nickname = tokenService.getNicknameFromToken(token);
+        String email = tokenService.getEmailFromToken(token);
+        String role = tokenService.getRoleFromToken(token);
+        return new ChatMemberPrincipal(memberId, nickname, email, role);
     }
 
     // 채팅 제한
