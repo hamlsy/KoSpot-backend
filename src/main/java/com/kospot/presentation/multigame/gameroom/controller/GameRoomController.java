@@ -1,4 +1,4 @@
-package com.kospot.presentation.multigame.gameRoom.controller;
+package com.kospot.presentation.multigame.gameroom.controller;
 
 
 import com.kospot.application.multiplayer.gameroom.*;
@@ -6,10 +6,10 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
-import com.kospot.presentation.multigame.gameRoom.dto.request.GameRoomRequest;
-import com.kospot.presentation.multigame.gameRoom.dto.response.FindGameRoomResponse;
-import com.kospot.presentation.multigame.gameRoom.dto.response.GameRoomDetailResponse;
-import com.kospot.presentation.multigame.gameRoom.dto.response.GameRoomResponse;
+import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multigame.gameroom.dto.response.FindGameRoomResponse;
+import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;
+import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

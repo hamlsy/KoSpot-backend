@@ -6,7 +6,7 @@ import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.presentation.multigame.gameRoom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;

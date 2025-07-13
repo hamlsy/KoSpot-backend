@@ -6,7 +6,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.game.vo.PlayerMatchType;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
-import com.kospot.presentation.multigame.gameRoom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

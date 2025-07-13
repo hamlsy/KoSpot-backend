@@ -3,7 +3,7 @@ package com.kospot.application.multiplayer.gameroom;
 import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.presentation.multigame.gameRoom.dto.response.FindGameRoomResponse;
+import com.kospot.presentation.multigame.gameroom.dto.response.FindGameRoomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package com.kospot.presentation.multigame.gameRoom.dto.request;
+package com.kospot.presentation.multigame.gameroom.dto.request;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multigame.game.vo.PlayerMatchType;
