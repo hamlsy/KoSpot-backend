@@ -34,7 +34,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         switch (accessor.getCommand()) {
             case CONNECT -> handleConnect(accessor);
             case SEND -> handleSend(accessor);
-            case SUBSCRIBE -> handleSubscribe();
+            case SUBSCRIBE -> handleSubscribe(accessor);
         }
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) { // websocket 연결시
@@ -71,6 +71,12 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         }
         validateSubscriptionAccess(principal, destination);
         processSubscription(principal, destination, accessor.getSessionId());
+    }
+
+    private void processSubscription(WebSocketMemberPrincipal principal, String destination, String sessionId) {
+        if (destination.startsWith(PREFIX_GAME_ROOM)) {
+
+        }
     }
 
     private void validateSubscriptionAccess(WebSocketMemberPrincipal principal, String destination) {
