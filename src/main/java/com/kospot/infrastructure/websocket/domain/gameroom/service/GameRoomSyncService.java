@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.service;
+package com.kospot.infrastructure.websocket.domain.gameroom.service;
 
 import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;

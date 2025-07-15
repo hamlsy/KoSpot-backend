@@ -1,7 +1,7 @@
 package com.kospot.infrastructure.websocket.session;
 
-import com.kospot.infrastructure.websocket.service.GameRoomRedisService;
-import com.kospot.infrastructure.websocket.service.GameRoomSyncService;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

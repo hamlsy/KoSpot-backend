@@ -1,8 +1,8 @@
 package com.kospot.infrastructure.websocket.session;
 
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.infrastructure.websocket.service.GameRoomPlayerService;
-import com.kospot.infrastructure.websocket.service.GameRoomRedisService;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomPlayerService;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

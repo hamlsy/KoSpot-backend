@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.service;
+package com.kospot.infrastructure.websocket.domain.gameroom.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +46,8 @@ public class GameRoomRedisService {
         try {
             String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
             String playerJson = objectMapper.writeValueAsString(playerInfo);
-            
+
+            //todo implement member detail statistic info in http methods
             redisTemplate.opsForHash().put(roomKey, playerInfo.getMemberId().toString(), playerJson);
             redisTemplate.expire(roomKey, ROOM_DATA_EXPIRY_HOURS, TimeUnit.HOURS);
             

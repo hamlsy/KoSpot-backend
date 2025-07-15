@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.service;
+package com.kospot.infrastructure.websocket.domain.gameroom.service;
 
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
