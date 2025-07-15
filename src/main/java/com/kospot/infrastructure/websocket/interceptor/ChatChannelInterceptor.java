@@ -5,6 +5,7 @@ import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
+import com.kospot.infrastructure.websocket.session.GameRoomSessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,6 +27,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final TokenService tokenService;
+    private final GameRoomSessionManager gameRoomSessionManager;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -75,7 +77,13 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
 
     private void processSubscription(WebSocketMemberPrincipal principal, String destination, String sessionId) {
         if (destination.startsWith(PREFIX_GAME_ROOM)) {
-
+            // 게임방 관련 구독 처리
+            String roomId = gameRoomSessionManager.extractRoomId(destination);
+            if (roomId != null) {
+                gameRoomSessionManager.addSubscription(principal, roomId, destination, sessionId);
+            } else {
+                throw new WebSocketHandler(ErrorStatus.INVALID_DESTINATION);
+            }
         }
     }
 
@@ -92,7 +100,7 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
     private WebSocketMemberPrincipal getPrincipal(StompHeaderAccessor accessor) {
         WebSocketMemberPrincipal principal = (WebSocketMemberPrincipal) accessor.getSessionAttributes().get("user");
         if(principal == null) {
-            throw new WebSocketHandler(ErrorStatus.UNAUTHORIZED); //todo implement custom exception
+            throw new WebSocketHandler(ErrorStatus._UNAUTHORIZED);
         }
         return principal;
     }
