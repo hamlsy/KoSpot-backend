@@ -82,12 +82,12 @@ public class GameRoom extends BaseTimeEntity {
     public void join(Member player, String inputPassword) {
         validateJoinRoom(player, inputPassword);
         player.joinGameRoom(this.id);
-        currentPlayerCount++;
+        // currentPlayerCount는 Redis에서 관리하므로 DB 업데이트는 별도 동기화에서 처리
     }
 
     public void leaveRoom(Member player) {
         player.leaveGameRoom();
-        currentPlayerCount--;
+        // currentPlayerCount는 Redis에서 관리하므로 DB 업데이트는 별도 동기화에서 처리
     }
 
     public void kickPlayer(Member host, Member player) {
@@ -97,6 +97,14 @@ public class GameRoom extends BaseTimeEntity {
 
     public void deleteRoom() {
         this.deleted = true;
+    }
+
+    /**
+     * 현재 플레이어 수 업데이트 (Redis 동기화용)
+     * @param count 새로운 플레이어 수
+     */
+    public void updateCurrentPlayerCount(int count) {
+        this.currentPlayerCount = count;
     }
 
     //--- todo websocket

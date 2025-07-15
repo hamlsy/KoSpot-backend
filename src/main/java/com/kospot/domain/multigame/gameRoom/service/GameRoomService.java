@@ -6,6 +6,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.game.vo.PlayerMatchType;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
+import com.kospot.infrastructure.websocket.service.GameRoomPlayerService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class GameRoomService {
 
     private final MemberAdaptor memberAdaptor;
     private final GameRoomRepository gameRoomRepository;
+    private final GameRoomPlayerService gameRoomPlayerService;
 
     public GameRoom createGameRoom(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = request.toEntity();
@@ -45,8 +47,8 @@ public class GameRoomService {
         //플레이어가 나간 경우
         gameRoom.leaveRoom(player);
 
-        //방장이 나간 경우 또는 남은 플레이어가 없는 경우
-        if (gameRoom.isHost(player) || gameRoom.isRoomEmpty()) {
+        //방장이 나간 경우 또는 남은 플레이어가 없는 경우 (Redis 기반 실시간 확인)
+        if (gameRoom.isHost(player) || gameRoomPlayerService.isRoomEmpty(gameRoom.getId().toString())) {
             deleteRoom(gameRoom);
         }
 

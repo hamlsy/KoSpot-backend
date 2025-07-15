@@ -41,7 +41,7 @@ public class WebSocketEventHandler {
         String sessionId = headerAccessor.getSessionId();
         try {
             // 게임방에서 플레이어 제거
-            gameRoomSessionManager.removePlayerFromRoom(sessionId);
+            gameRoomSessionManager.removePlayerOnDisconnect(sessionId);
 
             // Redis에서 세션 정보 삭제
             redisTemplate.delete("websocket:session:" + sessionId);

@@ -5,7 +5,7 @@ import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.infrastructure.websocket.session.GameRoomSessionManager;
+import com.kospot.infrastructure.websocket.service.GameRoomPlayerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ public class LeaveGameRoomUseCase {
 
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
-    private final GameRoomSessionManager gameRoomSessionManager;
+    private final GameRoomPlayerService gameRoomPlayerService;
 
     public void execute(Member player, Long gameRoomId) {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
@@ -27,7 +27,7 @@ public class LeaveGameRoomUseCase {
         gameRoomService.leaveGameRoom(player, gameRoom);
         
         // WebSocket 레벨에서 실시간 퇴장 처리 (Redis + 실시간 알림)
-        gameRoomSessionManager.removePlayerFromRoom(gameRoomId, player.getId());
+        gameRoomPlayerService.removePlayerFromRoom(gameRoomId, player.getId());
     }
 
 }
