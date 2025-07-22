@@ -43,8 +43,6 @@ public class GameRoom extends BaseTimeEntity {
 
     private int teamCount;
 
-    private int currentPlayerCount;
-
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -99,19 +97,11 @@ public class GameRoom extends BaseTimeEntity {
         this.deleted = true;
     }
 
-    /**
-     * 현재 플레이어 수 업데이트 (Redis 동기화용)
-     * @param count 새로운 플레이어 수
-     */
-    public void updateCurrentPlayerCount(int count) {
-        this.currentPlayerCount = count;
-    }
-
     //--- todo websocket
 
     //validate
     public void validateJoinRoom(Member player, String inputPassword) {
-        validateRoomCapacity();
+//        validateRoomCapacity(currentPlayerCount);
         if (privateRoom) {
             validatePassword(inputPassword);
         }
@@ -126,16 +116,16 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     public void validateGameStart(Member host) {
-        validatePlayerCount();
+//        validatePlayerCount(currentPlayerCount);
         validateHost(host);
         validateRoomStatus();
     }
-
-    private void validateRoomCapacity() {
-        if (currentPlayerCount >= maxPlayers) {
-            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
-        }
-    }
+//
+//    private void validateRoomCapacity(int currentPlayerCount) {
+//        if (currentPlayerCount >= maxPlayers) {
+//            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
+//        }
+//    }
 
     public void validatePassword(String inputPassword) {
         if (isNotCorrectPassword(inputPassword)) {
@@ -149,13 +139,13 @@ public class GameRoom extends BaseTimeEntity {
         }
     }
 
-    private void validatePlayerCount() {
+    private void validatePlayerCount(int currentPlayerCount) {
         if (currentPlayerCount < 2) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_NOT_ENOUGH_PLAYER);
         }
     }
 
-    public boolean isRoomEmpty() {
+    public boolean isRoomEmpty(int currentPlayerCount) {
         return currentPlayerCount == 0;
     }
 
