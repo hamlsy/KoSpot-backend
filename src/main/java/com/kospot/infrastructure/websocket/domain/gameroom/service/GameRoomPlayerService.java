@@ -28,7 +28,6 @@ public class GameRoomPlayerService {
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService notificationService;
-    private final GameRoomSyncService syncService;
 
     /**
      * 플레이어를 게임방에 추가
@@ -59,9 +58,6 @@ public class GameRoomPlayerService {
 
             // 실시간 알림 전송
             notificationService.notifyPlayerJoinedWithCount(roomId.toString(), playerInfo, previousCount, currentCount);
-            
-            // DB와 비동기 동기화
-            syncService.syncPlayerCountToDatabase(roomId.toString());
 
             log.info("Player successfully joined room - MemberId: {}, RoomId: {}, Nickname: {}", 
                     member.getId(), roomId, member.getNickname());
@@ -94,9 +90,6 @@ public class GameRoomPlayerService {
 
                 // 실시간 알림 전송
                 notificationService.notifyPlayerLeftWithCount(roomId.toString(), playerInfo, previousCount, currentCount);
-                
-                // DB와 비동기 동기화
-                syncService.syncPlayerCountToDatabase(roomId.toString());
 
                 log.info("Player successfully left room - MemberId: {}, RoomId: {}, Nickname: {}", 
                         memberId, roomId, playerInfo.getNickname());
@@ -170,9 +163,6 @@ public class GameRoomPlayerService {
 
             // 실시간 알림 전송
             notificationService.notifyPlayerKickedWithCount(roomId.toString(), targetMember, previousCount, currentCount);
-            
-            // DB와 비동기 동기화
-            syncService.syncPlayerCountToDatabase(roomId.toString());
 
             log.info("Player successfully kicked - HostId: {}, TargetId: {}, RoomId: {}", 
                     hostMemberId, targetMemberId, roomId);
