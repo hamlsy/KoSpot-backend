@@ -61,10 +61,7 @@ public class GameRoomNotification {
             return description;
         }
     }
-    
-    /**
-     * 플레이어 입장 알림 생성
-     */
+
     public static GameRoomNotification playerJoined(String roomId, GameRoomPlayerInfo playerInfo, List<GameRoomPlayerInfo> allPlayers) {
         return GameRoomNotification.builder()
                 .type(NotificationType.PLAYER_JOINED.name())
@@ -74,10 +71,7 @@ public class GameRoomNotification {
                 .timestamp(System.currentTimeMillis())
                 .build();
     }
-    
-    /**
-     * 플레이어 퇴장 알림 생성
-     */
+
     public static GameRoomNotification playerLeft(String roomId, GameRoomPlayerInfo playerInfo, List<GameRoomPlayerInfo> allPlayers) {
         return GameRoomNotification.builder()
                 .type(NotificationType.PLAYER_LEFT.name())
@@ -87,10 +81,7 @@ public class GameRoomNotification {
                 .timestamp(System.currentTimeMillis())
                 .build();
     }
-    
-    /**
-     * 플레이어 강퇴 알림 생성
-     */
+
     public static GameRoomNotification playerKicked(String roomId, GameRoomPlayerInfo playerInfo, List<GameRoomPlayerInfo> allPlayers) {
         return GameRoomNotification.builder()
                 .type(NotificationType.PLAYER_KICKED.name())

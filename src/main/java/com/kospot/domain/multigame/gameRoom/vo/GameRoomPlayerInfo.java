@@ -49,8 +49,7 @@ public class GameRoomPlayerInfo {
         return GameRoomPlayerInfo.builder()
                 .memberId(member.getId())
                 .nickname(member.getNickname())
-                .markerImageUrl(member.getEquippedMarkerImage() != null ? 
-                        member.getEquippedMarkerImage().getImageUrl() : null)
+                .markerImageUrl(member.getEquippedMarkerImage().getImageUrl())
                 .isHost(false) // 호스트 여부는 별도로 설정 필요
                 .joinedAt(System.currentTimeMillis())
                 .build();

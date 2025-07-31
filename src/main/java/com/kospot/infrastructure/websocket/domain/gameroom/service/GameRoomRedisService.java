@@ -133,7 +133,8 @@ public class GameRoomRedisService {
     }
 
     /**
-     * 게임방 입장 가능 여부 확인
+     *  "Read-Then-Check"
+     *  race condition 방지 안 됨 todo refactor
      */
     public boolean canJoinRoom(String roomId, int maxPlayers) {
         int currentCount = getCurrentPlayerCount(roomId);

@@ -10,6 +10,6 @@ import lombok.Getter;
 public class GameRoomJoinEvent {
 
     private final GameRoom gameRoom;
-    private final Member member;
+    private final Member player;
 
 }
