@@ -1,6 +1,5 @@
-package com.kospot.application.multiplayer.gameroom;
+package com.kospot.application.multiplayer.gameroom.usecase;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
@@ -16,22 +15,19 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class KickPlayerUseCase {
+public class JoinGameRoomUseCase {
 
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
-    private final MemberAdaptor memberAdaptor;
     private final GameRoomPlayerService gameRoomPlayerService;
 
-    public void execute(Member host, GameRoomRequest.Kick request, Long gameRoomId) {
+    public void execute(Member player, Long gameRoomId, GameRoomRequest.Join request) {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
-        Member targetPlayer = memberAdaptor.queryById(request.getTargetPlayerId());
+        // 데이터베이스 레벨에서 입장 처리
+        gameRoomService.joinGameRoom(player, gameRoom, request);
         
-        // 데이터베이스 레벨에서 강퇴 처리
-        gameRoomService.kickPlayer(host, targetPlayer, gameRoom);
-        
-        // WebSocket 레벨에서 실시간 강퇴 처리 (Redis + 실시간 알림)
-        gameRoomPlayerService.kickPlayer(gameRoomId, host.getId(), targetPlayer.getId());
+        // 주의: 실시간 알림은 WebSocket 구독 시점에서 GameRoomSessionManager.addSubscription()을 통해 처리됩니다.
+
     }
 
 }

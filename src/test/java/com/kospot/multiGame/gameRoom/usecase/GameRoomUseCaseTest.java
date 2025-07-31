@@ -1,6 +1,6 @@
 package com.kospot.multiGame.gameRoom.usecase;
 
-import com.kospot.application.multiplayer.gameroom.*;
+import com.kospot.application.multiplayer.gameroom.usecase.*;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;

@@ -101,7 +101,6 @@ public class GameRoom extends BaseTimeEntity {
 
     //validate
     public void validateJoinRoom(Member player, String inputPassword) {
-//        validateRoomCapacity(currentPlayerCount);
         if (privateRoom) {
             validatePassword(inputPassword);
         }
@@ -120,12 +119,6 @@ public class GameRoom extends BaseTimeEntity {
         validateHost(host);
         validateRoomStatus();
     }
-//
-//    private void validateRoomCapacity(int currentPlayerCount) {
-//        if (currentPlayerCount >= maxPlayers) {
-//            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
-//        }
-//    }
 
     public void validatePassword(String inputPassword) {
         if (isNotCorrectPassword(inputPassword)) {
