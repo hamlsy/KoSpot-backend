@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotification;
+import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotificationType;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gameRoom.vo.PlayerCountChangeDto;
 import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
@@ -181,7 +182,7 @@ public class GameRoomNotificationService {
             String destination = String.format(WebSocketChannelConstants.GAME_ROOM_PLAYER_LIST, roomId);
             
             GameRoomNotification notification = GameRoomNotification.builder()
-                    .type(GameRoomNotification.NotificationType.GAME_STARTED.name())
+                    .type(GameRoomNotificationType.GAME_STARTED.name())
                     .roomId(roomId)
                     .timestamp(System.currentTimeMillis())
                     .build();
