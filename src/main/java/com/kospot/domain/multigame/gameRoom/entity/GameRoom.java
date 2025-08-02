@@ -76,11 +76,9 @@ public class GameRoom extends BaseTimeEntity {
         this.teamCount = teamCount;
     }
 
-    //todo websocket ---
     public void join(Member player, String inputPassword) {
         validateJoinRoom(player, inputPassword);
         player.joinGameRoom(this.id);
-        // currentPlayerCount는 Redis에서 관리하므로 DB 업데이트는 별도 동기화에서 처리
     }
 
     public void leaveRoom(Member player) {
