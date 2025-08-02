@@ -21,6 +21,7 @@ public class CreateGameRoomUseCase {
 
     public GameRoomResponse execute(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = gameRoomService.createGameRoom(host, request);
+        host.joinGameRoom(gameRoom.getId());
         return GameRoomResponse.from(gameRoom);
     }
 

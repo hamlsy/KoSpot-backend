@@ -40,7 +40,6 @@ public class GameRoomRequest {
                     .playerMatchType(PlayerMatchType.fromKey(playerMatchTypeKey))
                     .status(GameRoomStatus.WAITING)
                     .privateRoom(privateRoom)
-                    .currentPlayerCount(1)
                     .build();
         }
     }
