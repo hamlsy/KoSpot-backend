@@ -1,12 +1,10 @@
 package com.kospot.infrastructure.websocket.domain.gameroom.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotification;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotificationType;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
-import com.kospot.domain.multigame.gameRoom.vo.PlayerCountChangeDto;
 import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,33 +87,6 @@ public class GameRoomNotificationService {
         }
     }
 
-    /**
-     * 플레이어 수 변경 이벤트 전송
-     */
-    public void notifyPlayerCountChanged(String roomId, int previousCount, int currentCount, String changeType) {
-        try {
-            PlayerCountChangeDto countChangeDto = PlayerCountChangeDto.builder()
-                    .roomId(roomId)
-                    .previousCount(previousCount)
-                    .currentCount(currentCount)
-                    .changeType(changeType)
-                    .timestamp(System.currentTimeMillis())
-                    .build();
-            
-            String message = objectMapper.writeValueAsString(countChangeDto);
-            String destination = WebSocketChannelConstants.PREFIX_GAME_ROOM + roomId + "/count";
-            
-            messagingTemplate.convertAndSend(destination, message);
-            
-            log.debug("Sent player count change notification - RoomId: {}, Previous: {}, Current: {}, Type: {}", 
-                    roomId, previousCount, currentCount, changeType);
-                    
-        } catch (JsonProcessingException e) {
-            log.error("Failed to serialize player count change event - RoomId: {}", roomId, e);
-        } catch (Exception e) {
-            log.error("Failed to send player count change notification - RoomId: {}", roomId, e);
-        }
-    }
 
     /**
      * 플레이어 입장 이벤트 (인원 수 포함)
@@ -123,10 +94,6 @@ public class GameRoomNotificationService {
     public void notifyPlayerJoinedWithCount(String roomId, GameRoomPlayerInfo playerInfo, int previousCount, int currentCount) {
         // 플레이어 입장 알림
         notifyPlayerJoined(roomId, playerInfo);
-        
-        // 인원 수 변경 알림
-        notifyPlayerCountChanged(roomId, previousCount, currentCount, 
-                PlayerCountChangeDto.ChangeType.JOIN.name());
     }
 
     /**
@@ -135,10 +102,7 @@ public class GameRoomNotificationService {
     public void notifyPlayerLeftWithCount(String roomId, GameRoomPlayerInfo playerInfo, int previousCount, int currentCount) {
         // 플레이어 퇴장 알림
         notifyPlayerLeft(roomId, playerInfo);
-        
-        // 인원 수 변경 알림
-        notifyPlayerCountChanged(roomId, previousCount, currentCount, 
-                PlayerCountChangeDto.ChangeType.LEAVE.name());
+
     }
 
     /**
@@ -147,10 +111,6 @@ public class GameRoomNotificationService {
     public void notifyPlayerKickedWithCount(String roomId, Member kickedMember, int previousCount, int currentCount) {
         // 플레이어 강퇴 알림
         notifyPlayerKicked(roomId, kickedMember);
-        
-        // 인원 수 변경 알림
-        notifyPlayerCountChanged(roomId, previousCount, currentCount, 
-                PlayerCountChangeDto.ChangeType.KICK.name());
     }
 
     /**
