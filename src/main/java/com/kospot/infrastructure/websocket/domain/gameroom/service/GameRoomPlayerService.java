@@ -184,7 +184,7 @@ public class GameRoomPlayerService {
         }
 
         // Redis 기반 실시간 인원 수 체크 (더 정확하고 빠름)
-        if (!gameRoomRedisService.canJoinRoom(roomId, gameRoom.getMaxPlayers())) {
+        if (!gameRoomRedisService.cannotJoinRoom(roomId, gameRoom.getMaxPlayers())) {
             throw new WebSocketHandler(ErrorStatus.GAME_ROOM_IS_FULL);
         }
 
@@ -224,7 +224,7 @@ public class GameRoomPlayerService {
      * 게임방 입장 가능 여부 확인
      */
     public boolean canJoinRoom(String roomId, int maxPlayers) {
-        return gameRoomRedisService.canJoinRoom(roomId, maxPlayers);
+        return gameRoomRedisService.cannotJoinRoom(roomId, maxPlayers);
     }
 
     /**

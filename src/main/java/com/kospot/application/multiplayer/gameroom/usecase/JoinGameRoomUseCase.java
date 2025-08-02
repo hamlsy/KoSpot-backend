@@ -8,7 +8,6 @@ import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomPlayerService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +34,15 @@ public class JoinGameRoomUseCase {
         eventPublisher.publishEvent(new GameRoomJoinEvent(gameRoom, player));
     }
 
-    // Read - then - check - V1
+    // Read - then - check - V1 todo refactor
     private void validateGameCapacityV1(GameRoom gameRoom) {
-        if(!gameRoomRedisService.canJoinRoom(gameRoom.getId().toString(), gameRoom.getMaxPlayers())) {
+        if(cannotJoinRoom(gameRoom)) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
         }
+    }
+
+    private boolean cannotJoinRoom(GameRoom gameRoom) {
+        return gameRoomRedisService.cannotJoinRoom(gameRoom.getId().toString(), gameRoom.getMaxPlayers())
     }
 
 }

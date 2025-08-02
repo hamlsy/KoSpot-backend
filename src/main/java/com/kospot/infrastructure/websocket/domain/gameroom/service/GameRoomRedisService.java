@@ -136,14 +136,14 @@ public class GameRoomRedisService {
      *  "Read-Then-Check"
      *  race condition 방지 안 됨 todo refactor
      */
-    public boolean canJoinRoom(String roomId, int maxPlayers) {
+    public boolean cannotJoinRoom(String roomId, int maxPlayers) {
         int currentCount = getCurrentPlayerCount(roomId);
         boolean canJoin = currentCount < maxPlayers;
         
         log.debug("Room capacity check - RoomId: {}, Current: {}, Max: {}, CanJoin: {}", 
                 roomId, currentCount, maxPlayers, canJoin);
         
-        return canJoin;
+        return !canJoin;
     }
 
     /**
