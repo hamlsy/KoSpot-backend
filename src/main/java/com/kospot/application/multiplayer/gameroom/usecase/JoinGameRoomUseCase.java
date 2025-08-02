@@ -42,7 +42,7 @@ public class JoinGameRoomUseCase {
     }
 
     private boolean cannotJoinRoom(GameRoom gameRoom) {
-        return gameRoomRedisService.cannotJoinRoom(gameRoom.getId().toString(), gameRoom.getMaxPlayers())
+        return gameRoomRedisService.cannotJoinRoom(gameRoom.getId().toString(), gameRoom.getMaxPlayers());
     }
 
 }
