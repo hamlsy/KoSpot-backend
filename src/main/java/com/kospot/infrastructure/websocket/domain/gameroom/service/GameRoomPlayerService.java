@@ -29,45 +29,6 @@ public class GameRoomPlayerService {
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService notificationService;
 
-    /**
-     * 플레이어를 게임방에 추가
-     */
-    public void addPlayerToRoom(WebSocketMemberPrincipal principal, Long roomId) {
-        try {
-            // 데이터베이스에서 멤버 정보 조회
-            Member member = memberAdaptor.queryById(principal.getMemberId());
-            GameRoom gameRoom = gameRoomAdaptor.queryById(roomId);
-
-            // 비즈니스 규칙 검증
-            validatePlayerJoin(member, gameRoom, roomId.toString());
-
-            // 입장 전 인원 수 확인
-            int previousCount = gameRoomRedisService.getCurrentPlayerCount(roomId.toString());
-
-            // Redis에 플레이어 정보 저장
-            GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(member);
-            gameRoomRedisService.addPlayerToRoom(roomId.toString(), playerInfo);
-
-            // 데이터베이스 업데이트 (멤버의 게임방 정보)
-            if (!member.isAlreadyInGameRoom()) {
-                member.joinGameRoom(roomId);
-            }
-
-            // 입장 후 인원 수 확인
-            int currentCount = gameRoomRedisService.getCurrentPlayerCount(roomId.toString());
-
-            // 실시간 알림 전송
-            notificationService.notifyPlayerJoinedWithCount(roomId.toString(), playerInfo, previousCount, currentCount);
-
-            log.info("Player successfully joined room - MemberId: {}, RoomId: {}, Nickname: {}", 
-                    member.getId(), roomId, member.getNickname());
-
-        } catch (Exception e) {
-            log.error("Failed to add player to room - MemberId: {}, RoomId: {}, Error: {}", 
-                    principal.getMemberId(), roomId, e.getMessage());
-            throw e;
-        }
-    }
 
     /**
      * 플레이어를 게임방에서 제거 (멤버 ID로)
