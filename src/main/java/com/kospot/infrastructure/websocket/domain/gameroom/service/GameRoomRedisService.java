@@ -176,7 +176,6 @@ public class GameRoomRedisService {
         return RoomPlayerStats.builder()
                 .roomId(roomId)
                 .currentPlayerCount(currentCount)
-                .bannedPlayerCount(bannedCount)
                 .lastUpdated(System.currentTimeMillis())
                 .build();
     }

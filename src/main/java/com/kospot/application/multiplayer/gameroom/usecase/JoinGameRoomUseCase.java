@@ -24,19 +24,19 @@ public class JoinGameRoomUseCase {
 
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
-    private final GameRoomPlayerService gameRoomPlayerService;
     private final GameRoomRedisService gameRoomRedisService;
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public void execute(Member player, Long gameRoomId, GameRoomRequest.Join request) {
+    public void executeV1(Member player, Long gameRoomId, GameRoomRequest.Join request) {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
-        validateGameCapacity(gameRoom);
+        validateGameCapacityV1(gameRoom);
         gameRoomService.joinGameRoom(player, gameRoom, request);
         eventPublisher.publishEvent(new GameRoomJoinEvent(gameRoom, player));
     }
 
-    private void validateGameCapacity(GameRoom gameRoom) {
+    // Read - then - check - V1
+    private void validateGameCapacityV1(GameRoom gameRoom) {
         if(!gameRoomRedisService.canJoinRoom(gameRoom.getId().toString(), gameRoom.getMaxPlayers())) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
         }

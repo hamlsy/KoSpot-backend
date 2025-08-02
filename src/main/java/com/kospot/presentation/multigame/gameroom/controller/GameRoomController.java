@@ -64,9 +64,9 @@ public class GameRoomController {
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
     @PostMapping("/{id}/join")
-    public ApiResponseDto<?> joinGameRoom(@CurrentMember Member member, @PathVariable("id") Long gameRoomId,
+    public ApiResponseDto<?> joinGameRoomV1(@CurrentMember Member member, @PathVariable("id") Long gameRoomId,
                                           @RequestBody GameRoomRequest.Join request) {
-        joinGameRoomUseCase.execute(member, gameRoomId, request);
+        joinGameRoomUseCase.executeV1(member, gameRoomId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

@@ -37,10 +37,8 @@ public class GameRoomService {
         return gameRoom;
     }
 
-    //todo 동시성 해결
     public void joinGameRoom(Member player, GameRoom gameRoom, GameRoomRequest.Join request) {
         gameRoom.join(player, request.getPassword());
-        //todo websocket 입장 알림 전송
     }
 
     public void leaveGameRoom(Member player, GameRoom gameRoom) {

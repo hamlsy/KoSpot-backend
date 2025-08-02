@@ -15,10 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameRoomNotification {
-    
-    /**
-     * 알림 타입 (PLAYER_JOINED, PLAYER_LEFT, PLAYER_KICKED, etc.)
-     */
+
     private String type;
 
     private String roomId;
@@ -26,10 +23,7 @@ public class GameRoomNotification {
     private GameRoomPlayerInfo playerInfo;
 
     private List<GameRoomPlayerInfo> players;
-    
-    /**
-     * 알림 발생 시간 (Unix timestamp)
-     */
+
     private Long timestamp;
 
     public static GameRoomNotification playerJoined(String roomId, GameRoomPlayerInfo playerInfo, List<GameRoomPlayerInfo> allPlayers) {

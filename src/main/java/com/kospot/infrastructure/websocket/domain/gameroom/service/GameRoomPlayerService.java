@@ -188,11 +188,6 @@ public class GameRoomPlayerService {
             throw new WebSocketHandler(ErrorStatus.GAME_ROOM_IS_FULL);
         }
 
-        // 강퇴된 플레이어인지 확인
-        if (gameRoomRedisService.isPlayerBanned(roomId, member.getId())) {
-            throw new WebSocketHandler(ErrorStatus.GAME_ROOM_CANNOT_JOIN_NOW);
-        }
-
         // 게임방 상태 확인 (대기 중인지) - 직접 비즈니스 로직 호출
         gameRoom.validateJoinRoom(member, ""); // 패스워드 검증은 별도 처리
     }

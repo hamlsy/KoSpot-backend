@@ -14,31 +14,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameRoomPlayerInfo {
-    
-    /**
-     * 플레이어(멤버) ID
-     */
+
     private Long memberId;
-    
-    /**
-     * 플레이어 닉네임
-     */
+
     private String nickname;
-    
-    /**
-     * 플레이어 마커 이미지 URL
-     */
+
     private String markerImageUrl;
-    
-    /**
-     * 호스트 여부
-     */
+
     private boolean isHost;
-    
-    /**
-     * 게임방 입장 시간 (Unix timestamp)
-     */
+
     private Long joinedAt;
+
+    //todo add player statistic
     
     /**
      * Member 엔티티로부터 GameRoomPlayerInfo 생성
@@ -64,4 +51,5 @@ public class GameRoomPlayerInfo {
         this.isHost = isHost;
         return this;
     }
+
 } 
