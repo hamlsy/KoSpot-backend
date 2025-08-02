@@ -1,6 +1,6 @@
 package com.kospot.domain.multigame.game.vo;
 
-import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
+import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,6 @@ public enum PlayerMatchType {
         return Arrays.stream(PlayerMatchType.values())
                 .filter(s -> s.name().equalsIgnoreCase(key))
                 .findFirst()
-                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.PLAYER_MATCH_TYPE_NOT_FOUND));
+                .orElseThrow(() -> new GameRoomHandler(ErrorStatus.PLAYER_MATCH_TYPE_NOT_FOUND));
     }
 } 

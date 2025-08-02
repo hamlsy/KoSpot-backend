@@ -33,11 +33,6 @@ public class GameRoomSessionManager {
             // 세션 정보 저장
             gameRoomRedisService.saveSessionInfo(sessionId, roomId, destination, principal.getMemberId());
 
-            // 게임방 플레이어 목록 구독인 경우 플레이어 추가
-            if (isPlayerListSubscription(destination)) {
-                gameRoomPlayerService.addPlayerToRoom(principal, Long.parseLong(roomId));
-            }
-
             log.info("Added WebSocket subscription - MemberId: {}, RoomId: {}, Destination: {}", 
                     principal.getMemberId(), roomId, destination);
 
