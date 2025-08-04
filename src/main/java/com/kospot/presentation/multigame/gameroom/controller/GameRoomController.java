@@ -38,8 +38,8 @@ public class GameRoomController {
 
     //todo search refactoring
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
-    @GetMapping("/{page}")
-    public ApiResponseDto<List<FindGameRoomResponse>> findGameRoom(@PathVariable("page") int page) {
+    @GetMapping("/")
+    public ApiResponseDto<List<FindGameRoomResponse>> findGameRoom(@RequestParam("page") int page) {
         return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(page));
     }
 

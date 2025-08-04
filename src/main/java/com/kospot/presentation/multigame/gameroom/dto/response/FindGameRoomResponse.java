@@ -15,7 +15,7 @@ public class FindGameRoomResponse {
     private String gameMode;
     private String gameType;
     private int maxPlayers;
-    private int currentPlayerCount;
+    private int currentPlayerCount; //todo redis
     private String hostNickname;
     private boolean privateRoom;
     private String gameRoomStatus;
@@ -27,7 +27,6 @@ public class FindGameRoomResponse {
                 .gameMode(gameRoom.getGameMode().name())
                 .gameType(gameRoom.getPlayerMatchType().name())
                 .maxPlayers(gameRoom.getMaxPlayers())
-                .currentPlayerCount(gameRoom.getCurrentPlayerCount())
                 .hostNickname(gameRoom.getHost().getNickname())
                 .privateRoom(gameRoom.isPrivateRoom())
                 .gameRoomStatus(gameRoom.getStatus().name())
