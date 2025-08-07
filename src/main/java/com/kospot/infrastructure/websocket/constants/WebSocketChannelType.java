@@ -8,11 +8,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * WebSocket 채널 타입 정의 및 권한 관리
- * - 인터셉터에서 구독 권한 검증에 사용
- * - 새로운 채널 타입 추가 시 이 Enum에만 추가하면 됨
- */
 @Getter
 @RequiredArgsConstructor
 public enum WebSocketChannelType {
@@ -22,13 +17,10 @@ public enum WebSocketChannelType {
     PERSONAL_MESSAGE("/user/", "개인 메시지", "Spring WebSocket 개인 메시지", ChannelAccessLevel.PRIVATE),
     GLOBAL_NOTIFICATION("/topic/notification/", "전역 알림", "시스템 공지사항 등", ChannelAccessLevel.PUBLIC);
 
-    /**
-     * 채널 접근 권한 레벨
-     */
     public enum ChannelAccessLevel {
-        PUBLIC,        // 누구나 접근 가능
-        AUTHENTICATED, // 인증된 사용자만
-        PRIVATE        // 개인 전용
+        PUBLIC,
+        AUTHENTICATED,
+        PRIVATE
     }
 
     private final String prefix;
@@ -36,18 +28,12 @@ public enum WebSocketChannelType {
     private final String description;
     private final ChannelAccessLevel accessLevel;
 
-    /**
-     * 모든 허용된 PREFIX 반환
-     */
     public static Set<String> getAllowedPrefixes() {
         return Arrays.stream(values())
                 .map(WebSocketChannelType::getPrefix)
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * 목적지가 유효한 채널 타입인지 확인
-     */
     public static boolean isValidDestination(String destination) {
         if (destination == null || destination.trim().isEmpty()) {
             return false;
@@ -57,9 +43,6 @@ public enum WebSocketChannelType {
                 .anyMatch(type -> destination.startsWith(type.getPrefix()));
     }
 
-    /**
-     * 목적지에 해당하는 채널 타입 반환
-     */
     public static Optional<WebSocketChannelType> fromDestination(String destination) {
         if (destination == null || destination.trim().isEmpty()) {
             return Optional.empty();
@@ -70,9 +53,6 @@ public enum WebSocketChannelType {
                 .findFirst();
     }
 
-    /**
-     * 채널 타입 이름으로 조회
-     */
     public static Optional<WebSocketChannelType> fromName(String name) {
         try {
             return Optional.of(WebSocketChannelType.valueOf(name.toUpperCase()));
