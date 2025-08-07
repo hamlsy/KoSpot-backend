@@ -1,8 +1,7 @@
-package com.kospot.infrastructure.websocket.session;
+package com.kospot.infrastructure.websocket.domain.gameroom.service;
 
+import com.kospot.domain.multigame.gameRoom.service.GameRoomPlayerService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomPlayerService;
-import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,7 @@ public class GameRoomSessionManager {
 
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomPlayerService gameRoomPlayerService;
+    //todo resolve circular reference
 
     /**
      * WebSocket 구독 처리 및 플레이어 추가

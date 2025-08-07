@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.domain.gameroom.service;
+package com.kospot.domain.multigame.gameRoom.service;
 
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
@@ -7,7 +7,8 @@ import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomNotificationService;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -28,7 +29,6 @@ public class GameRoomPlayerService {
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService notificationService;
-
 
     /**
      * 플레이어를 게임방에서 제거 (멤버 ID로)

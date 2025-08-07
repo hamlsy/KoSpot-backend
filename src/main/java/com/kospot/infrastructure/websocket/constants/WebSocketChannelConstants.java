@@ -1,5 +1,7 @@
 package com.kospot.infrastructure.websocket.constants;
 
+import java.util.Set;
+
 public final class WebSocketChannelConstants {
     private WebSocketChannelConstants() {
 
@@ -24,4 +26,13 @@ public final class WebSocketChannelConstants {
     //rate limit
     public static final int RATE_LIMIT = 40; // 1분에 허용되는 메시지 수
     public static final String RATE_LIMIT_KEY = "rate_limit:chat:";
+
+    public static final Set<String> ALLOWED_SUBSCRIPTION_PREFIXES = Set.of(
+        PREFIX_CHAT,
+        PREFIX_GAME_ROOM,
+            "/user/",
+            "/topic/notification/"
+    );
+
+
 }

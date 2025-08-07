@@ -60,8 +60,10 @@ public class MultiPhotoGameService {
         
         // 6. 모든 플레이어가 정답을 제출했는지 확인하고 라운드 종료 여부 결정
         GameRoom gameRoom = game.getGameRoom();
-        boolean allAnswered = round.allPlayersAnsweredCorrectly(gameRoom.getCurrentPlayerCount());
-        
+        //todo implement
+//        boolean allAnswered = round.allPlayersAnsweredCorrectly(gameRoom.getCurrentPlayerCount());
+        boolean allAnswered = true;
+
         if (allAnswered) {
             round.finishRound();
             

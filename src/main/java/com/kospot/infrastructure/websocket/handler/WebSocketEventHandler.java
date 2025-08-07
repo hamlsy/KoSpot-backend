@@ -1,7 +1,7 @@
 package com.kospot.infrastructure.websocket.handler;
 
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
-import com.kospot.infrastructure.websocket.session.GameRoomSessionManager;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomSessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
