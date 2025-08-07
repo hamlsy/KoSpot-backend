@@ -34,7 +34,7 @@ public class GameRoomNotificationService {
             List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
             GameRoomNotification notification = GameRoomNotification.playerJoined(roomId, playerInfo, allPlayers);
             
-            String destination = String.format(WebSocketChannelConstants.GAME_ROOM_PLAYER_LIST, roomId);
+            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
             messagingTemplate.convertAndSend(destination, notification);
             
             log.info("Sent player joined notification - RoomId: {}, PlayerId: {}, PlayerName: {}", 
@@ -54,7 +54,7 @@ public class GameRoomNotificationService {
             List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
             GameRoomNotification notification = GameRoomNotification.playerLeft(roomId, playerInfo, allPlayers);
             
-            String destination = String.format(WebSocketChannelConstants.GAME_ROOM_PLAYER_LIST, roomId);
+            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
             messagingTemplate.convertAndSend(destination, notification);
             
             log.info("Sent player left notification - RoomId: {}, PlayerId: {}, PlayerName: {}", 
@@ -75,7 +75,7 @@ public class GameRoomNotificationService {
             List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
             GameRoomNotification notification = GameRoomNotification.playerKicked(roomId, playerInfo, allPlayers);
             
-            String destination = String.format(WebSocketChannelConstants.GAME_ROOM_PLAYER_LIST, roomId);
+            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
             messagingTemplate.convertAndSend(destination, notification);
             
             log.info("Sent player kicked notification - RoomId: {}, PlayerId: {}, PlayerName: {}", 
@@ -139,7 +139,7 @@ public class GameRoomNotificationService {
      */
     public void notifyGameStarted(String roomId) {
         try {
-            String destination = String.format(WebSocketChannelConstants.GAME_ROOM_PLAYER_LIST, roomId);
+            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
             
             GameRoomNotification notification = GameRoomNotification.builder()
                     .type(GameRoomNotificationType.GAME_STARTED.name())
@@ -176,7 +176,7 @@ public class GameRoomNotificationService {
      */
     public void sendErrorMessage(String roomId, String errorCode, String errorMessage) {
         try {
-            String destination = String.format(WebSocketChannelConstants.GAME_ROOM_PLAYER_LIST, roomId);
+            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
             
             String message = String.format("{\"type\":\"ERROR\",\"errorCode\":\"%s\",\"message\":\"%s\",\"timestamp\":%d}", 
                     errorCode, errorMessage, System.currentTimeMillis());

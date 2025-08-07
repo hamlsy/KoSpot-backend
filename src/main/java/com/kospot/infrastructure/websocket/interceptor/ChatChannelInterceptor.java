@@ -119,9 +119,18 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
         Optional<WebSocketChannelType> channelType = WebSocketChannelType.fromDestination(destination);
         
         if (channelType.isPresent()) {
-            log.debug("Valid subscription - MemberId: {}, Destination: {}, ChannelType: {}", 
-                     principal.getMemberId(), destination, channelType.get().getDisplayName());
-            return;
+            WebSocketChannelType type = channelType.get();
+            
+            // 채널 타입별 세부 접근 권한 검증
+            if (type.canAccess(principal.getMemberId(), destination)) {
+                log.debug("Valid subscription - MemberId: {}, Destination: {}, ChannelType: {} [{}]", 
+                         principal.getMemberId(), destination, type.getDisplayName(), type.getAccessLevel());
+                return;
+            } else {
+                log.warn("Access denied - MemberId: {}, Destination: {}, ChannelType: {}, AccessLevel: {}", 
+                         principal.getMemberId(), destination, type.getDisplayName(), type.getAccessLevel());
+                throw new WebSocketHandler(ErrorStatus._FORBIDDEN);
+            }
         }
         
         log.warn("Invalid destination - MemberId: {}, Destination: {}, AllowedPrefixes: {}", 
