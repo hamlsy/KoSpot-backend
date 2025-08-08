@@ -12,6 +12,7 @@ import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomStatus;
 import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;
 import jakarta.persistence.EntityManager;
@@ -75,6 +76,9 @@ public class GameRoomUseCaseTest {
     //service
     @Autowired
     private GameRoomService gameRoomService;
+
+    @Autowired
+    private GameRoomRedisService gameRoomRedisService;
 
     @Autowired
     private EntityManager entityManager;
@@ -249,8 +253,8 @@ public class GameRoomUseCaseTest {
         leaveGameRoomUseCase.execute(player1, gameRoom.getId());
 
         //then
-        GameRoom updatedGameRoom = gameRoomAdaptor.queryById(gameRoom.getId());
-        assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
+        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        assertEquals(2, currentPlayerCount);
         assertNull(player1.getGameRoomId());
     }
 
@@ -264,7 +268,6 @@ public class GameRoomUseCaseTest {
                 .privateRoom(false)
                 .status(GameRoomStatus.WAITING)
                 .maxPlayers(4)
-                .currentPlayerCount(1)
                 .build();
     }
 
@@ -284,12 +287,13 @@ public class GameRoomUseCaseTest {
 
 
         //when
-        joinGameRoomUseCase.execute(member1, gameRoom.getId(), request);
-        joinGameRoomUseCase.execute(member2, gameRoom.getId(), request);
+        joinGameRoomUseCase.executeV1(member1, gameRoom.getId(), request);
+        joinGameRoomUseCase.executeV1(member2, gameRoom.getId(), request);
 
         //then
-        GameRoom updatedGameRoom = gameRoomAdaptor.queryById(gameRoom.getId());
-        assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
+        // Redis에서 현재 인원 수 확인
+        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        assertEquals(2, currentPlayerCount);
 
     }
 
@@ -308,13 +312,14 @@ public class GameRoomUseCaseTest {
                 .build();
 
         //when
-        joinGameRoomUseCase.execute(member1, gameRoom.getId(), request);
-        joinGameRoomUseCase.execute(member2, gameRoom.getId(), request);
-        joinGameRoomUseCase.execute(member3, gameRoom.getId(), request);
+        joinGameRoomUseCase.executeV1(member1, gameRoom.getId(), request);
+        joinGameRoomUseCase.executeV1(member2, gameRoom.getId(), request);
+        joinGameRoomUseCase.executeV1(member3, gameRoom.getId(), request);
 
         //then
-        log.info("" + gameRoom.getCurrentPlayerCount());
-        assertThrows(Exception.class, () -> joinGameRoomUseCase.execute(member5, gameRoom.getId(), request));
+        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        log.info("현재 인원 수: " + currentPlayerCount);
+        assertThrows(Exception.class, () -> joinGameRoomUseCase.executeV1(member5, gameRoom.getId(), request));
         assertNull(member5.getGameRoomId());
     }
 
@@ -336,12 +341,12 @@ public class GameRoomUseCaseTest {
 
 
         //when
-        joinGameRoomUseCase.execute(member1, gameRoom.getId(), request);
-        assertThrows(Exception.class, () -> joinGameRoomUseCase.execute(member2, gameRoom.getId(), request1));
+        joinGameRoomUseCase.executeV1(member1, gameRoom.getId(), request);
+        assertThrows(Exception.class, () -> joinGameRoomUseCase.executeV1(member2, gameRoom.getId(), request1));
 
         //then
-        GameRoom updatedGameRoom = gameRoomAdaptor.queryById(gameRoom.getId());
-        assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
+        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        assertEquals(2, currentPlayerCount);
     }
 
     @DisplayName("비밀번호 없는 방에 비밀번호를 입력했을 경우를 테스트합니다.")
@@ -356,11 +361,12 @@ public class GameRoomUseCaseTest {
                 .build();
 
         //when
-        assertDoesNotThrow(() -> joinGameRoomUseCase.execute(member1, gameRoom.getId(), request));
+        assertDoesNotThrow(() -> joinGameRoomUseCase.executeV1(member1, gameRoom.getId(), request));
 
         //then
         assertNotNull(member1.getGameRoomId());
-        assertEquals(2, gameRoom.getCurrentPlayerCount());
+        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        assertEquals(2, currentPlayerCount);
     }
 
     @DisplayName("이미 방에 참여한 플레이어가 다른 방에 참여하는 경우를 테스트합니다.")
@@ -379,13 +385,13 @@ public class GameRoomUseCaseTest {
                 .build();
 
         //when
-        joinGameRoomUseCase.execute(member1, gameRoom.getId(), request);
-//        assertThrows(Exception.class, () -> joinGameRoomUseCase.execute(member1, gameRoom1.getId(), request));
-        joinGameRoomUseCase.execute(member1, gameRoom1.getId(), request1);
+        joinGameRoomUseCase.executeV1(member1, gameRoom.getId(), request);
+//        assertThrows(Exception.class, () -> joinGameRoomUseCase.executeV1(member1, gameRoom1.getId(), request));
+        joinGameRoomUseCase.executeV1(member1, gameRoom1.getId(), request1);
 
         //then
-        GameRoom updatedGameRoom = gameRoomAdaptor.queryById(gameRoom.getId());
-        assertEquals(2, updatedGameRoom.getCurrentPlayerCount());
+        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        assertEquals(2, currentPlayerCount);
     }
 
     @DisplayName("게임 방 내부 조회 테스트")
@@ -398,7 +404,7 @@ public class GameRoomUseCaseTest {
         GameRoomRequest.Join request = GameRoomRequest.Join.builder()
                 .password(null)
                 .build();
-        joinGameRoomUseCase.execute(member, gameRoom.getId(), request);
+        joinGameRoomUseCase.executeV1(member, gameRoom.getId(), request);
 
         //then
         GameRoomDetailResponse response =  findGameRoomDetailUseCase.execute(gameRoom.getId());
@@ -425,7 +431,6 @@ public class GameRoomUseCaseTest {
                 .password(password)
                 .status(GameRoomStatus.WAITING)
                 .maxPlayers(4)
-                .currentPlayerCount(1)
                 .build();
     }
 

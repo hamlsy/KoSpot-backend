@@ -118,7 +118,7 @@ public class GameRoomNotificationService {
      */
     public void notifyRoomSettingsChanged(String roomId, String settingsType, Object newValue) {
         try {
-            String destination = String.format(WebSocketChannelConstants.GAME_ROOM_SETTINGS, roomId);
+            String destination = WebSocketChannelConstants.getGameRoomSettingsChannel(roomId);
             
             // 간단한 설정 변경 메시지 생성
             String message = String.format("{\"type\":\"SETTINGS_CHANGED\",\"settingsType\":\"%s\",\"newValue\":\"%s\",\"timestamp\":%d}", 
