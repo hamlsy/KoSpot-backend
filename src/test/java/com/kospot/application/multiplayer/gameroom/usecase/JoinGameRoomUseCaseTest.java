@@ -2,6 +2,8 @@ package com.kospot.application.multiplayer.gameroom.usecase;
 
 import com.kospot.application.multiplayer.gameroom.event.GameRoomEventHandler;
 import com.kospot.domain.game.vo.GameMode;
+import com.kospot.domain.image.entity.Image;
+import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.member.vo.Role;
@@ -48,6 +50,9 @@ class JoinGameRoomUseCaseTest {
 
     @Autowired
     private GameRoomRepository gameRoomRepository;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -294,11 +299,16 @@ class JoinGameRoomUseCaseTest {
     // Helper Methods
 
     private Member createAndSaveMember(String username, String nickname) {
+        Image image = Image.builder()
+                .imageUrl("http://example.com/image.png")
+                .build();
+        imageRepository.save(image);
         Member member = Member.builder()
                 .username(username)
                 .nickname(nickname)
                 .role(Role.USER)
                 .point(1000)
+                .equippedMarkerImage(image)
                 .build();
         return memberRepository.save(member);
     }
