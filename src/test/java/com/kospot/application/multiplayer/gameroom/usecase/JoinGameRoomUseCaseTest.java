@@ -14,6 +14,7 @@ import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomStatus;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
@@ -239,7 +240,8 @@ class JoinGameRoomUseCaseTest {
         // when & then
         assertThatThrownBy(() -> joinGameRoomUseCase.executeV1(testMember, nonExistentRoomId, joinRequest))
                 .isInstanceOf(GameRoomHandler.class)
-                .hasMessageContaining("NOT_FOUND");
+                .extracting(e -> ((GameRoomHandler) e).getCode())
+                .isEqualTo(ErrorStatus.GAME_ROOM_NOT_FOUND);
 
         log.info("✅ 존재하지 않는 방 예외 처리 완료");
     }
@@ -254,7 +256,8 @@ class JoinGameRoomUseCaseTest {
         // when & then
         assertThatThrownBy(() -> joinGameRoomUseCase.executeV1(testMember, testGameRoom.getId(), joinRequest))
                 .isInstanceOf(GameRoomHandler.class)
-                .hasMessageContaining("CANNOT_JOIN_NOW");
+                .extracting(e -> ((GameRoomHandler) e).getCode())
+                .isEqualTo(ErrorStatus.GAME_ROOM_CANNOT_JOIN_NOW);
 
         log.info("✅ 게임 진행 중 참가 방지 완료");
     }
