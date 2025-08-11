@@ -43,8 +43,6 @@ public class GameRoom extends BaseTimeEntity {
 
     private int teamCount;
 
-    private int currentPlayerCount;
-
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -78,16 +76,14 @@ public class GameRoom extends BaseTimeEntity {
         this.teamCount = teamCount;
     }
 
-    //todo websocket ---
     public void join(Member player, String inputPassword) {
         validateJoinRoom(player, inputPassword);
         player.joinGameRoom(this.id);
-        currentPlayerCount++;
     }
 
     public void leaveRoom(Member player) {
         player.leaveGameRoom();
-        currentPlayerCount--;
+        // currentPlayerCount는 Redis에서 관리하므로 DB 업데이트는 별도 동기화에서 처리
     }
 
     public void kickPlayer(Member host, Member player) {
@@ -103,7 +99,6 @@ public class GameRoom extends BaseTimeEntity {
 
     //validate
     public void validateJoinRoom(Member player, String inputPassword) {
-        validateRoomCapacity();
         if (privateRoom) {
             validatePassword(inputPassword);
         }
@@ -118,15 +113,9 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     public void validateGameStart(Member host) {
-        validatePlayerCount();
+//        validatePlayerCount(currentPlayerCount);
         validateHost(host);
         validateRoomStatus();
-    }
-
-    private void validateRoomCapacity() {
-        if (currentPlayerCount >= maxPlayers) {
-            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
-        }
     }
 
     public void validatePassword(String inputPassword) {
@@ -141,13 +130,13 @@ public class GameRoom extends BaseTimeEntity {
         }
     }
 
-    private void validatePlayerCount() {
+    private void validatePlayerCount(int currentPlayerCount) {
         if (currentPlayerCount < 2) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_NOT_ENOUGH_PLAYER);
         }
     }
 
-    public boolean isRoomEmpty() {
+    public boolean isRoomEmpty(int currentPlayerCount) {
         return currentPlayerCount == 0;
     }
 

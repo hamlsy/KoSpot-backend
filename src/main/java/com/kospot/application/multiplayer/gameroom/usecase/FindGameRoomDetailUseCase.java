@@ -1,8 +1,8 @@
-package com.kospot.application.multiplayer.gameroom;
+package com.kospot.application.multiplayer.gameroom.usecase;
 
 import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.presentation.multigame.gameRoom.dto.response.GameRoomDetailResponse;
+import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;

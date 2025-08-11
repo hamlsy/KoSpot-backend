@@ -95,7 +95,11 @@ public enum ErrorStatus implements BaseCode {
     // Chat Error(4341 ~ 4350)
     CHAT_RATE_LIMIT_EXCEEDED(BAD_REQUEST, 4341, "채팅 속도 제한을 초과했습니다."),
     CHAT_MESSAGE_CONTENT_EMPTY(BAD_REQUEST, 4342, "채팅 메시지 내용이 비어있습니다."),
-    CHAT_INVALID_CHANNEL_TYPE(BAD_REQUEST, 4343, "유효하지 않은 채널 타입입니다."),;
+    CHAT_INVALID_CHANNEL_TYPE(BAD_REQUEST, 4343, "유효하지 않은 채널 타입입니다."),
+
+    // WebSocket Channel Error (4351 ~ 4360)
+    INVALID_DESTINATION(BAD_REQUEST, 4351, "유효하지 않은 구독 목적지입니다."),
+    ;
 
 
     private final HttpStatus httpStatus;

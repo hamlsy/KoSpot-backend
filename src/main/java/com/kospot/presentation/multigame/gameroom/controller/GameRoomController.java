@@ -1,15 +1,15 @@
-package com.kospot.presentation.multigame.gameRoom.controller;
+package com.kospot.presentation.multigame.gameroom.controller;
 
 
-import com.kospot.application.multiplayer.gameroom.*;
+import com.kospot.application.multiplayer.gameroom.usecase.*;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
-import com.kospot.presentation.multigame.gameRoom.dto.request.GameRoomRequest;
-import com.kospot.presentation.multigame.gameRoom.dto.response.FindGameRoomResponse;
-import com.kospot.presentation.multigame.gameRoom.dto.response.GameRoomDetailResponse;
-import com.kospot.presentation.multigame.gameRoom.dto.response.GameRoomResponse;
+import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multigame.gameroom.dto.response.FindGameRoomResponse;
+import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;
+import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,8 +38,8 @@ public class GameRoomController {
 
     //todo search refactoring
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
-    @GetMapping("/{page}")
-    public ApiResponseDto<List<FindGameRoomResponse>> findGameRoom(@PathVariable("page") int page) {
+    @GetMapping("/")
+    public ApiResponseDto<List<FindGameRoomResponse>> findGameRoom(@RequestParam("page") int page) {
         return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(page));
     }
 
@@ -64,9 +64,9 @@ public class GameRoomController {
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
     @PostMapping("/{id}/join")
-    public ApiResponseDto<?> joinGameRoom(@CurrentMember Member member, @PathVariable("id") Long gameRoomId,
+    public ApiResponseDto<?> joinGameRoomV1(@CurrentMember Member member, @PathVariable("id") Long gameRoomId,
                                           @RequestBody GameRoomRequest.Join request) {
-        joinGameRoomUseCase.execute(member, gameRoomId, request);
+        joinGameRoomUseCase.executeV1(member, gameRoomId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

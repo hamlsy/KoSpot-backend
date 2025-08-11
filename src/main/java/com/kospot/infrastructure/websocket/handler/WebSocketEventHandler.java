@@ -1,6 +1,7 @@
 package com.kospot.infrastructure.websocket.handler;
 
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomSessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -19,6 +20,7 @@ public class WebSocketEventHandler {
 
     private final GameRoomService gameRoomService;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final GameRoomSessionManager gameRoomSessionManager;
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
@@ -38,8 +40,8 @@ public class WebSocketEventHandler {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
         try {
-            // todo 세션에서 사용자 정보 추출하여 게임방에서 제거
-//            gameRoomService.handlePlayerDisconnect(sessionId);
+            // 게임방에서 플레이어 제거
+            gameRoomSessionManager.removePlayerOnDisconnect(sessionId);
 
             // Redis에서 세션 정보 삭제
             redisTemplate.delete("websocket:session:" + sessionId);

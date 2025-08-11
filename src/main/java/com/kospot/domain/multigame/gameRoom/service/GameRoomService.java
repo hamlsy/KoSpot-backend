@@ -6,7 +6,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.game.vo.PlayerMatchType;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
-import com.kospot.presentation.multigame.gameRoom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,11 +20,11 @@ public class GameRoomService {
 
     private final MemberAdaptor memberAdaptor;
     private final GameRoomRepository gameRoomRepository;
+    private final GameRoomPlayerService gameRoomPlayerService;
 
     public GameRoom createGameRoom(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = request.toEntity();
         gameRoom.setHost(host);
-
         return gameRoomRepository.save(gameRoom);
     }
 
@@ -35,18 +35,16 @@ public class GameRoomService {
         return gameRoom;
     }
 
-    //todo 동시성 해결
     public void joinGameRoom(Member player, GameRoom gameRoom, GameRoomRequest.Join request) {
         gameRoom.join(player, request.getPassword());
-        //todo websocket 입장 알림 전송
     }
 
     public void leaveGameRoom(Member player, GameRoom gameRoom) {
         //플레이어가 나간 경우
         gameRoom.leaveRoom(player);
 
-        //방장이 나간 경우 또는 남은 플레이어가 없는 경우
-        if (gameRoom.isHost(player) || gameRoom.isRoomEmpty()) {
+        //방장이 나간 경우 또는 남은 플레이어가 없는 경우 (Redis 기반 실시간 확인)
+        if (gameRoom.isHost(player) || gameRoomPlayerService.isRoomEmpty(gameRoom.getId().toString())) {
             deleteRoom(gameRoom);
         }
 
