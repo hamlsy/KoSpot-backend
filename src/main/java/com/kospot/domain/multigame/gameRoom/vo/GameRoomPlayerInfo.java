@@ -1,6 +1,7 @@
 package com.kospot.domain.multigame.gameRoom.vo;
 
 import com.kospot.domain.member.entity.Member;
+import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomPlayerResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,7 +42,16 @@ public class GameRoomPlayerInfo {
                 .joinedAt(System.currentTimeMillis())
                 .build();
     }
-    
+
+    public GameRoomPlayerResponse toResponse(GameRoomPlayerInfo playerInfo) {
+        return GameRoomPlayerResponse.builder()
+                .memberId(playerInfo.getMemberId())
+                .nickname(playerInfo.getNickname())
+                .markerImageUrl(playerInfo.getMarkerImageUrl())
+                .isHost(playerInfo.isHost())
+                .build();
+    }
+
     /**
      * 호스트 여부 설정
      * @param isHost 호스트 여부

@@ -58,7 +58,7 @@ public class GameRoomController {
     //todo implement websocket ----
     @Operation(summary = "게임 방 내부 조회", description = "멀티 게임 방 내부를 조회합니다.")
     @GetMapping("/{id}")
-    public ApiResponseDto<GameRoomDetailResponse> getDetailGameRoom(@PathVariable("id") Long gameRoomId) {
+    public ApiResponseDto<GameRoomDetailResponse> getGameRoomDetail(@PathVariable("id") Long gameRoomId) {
         return ApiResponseDto.onSuccess(getGameRoomDetailUseCase.execute(gameRoomId));
     }
 
