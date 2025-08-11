@@ -58,7 +58,7 @@ public class GameRoomUseCaseTest {
     private LeaveGameRoomUseCase leaveGameRoomUseCase;
 
     @Autowired
-    private FindGameRoomDetailUseCase findGameRoomDetailUseCase;
+    private GetGameRoomDetailUseCase getGameRoomDetailUseCase;
 
     //repository, adaptor
     @Autowired
@@ -407,7 +407,7 @@ public class GameRoomUseCaseTest {
         joinGameRoomUseCase.executeV1(member, gameRoom.getId(), request);
 
         //then
-        GameRoomDetailResponse response =  findGameRoomDetailUseCase.execute(gameRoom.getId());
+        GameRoomDetailResponse response =  getGameRoomDetailUseCase.execute(gameRoom.getId());
         assertEquals("title", response.getTitle());
     }
 
