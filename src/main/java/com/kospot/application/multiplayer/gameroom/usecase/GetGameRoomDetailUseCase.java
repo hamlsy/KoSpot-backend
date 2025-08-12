@@ -1,11 +1,16 @@
 package com.kospot.application.multiplayer.gameroom.usecase;
 
 import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
+import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @UseCase
@@ -14,11 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class GetGameRoomDetailUseCase {
 
     private final GameRoomAdaptor gameRoomAdaptor;
+    private final GameRoomRedisService gameRoomRedisService;
 
     public GameRoomDetailResponse execute(Long gameRoomId) {
-        return GameRoomDetailResponse.from(
-                gameRoomAdaptor.queryById(gameRoomId)
-        );
+        GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
+        List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(gameRoomId.toString());
+
+        return GameRoomDetailResponse.from(gameRoom, players);
     }
 
 }
