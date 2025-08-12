@@ -19,8 +19,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
-@Tag(name = "Chat Websocket", description = "채팅 소켓")
-public class ChatController {
+@Tag(name = "Global Lobby Chat Websocket", description = "글로벌 로비 채팅 소켓")
+public class GlobalLobbyChatController {
 
     private final JoinGlobalLobbyUseCase joinGlobalLobbyUseCase;
     private final SendGlobalLobbyMessageUseCase sendGlobalLobbyMessageUseCase;
