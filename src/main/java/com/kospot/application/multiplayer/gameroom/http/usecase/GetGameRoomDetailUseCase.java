@@ -1,4 +1,4 @@
-package com.kospot.application.multiplayer.gameroom.usecase;
+package com.kospot.application.multiplayer.gameroom.http.usecase;
 
 import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;

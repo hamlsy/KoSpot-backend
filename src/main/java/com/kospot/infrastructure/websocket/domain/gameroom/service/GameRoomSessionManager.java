@@ -23,7 +23,6 @@ public class GameRoomSessionManager {
 
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomPlayerService gameRoomPlayerService;
-    //todo resolve circular reference
 
     /**
      * WebSocket 구독 처리 및 플레이어 추가
