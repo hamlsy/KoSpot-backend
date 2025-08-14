@@ -4,6 +4,7 @@ import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
+import com.kospot.infrastructure.websocket.session.service.WebSocketSessionService;
 import com.kospot.infrastructure.websocket.subscription.SubscriptionValidationManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     private final RedisTemplate<String, String> redisTemplate;
     private final TokenService tokenService;
     private final SubscriptionValidationManager subscriptionValidationManager;
+    private final WebSocketSessionService webSocketSessionService;
 
     @Override
     public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
@@ -96,7 +98,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         validateSubscriptionAccess(principal, destination);
         
         // 세션 정보 저장 (연결 해제 시 정리용)
-        saveSessionInfo(accessor.getSessionId(), destination, principal);
+        webSocketSessionService.saveSessionInfo(accessor.getSessionId(), destination, principal);
         
         log.info("Subscription registered - MemberId: {}, Destination: {}, SessionId: {}", 
                 principal.getMemberId(), destination, accessor.getSessionId());
@@ -108,7 +110,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     private void handleDisconnect(StompHeaderAccessor accessor) {
         String sessionId = accessor.getSessionId();
         if (sessionId != null) {
-            cleanupSession(sessionId);
+            webSocketSessionService.cleanupSession(sessionId);
             log.info("WebSocket disconnected - SessionId: {}", sessionId);
         }
     }
@@ -127,34 +129,6 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         
         log.debug("Subscription access granted - MemberId: {}, Destination: {}, ValidatorStats: {}", 
                 principal.getMemberId(), destination, subscriptionValidationManager.getValidationStatistics());
-    }
-
-    /**
-     * 세션 정보 저장 (Redis)
-     */
-    private void saveSessionInfo(String sessionId, String destination, WebSocketMemberPrincipal principal) {
-        try {
-            String sessionKey = "websocket:session:" + sessionId;
-            String sessionData = String.format(
-                "{\"memberId\":%d,\"destination\":\"%s\",\"timestamp\":%d}",
-                principal.getMemberId(), destination, System.currentTimeMillis()
-            );
-            redisTemplate.opsForValue().set(sessionKey, sessionData, Duration.ofHours(2));
-        } catch (Exception e) {
-            log.error("Failed to save session info - SessionId: {}", sessionId, e);
-        }
-    }
-
-    /**
-     * 세션 정보 정리
-     */
-    private void cleanupSession(String sessionId) {
-        try {
-            String sessionKey = "websocket:session:" + sessionId;
-            redisTemplate.delete(sessionKey);
-        } catch (Exception e) {
-            log.error("Failed to cleanup session - SessionId: {}", sessionId, e);
-        }
     }
 
     /**
