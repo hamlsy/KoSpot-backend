@@ -1,6 +1,7 @@
 package com.kospot.application.multiplayer.gameroom.usecase;
 
 import com.kospot.application.multiplayer.gameroom.event.GameRoomEventHandler;
+import com.kospot.application.multiplayer.gameroom.http.usecase.JoinGameRoomUseCase;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;

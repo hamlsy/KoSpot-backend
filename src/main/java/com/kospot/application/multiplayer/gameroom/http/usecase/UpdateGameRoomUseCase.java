@@ -1,7 +1,7 @@
-package com.kospot.application.multiplayer.gameroom.usecase;
-
+package com.kospot.application.multiplayer.gameroom.http.usecase;
 
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -15,14 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class CreateGameRoomUseCase {
+public class UpdateGameRoomUseCase {
 
+    private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
 
-    public GameRoomResponse execute(Member host, GameRoomRequest.Create request) {
-        GameRoom gameRoom = gameRoomService.createGameRoom(host, request);
-        host.joinGameRoom(gameRoom.getId());
-        return GameRoomResponse.from(gameRoom);
+    public GameRoomResponse execute(Member host, GameRoomRequest.Update request, Long gameRoomId) {
+        GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
+        return GameRoomResponse.from(gameRoomService.updateGameRoom(host, request, gameRoom));
     }
 
 }

@@ -4,7 +4,8 @@ import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.infrastructure.websocket.constants.WebSocketChannelType;
+import com.kospot.infrastructure.websocket.session.service.WebSocketSessionService;
+import com.kospot.infrastructure.websocket.subscription.SubscriptionValidationManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,22 +15,24 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
+import org.springframework.lang.NonNull;
 
 import java.time.Duration;
-import java.util.Optional;
 
 import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ChatChannelInterceptor implements ChannelInterceptor {
+public class WebSocketChannelInterceptor implements ChannelInterceptor {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final TokenService tokenService;
+    private final SubscriptionValidationManager subscriptionValidationManager;
+    private final WebSocketSessionService webSocketSessionService;
 
     @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel) {
+    public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
         if (accessor.getCommand() != null) {
@@ -91,11 +94,11 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
             throw new WebSocketHandler(ErrorStatus.INVALID_DESTINATION);
         }
         
-        // Enum 기반 구독 권한 검증
-        validateBasicSubscriptionAccess(principal, destination);
+        // 확장 가능한 구독 권한 검증
+        validateSubscriptionAccess(principal, destination);
         
         // 세션 정보 저장 (연결 해제 시 정리용)
-        saveSessionInfo(accessor.getSessionId(), destination, principal);
+        webSocketSessionService.saveSessionInfo(accessor.getSessionId(), destination, principal);
         
         log.info("Subscription registered - MemberId: {}, Destination: {}, SessionId: {}", 
                 principal.getMemberId(), destination, accessor.getSessionId());
@@ -107,63 +110,25 @@ public class ChatChannelInterceptor implements ChannelInterceptor {
     private void handleDisconnect(StompHeaderAccessor accessor) {
         String sessionId = accessor.getSessionId();
         if (sessionId != null) {
-            cleanupSession(sessionId);
+            webSocketSessionService.cleanupSession(sessionId);
             log.info("WebSocket disconnected - SessionId: {}", sessionId);
         }
     }
 
     /**
-     * Enum 기반 구독 권한 검증 (확장 가능한 방식)
+     * 확장 가능한 구독 권한 검증 (전략 패턴 적용)
      */
-    private void validateBasicSubscriptionAccess(WebSocketMemberPrincipal principal, String destination) {
-        Optional<WebSocketChannelType> channelType = WebSocketChannelType.fromDestination(destination);
+    private void validateSubscriptionAccess(WebSocketMemberPrincipal principal, String destination) {
+        boolean canSubscribe = subscriptionValidationManager.validateSubscription(principal, destination);
         
-        if (channelType.isPresent()) {
-            WebSocketChannelType type = channelType.get();
-            
-            // 채널 타입별 세부 접근 권한 검증
-            if (type.canAccess(principal.getMemberId(), destination)) {
-                log.debug("Valid subscription - MemberId: {}, Destination: {}, ChannelType: {} [{}]", 
-                         principal.getMemberId(), destination, type.getDisplayName(), type.getAccessLevel());
-                return;
-            } else {
-                log.warn("Access denied - MemberId: {}, Destination: {}, ChannelType: {}, AccessLevel: {}", 
-                         principal.getMemberId(), destination, type.getDisplayName(), type.getAccessLevel());
-                throw new WebSocketHandler(ErrorStatus._FORBIDDEN);
-            }
+        if (!canSubscribe) {
+            log.warn("Subscription access denied - MemberId: {}, Destination: {}, SupportedPrefixes: {}", 
+                    principal.getMemberId(), destination, subscriptionValidationManager.getSupportedPrefixes());
+            throw new WebSocketHandler(ErrorStatus._FORBIDDEN);
         }
         
-        log.warn("Invalid destination - MemberId: {}, Destination: {}, AllowedPrefixes: {}", 
-                 principal.getMemberId(), destination, WebSocketChannelType.getAllowedPrefixes());
-        throw new WebSocketHandler(ErrorStatus.INVALID_DESTINATION);
-    }
-
-    /**
-     * 세션 정보 저장 (Redis)
-     */
-    private void saveSessionInfo(String sessionId, String destination, WebSocketMemberPrincipal principal) {
-        try {
-            String sessionKey = "websocket:session:" + sessionId;
-            String sessionData = String.format(
-                "{\"memberId\":%d,\"destination\":\"%s\",\"timestamp\":%d}",
-                principal.getMemberId(), destination, System.currentTimeMillis()
-            );
-            redisTemplate.opsForValue().set(sessionKey, sessionData, Duration.ofHours(2));
-        } catch (Exception e) {
-            log.error("Failed to save session info - SessionId: {}", sessionId, e);
-        }
-    }
-
-    /**
-     * 세션 정보 정리
-     */
-    private void cleanupSession(String sessionId) {
-        try {
-            String sessionKey = "websocket:session:" + sessionId;
-            redisTemplate.delete(sessionKey);
-        } catch (Exception e) {
-            log.error("Failed to cleanup session - SessionId: {}", sessionId, e);
-        }
+        log.debug("Subscription access granted - MemberId: {}, Destination: {}, ValidatorStats: {}", 
+                principal.getMemberId(), destination, subscriptionValidationManager.getValidationStatistics());
     }
 
     /**

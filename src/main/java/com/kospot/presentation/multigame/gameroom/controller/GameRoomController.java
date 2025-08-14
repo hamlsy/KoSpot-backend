@@ -1,7 +1,7 @@
 package com.kospot.presentation.multigame.gameroom.controller;
 
 
-import com.kospot.application.multiplayer.gameroom.usecase.*;
+import com.kospot.application.multiplayer.gameroom.http.usecase.*;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
@@ -29,7 +29,7 @@ import java.util.List;
 public class GameRoomController {
 
     private final FindAllGameRoomUseCase findAllGameRoomUseCase;
-    private final FindGameRoomDetailUseCase findGameRoomDetailUseCase;
+    private final GetGameRoomDetailUseCase getGameRoomDetailUseCase;
     private final CreateGameRoomUseCase createGameRoomUseCase;
     private final UpdateGameRoomUseCase updateGameRoomUseCase;
     private final JoinGameRoomUseCase joinGameRoomUseCase;
@@ -58,8 +58,8 @@ public class GameRoomController {
     //todo implement websocket ----
     @Operation(summary = "게임 방 내부 조회", description = "멀티 게임 방 내부를 조회합니다.")
     @GetMapping("/{id}")
-    public ApiResponseDto<GameRoomDetailResponse> findDetailGameRoom(@PathVariable("id") Long gameRoomId) {
-        return ApiResponseDto.onSuccess(findGameRoomDetailUseCase.execute(gameRoomId));
+    public ApiResponseDto<GameRoomDetailResponse> getGameRoomDetail(@PathVariable("id") Long gameRoomId) {
+        return ApiResponseDto.onSuccess(getGameRoomDetailUseCase.execute(gameRoomId));
     }
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")

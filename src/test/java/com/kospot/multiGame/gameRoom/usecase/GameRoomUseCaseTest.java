@@ -1,6 +1,6 @@
 package com.kospot.multiGame.gameRoom.usecase;
 
-import com.kospot.application.multiplayer.gameroom.usecase.*;
+import com.kospot.application.multiplayer.gameroom.http.usecase.*;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
@@ -58,7 +58,7 @@ public class GameRoomUseCaseTest {
     private LeaveGameRoomUseCase leaveGameRoomUseCase;
 
     @Autowired
-    private FindGameRoomDetailUseCase findGameRoomDetailUseCase;
+    private GetGameRoomDetailUseCase getGameRoomDetailUseCase;
 
     //repository, adaptor
     @Autowired
@@ -407,7 +407,7 @@ public class GameRoomUseCaseTest {
         joinGameRoomUseCase.executeV1(member, gameRoom.getId(), request);
 
         //then
-        GameRoomDetailResponse response =  findGameRoomDetailUseCase.execute(gameRoom.getId());
+        GameRoomDetailResponse response =  getGameRoomDetailUseCase.execute(gameRoom.getId());
         assertEquals("title", response.getTitle());
     }
 
