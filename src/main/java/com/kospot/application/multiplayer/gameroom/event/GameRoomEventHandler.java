@@ -1,7 +1,10 @@
 package com.kospot.application.multiplayer.gameroom.event;
 
+import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.event.GameRoomJoinEvent;
+import com.kospot.domain.multigame.gameRoom.event.GameRoomLeaveEvent;
+import com.kospot.domain.multigame.gameRoom.service.GameRoomPlayerService;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomNotificationService;
@@ -18,6 +21,7 @@ public class GameRoomEventHandler {
 
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService gameRoomNotificationService;
+    private final GameRoomPlayerService gameRoomPlayerService;
 
     // can join room
     @EventListener
@@ -31,6 +35,17 @@ public class GameRoomEventHandler {
 
         // 입장 알림
         gameRoomNotificationService.notifyPlayerJoined(roomId, playerInfo);
+
+    }
+
+    // leave room
+    @EventListener
+    public void handleLeave(GameRoomLeaveEvent event) {
+        GameRoom gameRoom = event.getGameRoom();
+        Member player = event.getPlayer();
+
+        // WebSocket 레벨에서 실시간 퇴장 처리 (Redis + 실시간 알림)
+        gameRoomPlayerService.removePlayerFromRoom(gameRoom.getId(), player.getId());
 
     }
 
