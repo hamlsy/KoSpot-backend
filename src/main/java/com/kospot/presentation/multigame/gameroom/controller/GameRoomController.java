@@ -9,7 +9,6 @@ import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multigame.gameroom.dto.response.FindGameRoomResponse;
 import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;
-import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomPlayerResponse;
 import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,7 +35,6 @@ public class GameRoomController {
     private final JoinGameRoomUseCase joinGameRoomUseCase;
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
     private final KickPlayerUseCase kickPlayerUseCase;
-    private final GetGameRoomPlayersUseCase getGameRoomPlayersUseCase;
 
     //todo search refactoring
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
@@ -62,12 +60,6 @@ public class GameRoomController {
     @GetMapping("/{id}")
     public ApiResponseDto<GameRoomDetailResponse> getGameRoomDetail(@PathVariable("id") Long gameRoomId) {
         return ApiResponseDto.onSuccess(getGameRoomDetailUseCase.execute(gameRoomId));
-    }
-
-    @Operation(summary = "게임 방 내부 플레이어들 조회", description = "멀티 게임 방 내부 플레이어들을 조회합니다.")
-    @GetMapping("/{id}/players")
-    public ApiResponseDto<List<GameRoomPlayerResponse>> getGameRoomPlayers(@PathVariable("id") Long gameRoomId) {
-        return ApiResponseDto.onSuccess(getGameRoomPlayersUseCase.execute(gameRoomId));
     }
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
