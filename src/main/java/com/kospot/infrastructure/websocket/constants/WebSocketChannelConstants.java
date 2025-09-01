@@ -1,57 +1,26 @@
 package com.kospot.infrastructure.websocket.constants;
 
+import static com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
+
 /**
  * WebSocket 채널 경로 및 설정 상수
  * - 구체적인 메시지 전송 경로 생성에 사용
  * - 동적 채널 경로 생성 및 유틸리티 제공
  */
 public final class WebSocketChannelConstants {
-    private WebSocketChannelConstants() {
-        // Utility class - prevent instantiation
-    }
+        private WebSocketChannelConstants() {
+            // Utility class - prevent instantiation
+        }
 
-    // ==================== 기본 PREFIX ====================
-    private static final String PREFIX_TOPIC = "/topic/";
-    private static final String PREFIX_USER = "/user/";
+        // ==================== 기본 PREFIX ====================
+        public static final String PREFIX_TOPIC = "/topic/";
+        public static final String PREFIX_USER = "/user/";
 
-    // ==================== 글로벌 채팅 ====================
-    public static final String PREFIX_CHAT = PREFIX_TOPIC + "chat/";
-    public static final String GLOBAL_LOBBY_CHANNEL = PREFIX_CHAT + "lobby";
+        // ==================== 글로벌 채팅 ====================
+        public static final String PREFIX_CHAT = PREFIX_TOPIC + "chat/";
+        public static final String GLOBAL_LOBBY_CHANNEL = PREFIX_CHAT + "lobby";
 
-    // ==================== 게임방 채널 ====================
-    public static final String PREFIX_GAME_ROOM = PREFIX_TOPIC + "room/";
-    
-    /**
-     * 게임방 플레이어 목록 채널 생성
-     */
-    public static String getGameRoomPlayerListChannel(String roomId) {
-        validateId(roomId, "roomId");
-        return PREFIX_GAME_ROOM + roomId + "/playerList";
-    }
-    
-    /**
-     * 게임방 채팅 채널 생성
-     */
-    public static String getGameRoomChatChannel(String roomId) {
-        validateId(roomId, "roomId");
-        return PREFIX_GAME_ROOM + roomId + "/chat";
-    }
-    
-    /**
-     * 게임방 설정 채널 생성
-     */
-    public static String getGameRoomSettingsChannel(String roomId) {
-        validateId(roomId, "roomId");
-        return PREFIX_GAME_ROOM + roomId + "/settings";
-    }
-    
-    /**
-     * 게임방 상태 채널 생성
-     */
-    public static String getGameRoomStatusChannel(String roomId) {
-        validateId(roomId, "roomId");
-        return PREFIX_GAME_ROOM + roomId + "/status";
-    }
+
 
     // ==================== 게임 내부 채널 ====================
     public static final String PREFIX_GAME = PREFIX_TOPIC + "game/";

@@ -15,7 +15,6 @@ import java.time.Duration;
 public class WebSocketSessionService {
 
     private final RedisTemplate<String, String> redisTemplate;
-    private final ObjectMapper objectMapper;
 
     public void saveSessionInfo(String sessionId, String destination, WebSocketMemberPrincipal principal) {
         try {

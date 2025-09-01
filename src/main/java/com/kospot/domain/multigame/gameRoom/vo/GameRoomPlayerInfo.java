@@ -43,7 +43,7 @@ public class GameRoomPlayerInfo {
                 .build();
     }
 
-    public GameRoomPlayerResponse toResponse(GameRoomPlayerInfo playerInfo) {
+    public static GameRoomPlayerResponse toResponse(GameRoomPlayerInfo playerInfo) {
         return GameRoomPlayerResponse.builder()
                 .memberId(playerInfo.getMemberId())
                 .nickname(playerInfo.getNickname())

@@ -1,6 +1,11 @@
 package com.kospot.infrastructure.websocket.handler;
 
+import com.kospot.application.chat.lobby.usecase.LeaveGlobalLobbyUseCase;
+import com.kospot.application.multiplayer.gameroom.http.usecase.LeaveGameRoomUseCase;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
+import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
+import com.kospot.infrastructure.redis.service.SessionContextRedisService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomSessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,15 +17,23 @@ import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class WebSocketEventHandler {
 
-    private final GameRoomService gameRoomService;
     private final RedisTemplate<String, Object> redisTemplate;
-    private final GameRoomSessionManager gameRoomSessionManager;
+    private final SessionContextRedisService sessionContextRedisService;
+
+    //usecase
+    private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
+    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
+
+    //adaptor
+    private final MemberAdaptor memberAdaptor;
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
@@ -39,18 +52,34 @@ public class WebSocketEventHandler {
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
-        try {
-            // 게임방에서 플레이어 제거
-            gameRoomSessionManager.removePlayerOnDisconnect(sessionId);
+        String gameRoomId = sessionContextRedisService.getAttr(sessionId, "roomId", String.class);
+        String memberId = sessionContextRedisService.getAttr(sessionId, "memberId", String.class);
+        Member member = memberAdaptor.queryById(Long.parseLong(memberId));
 
-            // Redis에서 세션 정보 삭제
-            redisTemplate.delete("websocket:session:" + sessionId);
-
-        } catch (Exception e) {
-            log.error("WebSocket 연결 해제 처리 중 오류 발생 - SessionId: {}", sessionId, e);
+        // 비즈니스 로직 처리
+        List<Runnable> cleanUpTasks = Arrays.asList(
+                () -> leaveGlobalLobbyUseCase.execute(headerAccessor)
+        );
+        if (gameRoomId != null) {
+            cleanUpTasks.add(
+                    () -> leaveGameRoomUseCase.execute(member, Long.parseLong(gameRoomId))
+            );
         }
+        cleanUpTasks.parallelStream().forEach(Runnable::run);
+
+        // Redis에서 세션 정보 삭제
+        sessionContextRedisService.removeAttr(sessionId, "roomId");
+        sessionContextRedisService.removeAttr(sessionId, "memberId");
 
         log.info("WebSocket 연결 해제 - SessionId: {}", sessionId);
+    }
+
+    private void safeCleanup(Runnable cleanup, String errorMessage) {
+        try {
+            cleanup.run();
+        } catch (Exception e) {
+            log.debug(errorMessage, e);
+        }
     }
 
 }
