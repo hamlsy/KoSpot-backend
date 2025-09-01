@@ -7,6 +7,7 @@ import com.kospot.domain.multigame.gameRoom.event.GameRoomLeaveEvent;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomPlayerService;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
+import com.kospot.infrastructure.redis.service.SessionContextRedisService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class GameRoomEventHandler {
 
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService gameRoomNotificationService;
+    private final SessionContextRedisService sessionContextRedisService;
     private final GameRoomPlayerService gameRoomPlayerService;
 
     // can join room

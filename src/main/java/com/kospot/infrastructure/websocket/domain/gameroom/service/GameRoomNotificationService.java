@@ -6,12 +6,15 @@ import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotification;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotificationType;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
+import com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
 
 /**
  * 게임방 실시간 알림 전송 서비스
@@ -34,7 +37,7 @@ public class GameRoomNotificationService {
             List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
             GameRoomNotification notification = GameRoomNotification.playerJoined(roomId, playerInfo, allPlayers);
             
-            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
+            String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
             messagingTemplate.convertAndSend(destination, notification);
             
             log.info("Sent player joined notification - RoomId: {}, PlayerId: {}, PlayerName: {}", 
@@ -54,7 +57,7 @@ public class GameRoomNotificationService {
             List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
             GameRoomNotification notification = GameRoomNotification.playerLeft(roomId, playerInfo, allPlayers);
             
-            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
+            String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
             messagingTemplate.convertAndSend(destination, notification);
             
             log.info("Sent player left notification - RoomId: {}, PlayerId: {}, PlayerName: {}", 
@@ -75,7 +78,7 @@ public class GameRoomNotificationService {
             List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
             GameRoomNotification notification = GameRoomNotification.playerKicked(roomId, playerInfo, allPlayers);
             
-            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
+            String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
             messagingTemplate.convertAndSend(destination, notification);
             
             log.info("Sent player kicked notification - RoomId: {}, PlayerId: {}, PlayerName: {}", 
@@ -118,7 +121,7 @@ public class GameRoomNotificationService {
      */
     public void notifyRoomSettingsChanged(String roomId, String settingsType, Object newValue) {
         try {
-            String destination = WebSocketChannelConstants.getGameRoomSettingsChannel(roomId);
+            String destination = GameRoomChannelConstants.getGameRoomSettingsChannel(roomId);
             
             // 간단한 설정 변경 메시지 생성
             String message = String.format("{\"type\":\"SETTINGS_CHANGED\",\"settingsType\":\"%s\",\"newValue\":\"%s\",\"timestamp\":%d}", 
@@ -139,7 +142,7 @@ public class GameRoomNotificationService {
      */
     public void notifyGameStarted(String roomId) {
         try {
-            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
+            String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
             
             GameRoomNotification notification = GameRoomNotification.builder()
                     .type(GameRoomNotificationType.GAME_STARTED.name())
@@ -161,7 +164,7 @@ public class GameRoomNotificationService {
      */
     public void sendCustomMessage(String roomId, String channel, Object message) {
         try {
-            String destination = WebSocketChannelConstants.PREFIX_GAME_ROOM + roomId + "/" + channel;
+            String destination = PREFIX_GAME_ROOM + roomId + "/" + channel;
             messagingTemplate.convertAndSend(destination, message);
             
             log.debug("Sent custom message - RoomId: {}, Channel: {}", roomId, channel);
@@ -176,7 +179,7 @@ public class GameRoomNotificationService {
      */
     public void sendErrorMessage(String roomId, String errorCode, String errorMessage) {
         try {
-            String destination = WebSocketChannelConstants.getGameRoomPlayerListChannel(roomId);
+            String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
             
             String message = String.format("{\"type\":\"ERROR\",\"errorCode\":\"%s\",\"message\":\"%s\",\"timestamp\":%d}", 
                     errorCode, errorMessage, System.currentTimeMillis());

@@ -1,5 +1,7 @@
 package com.kospot.infrastructure.websocket.handler;
 
+import com.kospot.application.chat.lobby.usecase.LeaveGlobalLobbyUseCase;
+import com.kospot.application.multiplayer.gameroom.http.usecase.LeaveGameRoomUseCase;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomSessionManager;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,8 @@ import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -21,6 +25,10 @@ public class WebSocketEventHandler {
     private final GameRoomService gameRoomService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final GameRoomSessionManager gameRoomSessionManager;
+
+    //usecase
+    private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
+    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
@@ -39,18 +47,24 @@ public class WebSocketEventHandler {
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
-        try {
-            // 게임방에서 플레이어 제거
-            gameRoomSessionManager.removePlayerOnDisconnect(sessionId);
 
-            // Redis에서 세션 정보 삭제
-            redisTemplate.delete("websocket:session:" + sessionId);
+        List<Runnable> cleanUpTasks = Arrays.asList(
+                () -> leaveGlobalLobbyUseCase.execute(headerAccessor)
+//                () -> leaveGameRoomUseCase.execute()
+                // todo add sessionCleanUpUseCase
 
-        } catch (Exception e) {
-            log.error("WebSocket 연결 해제 처리 중 오류 발생 - SessionId: {}", sessionId, e);
-        }
+        );
+        cleanUpTasks.parallelStream().forEach(Runnable::run);
 
         log.info("WebSocket 연결 해제 - SessionId: {}", sessionId);
+    }
+
+    private void safeCleanup(Runnable cleanup, String errorMessage) {
+        try {
+            cleanup.run();
+        } catch (Exception e) {
+            log.debug(errorMessage, e);
+        }
     }
 
 }
