@@ -30,7 +30,7 @@ public class GameRoomWebSocketController {
 
     @SubscribeMapping("/room/{roomId}/playerList")
     public void subscribeGameRoomPlayerList(@DestinationVariable String roomId, SimpMessageHeaderAccessor headerAccessor) {
-        setGameRoomIdAttrUseCase.execute();
+        setGameRoomIdAttrUseCase.execute(roomId, headerAccessor);
     }
 
 }

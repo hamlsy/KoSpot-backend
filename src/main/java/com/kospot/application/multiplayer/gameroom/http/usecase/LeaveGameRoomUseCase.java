@@ -23,13 +23,13 @@ public class LeaveGameRoomUseCase {
     private final GameRoomService gameRoomService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public void execute(Member player, Long gameRoomId) {
+    public void execute(Member member, Long gameRoomId) {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
         
         // 데이터베이스 레벨에서 퇴장 처리
-        gameRoomService.leaveGameRoom(player, gameRoom);
+        gameRoomService.leaveGameRoom(member, gameRoom);
 
-        eventPublisher.publishEvent(new GameRoomLeaveEvent(gameRoom, player));
+        eventPublisher.publishEvent(new GameRoomLeaveEvent(gameRoom, member));
 
     }
 
