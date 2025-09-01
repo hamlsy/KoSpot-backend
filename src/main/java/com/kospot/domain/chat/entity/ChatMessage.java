@@ -27,9 +27,6 @@ public class ChatMessage extends BaseTimeEntity {
     private String messageId; // 메시지 ID, UUID 등으로 생성하여 중복 방지
 
     @Enumerated(EnumType.STRING)
-    private ChannelType channelType;
-
-    @Enumerated(EnumType.STRING)
     private MessageType messageType;
 
     private String nickname;

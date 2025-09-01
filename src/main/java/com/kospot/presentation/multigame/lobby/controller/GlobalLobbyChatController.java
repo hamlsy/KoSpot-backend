@@ -1,8 +1,8 @@
-package com.kospot.presentation.chat.controller;
+package com.kospot.presentation.multigame.lobby.controller;
 
-import com.kospot.application.chat.lobby.usecase.JoinGlobalLobbyUseCase;
-import com.kospot.application.chat.lobby.usecase.LeaveGlobalLobbyUseCase;
-import com.kospot.application.chat.lobby.usecase.SendGlobalLobbyMessageUseCase;
+import com.kospot.application.lobby.http.usecase.JoinGlobalLobbyUseCase;
+import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
+import com.kospot.application.lobby.websocket.usecase.SendGlobalLobbyMessageUseCase;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +28,7 @@ public class GlobalLobbyChatController {
 
     @MessageMapping("/chat.message.lobby")
     @SendTo("/topic/lobby")
-    public void sendGlobalMessage(@Valid @Payload ChatMessageDto dto, SimpMessageHeaderAccessor headerAccessor) {
+    public void sendGlobalMessage(@Valid @Payload ChatMessageDto.Lobby dto, SimpMessageHeaderAccessor headerAccessor) {
         sendGlobalLobbyMessageUseCase.execute(dto, headerAccessor);
     }
 

@@ -1,6 +1,6 @@
-package com.kospot.application.chat.lobby.usecase;
+package com.kospot.application.lobby.websocket.usecase;
 
-import com.kospot.application.chat.lobby.command.SendGlobalLobbyMessageCommand;
+import com.kospot.application.lobby.websocket.command.SendGlobalLobbyMessageCommand;
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.service.ChatService;
 import com.kospot.domain.chat.vo.ChannelType;
@@ -23,7 +23,7 @@ public class SendGlobalLobbyMessageUseCase {
     private final ChatService chatService;
 
     @Async("chatRoomExecutor")
-    public void execute(ChatMessageDto dto, SimpMessageHeaderAccessor headerAccessor) {
+    public void execute(ChatMessageDto.Lobby dto, SimpMessageHeaderAccessor headerAccessor) {
         WebSocketMemberPrincipal webSocketMemberPrincipal = (WebSocketMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
         SendGlobalLobbyMessageCommand command = SendGlobalLobbyMessageCommand.from(dto, webSocketMemberPrincipal);
         validateCommand(command);
@@ -36,7 +36,6 @@ public class SendGlobalLobbyMessageUseCase {
                 .memberId(command.getMemberId())
                 .nickname(command.getNickname())
                 .messageType(MessageType.GLOBAL_CHAT)
-                .channelType(ChannelType.GLOBAL_LOBBY)
                 .content(command.getContent())
                 .build();
     }

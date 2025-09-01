@@ -2,6 +2,7 @@ package com.kospot.domain.chat.service;
 
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.repository.ChatMessageRepository;
+import com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants;
 import com.kospot.presentation.chat.dto.response.ChatMessageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,10 +51,34 @@ public class ChatService {
 
             log.debug("Global chat message processed: {} by user {}", chatMessage.getMessageId(), chatMessage.getMemberId());
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error processing global chat message for user: " + chatMessage.getMemberId(), e);
         }
 
+    }
+
+    public void sendGameRoomMessage(ChatMessage chatMessage) {
+        try {
+            chatMessage.generateMessageId();
+            //todo to constants
+            String deduplicationKey = "dedup:" + chatMessage.getMessageId();
+            Boolean isNew = redisTemplate.opsForValue().setIfAbsent(deduplicationKey, "1", Duration.ofMinutes(5));
+            if (!Boolean.TRUE.equals(isNew)) {
+                log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
+                return;
+            }
+            //save message todo -> batch save
+            chatMessageRepository.save(chatMessage);
+
+            //convert response dto
+            ChatMessageResponse.GlobalLobby response = ChatMessageResponse.GlobalLobby.from(chatMessage);
+
+            //send to game room channel
+            String destination = GameRoomChannelConstants.getGameRoomChatChannel(chatMessage.getGameRoomId().toString());
+            simpMessagingTemplate.convertAndSend(destination, response);
+        } catch (Exception e) {
+            log.error("Error processing global chat message for user: " + chatMessage.getMemberId(), e);
+        }
     }
 
     public void joinGlobalLobby(Long memberId, String sessionId) {
