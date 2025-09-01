@@ -12,10 +12,12 @@ import com.kospot.domain.multigame.game.vo.PlayerMatchType;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.event.GameRoomJoinEvent;
 import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
+import com.kospot.domain.multigame.gameRoom.service.GameRoomPlayerService;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomStatus;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.redis.service.SessionContextRedisService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
@@ -61,6 +63,12 @@ class JoinGameRoomUseCaseTest {
 
     @Autowired
     private GameRoomNotificationService gameRoomNotificationService;
+
+    @Autowired
+    private SessionContextRedisService sessionContextRedisService;
+
+    @Autowired
+    private GameRoomPlayerService gameRoomPlayerService;
 
     private Member testMember;
     private Member hostMember;
@@ -111,7 +119,7 @@ class JoinGameRoomUseCaseTest {
     @DisplayName("이벤트 처리 후 Redis 상태 검증 테스트")
     void shouldUpdateRedisAfterEventProcessing() {
         // given
-        GameRoomEventHandler eventHandler = new GameRoomEventHandler(gameRoomRedisService, gameRoomNotificationService);
+        GameRoomEventHandler eventHandler = new GameRoomEventHandler(gameRoomRedisService, gameRoomNotificationService, sessionContextRedisService, gameRoomPlayerService);
 
         // when
         joinGameRoomUseCase.executeV1(testMember, testGameRoom.getId(), joinRequest);
@@ -270,7 +278,7 @@ class JoinGameRoomUseCaseTest {
         Member member1 = createAndSaveMember("member1", "멤버1");
         Member member2 = createAndSaveMember("member2", "멤버2");
 
-        GameRoomEventHandler eventHandler = new GameRoomEventHandler(gameRoomRedisService, gameRoomNotificationService);
+        GameRoomEventHandler eventHandler = new GameRoomEventHandler(gameRoomRedisService, gameRoomNotificationService, sessionContextRedisService, gameRoomPlayerService);
 
         // when
         // 두 명의 플레이어가 순차적으로 참가
