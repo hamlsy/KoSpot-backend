@@ -1,12 +1,10 @@
 package com.kospot.infrastructure.websocket.handler;
 
-import com.kospot.application.chat.lobby.usecase.LeaveGlobalLobbyUseCase;
+import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.application.multiplayer.gameroom.http.usecase.LeaveGameRoomUseCase;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
 import com.kospot.infrastructure.redis.service.SessionContextRedisService;
-import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomSessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

@@ -6,18 +6,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class ChatMessageDto {
 
-    @NotEmpty
-    private String content;
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Lobby {
+        @NotEmpty
+        private String content;
+    }
 
-    private Long roomId;
-    private String teamId;
-    private Long gamePlayerId;
-    private Long gameRoomId;
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GameRoom {
+        @NotEmpty
+        private String content;
+        private String teamId;
+    }
 
 }

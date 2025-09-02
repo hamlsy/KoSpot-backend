@@ -2,6 +2,7 @@ package com.kospot.domain.chat.service;
 
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.repository.ChatMessageRepository;
+import com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants;
 import com.kospot.presentation.chat.dto.response.ChatMessageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.function.Function;
 
 import static com.kospot.infrastructure.redis.constants.RedisKeyConstants.REDIS_LOBBY_USERS;
 import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
@@ -26,55 +28,48 @@ public class ChatService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     public void sendGlobalLobbyMessage(ChatMessage chatMessage) {
-        // 디버깅용 try-catch
+        processAndSend(
+                chatMessage,
+                ChatMessageResponse.GlobalLobby::from,  // DTO 변환 전략
+                PREFIX_CHAT + GLOBAL_LOBBY_CHANNEL      // 채널
+        );
+    }
+
+    public <T> void processAndSend(
+            ChatMessage chatMessage,
+            Function<ChatMessage, T> dtoMapper,
+            String destination
+    ) {
         try {
             chatMessage.generateMessageId();
-            //todo to constants
-            String deduplicationKey = "dedup:" + chatMessage.getMessageId();
-            Boolean isNew = redisTemplate.opsForValue().setIfAbsent(deduplicationKey, "1", Duration.ofMinutes(5));
-            if (!Boolean.TRUE.equals(isNew)) {
-                log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
-                return;
-            }
-            //save message todo -> batch save
+            validateMessageDeduplication(chatMessage);
+
             chatMessageRepository.save(chatMessage);
 
-            //convert response dto
-            ChatMessageResponse.GlobalLobby response = ChatMessageResponse.GlobalLobby.from(chatMessage);
+            T response = dtoMapper.apply(chatMessage);
 
-            //send to global lobby channel
-            simpMessagingTemplate.convertAndSend(PREFIX_CHAT + GLOBAL_LOBBY_CHANNEL, response);
+            simpMessagingTemplate.convertAndSend(destination, response);
 
-//            todo 비동기 DB 저장을 위해 배치 큐에 추가 (성능 최적화)
-//            batchService.addMessageToQueue(chatMessageDto);
-
-            log.debug("Global chat message processed: {} by user {}", chatMessage.getMessageId(), chatMessage.getMemberId());
-
-        }catch (Exception e) {
-            log.error("Error processing global chat message for user: " + chatMessage.getMemberId(), e);
-        }
-
-    }
-
-    public void joinGlobalLobby(Long memberId, String sessionId) {
-        try {
-            // 활성 사용자 세션 관리, 중복 세션 방지 -> field: memberId
-            redisTemplate.opsForHash().put(REDIS_LOBBY_USERS, sessionId, memberId.toString());
-            log.info("User {} joined global lobby with session {}", sessionId, memberId);
+            log.debug("Chat message processed: {} by user {}", chatMessage.getMessageId(), chatMessage.getMemberId());
 
         } catch (Exception e) {
-            log.error("Error joining global lobby for user: " + memberId, e);
+            log.error("Error processing chat message for user: " + chatMessage.getMemberId(), e);
         }
     }
 
-    public void leaveGlobalLobby(String sessionId) {
-        try {
-            // 세션 정보 정리
-            redisTemplate.opsForHash().delete(REDIS_LOBBY_USERS, sessionId);
-            log.info("User {} left global lobby", sessionId);
-
-        } catch (Exception e) {
-            log.error("Error leaving global lobby for user: " + sessionId, e);
+    private void validateMessageDeduplication(ChatMessage chatMessage) {
+        String deduplicationKey = "dedup:" + chatMessage.getMessageId();
+        Boolean isNew = redisTemplate.opsForValue().setIfAbsent(deduplicationKey, "1", Duration.ofMinutes(5));
+        if (!Boolean.TRUE.equals(isNew)) {
+            log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
         }
     }
+
+    public void sendGameRoomMessage(ChatMessage chatMessage) {
+        processAndSend(chatMessage,
+                ChatMessageResponse.GameRoom::from,
+                GameRoomChannelConstants.getGameRoomChatChannel(chatMessage.getGameRoomId().toString())
+        );
+    }
+
 }

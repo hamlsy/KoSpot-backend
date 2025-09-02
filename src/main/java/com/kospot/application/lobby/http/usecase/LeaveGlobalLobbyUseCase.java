@@ -1,7 +1,7 @@
-package com.kospot.application.chat.lobby.usecase;
+package com.kospot.application.lobby.http.usecase;
 
-import com.kospot.domain.chat.service.ChatService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.websocket.domain.lobby.service.LobbyPresenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -11,11 +11,10 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 @RequiredArgsConstructor
 public class LeaveGlobalLobbyUseCase {
 
-    private final ChatService chatService;
+    private final LobbyPresenceService lobbyPresenceService;
 
     public void execute(SimpMessageHeaderAccessor headerAccessor) {
-        //todo session 기반으로 변경
-        chatService.leaveGlobalLobby(headerAccessor.getSessionId());
+        lobbyPresenceService.leaveGlobalLobby(headerAccessor.getSessionId());
     }
 
 }

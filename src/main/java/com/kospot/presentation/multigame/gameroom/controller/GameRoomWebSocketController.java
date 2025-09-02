@@ -1,11 +1,15 @@
 package com.kospot.presentation.multigame.gameroom.controller;
 
+import com.kospot.application.multiplayer.gameroom.websocket.usecase.SendGameRoomMessageUseCase;
 import com.kospot.application.multiplayer.gameroom.websocket.usecase.SetGameRoomIdAttrUseCase;
+import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Controller;
 public class GameRoomWebSocketController {
 
     private final SetGameRoomIdAttrUseCase setGameRoomIdAttrUseCase;
+    private final SendGameRoomMessageUseCase sendGameRoomMessageUseCase;
 
     /**
      * 게임방 채팅 메시지 전송
@@ -24,8 +29,8 @@ public class GameRoomWebSocketController {
      * 구독: /topic/room/123/chat
      */
     @MessageMapping("/room.{roomId}.chat")
-    public void sendRoomMessage(){
-
+    public void sendRoomMessage(@DestinationVariable String roomId, @Valid @Payload ChatMessageDto.GameRoom dto, SimpMessageHeaderAccessor headerAccessor){
+        sendGameRoomMessageUseCase.execute(roomId, dto, headerAccessor);
     }
 
     @SubscribeMapping("/room/{roomId}/playerList")

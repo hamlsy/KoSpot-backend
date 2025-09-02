@@ -2,6 +2,7 @@ package com.kospot.infrastructure.websocket.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 
 import java.security.Principal;
 
@@ -16,5 +17,9 @@ public class WebSocketMemberPrincipal implements Principal {
     @Override
     public String getName() {
         return String.valueOf(memberId);
+    }
+
+    public static WebSocketMemberPrincipal getPrincipal(SimpMessageHeaderAccessor headerAccessor) {
+        return (WebSocketMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
     }
 }

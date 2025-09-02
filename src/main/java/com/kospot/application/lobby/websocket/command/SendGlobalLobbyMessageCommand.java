@@ -1,4 +1,4 @@
-package com.kospot.application.chat.lobby.command;
+package com.kospot.application.lobby.websocket.command;
 
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
@@ -13,7 +13,7 @@ public class SendGlobalLobbyMessageCommand {
     private String nickname;
     private String content;
 
-    public static SendGlobalLobbyMessageCommand from(ChatMessageDto dto, WebSocketMemberPrincipal principal) {
+    public static SendGlobalLobbyMessageCommand from(ChatMessageDto.Lobby dto, WebSocketMemberPrincipal principal) {
         return SendGlobalLobbyMessageCommand.builder()
                 .memberId(principal.getMemberId())
                 .nickname(principal.getNickname())

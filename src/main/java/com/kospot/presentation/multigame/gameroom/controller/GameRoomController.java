@@ -55,7 +55,6 @@ public class GameRoomController {
         return ApiResponseDto.onSuccess(updateGameRoomUseCase.execute(member, request, gameRoomId));
     }
 
-    //todo implement websocket ----
     @Operation(summary = "게임 방 내부 조회", description = "멀티 게임 방 내부를 조회합니다.")
     @GetMapping("/{id}")
     public ApiResponseDto<GameRoomDetailResponse> getGameRoomDetail(@PathVariable("id") Long gameRoomId) {
@@ -83,6 +82,5 @@ public class GameRoomController {
         kickPlayerUseCase.execute(member, request, gameRoomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
-    //---- todo websocket
 
 }

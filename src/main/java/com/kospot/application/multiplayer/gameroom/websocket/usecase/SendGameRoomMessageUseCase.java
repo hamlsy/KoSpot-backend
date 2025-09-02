@@ -1,6 +1,6 @@
-package com.kospot.application.chat.lobby.usecase;
+package com.kospot.application.multiplayer.gameroom.websocket.usecase;
 
-import com.kospot.application.chat.lobby.command.SendGlobalLobbyMessageCommand;
+import com.kospot.application.multiplayer.gameroom.websocket.command.SendGameRoomMessageCommand;
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.service.ChatService;
 import com.kospot.domain.chat.vo.ChannelType;
@@ -11,45 +11,42 @@ import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.scheduling.annotation.Async;
 
-@Slf4j
 @UseCase
 @RequiredArgsConstructor
-public class SendGlobalLobbyMessageUseCase {
+public class SendGameRoomMessageUseCase {
 
     private final ChatService chatService;
 
     @Async("chatRoomExecutor")
-    public void execute(ChatMessageDto dto, SimpMessageHeaderAccessor headerAccessor) {
-        WebSocketMemberPrincipal webSocketMemberPrincipal = (WebSocketMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
-        SendGlobalLobbyMessageCommand command = SendGlobalLobbyMessageCommand.from(dto, webSocketMemberPrincipal);
+    public void execute(String roomId, ChatMessageDto.GameRoom dto, SimpMessageHeaderAccessor headerAccessor) {
+        WebSocketMemberPrincipal webSocketMemberPrincipal = WebSocketMemberPrincipal.getPrincipal(headerAccessor);
+        SendGameRoomMessageCommand command = SendGameRoomMessageCommand.from(roomId, dto, webSocketMemberPrincipal);
         validateCommand(command);
-        ChatMessage chatMessage = createChatMessage(command);
-        chatService.sendGlobalLobbyMessage(chatMessage);
+        ChatMessage chatMessage = createGameRoomChatMessage(command);
+        chatService.sendGameRoomMessage(chatMessage);
     }
 
-    private ChatMessage createChatMessage(SendGlobalLobbyMessageCommand command) {
+    private ChatMessage createGameRoomChatMessage(SendGameRoomMessageCommand command) {
         return ChatMessage.builder()
                 .memberId(command.getMemberId())
                 .nickname(command.getNickname())
-                .messageType(MessageType.GLOBAL_CHAT)
-                .channelType(ChannelType.GLOBAL_LOBBY)
+                .messageType(MessageType.GAME_ROOM_CHAT)
+                .gameRoomId(command.getGameRoomId())
                 .content(command.getContent())
                 .build();
     }
 
-    private void validateCommand(SendGlobalLobbyMessageCommand command) {
+    private void validateCommand(SendGameRoomMessageCommand command) {
         validateContent(command);
         // todo Additional validations
     }
 
-    private void validateContent(SendGlobalLobbyMessageCommand command) {
+    private void validateContent(SendGameRoomMessageCommand command) {
         if (command.getContent() == null || command.getContent().isEmpty()) {
             throw new WebSocketHandler(ErrorStatus.CHAT_MESSAGE_CONTENT_EMPTY);
         }
     }
-
 }
