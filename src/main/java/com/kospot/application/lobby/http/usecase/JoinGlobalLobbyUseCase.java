@@ -15,7 +15,7 @@ public class JoinGlobalLobbyUseCase {
     private final LobbyPresenceService lobbyPresenceService;
 
     public void execute(SimpMessageHeaderAccessor headerAccessor) {
-        WebSocketMemberPrincipal webSocketMemberPrincipal = (WebSocketMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
+        WebSocketMemberPrincipal webSocketMemberPrincipal = WebSocketMemberPrincipal.getPrincipal(headerAccessor);
         lobbyPresenceService.joinGlobalLobby(webSocketMemberPrincipal.getMemberId(), headerAccessor.getSessionId());
     }
 

@@ -22,7 +22,7 @@ public class SendGameRoomMessageUseCase {
 
     @Async("chatRoomExecutor")
     public void execute(String roomId, ChatMessageDto.GameRoom dto, SimpMessageHeaderAccessor headerAccessor) {
-        WebSocketMemberPrincipal webSocketMemberPrincipal = (WebSocketMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
+        WebSocketMemberPrincipal webSocketMemberPrincipal = WebSocketMemberPrincipal.getPrincipal(headerAccessor);
         SendGameRoomMessageCommand command = SendGameRoomMessageCommand.from(roomId, dto, webSocketMemberPrincipal);
         validateCommand(command);
         ChatMessage chatMessage = createGameRoomChatMessage(command);
