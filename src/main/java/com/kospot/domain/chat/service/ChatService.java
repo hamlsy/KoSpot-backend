@@ -62,7 +62,6 @@ public class ChatService {
         Boolean isNew = redisTemplate.opsForValue().setIfAbsent(deduplicationKey, "1", Duration.ofMinutes(5));
         if (!Boolean.TRUE.equals(isNew)) {
             log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
-            return;
         }
     }
 
@@ -73,25 +72,4 @@ public class ChatService {
         );
     }
 
-    public void joinGlobalLobby(Long memberId, String sessionId) {
-        try {
-            // 활성 사용자 세션 관리, 중복 세션 방지 -> field: memberId
-            redisTemplate.opsForHash().put(REDIS_LOBBY_USERS, sessionId, memberId.toString());
-            log.info("User {} joined global lobby with session {}", sessionId, memberId);
-
-        } catch (Exception e) {
-            log.error("Error joining global lobby for user: " + memberId, e);
-        }
-    }
-
-    public void leaveGlobalLobby(String sessionId) {
-        try {
-            // 세션 정보 정리
-            redisTemplate.opsForHash().delete(REDIS_LOBBY_USERS, sessionId);
-            log.info("User {} left global lobby", sessionId);
-
-        } catch (Exception e) {
-            log.error("Error leaving global lobby for user: " + sessionId, e);
-        }
-    }
 }
