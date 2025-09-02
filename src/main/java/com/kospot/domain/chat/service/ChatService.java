@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.function.Function;
 
 import static com.kospot.infrastructure.redis.constants.RedisKeyConstants.REDIS_LOBBY_USERS;
 import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
@@ -27,58 +28,49 @@ public class ChatService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     public void sendGlobalLobbyMessage(ChatMessage chatMessage) {
-        // 디버깅용 try-catch
+        processAndSend(
+                chatMessage,
+                ChatMessageResponse.GlobalLobby::from,  // DTO 변환 전략
+                PREFIX_CHAT + GLOBAL_LOBBY_CHANNEL      // 채널
+        );
+    }
+
+    public <T> void processAndSend(
+            ChatMessage chatMessage,
+            Function<ChatMessage, T> dtoMapper,
+            String destination
+    ) {
         try {
             chatMessage.generateMessageId();
-            //todo to constants
-            String deduplicationKey = "dedup:" + chatMessage.getMessageId();
-            Boolean isNew = redisTemplate.opsForValue().setIfAbsent(deduplicationKey, "1", Duration.ofMinutes(5));
-            if (!Boolean.TRUE.equals(isNew)) {
-                log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
-                return;
-            }
-            //save message todo -> batch save
+            validateMessageDeduplication(chatMessage);
+
             chatMessageRepository.save(chatMessage);
 
-            //convert response dto
-            ChatMessageResponse.GlobalLobby response = ChatMessageResponse.GlobalLobby.from(chatMessage);
+            T response = dtoMapper.apply(chatMessage);
 
-            //send to global lobby channel
-            simpMessagingTemplate.convertAndSend(PREFIX_CHAT + GLOBAL_LOBBY_CHANNEL, response);
+            simpMessagingTemplate.convertAndSend(destination, response);
 
-//            todo 비동기 DB 저장을 위해 배치 큐에 추가 (성능 최적화)
-//            batchService.addMessageToQueue(chatMessageDto);
-
-            log.debug("Global chat message processed: {} by user {}", chatMessage.getMessageId(), chatMessage.getMemberId());
+            log.debug("Chat message processed: {} by user {}", chatMessage.getMessageId(), chatMessage.getMemberId());
 
         } catch (Exception e) {
-            log.error("Error processing global chat message for user: " + chatMessage.getMemberId(), e);
+            log.error("Error processing chat message for user: " + chatMessage.getMemberId(), e);
         }
+    }
 
+    private void validateMessageDeduplication(ChatMessage chatMessage) {
+        String deduplicationKey = "dedup:" + chatMessage.getMessageId();
+        Boolean isNew = redisTemplate.opsForValue().setIfAbsent(deduplicationKey, "1", Duration.ofMinutes(5));
+        if (!Boolean.TRUE.equals(isNew)) {
+            log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
+            return;
+        }
     }
 
     public void sendGameRoomMessage(ChatMessage chatMessage) {
-        try {
-            chatMessage.generateMessageId();
-            //todo to constants
-            String deduplicationKey = "dedup:" + chatMessage.getMessageId();
-            Boolean isNew = redisTemplate.opsForValue().setIfAbsent(deduplicationKey, "1", Duration.ofMinutes(5));
-            if (!Boolean.TRUE.equals(isNew)) {
-                log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
-                return;
-            }
-            //save message todo -> batch save
-            chatMessageRepository.save(chatMessage);
-
-            //convert response dto
-            ChatMessageResponse.GlobalLobby response = ChatMessageResponse.GlobalLobby.from(chatMessage);
-
-            //send to game room channel
-            String destination = GameRoomChannelConstants.getGameRoomChatChannel(chatMessage.getGameRoomId().toString());
-            simpMessagingTemplate.convertAndSend(destination, response);
-        } catch (Exception e) {
-            log.error("Error processing global chat message for user: " + chatMessage.getMemberId(), e);
-        }
+        processAndSend(chatMessage,
+                ChatMessageResponse.GameRoom::from,
+                GameRoomChannelConstants.getGameRoomChatChannel(chatMessage.getGameRoomId().toString())
+        );
     }
 
     public void joinGlobalLobby(Long memberId, String sessionId) {
