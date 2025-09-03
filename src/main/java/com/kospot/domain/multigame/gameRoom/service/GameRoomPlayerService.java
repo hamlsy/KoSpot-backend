@@ -109,9 +109,6 @@ public class GameRoomPlayerService {
                 throw new WebSocketHandler(ErrorStatus._BAD_REQUEST);
             }
 
-            // 강퇴 전 인원 수 확인
-            int previousCount = gameRoomRedisService.getCurrentPlayerCount(roomId.toString());
-
             // 강퇴 목록에 추가
             gameRoomRedisService.addPlayerToBannedList(roomId.toString(), targetMemberId);
 
@@ -119,11 +116,8 @@ public class GameRoomPlayerService {
             gameRoomRedisService.removePlayerFromRoom(roomId.toString(), targetMemberId);
             targetMember.leaveGameRoom();
 
-            // 강퇴 후 인원 수 확인
-            int currentCount = gameRoomRedisService.getCurrentPlayerCount(roomId.toString());
-
             // 실시간 알림 전송
-            notificationService.notifyPlayerKickedWithCount(roomId.toString(), targetMember, previousCount, currentCount);
+            notificationService.notifyPlayerKicked(roomId.toString(), targetMember);
 
             log.info("Player successfully kicked - HostId: {}, TargetId: {}, RoomId: {}", 
                     hostMemberId, targetMemberId, roomId);
@@ -228,8 +222,7 @@ public class GameRoomPlayerService {
                 newHost.setHost(true);
                 gameRoomRedisService.addPlayerToRoom(roomId.toString(), newHost);
                 
-                // 방장 변경 알림
-                notificationService.notifyRoomSettingsChanged(roomId.toString(), "HOST_CHANGED", newHost.getNickname());
+                // todo 방장 변경 알림
                 
                 log.info("Host changed - RoomId: {}, NewHostId: {}, NewHostName: {}", 
                         roomId, newHost.getMemberId(), newHost.getNickname());

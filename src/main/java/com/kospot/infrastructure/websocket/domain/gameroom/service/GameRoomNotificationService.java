@@ -91,15 +91,6 @@ public class GameRoomNotificationService {
         }
     }
 
-
-    /**
-     * 플레이어 입장 이벤트 (인원 수 포함)
-     */
-    public void notifyPlayerJoinedWithCount(String roomId, GameRoomPlayerInfo playerInfo, int previousCount, int currentCount) {
-        // 플레이어 입장 알림
-        notifyPlayerJoined(roomId, playerInfo);
-    }
-
     /**
      * 플레이어 퇴장 이벤트 (인원 수 포함)
      */
@@ -107,14 +98,6 @@ public class GameRoomNotificationService {
         // 플레이어 퇴장 알림
         notifyPlayerLeft(roomId, playerInfo);
 
-    }
-
-    /**
-     * 플레이어 강퇴 이벤트 (인원 수 포함)
-     */
-    public void notifyPlayerKickedWithCount(String roomId, Member kickedMember, int previousCount, int currentCount) {
-        // 플레이어 강퇴 알림
-        notifyPlayerKicked(roomId, kickedMember);
     }
 
     /**
