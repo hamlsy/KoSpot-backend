@@ -4,6 +4,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
+import com.kospot.domain.multigame.gameRoom.vo.GameRoomUpdateInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
@@ -23,11 +24,21 @@ public class UpdateGameRoomUseCase {
     private final GameRoomService gameRoomService;
     private final GameRoomNotificationService gameRoomNotificationService;
 
-    //todo websocket
     public GameRoomResponse execute(Member host, GameRoomRequest.Update request, Long gameRoomId) {
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
-        gameRoomNotificationService.notifyRoomSettingsChanged(gameRoomId.toString(), request);
-        return GameRoomResponse.from(gameRoomService.updateGameRoom(host, request, gameRoom));
+        GameRoomUpdateInfo updateInfo = mapToUpdateInfo(request);
+        gameRoomNotificationService.notifyRoomSettingsChanged(gameRoomId.toString(), updateInfo);
+        return GameRoomResponse.from(gameRoomService.updateGameRoom(host, updateInfo, gameRoom));
+    }
+
+    public GameRoomUpdateInfo mapToUpdateInfo (GameRoomRequest.Update request) {
+        return GameRoomUpdateInfo.builder()
+                .title(request.getTitle())
+                .gameModeKey(request.getGameModeKey())
+                .playerMatchTypeKey(request.getPlayerMatchTypeKey())
+                .privateRoom(request.isPrivateRoom())
+                .password(request.getPassword())
+                .build();
     }
 
 }

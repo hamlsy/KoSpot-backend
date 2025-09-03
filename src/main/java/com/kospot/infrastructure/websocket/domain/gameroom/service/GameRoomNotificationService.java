@@ -5,8 +5,10 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotification;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotificationType;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
+import com.kospot.domain.multigame.gameRoom.vo.GameRoomUpdateInfo;
 import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
 import com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants;
+import com.kospot.presentation.multigame.gameroom.dto.event.GameRoomUpdateEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -119,21 +121,20 @@ public class GameRoomNotificationService {
     /**
      * 방 설정 변경 알림
      */
-    public void notifyRoomSettingsChanged(String roomId, String settingsType, Object newValue) {
+    public void notifyRoomSettingsChanged(String roomId, GameRoomUpdateInfo updateInfo) {
         try {
+
+            GameRoomUpdateEvent event = GameRoomUpdateEvent.of(updateInfo);
             String destination = GameRoomChannelConstants.getGameRoomSettingsChannel(roomId);
-            
-            // 간단한 설정 변경 메시지 생성
-            String message = String.format("{\"type\":\"SETTINGS_CHANGED\",\"settingsType\":\"%s\",\"newValue\":\"%s\",\"timestamp\":%d}", 
-                    settingsType, newValue, System.currentTimeMillis());
+            String message = objectMapper.writeValueAsString(event);
             
             messagingTemplate.convertAndSend(destination, message);
             
-            log.info("Sent room settings change notification - RoomId: {}, SettingsType: {}", roomId, settingsType);
+            log.info("Sent room settings change notification - RoomId: {}", roomId);
             
         } catch (Exception e) {
-            log.error("Failed to send room settings change notification - RoomId: {}, SettingsType: {}", 
-                    roomId, settingsType, e);
+            log.error("Failed to send room settings change notification - RoomId: {}",
+                    roomId, e);
         }
     }
 
