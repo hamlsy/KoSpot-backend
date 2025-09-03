@@ -6,9 +6,8 @@ import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotification;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotificationType;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomUpdateInfo;
-import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
 import com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants;
-import com.kospot.presentation.multigame.gameroom.dto.event.GameRoomUpdateEvent;
+import com.kospot.presentation.multigame.gameroom.dto.message.GameRoomUpdateMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -124,9 +123,9 @@ public class GameRoomNotificationService {
     public void notifyRoomSettingsChanged(String roomId, GameRoomUpdateInfo updateInfo) {
         try {
 
-            GameRoomUpdateEvent event = GameRoomUpdateEvent.of(updateInfo);
+            GameRoomUpdateMessage updateMessage = GameRoomUpdateMessage.of(updateInfo);
             String destination = GameRoomChannelConstants.getGameRoomSettingsChannel(roomId);
-            String message = objectMapper.writeValueAsString(event);
+            String message = objectMapper.writeValueAsString(updateMessage);
             
             messagingTemplate.convertAndSend(destination, message);
             

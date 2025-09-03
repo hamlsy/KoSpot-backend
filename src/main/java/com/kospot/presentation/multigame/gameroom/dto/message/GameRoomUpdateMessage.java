@@ -1,4 +1,4 @@
-package com.kospot.presentation.multigame.gameroom.dto.event;
+package com.kospot.presentation.multigame.gameroom.dto.message;
 
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomUpdateInfo;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class GameRoomUpdateEvent {
+public class GameRoomUpdateMessage {
 
     private final String roomId;
     private final String title;
@@ -15,8 +15,8 @@ public class GameRoomUpdateEvent {
     private final boolean privateRoom;
     private final int teamCount;
 
-    public static GameRoomUpdateEvent of(GameRoomUpdateInfo vo) {
-        return GameRoomUpdateEvent.builder()
+    public static GameRoomUpdateMessage of(GameRoomUpdateInfo vo) {
+        return GameRoomUpdateMessage.builder()
                 .roomId(vo.getRoomId())
                 .title(vo.getTitle())
                 .gameModeKey(vo.getGameModeKey())
