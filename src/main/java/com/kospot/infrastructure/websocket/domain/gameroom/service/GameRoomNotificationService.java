@@ -30,76 +30,50 @@ public class GameRoomNotificationService {
     private final ObjectMapper objectMapper;
     private final GameRoomRedisService gameRoomRedisService;
 
-    /**
-     * 플레이어 입장 알림 전송
-     */
+    private void sendNotification(String roomId, Object notification, String channel) {
+        try {
+            String destination = GameRoomChannelConstants.PREFIX_GAME_ROOM + roomId + "/" + channel;
+            messagingTemplate.convertAndSend(destination, notification);
+        } catch (Exception e) {
+            log.error("Failed to send notification - RoomId: {}, Channel: {}", roomId, channel, e);
+        }
+    }
+
+    /** ---------------- 개별 이벤트 ---------------- **/
+
     public void notifyPlayerJoined(String roomId, GameRoomPlayerInfo playerInfo) {
-        try {
-            List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
-            GameRoomNotification notification = GameRoomNotification.playerJoined(roomId, playerInfo, allPlayers);
-            
-            String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
-            messagingTemplate.convertAndSend(destination, notification);
-            
-            log.info("Sent player joined notification - RoomId: {}, PlayerId: {}, PlayerName: {}", 
-                    roomId, playerInfo.getMemberId(), playerInfo.getNickname());
-                    
-        } catch (Exception e) {
-            log.error("Failed to send player joined notification - RoomId: {}, PlayerId: {}", 
-                    roomId, playerInfo.getMemberId(), e);
-        }
+        GameRoomNotification notification = GameRoomNotification.playerJoined(roomId, playerInfo);
+        sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+        notifyPlayerListUpdated(roomId);
+        log.info("Player joined - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 
-    /**
-     * 플레이어 퇴장 알림 전송
-     */
     public void notifyPlayerLeft(String roomId, GameRoomPlayerInfo playerInfo) {
+        GameRoomNotification notification = GameRoomNotification.playerLeft(roomId, playerInfo);
+        sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+        notifyPlayerListUpdated(roomId);
+        log.info("Player left - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
+    }
+
+    public void notifyPlayerKicked(String roomId, GameRoomPlayerInfo playerInfo) {
+        GameRoomNotification notification = GameRoomNotification.playerKicked(roomId, playerInfo);
+        sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+        notifyPlayerListUpdated(roomId);
+        log.info("Player kicked - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
+    }
+
+    /** ---------------- 전체 리스트 갱신 이벤트 ---------------- **/
+
+    public void notifyPlayerListUpdated(String roomId) {
         try {
             List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
-            GameRoomNotification notification = GameRoomNotification.playerLeft(roomId, playerInfo, allPlayers);
-            
-            String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
-            messagingTemplate.convertAndSend(destination, notification);
-            
-            log.info("Sent player left notification - RoomId: {}, PlayerId: {}, PlayerName: {}", 
-                    roomId, playerInfo.getMemberId(), playerInfo.getNickname());
-                    
+            GameRoomNotification notification = GameRoomNotification.playerListUpdated(roomId, allPlayers);
+            sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+            log.info("Player list updated - RoomId: {}, PlayerCount: {}", roomId, allPlayers.size());
         } catch (Exception e) {
-            log.error("Failed to send player left notification - RoomId: {}, PlayerId: {}", 
-                    roomId, playerInfo.getMemberId(), e);
+            log.error("Failed to send player list updated - RoomId: {}", roomId, e);
         }
     }
-
-    /**
-     * 플레이어 강퇴 알림 전송
-     */
-    public void notifyPlayerKicked(String roomId, Member kickedMember) {
-        try {
-            GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(kickedMember);
-            List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
-            GameRoomNotification notification = GameRoomNotification.playerKicked(roomId, playerInfo, allPlayers);
-            
-            String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
-            messagingTemplate.convertAndSend(destination, notification);
-            
-            log.info("Sent player kicked notification - RoomId: {}, PlayerId: {}, PlayerName: {}", 
-                    roomId, kickedMember.getId(), kickedMember.getNickname());
-                    
-        } catch (Exception e) {
-            log.error("Failed to send player kicked notification - RoomId: {}, PlayerId: {}", 
-                    roomId, kickedMember.getId(), e);
-        }
-    }
-
-    /**
-     * 플레이어 퇴장 이벤트 (인원 수 포함)
-     */
-    public void notifyPlayerLeftWithCount(String roomId, GameRoomPlayerInfo playerInfo, int previousCount, int currentCount) {
-        // 플레이어 퇴장 알림
-        notifyPlayerLeft(roomId, playerInfo);
-
-    }
-
     /**
      * 방 설정 변경 알림
      */
@@ -109,11 +83,11 @@ public class GameRoomNotificationService {
             GameRoomUpdateMessage updateMessage = GameRoomUpdateMessage.of(updateInfo);
             String destination = GameRoomChannelConstants.getGameRoomSettingsChannel(roomId);
             String message = objectMapper.writeValueAsString(updateMessage);
-            
+
             messagingTemplate.convertAndSend(destination, message);
-            
+
             log.info("Sent room settings change notification - RoomId: {}", roomId);
-            
+
         } catch (Exception e) {
             log.error("Failed to send room settings change notification - RoomId: {}",
                     roomId, e);

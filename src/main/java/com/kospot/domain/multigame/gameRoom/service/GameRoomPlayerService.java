@@ -35,9 +35,6 @@ public class GameRoomPlayerService {
      */
     public void removePlayerFromRoom(Long roomId, Long memberId) {
         try {
-            // 퇴장 전 인원 수 확인
-            int previousCount = gameRoomRedisService.getCurrentPlayerCount(roomId.toString());
-            
             // Redis에서 플레이어 정보 조회 후 삭제
             GameRoomPlayerInfo playerInfo = gameRoomRedisService.removePlayerFromRoom(roomId.toString(), memberId);
             
@@ -45,12 +42,8 @@ public class GameRoomPlayerService {
                 // 데이터베이스 업데이트
                 Member member = memberAdaptor.queryById(memberId);
                 member.leaveGameRoom();
-
-                // 퇴장 후 인원 수 확인
-                int currentCount = gameRoomRedisService.getCurrentPlayerCount(roomId.toString());
-
                 // 실시간 알림 전송
-                notificationService.notifyPlayerLeftWithCount(roomId.toString(), playerInfo, previousCount, currentCount);
+                notificationService.notifyPlayerLeft(roomId.toString(), playerInfo);
 
                 log.info("Player successfully left room - MemberId: {}, RoomId: {}, Nickname: {}", 
                         memberId, roomId, playerInfo.getNickname());
@@ -116,8 +109,10 @@ public class GameRoomPlayerService {
             gameRoomRedisService.removePlayerFromRoom(roomId.toString(), targetMemberId);
             targetMember.leaveGameRoom();
 
+            GameRoomPlayerInfo targetPlayerInfo = GameRoomPlayerInfo.from(targetMember);
+
             // 실시간 알림 전송
-            notificationService.notifyPlayerKicked(roomId.toString(), targetMember);
+            notificationService.notifyPlayerKicked(roomId.toString(), targetPlayerInfo);
 
             log.info("Player successfully kicked - HostId: {}, TargetId: {}, RoomId: {}", 
                     hostMemberId, targetMemberId, roomId);
