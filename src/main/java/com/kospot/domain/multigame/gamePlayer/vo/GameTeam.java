@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 @Getter
 @RequiredArgsConstructor
 public enum GameTeam {
-    RED, BLUE, GREEN, YELLOW, NONE;
+    RED, BLUE, GREEN, YELLOW;
 
     public static GameTeam fromString(String name) {
         if (name == null || name.trim().isEmpty()) {
