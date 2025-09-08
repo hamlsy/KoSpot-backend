@@ -111,6 +111,28 @@ public class GameRoomRedisService {
         }
     }
 
+    public void switchTeam(String roomId, Long memberId, String newTeam) {
+        try {
+            String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
+            String playerJson = (String) redisTemplate.opsForHash().get(roomKey, memberId.toString());
+
+            if (playerJson != null) {
+                GameRoomPlayerInfo playerInfo = objectMapper.readValue(playerJson, GameRoomPlayerInfo.class);
+                playerInfo.setTeam(newTeam);
+
+                String updatedJson = objectMapper.writeValueAsString(playerInfo);
+                redisTemplate.opsForHash().put(roomKey, memberId.toString(), updatedJson);
+
+                log.debug("Switched player team in Redis - RoomId: {}, PlayerId: {}, NewTeam: {}",
+                        roomId, memberId, newTeam);
+            }
+
+        } catch (Exception e) {
+            log.error("Failed to switch player team in Redis - RoomId: {}, PlayerId: {}, NewTeam: {}",
+                    roomId, memberId, newTeam, e);
+        }
+    }
+
     /**
      * 게임방 현재 인원 수 조회 (Redis 기반)
      */

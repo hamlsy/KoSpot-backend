@@ -2,7 +2,9 @@ package com.kospot.presentation.multigame.gameroom.controller;
 
 import com.kospot.application.multiplayer.gameroom.websocket.usecase.SendGameRoomMessageUseCase;
 import com.kospot.application.multiplayer.gameroom.websocket.usecase.SetGameRoomIdAttrUseCase;
+import com.kospot.application.multiplayer.gameroom.websocket.usecase.SwitchTeamUseCase;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
+import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class GameRoomWebSocketController {
 
     private final SetGameRoomIdAttrUseCase setGameRoomIdAttrUseCase;
     private final SendGameRoomMessageUseCase sendGameRoomMessageUseCase;
+    private final SwitchTeamUseCase switchTeamUseCase;
 
     /**
      * 게임방 채팅 메시지 전송
@@ -36,6 +39,16 @@ public class GameRoomWebSocketController {
     @SubscribeMapping("/room/{roomId}/playerList")
     public void subscribeGameRoomPlayerList(@DestinationVariable String roomId, SimpMessageHeaderAccessor headerAccessor) {
         setGameRoomIdAttrUseCase.execute(roomId, headerAccessor);
+    }
+
+    //todo 1. race condition 해결
+    // 2. 팀 ENUM 최적화
+    // 3. redis 내부 팀 직접 변경 서비스
+    @MessageMapping("/room.{roomId}.switchTeam")
+    public void switchTeam(@DestinationVariable String roomId,
+                           @Valid @Payload GameRoomRequest.SwitchTeam request,
+                           SimpMessageHeaderAccessor headerAccessor) {
+        switchTeamUseCase.execute(roomId, request, headerAccessor);
     }
 
 }
