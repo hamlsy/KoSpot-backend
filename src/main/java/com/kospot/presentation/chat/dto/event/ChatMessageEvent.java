@@ -1,4 +1,4 @@
-package com.kospot.presentation.chat.dto.response;
+package com.kospot.presentation.chat.dto.event;
 
 import com.kospot.domain.chat.entity.ChatMessage;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public class ChatMessageResponse {
+public class ChatMessageEvent {
 
     @Data
     @Builder

@@ -3,7 +3,7 @@ package com.kospot.domain.chat.service;
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.repository.ChatMessageRepository;
 import com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants;
-import com.kospot.presentation.chat.dto.response.ChatMessageResponse;
+import com.kospot.presentation.chat.dto.event.ChatMessageEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.util.function.Function;
 
-import static com.kospot.infrastructure.redis.constants.RedisKeyConstants.REDIS_LOBBY_USERS;
 import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
 
 @Slf4j
@@ -30,7 +29,7 @@ public class ChatService {
     public void sendGlobalLobbyMessage(ChatMessage chatMessage) {
         processAndSend(
                 chatMessage,
-                ChatMessageResponse.GlobalLobby::from,  // DTO 변환 전략
+                ChatMessageEvent.GlobalLobby::from,  // DTO 변환 전략
                 PREFIX_CHAT + GLOBAL_LOBBY_CHANNEL      // 채널
         );
     }
@@ -67,7 +66,7 @@ public class ChatService {
 
     public void sendGameRoomMessage(ChatMessage chatMessage) {
         processAndSend(chatMessage,
-                ChatMessageResponse.GameRoom::from,
+                ChatMessageEvent.GameRoom::from,
                 GameRoomChannelConstants.getGameRoomChatChannel(chatMessage.getGameRoomId().toString())
         );
     }

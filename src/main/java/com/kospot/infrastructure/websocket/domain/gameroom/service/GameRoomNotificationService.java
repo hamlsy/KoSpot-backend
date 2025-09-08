@@ -5,8 +5,9 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotification;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotificationType;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
-import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
+import com.kospot.domain.multigame.gameRoom.vo.GameRoomUpdateInfo;
 import com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants;
+import com.kospot.presentation.multigame.gameroom.dto.message.GameRoomUpdateMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -90,15 +91,6 @@ public class GameRoomNotificationService {
         }
     }
 
-
-    /**
-     * 플레이어 입장 이벤트 (인원 수 포함)
-     */
-    public void notifyPlayerJoinedWithCount(String roomId, GameRoomPlayerInfo playerInfo, int previousCount, int currentCount) {
-        // 플레이어 입장 알림
-        notifyPlayerJoined(roomId, playerInfo);
-    }
-
     /**
      * 플레이어 퇴장 이벤트 (인원 수 포함)
      */
@@ -109,31 +101,22 @@ public class GameRoomNotificationService {
     }
 
     /**
-     * 플레이어 강퇴 이벤트 (인원 수 포함)
-     */
-    public void notifyPlayerKickedWithCount(String roomId, Member kickedMember, int previousCount, int currentCount) {
-        // 플레이어 강퇴 알림
-        notifyPlayerKicked(roomId, kickedMember);
-    }
-
-    /**
      * 방 설정 변경 알림
      */
-    public void notifyRoomSettingsChanged(String roomId, String settingsType, Object newValue) {
+    public void notifyRoomSettingsChanged(String roomId, GameRoomUpdateInfo updateInfo) {
         try {
+
+            GameRoomUpdateMessage updateMessage = GameRoomUpdateMessage.of(updateInfo);
             String destination = GameRoomChannelConstants.getGameRoomSettingsChannel(roomId);
-            
-            // 간단한 설정 변경 메시지 생성
-            String message = String.format("{\"type\":\"SETTINGS_CHANGED\",\"settingsType\":\"%s\",\"newValue\":\"%s\",\"timestamp\":%d}", 
-                    settingsType, newValue, System.currentTimeMillis());
+            String message = objectMapper.writeValueAsString(updateMessage);
             
             messagingTemplate.convertAndSend(destination, message);
             
-            log.info("Sent room settings change notification - RoomId: {}, SettingsType: {}", roomId, settingsType);
+            log.info("Sent room settings change notification - RoomId: {}", roomId);
             
         } catch (Exception e) {
-            log.error("Failed to send room settings change notification - RoomId: {}, SettingsType: {}", 
-                    roomId, settingsType, e);
+            log.error("Failed to send room settings change notification - RoomId: {}",
+                    roomId, e);
         }
     }
 

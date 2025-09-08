@@ -6,6 +6,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.game.vo.PlayerMatchType;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
+import com.kospot.domain.multigame.gameRoom.vo.GameRoomUpdateInfo;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +29,10 @@ public class GameRoomService {
         return gameRoomRepository.save(gameRoom);
     }
 
-    public GameRoom updateGameRoom(Member host, GameRoomRequest.Update request, GameRoom gameRoom) {
+    public GameRoom updateGameRoom(Member host, GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {
         gameRoom.validateHost(host);
-        gameRoom.update(request.getTitle(), GameMode.fromKey(request.getGameModeKey()), PlayerMatchType.fromKey(request.getPlayerMatchTypeKey()),
-                request.isPrivateRoom(), request.getPassword(), request.getTeamCount());
+        gameRoom.update(updateInfo.getTitle(), GameMode.fromKey(updateInfo.getGameModeKey()), PlayerMatchType.fromKey(updateInfo.getPlayerMatchTypeKey()),
+                updateInfo.isPrivateRoom(), updateInfo.getPassword(), updateInfo.getTeamCount());
         return gameRoom;
     }
 
