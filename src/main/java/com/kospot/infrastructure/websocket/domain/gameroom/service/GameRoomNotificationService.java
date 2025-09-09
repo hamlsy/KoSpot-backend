@@ -44,21 +44,18 @@ public class GameRoomNotificationService {
     public void notifyPlayerJoined(String roomId, GameRoomPlayerInfo playerInfo) {
         GameRoomNotification notification = GameRoomNotification.playerJoined(roomId, playerInfo);
         sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
-        notifyPlayerListUpdated(roomId);
         log.info("Player joined - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 
     public void notifyPlayerLeft(String roomId, GameRoomPlayerInfo playerInfo) {
         GameRoomNotification notification = GameRoomNotification.playerLeft(roomId, playerInfo);
         sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
-        notifyPlayerListUpdated(roomId);
         log.info("Player left - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 
     public void notifyPlayerKicked(String roomId, GameRoomPlayerInfo playerInfo) {
         GameRoomNotification notification = GameRoomNotification.playerKicked(roomId, playerInfo);
         sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
-        notifyPlayerListUpdated(roomId);
         log.info("Player kicked - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 

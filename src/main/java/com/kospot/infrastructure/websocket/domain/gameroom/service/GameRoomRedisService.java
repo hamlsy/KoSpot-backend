@@ -123,8 +123,6 @@ public class GameRoomRedisService {
                 String updatedJson = objectMapper.writeValueAsString(playerInfo);
                 redisTemplate.opsForHash().put(roomKey, memberId.toString(), updatedJson);
 
-                log.debug("Switched player team in Redis - RoomId: {}, PlayerId: {}, NewTeam: {}",
-                        roomId, memberId, newTeam);
             }
 
         } catch (Exception e) {
