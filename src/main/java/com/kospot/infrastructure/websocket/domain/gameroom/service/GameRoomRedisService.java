@@ -50,11 +50,11 @@ public class GameRoomRedisService {
             //todo implement member detail statistic info in http methods
             redisTemplate.opsForHash().put(roomKey, playerInfo.getMemberId().toString(), playerJson);
             redisTemplate.expire(roomKey, ROOM_DATA_EXPIRY_HOURS, TimeUnit.HOURS);
-            
+
             log.debug("Added player to room Redis - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
-            
+
         } catch (JsonProcessingException e) {
-            log.error("Failed to serialize player info for Redis - RoomId: {}, PlayerId: {}", 
+            log.error("Failed to serialize player info for Redis - RoomId: {}, PlayerId: {}",
                     roomId, playerInfo.getMemberId(), e);
             throw new RuntimeException("플레이어 정보 저장 실패", e);
         }
@@ -67,19 +67,19 @@ public class GameRoomRedisService {
         try {
             String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
             String playerJson = (String) redisTemplate.opsForHash().get(roomKey, memberId.toString());
-            
+
             if (playerJson != null) {
                 GameRoomPlayerInfo playerInfo = objectMapper.readValue(playerJson, GameRoomPlayerInfo.class);
                 redisTemplate.opsForHash().delete(roomKey, memberId.toString());
-                
+
                 log.debug("Removed player from room Redis - RoomId: {}, PlayerId: {}", roomId, memberId);
                 return playerInfo;
             }
-            
+
             return null;
-            
+
         } catch (JsonProcessingException e) {
-            log.error("Failed to deserialize player info from Redis - RoomId: {}, PlayerId: {}", 
+            log.error("Failed to deserialize player info from Redis - RoomId: {}, PlayerId: {}",
                     roomId, memberId, e);
             return null;
         }
@@ -92,7 +92,7 @@ public class GameRoomRedisService {
         try {
             String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
             Map<Object, Object> players = redisTemplate.opsForHash().entries(roomKey);
-            
+
             return players.values().stream()
                     .map(playerJson -> {
                         try {
@@ -104,7 +104,7 @@ public class GameRoomRedisService {
                     })
                     .filter(player -> player != null)
                     .collect(Collectors.toList());
-                    
+
         } catch (Exception e) {
             log.error("Failed to get room players from Redis - RoomId: {}", roomId, e);
             return List.of();
@@ -113,6 +113,11 @@ public class GameRoomRedisService {
 
     public void switchTeam(String roomId, Long memberId, String newTeam) {
         try {
+            if(isNotValidTeamCount(roomId, newTeam)) {
+                log.warn("Team switch denied - RoomId: {}, PlayerId: {}, NewTeam: {} (Team full)",
+                        roomId, memberId, newTeam);
+                return;
+            }
             String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
             String playerJson = (String) redisTemplate.opsForHash().get(roomKey, memberId.toString());
 
@@ -129,6 +134,18 @@ public class GameRoomRedisService {
             log.error("Failed to switch player team in Redis - RoomId: {}, PlayerId: {}, NewTeam: {}",
                     roomId, memberId, newTeam, e);
         }
+    }
+
+    private boolean isNotValidTeamCount(String roomId, String team) {
+        int count = getTeamCount(roomId, team);
+        return count >= 4;
+    }
+
+    private int getTeamCount(String roomId, String team) {
+        List<GameRoomPlayerInfo> playerInfoList = getRoomPlayers(roomId);
+        return (int) playerInfoList.stream()
+                .filter(player -> team.equals(player.getTeam()))
+                .count();
     }
 
     /**
@@ -159,10 +176,10 @@ public class GameRoomRedisService {
     public boolean cannotJoinRoom(String roomId, int maxPlayers) {
         int currentCount = getCurrentPlayerCount(roomId);
         boolean canJoin = currentCount < maxPlayers;
-        
-        log.debug("Room capacity check - RoomId: {}, Current: {}, Max: {}, CanJoin: {}", 
+
+        log.debug("Room capacity check - RoomId: {}, Current: {}, Max: {}, CanJoin: {}",
                 roomId, currentCount, maxPlayers, canJoin);
-        
+
         return !canJoin;
     }
 
@@ -173,7 +190,7 @@ public class GameRoomRedisService {
         String bannedKey = String.format(ROOM_BANNED_KEY, roomId);
         redisTemplate.opsForSet().add(bannedKey, memberId.toString());
         redisTemplate.expire(bannedKey, ROOM_DATA_EXPIRY_HOURS, TimeUnit.HOURS);
-        
+
         log.debug("Added player to banned list - RoomId: {}, PlayerId: {}", roomId, memberId);
     }
 
@@ -192,7 +209,7 @@ public class GameRoomRedisService {
         int currentCount = getCurrentPlayerCount(roomId);
         Set<String> bannedPlayers = redisTemplate.opsForSet().members(String.format(ROOM_BANNED_KEY, roomId));
         int bannedCount = bannedPlayers != null ? bannedPlayers.size() : 0;
-        
+
         return RoomPlayerStats.builder()
                 .roomId(roomId)
                 .currentPlayerCount(currentCount)
@@ -256,15 +273,15 @@ public class GameRoomRedisService {
         try {
             String playerSessionKey = String.format(PLAYER_SESSION_KEY, memberId);
             String sessionId = redisTemplate.opsForValue().get(playerSessionKey);
-            
+
             if (sessionId != null) {
                 String sessionSubscriptionsKey = String.format(SESSION_SUBSCRIPTIONS_KEY, sessionId);
                 String sessionRoomKey = String.format(SESSION_ROOM_KEY, sessionId);
-                
+
                 redisTemplate.delete(playerSessionKey);
                 redisTemplate.delete(sessionSubscriptionsKey);
                 redisTemplate.delete(sessionRoomKey);
-                
+
                 log.debug("Cleaned up player session - MemberId: {}, SessionId: {}", memberId, sessionId);
             }
         } catch (Exception e) {
@@ -280,27 +297,27 @@ public class GameRoomRedisService {
         try {
             Set<String> roomKeys = redisTemplate.keys(String.format(ROOM_PLAYERS_KEY, "*"));
             int cleanedRooms = 0;
-            
+
             if (roomKeys != null) {
                 for (String key : roomKeys) {
                     String roomId = extractRoomIdFromKey(key);
-                    
+
                     if (isRoomEmpty(roomId)) {
                         // 플레이어 목록 삭제
                         redisTemplate.delete(key);
-                        
+
                         // 강퇴 목록 삭제
                         String bannedKey = String.format(ROOM_BANNED_KEY, roomId);
                         redisTemplate.delete(bannedKey);
-                        
+
                         cleanedRooms++;
                         log.debug("Cleaned up empty room - RoomId: {}", roomId);
                     }
                 }
             }
-            
+
             log.info("Redis cleanup completed - {} empty rooms cleaned", cleanedRooms);
-            
+
         } catch (Exception e) {
             log.error("Failed to cleanup empty rooms in Redis", e);
         }
@@ -312,30 +329,30 @@ public class GameRoomRedisService {
     public void logRoomStatistics() {
         try {
             Set<String> roomKeys = redisTemplate.keys(String.format(ROOM_PLAYERS_KEY, "*"));
-            
+
             if (roomKeys == null || roomKeys.isEmpty()) {
                 log.info("Game Room Redis Statistics - No active rooms");
                 return;
             }
-            
+
             int totalRooms = roomKeys.size();
             int totalPlayers = 0;
             int emptyRooms = 0;
-            
+
             for (String key : roomKeys) {
                 String roomId = extractRoomIdFromKey(key);
                 int playerCount = getCurrentPlayerCount(roomId);
-                
+
                 totalPlayers += playerCount;
                 if (playerCount == 0) {
                     emptyRooms++;
                 }
             }
-            
-            log.info("Game Room Redis Statistics - Total Rooms: {}, Total Players: {}, Empty Rooms: {}, Avg Players/Room: {}", 
-                    totalRooms, totalPlayers, emptyRooms, 
+
+            log.info("Game Room Redis Statistics - Total Rooms: {}, Total Players: {}, Empty Rooms: {}, Avg Players/Room: {}",
+                    totalRooms, totalPlayers, emptyRooms,
                     totalRooms > 0 ? (double) totalPlayers / totalRooms : 0);
-                    
+
         } catch (Exception e) {
             log.error("Failed to generate room statistics from Redis", e);
         }
