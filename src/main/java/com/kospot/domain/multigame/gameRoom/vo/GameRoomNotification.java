@@ -26,33 +26,49 @@ public class GameRoomNotification {
 
     private Long timestamp;
 
-    public static GameRoomNotification playerJoined(String roomId, GameRoomPlayerInfo playerInfo, List<GameRoomPlayerInfo> allPlayers) {
+    /**
+     * 공통 팩토리 메서드
+     */
+    private static GameRoomNotification of(GameRoomNotificationType type,
+                                           String roomId,
+                                           GameRoomPlayerInfo playerInfo,
+                                           List<GameRoomPlayerInfo> players) {
         return GameRoomNotification.builder()
-                .type(GameRoomNotificationType.PLAYER_JOINED.name())
+                .type(type.name())
                 .roomId(roomId)
                 .playerInfo(playerInfo)
-                .players(allPlayers)
+                .players(players)
                 .timestamp(System.currentTimeMillis())
                 .build();
     }
 
-    public static GameRoomNotification playerLeft(String roomId, GameRoomPlayerInfo playerInfo, List<GameRoomPlayerInfo> allPlayers) {
-        return GameRoomNotification.builder()
-                .type(GameRoomNotificationType.PLAYER_LEFT.name())
-                .roomId(roomId)
-                .playerInfo(playerInfo)
-                .players(allPlayers)
-                .timestamp(System.currentTimeMillis())
-                .build();
+    /**
+     * 개별 이벤트 알림
+     */
+    public static GameRoomNotification playerJoined(String roomId, GameRoomPlayerInfo playerInfo) {
+        return of(GameRoomNotificationType.PLAYER_JOINED, roomId, playerInfo, null);
     }
 
-    public static GameRoomNotification playerKicked(String roomId, GameRoomPlayerInfo playerInfo, List<GameRoomPlayerInfo> allPlayers) {
-        return GameRoomNotification.builder()
-                .type(GameRoomNotificationType.PLAYER_KICKED.name())
-                .roomId(roomId)
-                .playerInfo(playerInfo)
-                .players(allPlayers)
-                .timestamp(System.currentTimeMillis())
-                .build();
+    public static GameRoomNotification playerLeft(String roomId, GameRoomPlayerInfo playerInfo) {
+        return of(GameRoomNotificationType.PLAYER_LEFT, roomId, playerInfo, null);
     }
+
+    public static GameRoomNotification playerKicked(String roomId, GameRoomPlayerInfo playerInfo) {
+        return of(GameRoomNotificationType.PLAYER_KICKED, roomId, playerInfo, null);
+    }
+
+    /**
+     * 전체 플레이어 동기화 알림
+     */
+    public static GameRoomNotification playerListUpdated(String roomId, List<GameRoomPlayerInfo> allPlayers) {
+        return of(GameRoomNotificationType.PLAYER_LIST_UPDATED, roomId, null, allPlayers);
+    }
+
+    /**
+     * 방 설정 변경 알림 (추후 확장)
+     */
+//    public static GameRoomNotification settingChanged(String roomId, Object settingPayload) {
+//        // settingPayload → 별도 DTO로 관리하는 게 바람직 (예: GameRoomSettingChangedMessage)
+//        return of(GameRoomNotificationType.SETTING_CHANGED, roomId, null, null);
+//    }
 } 

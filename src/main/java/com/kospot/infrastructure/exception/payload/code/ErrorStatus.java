@@ -100,6 +100,9 @@ public enum ErrorStatus implements BaseCode {
 
     // WebSocket Channel Error (4351 ~ 4360)
     INVALID_DESTINATION(BAD_REQUEST, 4351, "유효하지 않은 구독 목적지입니다."),
+
+
+
     ;
 
 

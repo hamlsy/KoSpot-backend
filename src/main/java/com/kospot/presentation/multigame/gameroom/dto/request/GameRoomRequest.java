@@ -77,4 +77,14 @@ public class GameRoomRequest {
     public static class Kick {
         private Long targetPlayerId;
     }
+
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class SwitchTeam {
+        private String team;
+    }
 }

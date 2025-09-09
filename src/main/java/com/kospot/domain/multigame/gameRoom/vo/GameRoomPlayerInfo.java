@@ -22,6 +22,8 @@ public class GameRoomPlayerInfo {
 
     private String markerImageUrl;
 
+    private String team;
+
     private boolean isHost;
 
     private Long joinedAt;

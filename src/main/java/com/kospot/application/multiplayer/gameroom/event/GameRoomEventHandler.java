@@ -38,17 +38,23 @@ public class GameRoomEventHandler {
         // 입장 알림
         gameRoomNotificationService.notifyPlayerJoined(roomId, playerInfo);
 
+        // 플레이어 업데이트
+        gameRoomNotificationService.notifyPlayerListUpdated(roomId);
+
     }
 
     // leave room
     @EventListener
     public void handleLeave(GameRoomLeaveEvent event) {
         GameRoom gameRoom = event.getGameRoom();
+        String roomId = gameRoom.getId().toString();
         Member player = event.getPlayer();
 
         // WebSocket 레벨에서 실시간 퇴장 처리 (Redis + 실시간 알림)
         gameRoomPlayerService.removePlayerFromRoom(gameRoom.getId(), player.getId());
 
+        // 플레이어 업데이트
+        gameRoomNotificationService.notifyPlayerListUpdated(roomId);
     }
 
 }

@@ -25,7 +25,7 @@ public class ChatMessageDto {
     public static class GameRoom {
         @NotEmpty
         private String content;
-        private String teamId;
+        private String team;
     }
 
 }
