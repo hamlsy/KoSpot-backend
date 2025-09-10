@@ -46,7 +46,7 @@ public class GameRoomUseCaseTest {
     private CreateGameRoomUseCase createGameRoomUseCase;
 
     @Autowired
-    private UpdateGameRoomUseCase updateGameRoomUseCase;
+    private UpdateGameRoomSettingsUseCase updateGameRoomSettingsUseCase;
 
     @Autowired
     private JoinGameRoomUseCase joinGameRoomUseCase;
@@ -146,12 +146,12 @@ public class GameRoomUseCaseTest {
                 .build();
 
         //when
-        updateGameRoomUseCase.execute(member, request, gameRoom.getId());
+        updateGameRoomSettingsUseCase.execute(member, request, gameRoom.getId());
 
         //then
         GameRoom updatedGameRoom = gameRoomRepository.findByIdFetchHost(gameRoom.getId()).orElseThrow();
         assertEquals(request.getTitle(), updatedGameRoom.getTitle());
-        assertEquals(PlayerMatchType.INDIVIDUAL, updatedGameRoom.getPlayerMatchType());
+        assertEquals(PlayerMatchType.SOLO, updatedGameRoom.getPlayerMatchType());
         assertEquals(member.getUsername(), updatedGameRoom.getHost().getUsername());
 
     }

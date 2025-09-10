@@ -10,7 +10,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum PlayerMatchType {
-    INDIVIDUAL("개인전"),
+    SOLO("개인전"),
     TEAM("협동전");
 
     private final String type;

@@ -1,6 +1,7 @@
 package com.kospot.application.multiplayer.gameroom.http.usecase;
 
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multigame.game.vo.PlayerMatchType;
 import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
@@ -18,20 +19,30 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class UpdateGameRoomUseCase {
+public class UpdateGameRoomSettingsUseCase {
 
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
+    private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService gameRoomNotificationService;
 
+    // todo refactor
     public GameRoomResponse execute(Member host, GameRoomRequest.Update request, Long gameRoomId) {
+        // host 검증
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
+        gameRoom.validateHost(host);
+
+        // 팀 설정 변경 처리 (업데이트 전 현재 상태와 비교)
+        handleTeamSettingChanged(gameRoom, request);
+
         GameRoomUpdateInfo updateInfo = mapToUpdateInfo(request);
+        GameRoom updatedGameRoom = gameRoomService.updateGameRoom(updateInfo, gameRoom);
+
         gameRoomNotificationService.notifyRoomSettingsChanged(gameRoomId.toString(), updateInfo);
-        return GameRoomResponse.from(gameRoomService.updateGameRoom(host, updateInfo, gameRoom));
+        return GameRoomResponse.from(updatedGameRoom);
     }
 
-    public GameRoomUpdateInfo mapToUpdateInfo (GameRoomRequest.Update request) {
+    public GameRoomUpdateInfo mapToUpdateInfo(GameRoomRequest.Update request) {
         return GameRoomUpdateInfo.builder()
                 .title(request.getTitle())
                 .gameModeKey(request.getGameModeKey())
@@ -40,5 +51,23 @@ public class UpdateGameRoomUseCase {
                 .password(request.getPassword())
                 .build();
     }
+
+    //todo refactor
+    private void handleTeamSettingChanged(GameRoom gameRoom, GameRoomRequest.Update request) {
+        PlayerMatchType currentPlayerMatchType = gameRoom.getPlayerMatchType();
+        PlayerMatchType requestPlayerMatchType = PlayerMatchType.fromKey(request.getPlayerMatchTypeKey());
+
+        if (currentPlayerMatchType != requestPlayerMatchType) { // 팀 변경 됐을 때
+            String gameRoomId = gameRoom.getId().toString();
+
+            switch (requestPlayerMatchType) {
+                case SOLO -> gameRoomRedisService.resetAllPlayersTeam(gameRoomId);
+                case TEAM -> gameRoomRedisService.assignAllPlayersTeam(gameRoomId);
+            }
+            // 2. playerList broadcast
+            gameRoomNotificationService.notifyPlayerListUpdated(gameRoomId);
+        }
+    }
+
 
 }

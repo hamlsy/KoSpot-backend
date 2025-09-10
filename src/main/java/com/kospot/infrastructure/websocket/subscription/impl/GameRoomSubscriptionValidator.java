@@ -38,13 +38,7 @@ public class GameRoomSubscriptionValidator implements SubscriptionValidator {
         }
         
         Long memberId = principal.getMemberId();
-        
-        // 강퇴 여부 확인
-        if (gameRoomRedisService.isPlayerBanned(roomId, memberId)) {
-            log.warn("Game room access denied - Player banned: MemberId={}, RoomId={}", memberId, roomId);
-            return false;
-        }
-        
+
         // 게임방 참여 여부 확인
         if (!isPlayerInRoom(roomId, memberId)) {
             log.warn("Game room access denied - Player not in room: MemberId={}, RoomId={}", memberId, roomId);

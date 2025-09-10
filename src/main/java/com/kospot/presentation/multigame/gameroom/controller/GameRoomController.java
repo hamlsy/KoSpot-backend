@@ -31,7 +31,7 @@ public class GameRoomController {
     private final FindAllGameRoomUseCase findAllGameRoomUseCase;
     private final GetGameRoomDetailUseCase getGameRoomDetailUseCase;
     private final CreateGameRoomUseCase createGameRoomUseCase;
-    private final UpdateGameRoomUseCase updateGameRoomUseCase;
+    private final UpdateGameRoomSettingsUseCase updateGameRoomSettingsUseCase;
     private final JoinGameRoomUseCase joinGameRoomUseCase;
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
     private final KickPlayerUseCase kickPlayerUseCase;
@@ -52,7 +52,7 @@ public class GameRoomController {
     @Operation(summary = "게임 방 수정", description = "멀티 게임 방을 수정합니다.")
     @PutMapping("/{id}")
     public ApiResponseDto<GameRoomResponse> updateGameRoom(@CurrentMember Member member, @RequestBody GameRoomRequest.Update request, @PathVariable("id") Long gameRoomId) {
-        return ApiResponseDto.onSuccess(updateGameRoomUseCase.execute(member, request, gameRoomId));
+        return ApiResponseDto.onSuccess(updateGameRoomSettingsUseCase.execute(member, request, gameRoomId));
     }
 
     @Operation(summary = "게임 방 내부 조회", description = "멀티 게임 방 내부를 조회합니다.")

@@ -289,7 +289,7 @@ public class StartMultiRoadViewPlayerGameUseCaseTest {
                 .host(host)
                 .gameMode(GameMode.ROADVIEW)
                 .maxPlayers(6)
-                .playerMatchType(PlayerMatchType.INDIVIDUAL)
+                .playerMatchType(PlayerMatchType.SOLO)
                 .status(GameRoomStatus.WAITING)
                 .title("Test Game Room")
                 .build();

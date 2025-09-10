@@ -12,8 +12,8 @@ public class GameRoomResponse {
 
     private Long gameRoomId;
     private String title;
-    private String gameMode;
-    private String gameType;
+    private String gameModeKey;
+    private String playerMatchTypeKey;
     private int maxPlayers;
 
     public static GameRoomResponse from(GameRoom gameRoom) {
@@ -21,8 +21,8 @@ public class GameRoomResponse {
                 .gameRoomId(gameRoom.getId())
                 .title(gameRoom.getTitle())
                 .maxPlayers(gameRoom.getMaxPlayers())
-                .gameMode(gameRoom.getGameMode().getMode())
-                .gameType(gameRoom.getPlayerMatchType().getType())
+                .gameModeKey(gameRoom.getGameMode().name())
+                .playerMatchTypeKey(gameRoom.getPlayerMatchType().name())
                 .build();
     }
 
