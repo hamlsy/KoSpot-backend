@@ -26,6 +26,7 @@ public class UpdateGameRoomSettingsUseCase {
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService gameRoomNotificationService;
 
+    // todo refactor
     public GameRoomResponse execute(Member host, GameRoomRequest.Update request, Long gameRoomId) {
         // host 검증
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
@@ -38,7 +39,7 @@ public class UpdateGameRoomSettingsUseCase {
 
         gameRoomNotificationService.notifyRoomSettingsChanged(gameRoomId.toString(), updateInfo);
 
-        return GameRoomResponse.from();
+        return GameRoomResponse.from(updatedGameRoom);
     }
 
     public GameRoomUpdateInfo mapToUpdateInfo (GameRoomRequest.Update request) {
@@ -53,13 +54,13 @@ public class UpdateGameRoomSettingsUseCase {
 
     private void handleTeamSettingChanged(GameRoom gameRoom, GameRoomRequest.Update request) {
         PlayerMatchType requestPlayerMatchType = PlayerMatchType.fromKey(request.getPlayerMatchTypeKey());
-        //todo 팀 모드 변경 분기
         if(gameRoom.getPlayerMatchType() != requestPlayerMatchType) { // 팀 변경 됐을 때
-            //todo implement
-            // 1. 랜덤 팀 부여
-
+            String gameRoomId = gameRoom.getId().toString();
+            // 랜덤 팀 부여
+            gameRoomRedisService.assignAllPlayersTeam(gameRoomId);
 
             // 2. playerList broadcast
+            gameRoomNotificationService.notifyPlayerListUpdated(gameRoomId);
 
         }
     }

@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 public enum GameTeamErrorStatus implements BaseCode {
 
-    // Game Team ERror (4361 ~ 4370)
+    // Game Team Error (4361 ~ 4370)
     GAME_TEAM_NOT_FOUND(NOT_FOUND, 4361, "해당 게임 팀을 찾을 수 없습니다."),
     GAME_TEAM_CANNOT_JOIN_NOW(BAD_REQUEST, 4362, "현재 게임 팀에 참여할 수 없습니다."),
     GAME_TEAM_ALREADY_JOINED(BAD_REQUEST, 4363, "이미 해당 게임 팀에 참여 중입니다."),
