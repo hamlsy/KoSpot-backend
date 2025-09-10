@@ -94,10 +94,12 @@ public class UpdateGameRoomSettingsUseCaseTest {
                 .host(host)
                 .gameMode(GameMode.ROADVIEW)
                 .playerMatchType(PlayerMatchType.SOLO)
+//                .playerMatchType(PlayerMatchType.TEAM)
                 .privateRoom(false)
                 .status(GameRoomStatus.WAITING)
                 .maxPlayers(8)
                 .build();
+
 
         gameRoom = gameRoomRepository.save(gameRoom); // 저장된 엔티티 반환
         entityManager.flush();
@@ -169,6 +171,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
     void testTeamToIndividual_ShouldResetAllPlayerTeams() {
         // Given - 먼저 팀전으로 설정
         String roomId = gameRoom.getId().toString();
+
         gameRoomRedisService.assignAllPlayersTeam(roomId);
 
         // 팀이 할당되었는지 확인
@@ -224,7 +227,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
 
         // Then
         // 게임방 설정이 팀전으로 유지되었는지 확인
-        assertEquals(PlayerMatchType.TEAM, response.getPlayerMatchTypeKey());
+        assertEquals(PlayerMatchType.TEAM.name(), response.getPlayerMatchTypeKey());
 
         // 팀이 재할당되었는지 확인 (동일한 팀 구성일 수도 있지만, 로직은 실행됨)
         List<GameRoomPlayerInfo> playersAfter = gameRoomRedisService.getRoomPlayers(roomId);
@@ -268,6 +271,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
     @DisplayName("플레이어가 없는 빈 방에서 팀 설정 변경 시 예외가 발생하지 않는지 테스트")
     @Test
     void testEmptyRoom_ShouldNotThrowException() {
+
         // Given - 빈 방 생성
         GameRoom emptyRoom = GameRoom.builder()
                 .title("빈 게임방")

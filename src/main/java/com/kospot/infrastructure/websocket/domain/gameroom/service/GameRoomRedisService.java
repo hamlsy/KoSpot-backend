@@ -180,7 +180,7 @@ public class GameRoomRedisService {
     //todo refactor
     public void resetAllPlayersTeam(String roomId) {
         String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
-        List<GameRoomPlayerInfo> players = getRoomPlayers(roomKey);
+        List<GameRoomPlayerInfo> players = getRoomPlayers(roomId);
         Map<Object, Object> teamRemovals = new HashMap<>();
 
         for(GameRoomPlayerInfo player : players) {
