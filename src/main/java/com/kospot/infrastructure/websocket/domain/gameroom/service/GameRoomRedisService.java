@@ -2,6 +2,8 @@ package com.kospot.infrastructure.websocket.domain.gameroom.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kospot.domain.multigame.gamePlayer.exception.GameTeamErrorStatus;
+import com.kospot.domain.multigame.gamePlayer.exception.GameTeamHandler;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gameRoom.vo.RoomPlayerStats;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,7 +50,7 @@ public class GameRoomRedisService {
             String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
             String playerJson = objectMapper.writeValueAsString(playerInfo);
 
-            //todo implement member detail statistic info in http methods
+            //todo implement member detail statistic info in http methods -> 그냥 http 요청으로 처리, redis에 너무 많은 데이터
             redisTemplate.opsForHash().put(roomKey, playerInfo.getMemberId().toString(), playerJson);
             redisTemplate.expire(roomKey, ROOM_DATA_EXPIRY_HOURS, TimeUnit.HOURS);
 
@@ -148,6 +151,33 @@ public class GameRoomRedisService {
                 .count();
     }
 
+    //todo refactor
+    public void assignAllPlayersTeam(String roomId) {
+        String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
+        List<GameRoomPlayerInfo> players = getRoomPlayers(roomKey);
+        int totalPlayers = players.size();
+        int redTeamSize = (totalPlayers + 1) / 2;
+        Map<Object, Object> teamAssignments = new HashMap<>();
+
+
+        for(int i = 0; i < totalPlayers; i++) {
+            GameRoomPlayerInfo player = players.get(i);
+            String team = (i < redTeamSize) ? "RED" : "BLUE";
+            player.setTeam(team);
+            try {
+                teamAssignments.put(player.getMemberId().toString(), objectMapper.writeValueAsString(player));
+            }catch (JsonProcessingException e) {
+                log.error("Failed to serialize player info for Redis during team assignment - RoomId: {}, PlayerId: {}",
+                        roomId, player.getMemberId(), e);
+                throw new GameTeamHandler(GameTeamErrorStatus.GAME_TEAM_ERROR_UNKNOWN);
+            }
+        }
+        if(!teamAssignments.isEmpty()) {
+            redisTemplate.opsForHash().putAll(roomKey, teamAssignments);
+        }
+
+    }
+
     /**
      * 게임방 현재 인원 수 조회 (Redis 기반)
      */
@@ -183,24 +213,6 @@ public class GameRoomRedisService {
         return !canJoin;
     }
 
-    /**
-     * 플레이어를 강퇴 목록에 추가
-     */
-    public void addPlayerToBannedList(String roomId, Long memberId) {
-        String bannedKey = String.format(ROOM_BANNED_KEY, roomId);
-        redisTemplate.opsForSet().add(bannedKey, memberId.toString());
-        redisTemplate.expire(bannedKey, ROOM_DATA_EXPIRY_HOURS, TimeUnit.HOURS);
-
-        log.debug("Added player to banned list - RoomId: {}, PlayerId: {}", roomId, memberId);
-    }
-
-    /**
-     * 강퇴된 플레이어인지 확인
-     */
-    public boolean isPlayerBanned(String roomId, Long memberId) {
-        String bannedKey = String.format(ROOM_BANNED_KEY, roomId);
-        return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(bannedKey, memberId.toString()));
-    }
 
     /**
      * 게임방 통계 정보 조회

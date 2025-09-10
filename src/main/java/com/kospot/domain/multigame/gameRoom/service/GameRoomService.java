@@ -29,8 +29,7 @@ public class GameRoomService {
         return gameRoomRepository.save(gameRoom);
     }
 
-    public GameRoom updateGameRoom(Member host, GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {
-        gameRoom.validateHost(host);
+    public GameRoom updateGameRoom(GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {
         gameRoom.update(updateInfo.getTitle(), GameMode.fromKey(updateInfo.getGameModeKey()), PlayerMatchType.fromKey(updateInfo.getPlayerMatchTypeKey()),
                 updateInfo.isPrivateRoom(), updateInfo.getPassword(), updateInfo.getTeamCount());
         return gameRoom;
