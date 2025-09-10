@@ -151,7 +151,7 @@ public class GameRoomUseCaseTest {
         //then
         GameRoom updatedGameRoom = gameRoomRepository.findByIdFetchHost(gameRoom.getId()).orElseThrow();
         assertEquals(request.getTitle(), updatedGameRoom.getTitle());
-        assertEquals(PlayerMatchType.INDIVIDUAL, updatedGameRoom.getPlayerMatchType());
+        assertEquals(PlayerMatchType.SOLO, updatedGameRoom.getPlayerMatchType());
         assertEquals(member.getUsername(), updatedGameRoom.getHost().getUsername());
 
     }

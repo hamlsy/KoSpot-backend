@@ -13,7 +13,7 @@ public class GameRoomResponse {
     private Long gameRoomId;
     private String title;
     private String gameMode;
-    private String gameType;
+    private String playerMatchType;
     private int maxPlayers;
 
     public static GameRoomResponse from(GameRoom gameRoom) {
@@ -22,7 +22,7 @@ public class GameRoomResponse {
                 .title(gameRoom.getTitle())
                 .maxPlayers(gameRoom.getMaxPlayers())
                 .gameMode(gameRoom.getGameMode().getMode())
-                .gameType(gameRoom.getPlayerMatchType().getType())
+                .playerMatchType(gameRoom.getPlayerMatchType().getType())
                 .build();
     }
 

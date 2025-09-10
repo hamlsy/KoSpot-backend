@@ -317,7 +317,7 @@ class JoinGameRoomConcurrencyTest {
         GameRoom gameRoom = GameRoom.builder()
                 .title("동시성 테스트 게임방")
                 .gameMode(GameMode.ROADVIEW)
-                .playerMatchType(PlayerMatchType.INDIVIDUAL)
+                .playerMatchType(PlayerMatchType.SOLO)
                 .privateRoom(false)
                 .maxPlayers(maxPlayers)
                 .teamCount(1)

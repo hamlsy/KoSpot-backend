@@ -58,7 +58,7 @@ public class UpdateGameRoomSettingsUseCase {
             // 개인전 -> 팀전
             String gameRoomId = gameRoom.getId().toString();
             switch (requestPlayerMatchType) {
-                case INDIVIDUAL -> gameRoomRedisService.resetAllPlayersTeam(gameRoomId);
+                case SOLO -> gameRoomRedisService.resetAllPlayersTeam(gameRoomId);
                 case TEAM -> gameRoomRedisService.assignAllPlayersTeam(gameRoomId);
             }
             // 2. playerList broadcast
