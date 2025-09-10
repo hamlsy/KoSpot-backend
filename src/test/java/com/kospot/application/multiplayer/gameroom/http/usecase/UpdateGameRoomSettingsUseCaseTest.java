@@ -6,6 +6,7 @@ import com.kospot.domain.multigame.game.vo.PlayerMatchType;
 // import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor; // 현재 테스트에서 사용하지 않음
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
+import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomStatus;
 import com.kospot.domain.game.vo.GameMode;
@@ -51,6 +52,9 @@ public class UpdateGameRoomSettingsUseCaseTest {
     private GameRoomRepository gameRoomRepository;
 
     @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
     private GameRoomRedisService gameRoomRedisService;
 
     @Autowired
@@ -65,14 +69,15 @@ public class UpdateGameRoomSettingsUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        // 호스트 생성
+        // 호스트 생성 및 저장
         host = Member.builder()
                 .username("host")
                 .nickname("호스트")
                 .role(Role.USER)
                 .build();
+        host = memberRepository.save(host); // 먼저 저장
 
-        // 플레이어들 생성 (4명)
+        // 플레이어들 생성 및 저장 (4명)
         players = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             Member player = Member.builder()
@@ -80,7 +85,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
                     .nickname("플레이어" + i)
                     .role(Role.USER)
                     .build();
-            players.add(player);
+            players.add(memberRepository.save(player)); // 먼저 저장
         }
 
         // 게임방 생성 (개인전으로 시작)
@@ -94,7 +99,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
                 .maxPlayers(8)
                 .build();
 
-        gameRoomRepository.save(gameRoom);
+        gameRoom = gameRoomRepository.save(gameRoom); // 저장된 엔티티 반환
         entityManager.flush();
 
         // Redis에 플레이어들 추가
@@ -136,7 +141,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
 
         // Then
         // 게임방 설정이 팀전으로 변경되었는지 확인
-        assertEquals(PlayerMatchType.TEAM, response.getPlayerMatchType());
+        assertEquals(PlayerMatchType.TEAM.name(), response.getPlayerMatchTypeKey());
 
         // Redis에서 플레이어들의 팀 할당 확인
         List<GameRoomPlayerInfo> playersAfter = gameRoomRedisService.getRoomPlayers(roomId);
@@ -174,7 +179,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
         GameRoomRequest.Update request = GameRoomRequest.Update.builder()
                 .title("개인전으로 변경")
                 .gameModeKey("roadview")
-                .playerMatchTypeKey("INDIVIDUAL")
+                .playerMatchTypeKey("SOLO")
                 .privateRoom(false)
                 .build();
 
@@ -183,7 +188,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
 
         // Then
         // 게임방 설정이 개인전으로 변경되었는지 확인
-        assertEquals(PlayerMatchType.SOLO, response.getPlayerMatchType());
+        assertEquals(PlayerMatchType.SOLO.name(), response.getPlayerMatchTypeKey());
 
         // Redis에서 모든 플레이어의 팀이 해제되었는지 확인
         List<GameRoomPlayerInfo> playersAfter = gameRoomRedisService.getRoomPlayers(roomId);
@@ -219,7 +224,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
 
         // Then
         // 게임방 설정이 팀전으로 유지되었는지 확인
-        assertEquals(PlayerMatchType.TEAM, response.getPlayerMatchType());
+        assertEquals(PlayerMatchType.TEAM, response.getPlayerMatchTypeKey());
 
         // 팀이 재할당되었는지 확인 (동일한 팀 구성일 수도 있지만, 로직은 실행됨)
         List<GameRoomPlayerInfo> playersAfter = gameRoomRedisService.getRoomPlayers(roomId);
@@ -241,7 +246,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
         GameRoomRequest.Update request = GameRoomRequest.Update.builder()
                 .title("개인전 유지 테스트")
                 .gameModeKey("roadview")
-                .playerMatchTypeKey("INDIVIDUAL")
+                .playerMatchTypeKey("SOLO")
                 .privateRoom(false)
                 .build();
 
@@ -250,7 +255,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
 
         // Then
         // 게임방 설정이 개인전으로 유지되었는지 확인
-        assertEquals(PlayerMatchType.SOLO, response.getPlayerMatchType());
+        assertEquals(PlayerMatchType.SOLO, response.getPlayerMatchTypeKey());
 
         // 팀 상태가 유지되었는지 확인 (여전히 팀 없음)
         List<GameRoomPlayerInfo> playersAfter = gameRoomRedisService.getRoomPlayers(roomId);
@@ -287,7 +292,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
         // When & Then - 예외가 발생하지 않아야 함
         assertDoesNotThrow(() -> {
             GameRoomResponse response = updateGameRoomSettingsUseCase.execute(host, request, emptyRoom.getId());
-            assertEquals(PlayerMatchType.TEAM, response.getPlayerMatchType());
+            assertEquals(PlayerMatchType.TEAM, response.getPlayerMatchTypeKey());
         });
 
         log.info("빈 방 팀 설정 변경 테스트 완료");

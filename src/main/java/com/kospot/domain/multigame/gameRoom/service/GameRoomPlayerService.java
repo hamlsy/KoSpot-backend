@@ -102,9 +102,6 @@ public class GameRoomPlayerService {
                 throw new WebSocketHandler(ErrorStatus._BAD_REQUEST);
             }
 
-            // 강퇴 목록에 추가
-            gameRoomRedisService.addPlayerToBannedList(roomId.toString(), targetMemberId);
-
             // 플레이어 제거
             gameRoomRedisService.removePlayerFromRoom(roomId.toString(), targetMemberId);
             targetMember.leaveGameRoom();
@@ -175,13 +172,6 @@ public class GameRoomPlayerService {
      */
     public boolean canJoinRoom(String roomId, int maxPlayers) {
         return gameRoomRedisService.cannotJoinRoom(roomId, maxPlayers);
-    }
-
-    /**
-     * 강퇴된 플레이어인지 확인
-     */
-    public boolean isPlayerBanned(String roomId, Long memberId) {
-        return gameRoomRedisService.isPlayerBanned(roomId, memberId);
     }
 
     /**

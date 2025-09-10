@@ -32,17 +32,17 @@ public class UpdateGameRoomSettingsUseCase {
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
         gameRoom.validateHost(host);
 
+        // 팀 설정 변경 처리 (업데이트 전 현재 상태와 비교)
         handleTeamSettingChanged(gameRoom, request);
 
         GameRoomUpdateInfo updateInfo = mapToUpdateInfo(request);
         GameRoom updatedGameRoom = gameRoomService.updateGameRoom(updateInfo, gameRoom);
 
         gameRoomNotificationService.notifyRoomSettingsChanged(gameRoomId.toString(), updateInfo);
-
         return GameRoomResponse.from(updatedGameRoom);
     }
 
-    public GameRoomUpdateInfo mapToUpdateInfo (GameRoomRequest.Update request) {
+    public GameRoomUpdateInfo mapToUpdateInfo(GameRoomRequest.Update request) {
         return GameRoomUpdateInfo.builder()
                 .title(request.getTitle())
                 .gameModeKey(request.getGameModeKey())
@@ -51,19 +51,21 @@ public class UpdateGameRoomSettingsUseCase {
                 .password(request.getPassword())
                 .build();
     }
+
     //todo refactor
     private void handleTeamSettingChanged(GameRoom gameRoom, GameRoomRequest.Update request) {
+        PlayerMatchType currentPlayerMatchType = gameRoom.getPlayerMatchType();
         PlayerMatchType requestPlayerMatchType = PlayerMatchType.fromKey(request.getPlayerMatchTypeKey());
-        if(gameRoom.getPlayerMatchType() != requestPlayerMatchType) { // 팀 변경 됐을 때
-            // 개인전 -> 팀전
+
+        if (currentPlayerMatchType != requestPlayerMatchType) { // 팀 변경 됐을 때
             String gameRoomId = gameRoom.getId().toString();
+
             switch (requestPlayerMatchType) {
                 case SOLO -> gameRoomRedisService.resetAllPlayersTeam(gameRoomId);
                 case TEAM -> gameRoomRedisService.assignAllPlayersTeam(gameRoomId);
             }
             // 2. playerList broadcast
             gameRoomNotificationService.notifyPlayerListUpdated(gameRoomId);
-
         }
     }
 

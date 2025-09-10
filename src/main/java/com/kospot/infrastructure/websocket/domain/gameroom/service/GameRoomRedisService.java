@@ -154,11 +154,10 @@ public class GameRoomRedisService {
     //todo refactor
     public void assignAllPlayersTeam(String roomId) {
         String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
-        List<GameRoomPlayerInfo> players = getRoomPlayers(roomKey);
+        List<GameRoomPlayerInfo> players = getRoomPlayers(roomId);
         int totalPlayers = players.size();
         int redTeamSize = (totalPlayers + 1) / 2;
         Map<Object, Object> teamAssignments = new HashMap<>();
-
 
         for(int i = 0; i < totalPlayers; i++) {
             GameRoomPlayerInfo player = players.get(i);

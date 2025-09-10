@@ -121,10 +121,4 @@ public class GameRoomSessionManager {
         gameRoomPlayerService.removePlayerFromRoom(roomId, memberId);
     }
 
-    /**
-     * 강퇴된 플레이어인지 확인 (위임)
-     */
-    public boolean isPlayerBanned(String roomId, Long memberId) {
-        return gameRoomPlayerService.isPlayerBanned(roomId, memberId);
-    }
 }
