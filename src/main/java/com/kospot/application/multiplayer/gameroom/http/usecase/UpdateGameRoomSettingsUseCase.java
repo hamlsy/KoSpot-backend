@@ -51,14 +51,16 @@ public class UpdateGameRoomSettingsUseCase {
                 .password(request.getPassword())
                 .build();
     }
-
+    //todo refactor
     private void handleTeamSettingChanged(GameRoom gameRoom, GameRoomRequest.Update request) {
         PlayerMatchType requestPlayerMatchType = PlayerMatchType.fromKey(request.getPlayerMatchTypeKey());
         if(gameRoom.getPlayerMatchType() != requestPlayerMatchType) { // 팀 변경 됐을 때
+            // 개인전 -> 팀전
             String gameRoomId = gameRoom.getId().toString();
-            // 랜덤 팀 부여
-            gameRoomRedisService.assignAllPlayersTeam(gameRoomId);
-
+            switch (requestPlayerMatchType) {
+                case INDIVIDUAL -> gameRoomRedisService.resetAllPlayersTeam(gameRoomId);
+                case TEAM -> gameRoomRedisService.assignAllPlayersTeam(gameRoomId);
+            }
             // 2. playerList broadcast
             gameRoomNotificationService.notifyPlayerListUpdated(gameRoomId);
 

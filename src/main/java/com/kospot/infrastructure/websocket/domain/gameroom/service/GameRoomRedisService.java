@@ -178,6 +178,28 @@ public class GameRoomRedisService {
 
     }
 
+    //todo refactor
+    public void resetAllPlayersTeam(String roomId) {
+        String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
+        List<GameRoomPlayerInfo> players = getRoomPlayers(roomKey);
+        Map<Object, Object> teamRemovals = new HashMap<>();
+
+        for(GameRoomPlayerInfo player : players) {
+            player.setTeam(null);
+            try {
+                teamRemovals.put(player.getMemberId().toString(), objectMapper.writeValueAsString(player));
+            }catch (JsonProcessingException e) {
+                log.error("Failed to serialize player info for Redis during team removal - RoomId: {}, PlayerId: {}",
+                        roomId, player.getMemberId(), e);
+                throw new GameTeamHandler(GameTeamErrorStatus.GAME_TEAM_ERROR_UNKNOWN);
+            }
+        }
+        if(!teamRemovals.isEmpty()) {
+            redisTemplate.opsForHash().putAll(roomKey, teamRemovals);
+        }
+    }
+
+
     /**
      * 게임방 현재 인원 수 조회 (Redis 기반)
      */
