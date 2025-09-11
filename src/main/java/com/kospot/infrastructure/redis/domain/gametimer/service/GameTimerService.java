@@ -1,10 +1,8 @@
 package com.kospot.infrastructure.redis.domain.gametimer.service;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -12,10 +10,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GameTimerService {
 
+    //todo refactor 쓰기 연산 증가, TTL 고려
     private final RedisTemplate<String, String> redisTemplate;
-
-    //todo refactoring redis
-    private static final long ROUND_DURATION_MS = 2 * 60 * 1000; // 2분
 
     private String timerKey(String roomId) { return "game:timer:" + roomId; }
     private String runningKey(String roomId) { return "game:timer:running:" + roomId; }
