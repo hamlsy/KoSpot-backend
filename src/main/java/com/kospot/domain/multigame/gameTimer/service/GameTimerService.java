@@ -1,12 +1,9 @@
-package com.kospot.domain.multigame.gameRound.service;
+package com.kospot.domain.multigame.gameTimer.service;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Service
