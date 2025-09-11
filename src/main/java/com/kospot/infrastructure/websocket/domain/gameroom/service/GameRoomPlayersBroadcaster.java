@@ -1,7 +1,8 @@
 package com.kospot.infrastructure.websocket.domain.gameroom.service;
 
-import com.kospot.domain.multigame.gameRoom.service.GameRoomPlayerService;
+import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotification;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
+import com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,11 +13,13 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class PlayerListBroadcaster {
+public class GameRoomPlayersBroadcaster {
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
     private final GameRoomRedisService gameRoomRedisService;
 
+    // todo refactor
+    // 단일 서버 기준
     @Scheduled(fixedRate = 5000) // 5초마다
     public void broadcastAllRooms() {
         Set<String> roomIds = gameRoomRedisService.getActiveRoomKeys();
@@ -25,7 +28,8 @@ public class PlayerListBroadcaster {
 
     public void broadcastRoom(String roomId) {
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(roomId);
-        simpMessagingTemplate.convertAndSend("/topic/room/" + roomId + "/players", players);
+        GameRoomNotification notification = GameRoomNotification.playerListUpdated(roomId, players);
+        messagingTemplate.convertAndSend(GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId), notification);
     }
 
 }

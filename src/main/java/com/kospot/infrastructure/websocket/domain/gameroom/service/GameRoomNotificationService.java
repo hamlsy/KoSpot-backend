@@ -1,7 +1,6 @@
 package com.kospot.infrastructure.websocket.domain.gameroom.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotification;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotificationType;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
@@ -30,47 +29,43 @@ public class GameRoomNotificationService {
     private final ObjectMapper objectMapper;
     private final GameRoomRedisService gameRoomRedisService;
 
-    private void sendNotification(String roomId, Object notification, String channel) {
-        try {
-            String destination = GameRoomChannelConstants.PREFIX_GAME_ROOM + roomId + "/" + channel;
-            messagingTemplate.convertAndSend(destination, notification);
-        } catch (Exception e) {
-            log.error("Failed to send notification - RoomId: {}, Channel: {}", roomId, channel, e);
-        }
-    }
-
-    /** ---------------- 개별 이벤트 ---------------- **/
+    /**
+     * ---------------- 개별 이벤트 ----------------
+     **/
 
     public void notifyPlayerJoined(String roomId, GameRoomPlayerInfo playerInfo) {
         GameRoomNotification notification = GameRoomNotification.playerJoined(roomId, playerInfo);
-        sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+        messagingTemplate.convertAndSend(GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId), notification);
         log.info("Player joined - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 
     public void notifyPlayerLeft(String roomId, GameRoomPlayerInfo playerInfo) {
         GameRoomNotification notification = GameRoomNotification.playerLeft(roomId, playerInfo);
-        sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+        messagingTemplate.convertAndSend(GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId), notification);
         log.info("Player left - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 
     public void notifyPlayerKicked(String roomId, GameRoomPlayerInfo playerInfo) {
         GameRoomNotification notification = GameRoomNotification.playerKicked(roomId, playerInfo);
-        sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+        messagingTemplate.convertAndSend(GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId), notification);
         log.info("Player kicked - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 
-    /** ---------------- 전체 리스트 갱신 이벤트 ---------------- **/
+    /**
+     * ---------------- 전체 리스트 갱신 이벤트 ----------------
+     **/
 
     public void notifyPlayerListUpdated(String roomId) {
         try {
             List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
             GameRoomNotification notification = GameRoomNotification.playerListUpdated(roomId, allPlayers);
-            sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+            messagingTemplate.convertAndSend(GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId), notification);
             log.info("Player list updated - RoomId: {}, PlayerCount: {}", roomId, allPlayers.size());
         } catch (Exception e) {
             log.error("Failed to send player list updated - RoomId: {}", roomId, e);
         }
     }
+
     /**
      * 방 설정 변경 알림
      */
@@ -97,17 +92,17 @@ public class GameRoomNotificationService {
     public void notifyGameStarted(String roomId) {
         try {
             String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
-            
+
             GameRoomNotification notification = GameRoomNotification.builder()
                     .type(GameRoomNotificationType.GAME_STARTED.name())
                     .roomId(roomId)
                     .timestamp(System.currentTimeMillis())
                     .build();
-            
+
             messagingTemplate.convertAndSend(destination, notification);
-            
+
             log.info("Sent game started notification - RoomId: {}", roomId);
-            
+
         } catch (Exception e) {
             log.error("Failed to send game started notification - RoomId: {}", roomId, e);
         }
@@ -120,9 +115,9 @@ public class GameRoomNotificationService {
         try {
             String destination = PREFIX_GAME_ROOM + roomId + "/" + channel;
             messagingTemplate.convertAndSend(destination, message);
-            
+
             log.debug("Sent custom message - RoomId: {}, Channel: {}", roomId, channel);
-            
+
         } catch (Exception e) {
             log.error("Failed to send custom message - RoomId: {}, Channel: {}", roomId, channel, e);
         }
@@ -134,14 +129,14 @@ public class GameRoomNotificationService {
     public void sendErrorMessage(String roomId, String errorCode, String errorMessage) {
         try {
             String destination = GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId);
-            
-            String message = String.format("{\"type\":\"ERROR\",\"errorCode\":\"%s\",\"message\":\"%s\",\"timestamp\":%d}", 
+
+            String message = String.format("{\"type\":\"ERROR\",\"errorCode\":\"%s\",\"message\":\"%s\",\"timestamp\":%d}",
                     errorCode, errorMessage, System.currentTimeMillis());
-            
+
             messagingTemplate.convertAndSend(destination, message);
-            
+
             log.warn("Sent error message - RoomId: {}, ErrorCode: {}, Message: {}", roomId, errorCode, errorMessage);
-            
+
         } catch (Exception e) {
             log.error("Failed to send error message - RoomId: {}, ErrorCode: {}", roomId, errorCode, e);
         }

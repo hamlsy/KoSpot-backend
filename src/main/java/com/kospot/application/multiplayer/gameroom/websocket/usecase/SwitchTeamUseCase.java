@@ -5,6 +5,7 @@ import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
+import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomPlayersBroadcaster;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 public class SwitchTeamUseCase {
 
     private final GameRoomRedisService gameRoomRedisService;
-    private final GameRoomNotificationService gameRoomNotificationService;
+    private final GameRoomPlayersBroadcaster gameRoomPlayersBroadcaster;
 
     //todo race condition 해결
     public void execute(String roomId, GameRoomRequest.SwitchTeam request, SimpMessageHeaderAccessor headerAccessor) {
@@ -24,7 +25,7 @@ public class SwitchTeamUseCase {
         Long memberId = principal.getMemberId();
         GameTeam team = GameTeam.fromString(request.getTeam());
         gameRoomRedisService.switchTeam(roomId, memberId, team.name());
-        gameRoomNotificationService.notifyPlayerListUpdated(roomId);
+        gameRoomPlayersBroadcaster.broadcastRoom(roomId);
     }
 
 }
