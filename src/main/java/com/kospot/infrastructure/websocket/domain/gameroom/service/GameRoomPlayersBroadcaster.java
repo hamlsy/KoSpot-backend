@@ -20,7 +20,7 @@ public class GameRoomPlayersBroadcaster {
 
     // todo refactor
     // 단일 서버 기준
-    @Scheduled(fixedRate = 5000) // 5초마다
+    @Scheduled(fixedRate = 10000) // 10초마다
     public void broadcastAllRooms() {
         Set<String> roomIds = gameRoomRedisService.getActiveRoomKeys();
         roomIds.stream().parallel().forEach(this::broadcastRoom);
