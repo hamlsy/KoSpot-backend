@@ -18,12 +18,11 @@ public class GameTimerScheduler {
     private final GameTimerBroadcaster gameTimerBroadcaster;
 
     // roomId -> ScheduledFuture 관리 (나중에 취소 가능)
-    private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
     //todo 모든 플레이어가 제출하면 타이머 삭제
     public void startRoomTimer(String roomId, long roundTimeMs) {
         //라운드 시작
-        gameTimerService.startRound();
+
         //기존 스케줄 있으면 취소
 
         //1초마다 실행되는 스케줄 등록
