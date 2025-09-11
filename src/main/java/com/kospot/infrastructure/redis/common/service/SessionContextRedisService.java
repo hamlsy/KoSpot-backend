@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.redis.service;
+package com.kospot.infrastructure.redis.common.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

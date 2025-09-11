@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.redis.service;
+package com.kospot.infrastructure.redis.common.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

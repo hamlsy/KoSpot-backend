@@ -8,7 +8,7 @@ import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomUpdateInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomNotificationService;
-import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
+import com.kospot.infrastructure.redis.domain.gameroom.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomResponse;
 import lombok.RequiredArgsConstructor;

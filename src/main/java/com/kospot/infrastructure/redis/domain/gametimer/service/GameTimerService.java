@@ -1,4 +1,4 @@
-package com.kospot.domain.multigame.gameTimer.service;
+package com.kospot.infrastructure.redis.domain.gametimer.service;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

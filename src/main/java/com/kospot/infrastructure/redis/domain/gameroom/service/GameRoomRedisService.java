@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.domain.gameroom.service;
+package com.kospot.infrastructure.redis.domain.gameroom.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

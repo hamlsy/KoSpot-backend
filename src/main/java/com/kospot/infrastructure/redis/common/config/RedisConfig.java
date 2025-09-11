@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.redis.config;
+package com.kospot.infrastructure.redis.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

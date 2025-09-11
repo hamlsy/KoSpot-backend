@@ -1,7 +1,7 @@
 package com.kospot.application.multiplayer.gameroom.websocket.usecase;
 
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.infrastructure.redis.service.SessionContextRedisService;
+import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;

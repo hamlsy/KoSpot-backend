@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.redis.constants;
+package com.kospot.infrastructure.redis.common.constants;
 
 public final class RedisKeyConstants {
 

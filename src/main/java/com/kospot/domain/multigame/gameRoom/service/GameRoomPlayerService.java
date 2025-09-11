@@ -8,7 +8,7 @@ import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomNotificationService;
-import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
+import com.kospot.infrastructure.redis.domain.gameroom.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

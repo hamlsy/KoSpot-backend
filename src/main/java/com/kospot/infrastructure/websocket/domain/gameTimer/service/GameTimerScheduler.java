@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.websocket.domain.gameTimer.service;
 
-import com.kospot.domain.multigame.gameTimer.service.GameTimerService;
+import com.kospot.infrastructure.redis.domain.gametimer.service.GameTimerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;

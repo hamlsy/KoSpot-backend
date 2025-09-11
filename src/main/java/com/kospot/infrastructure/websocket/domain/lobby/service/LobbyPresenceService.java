@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import static com.kospot.infrastructure.redis.constants.RedisKeyConstants.REDIS_LOBBY_USERS;
+import static com.kospot.infrastructure.redis.common.constants.RedisKeyConstants.REDIS_LOBBY_USERS;
 
 @Slf4j
 @Service
