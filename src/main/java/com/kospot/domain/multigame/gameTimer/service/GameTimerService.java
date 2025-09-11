@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class GameTimerService {
-
+    //todo refactoring redis
     private static final long ROUND_DURATION_MS = 2 * 60 * 1000; // 2분
 
     @Getter
