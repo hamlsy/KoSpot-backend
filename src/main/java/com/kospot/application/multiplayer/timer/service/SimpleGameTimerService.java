@@ -1,5 +1,6 @@
 package com.kospot.application.multiplayer.timer.service;
 
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multigame.gameRound.repository.PhotoGameRoundRepository;
 import com.kospot.domain.multigame.gameRound.repository.RoadViewGameRoundRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SimpleGameTimerService {
 
-    private static final String TIMER_KEY_PREFIX = "game_timer:";
+    private static final String TIMER_KEY_PREFIX = "timer:";
     private final SimpMessagingTemplate messagingTemplate;
 
-    public void startTimer(String roundId) {
+    public void startTimer(String roomId, GameMode gameMode, String roundId) {
         // Redis TTL 설정
-        String timerKey = TIMER_KEY_PREFIX + roundId;
+        String timerKey = String.format(
+                TIMER_KEY_PREFIX + "%s:%s:%s",
+                roomId, gameMode.name(), roundId
+        );
+
 
 //        TimerData timerData = new TimerData(
 //                round.getGameId(),
