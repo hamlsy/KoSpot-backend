@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
@@ -46,4 +48,21 @@ public class RedisConfig {
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
+
+    // pub/sub 사용 이유: TTL 만료 수신 -> application 에게 알림
+    @Bean
+    public RedisMessageListenerContainer redisContainer (RedisConnectionFactory connectionFactory,
+                                                         GameTimerKeyExpirationListener listener) {
+        // Redis Pub/Sub 이벤트 수신 컨테이너
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+
+        //todo implement listner
+
+        // key 만료 이벤트(expired)를 구독
+        container.addMessageListener(listener, new PatternTopic("__keyevent@*__:expired"));
+
+        return container;
+    }
+
 }
