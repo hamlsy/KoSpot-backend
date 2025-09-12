@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ *  RedisMessageListenerContainer 에서
+ *  키 만료 이벤트가 발생하면 이 리스너로 전달됨.
+ */
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
