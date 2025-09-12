@@ -1,5 +1,6 @@
 package com.kospot.infrastructure.redis.common.config;
 
+import com.kospot.infrastructure.redis.domain.gametimer.lisnter.GameTimerKeyExpirationListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
