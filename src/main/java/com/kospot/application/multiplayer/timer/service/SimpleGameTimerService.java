@@ -1,13 +1,11 @@
 package com.kospot.application.multiplayer.timer.service;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.multigame.gameRound.repository.PhotoGameRoundRepository;
-import com.kospot.domain.multigame.gameRound.repository.RoadViewGameRoundRepository;
+import com.kospot.domain.multigame.timer.vo.TimerData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -24,6 +22,9 @@ public class SimpleGameTimerService {
                 roomId, gameMode.name(), roundId
         );
 
+        TimerData timerData = TimerData.builder()
+                .gameId()
+                .build();
 
 //        TimerData timerData = new TimerData(
 //                round.getGameId(),

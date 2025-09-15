@@ -1,7 +1,9 @@
 package com.kospot.infrastructure.redis.domain.gametimer.service;
 
+import com.kospot.domain.multigame.timer.vo.TimerData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,36 +15,40 @@ public class GameTimerService {
     //todo refactor 쓰기 연산 증가, TTL 고려
     private final RedisTemplate<String, String> redisTemplate;
 
-    private String timerKey(String roomId) { return "game:timer:" + roomId; }
-    private String runningKey(String roomId) { return "game:timer:running:" + roomId; }
-
-    public void startRound(String roomId, long roundTimeMs) {
-        redisTemplate.opsForValue().set(timerKey(roomId), String.valueOf(roundTimeMs));
-        redisTemplate.opsForValue().set(runningKey(roomId), "true");
+    private String getTimerKey(String roomId, String roundId) {
+        return "game:timer:" + roomId + ":" + roundId;
     }
 
-    public void endRound(String roomId) {
-        redisTemplate.opsForValue().set(timerKey(roomId), "0");
-        redisTemplate.opsForValue().set(runningKey(roomId), "false");
+    private String getRunningKey(String roomId, String roundId) {
+        return "game:timer:running:" + roomId + ":" + roundId;
     }
 
-    public boolean isRunning(String roomId) {
-        String val = redisTemplate.opsForValue().get(runningKey(roomId));
+    public void startRound(String roomId, String roundId, long roundTimeMs) {
+        redisTemplate.opsForValue().set(getTimerKey(roomId, roundId), String.valueOf(roundTimeMs));
+        redisTemplate.opsForValue().set(getRunningKey(roomId, roundId), "true");
+    }
+
+    public void endRound(String roomId, String roundId) {
+        redisTemplate.opsForValue().set(getTimerKey(roomId, roundId), "0");
+        redisTemplate.opsForValue().set(getRunningKey(roomId, roundId), "false");
+    }
+
+    public boolean isRunning(String roomId, String roundId) {
+        String val = redisTemplate.opsForValue().get(getRunningKey(roomId, roundId));
         return "true".equals(val);
     }
 
-    public long getRemainingTimeMs(String roomId) {
-        String val = redisTemplate.opsForValue().get(timerKey(roomId));
+    public long getRemainingTimeMs(String roomId, String roundId) {
+        String val = redisTemplate.opsForValue().get(getTimerKey(roomId, roundId));
         return val != null ? Long.parseLong(val) : 0L;
     }
 
-    public void decrementTimer(String roomId) {
-        long remaining = getRemainingTimeMs(roomId) - 1000;
-        if(remaining <= 0) {
-            endRound(roomId);
-        } else{
-            redisTemplate.opsForValue().set(timerKey(roomId), String.valueOf(remaining));
+    public void decrementTimer(String roomId, String roundId) {
+        long remaining = getRemainingTimeMs(roomId, roundId) - 1000;
+        if (remaining <= 0) {
+            endRound(roomId, roundId);
+        } else {
+            redisTemplate.opsForValue().set(getTimerKey(roomId, roundId), String.valueOf(remaining));
         }
     }
-
 }
