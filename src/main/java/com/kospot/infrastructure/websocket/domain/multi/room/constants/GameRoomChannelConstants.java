@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.domain.gameroom.constants;
+package com.kospot.infrastructure.websocket.domain.multi.room.constants;
 
 import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.PREFIX_TOPIC;
 

@@ -4,7 +4,7 @@ import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.infrastructure.redis.domain.gameroom.service.GameRoomRedisService;
+import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

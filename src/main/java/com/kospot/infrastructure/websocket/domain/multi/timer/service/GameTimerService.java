@@ -1,19 +1,17 @@
-package com.kospot.infrastructure.websocket.domain.gameTimer.service;
+package com.kospot.infrastructure.websocket.domain.multi.timer.service;
 
 import com.kospot.application.multiplayer.timer.message.TimerStartMessage;
 import com.kospot.application.multiplayer.timer.message.TimerSyncMessage;
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.infrastructure.redis.domain.timer.dao.GameTimerRedisRepository;
+import com.kospot.infrastructure.redis.domain.multi.timer.dao.GameTimerRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
@@ -29,7 +27,7 @@ public class GameTimerService {
     private static final int SYNC_INTERVAL_MS = 5000; // 5초마다 동기화
     private static final int FINAL_COUNTDOWN_THRESHOLD_MS = 10000; // 마지막 10초 카운트다운
 
-    private static final String TIMER_START_SUFFIX = "/tier/start";
+    private static final String TIMER_START_SUFFIX = "/timer/start";
 
     private String getTimerTopic(String gameId) {
         return String.format("/game/%s/timer/sync", gameId);

@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.websocket.constants;
 
-import static com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
+import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
 
 /**
  * WebSocket 채널 경로 및 설정 상수

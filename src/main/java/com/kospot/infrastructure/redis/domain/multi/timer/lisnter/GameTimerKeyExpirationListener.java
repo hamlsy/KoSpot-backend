@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.redis.domain.timer.lisnter;
+package com.kospot.infrastructure.redis.domain.multi.timer.lisnter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

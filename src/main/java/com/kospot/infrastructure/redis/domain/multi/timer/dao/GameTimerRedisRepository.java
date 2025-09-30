@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.redis.domain.timer.dao;
+package com.kospot.infrastructure.redis.domain.multi.timer.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

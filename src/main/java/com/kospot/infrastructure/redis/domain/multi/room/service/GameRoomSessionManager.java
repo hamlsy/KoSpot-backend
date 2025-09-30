@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.redis.domain.gameroom.service;
+package com.kospot.infrastructure.redis.domain.multi.room.service;
 
 import com.kospot.domain.multigame.gameRoom.service.GameRoomPlayerService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;

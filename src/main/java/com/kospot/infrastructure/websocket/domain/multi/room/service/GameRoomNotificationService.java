@@ -1,12 +1,12 @@
-package com.kospot.infrastructure.websocket.domain.gameroom.service;
+package com.kospot.infrastructure.websocket.domain.multi.room.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotification;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomNotificationType;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomUpdateInfo;
-import com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants;
-import com.kospot.infrastructure.redis.domain.gameroom.service.GameRoomRedisService;
+import com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants;
+import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.message.GameRoomUpdateMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.kospot.infrastructure.websocket.domain.gameroom.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
+import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
 
 /**
  * 게임방 실시간 알림 전송 서비스

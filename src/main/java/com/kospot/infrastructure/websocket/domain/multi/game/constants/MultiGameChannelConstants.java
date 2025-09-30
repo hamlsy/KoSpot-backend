@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.domain.gameTimer.constants;
+package com.kospot.infrastructure.websocket.domain.multi.game.constants;
 
 public class MultiGameChannelConstants {
     private MultiGameChannelConstants() {

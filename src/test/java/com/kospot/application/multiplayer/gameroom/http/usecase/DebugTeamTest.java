@@ -9,7 +9,7 @@ import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomStatus;
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.infrastructure.redis.domain.gameroom.service.GameRoomRedisService;
+import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;

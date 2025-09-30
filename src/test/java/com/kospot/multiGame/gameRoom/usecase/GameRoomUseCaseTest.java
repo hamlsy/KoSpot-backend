@@ -12,7 +12,7 @@ import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomStatus;
 import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
 import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
-import com.kospot.infrastructure.redis.domain.gameroom.service.GameRoomRedisService;
+import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;
 import jakarta.persistence.EntityManager;
