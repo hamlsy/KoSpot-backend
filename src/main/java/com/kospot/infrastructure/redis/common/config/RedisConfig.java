@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.redis.common.config;
 
-import com.kospot.infrastructure.redis.domain.gametimer.lisnter.GameTimerKeyExpirationListener;
+import com.kospot.infrastructure.redis.domain.timer.lisnter.GameTimerKeyExpirationListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,6 @@ import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @RequiredArgsConstructor

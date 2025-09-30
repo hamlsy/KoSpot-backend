@@ -14,11 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 public class TimerData {
 
-    private String gameId;
     private String roundId;
     private GameMode gameMode;
     private int durationSeconds;
     private long startTimeMillis;
-    private List<String> playerIds;
 
 }

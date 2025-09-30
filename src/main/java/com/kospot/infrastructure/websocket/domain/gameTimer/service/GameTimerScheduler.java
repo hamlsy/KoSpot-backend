@@ -1,13 +1,9 @@
 package com.kospot.infrastructure.websocket.domain.gameTimer.service;
 
-import com.kospot.infrastructure.redis.domain.gametimer.service.GameTimerService;
+import com.kospot.infrastructure.redis.domain.timer.service.GameTimerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
 
 @Service
 @RequiredArgsConstructor

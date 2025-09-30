@@ -1,9 +1,7 @@
-package com.kospot.infrastructure.redis.domain.gametimer.service;
+package com.kospot.infrastructure.redis.domain.timer.service;
 
-import com.kospot.domain.multigame.timer.vo.TimerData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
