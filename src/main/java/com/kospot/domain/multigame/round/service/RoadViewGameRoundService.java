@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -19,10 +21,11 @@ public class RoadViewGameRoundService {
     private final CoordinateService coordinateService;
     private final RoadViewGameRoundRepository roundRepository;
 
-    public RoadViewGameRound createGameRound(MultiRoadViewGame game, int currentRound) {
+    public RoadViewGameRound createGameRound(MultiRoadViewGame game, int currentRound, Integer timeLimit , List<Long> playerIds) {
         CoordinateNationwide coordinate = (CoordinateNationwide) coordinateService.getRandomNationwideCoordinate();
-        RoadViewGameRound gameRound = RoadViewGameRound.createRound(currentRound, coordinate);
+        RoadViewGameRound gameRound = RoadViewGameRound.createRound(currentRound, coordinate, timeLimit, playerIds);
         gameRound.setMultiRoadViewGame(game);
+        gameRound.startRound();
         return roundRepository.save(gameRound);
     }
 

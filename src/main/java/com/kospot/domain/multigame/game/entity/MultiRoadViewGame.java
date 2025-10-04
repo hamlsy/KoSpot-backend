@@ -25,10 +25,6 @@ public class MultiRoadViewGame extends MultiGame {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_room_id")
     private GameRoom gameRoom;
-
-    @Builder.Default
-    @OneToMany(mappedBy = "multiRoadViewGame", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoadViewGameRound> roadViewGameRounds = new ArrayList<>();
     
     // 생성 메서드
     public static MultiRoadViewGame createGame(GameRoom gameRoom, PlayerMatchType matchType,
@@ -42,10 +38,5 @@ public class MultiRoadViewGame extends MultiGame {
                 .gameRoom(gameRoom)
                 .build();
     }
-    
-    // 게임 라운드 추가
-    public void addGameRound(RoadViewGameRound roadViewGameRound) {
-        this.roadViewGameRounds.add(roadViewGameRound);
-        roadViewGameRound.setMultiRoadViewGame(this);
-    }
+
 }

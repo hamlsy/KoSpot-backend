@@ -52,7 +52,6 @@ public class RoadViewGameRound extends BaseGameRound {
     // Business methods
     public void setMultiRoadViewGame(MultiRoadViewGame multiRoadViewGame) {
         this.multiRoadViewGame = multiRoadViewGame;
-        multiRoadViewGame.getRoadViewGameRounds().add(this);
     }
     
     public void addPlayerSubmission(RoadViewPlayerSubmission submission) {
@@ -66,10 +65,12 @@ public class RoadViewGameRound extends BaseGameRound {
     }
     
     // create method
-    public static RoadViewGameRound createRound(Integer roundNumber, CoordinateNationwide targetCoordinate) {
+    public static RoadViewGameRound createRound(Integer roundNumber, CoordinateNationwide targetCoordinate, Integer timeLimit, List<Long> playerIds) {
         return RoadViewGameRound.builder()
                 .roundNumber(roundNumber)
                 .targetCoordinate(targetCoordinate)
+                .timeLimit(timeLimit)
+                .playerIds(playerIds) //redis
                 .isFinished(false)
                 .build();
     }
