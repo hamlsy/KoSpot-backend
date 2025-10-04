@@ -2,8 +2,8 @@ package com.kospot.application.multiplayer.game;
 
 import com.kospot.domain.multigame.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multigame.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
-import com.kospot.domain.multigame.gameRound.service.RoadViewGameRoundService;
+import com.kospot.domain.multigame.round.entity.RoadViewGameRound;
+import com.kospot.domain.multigame.round.service.RoadViewGameRoundService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.multigame.game.dto.response.MultiRoadViewGameResponse;
 import lombok.RequiredArgsConstructor;

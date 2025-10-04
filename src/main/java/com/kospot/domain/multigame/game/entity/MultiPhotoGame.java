@@ -2,8 +2,8 @@ package com.kospot.domain.multigame.game.entity;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multigame.game.vo.PlayerMatchType;
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multigame.gameRound.entity.PhotoGameRound;
+import com.kospot.domain.multigame.room.entity.GameRoom;
+import com.kospot.domain.multigame.round.entity.PhotoGameRound;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package com.kospot.application.multiplayer.gameroom.http.usecase;
 
-import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
+import com.kospot.domain.multigame.room.adaptor.GameRoomAdaptor;
+import com.kospot.domain.multigame.room.entity.GameRoom;
+import com.kospot.domain.multigame.room.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;

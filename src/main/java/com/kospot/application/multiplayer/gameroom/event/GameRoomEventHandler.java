@@ -1,11 +1,11 @@
 package com.kospot.application.multiplayer.gameroom.event;
 
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multigame.gameRoom.event.GameRoomJoinEvent;
-import com.kospot.domain.multigame.gameRoom.event.GameRoomLeaveEvent;
-import com.kospot.domain.multigame.gameRoom.service.GameRoomPlayerService;
-import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
+import com.kospot.domain.multigame.room.entity.GameRoom;
+import com.kospot.domain.multigame.room.event.GameRoomJoinEvent;
+import com.kospot.domain.multigame.room.event.GameRoomLeaveEvent;
+import com.kospot.domain.multigame.room.service.GameRoomPlayerService;
+import com.kospot.domain.multigame.room.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;

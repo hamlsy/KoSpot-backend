@@ -1,7 +1,6 @@
 package com.kospot.application.multiplayer.timer.service;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
 import com.kospot.domain.multigame.timer.vo.TimerData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

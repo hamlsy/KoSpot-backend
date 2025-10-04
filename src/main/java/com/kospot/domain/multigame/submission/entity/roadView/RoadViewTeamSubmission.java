@@ -1,7 +1,7 @@
 package com.kospot.domain.multigame.submission.entity.roadView;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
+import com.kospot.domain.multigame.round.entity.RoadViewGameRound;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

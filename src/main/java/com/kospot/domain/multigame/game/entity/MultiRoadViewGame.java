@@ -2,8 +2,8 @@ package com.kospot.domain.multigame.game.entity;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multigame.game.vo.PlayerMatchType;
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
+import com.kospot.domain.multigame.room.entity.GameRoom;
+import com.kospot.domain.multigame.round.entity.RoadViewGameRound;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

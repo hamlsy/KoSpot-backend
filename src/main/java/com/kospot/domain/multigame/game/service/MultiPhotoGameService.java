@@ -1,12 +1,12 @@
 package com.kospot.domain.multigame.game.service;
 
 import com.kospot.domain.multigame.game.entity.MultiPhotoGame;
-import com.kospot.domain.multigame.gameRound.entity.PhotoGameRound;
-import com.kospot.domain.multigame.gameRound.repository.PhotoGameRoundRepository;
+import com.kospot.domain.multigame.round.entity.PhotoGameRound;
+import com.kospot.domain.multigame.round.repository.PhotoGameRoundRepository;
 import com.kospot.domain.multigame.submission.entity.photo.PhotoPlayerSubmission;
 import com.kospot.domain.multigame.game.repository.MultiPhotoGameRepository;
 import com.kospot.domain.multigame.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multigame.room.entity.GameRoom;
 import com.kospot.infrastructure.exception.object.domain.GameHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.kospot.presentation.multigame.round.dto.response;
 
 import com.kospot.domain.multigame.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
+import com.kospot.domain.multigame.round.entity.RoadViewGameRound;
 import com.kospot.domain.multigame.submission.entity.roadView.RoadViewPlayerSubmission;
 import com.kospot.presentation.multigame.gamePlayer.dto.response.GamePlayerResponse;
 import com.kospot.presentation.multigame.submission.dto.response.SubmissionResponse;

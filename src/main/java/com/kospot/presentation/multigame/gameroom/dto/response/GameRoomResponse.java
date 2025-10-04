@@ -1,6 +1,6 @@
 package com.kospot.presentation.multigame.gameroom.dto.response;
 
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multigame.room.entity.GameRoom;
 import lombok.*;
 
 @Data

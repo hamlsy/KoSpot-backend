@@ -4,11 +4,11 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.multigame.game.vo.PlayerMatchType;
 // import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor; // 현재 테스트에서 사용하지 않음
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
+import com.kospot.domain.multigame.room.entity.GameRoom;
+import com.kospot.domain.multigame.room.repository.GameRoomRepository;
 import com.kospot.domain.member.repository.MemberRepository;
-import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
-import com.kospot.domain.multigame.gameRoom.vo.GameRoomStatus;
+import com.kospot.domain.multigame.room.vo.GameRoomPlayerInfo;
+import com.kospot.domain.multigame.room.vo.GameRoomStatus;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;

@@ -5,7 +5,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multigame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multigame.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multigame.gamePlayer.repository.GamePlayerRepository;
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
+import com.kospot.domain.multigame.room.entity.GameRoom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,6 +1,6 @@
 package com.kospot.application.multiplayer.gameroom.websocket.usecase;
 
-import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
+import com.kospot.domain.multigame.room.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gamePlayer.exception.GameTeamHandler;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;

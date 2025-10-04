@@ -12,11 +12,11 @@ import com.kospot.domain.multigame.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multigame.game.vo.PlayerMatchType;
 import com.kospot.domain.multigame.game.repository.MultiRoadViewGameRepository;
 import com.kospot.domain.multigame.gamePlayer.repository.GamePlayerRepository;
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multigame.gameRoom.vo.GameRoomStatus;
-import com.kospot.domain.multigame.gameRoom.repository.GameRoomRepository;
-import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
-import com.kospot.domain.multigame.gameRound.repository.RoadViewGameRoundRepository;
+import com.kospot.domain.multigame.room.entity.GameRoom;
+import com.kospot.domain.multigame.room.vo.GameRoomStatus;
+import com.kospot.domain.multigame.room.repository.GameRoomRepository;
+import com.kospot.domain.multigame.round.entity.RoadViewGameRound;
+import com.kospot.domain.multigame.round.repository.RoadViewGameRoundRepository;
 
 import com.kospot.presentation.multigame.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multigame.game.dto.response.MultiRoadViewGameResponse;

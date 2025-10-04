@@ -2,8 +2,8 @@ package com.kospot.application.multiplayer.submission;
 
 import com.kospot.domain.multigame.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multigame.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multigame.gameRound.adaptor.RoadViewGameRoundAdaptor;
-import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
+import com.kospot.domain.multigame.round.adaptor.RoadViewGameRoundAdaptor;
+import com.kospot.domain.multigame.round.entity.RoadViewGameRound;
 import com.kospot.domain.multigame.submission.entity.roadView.RoadViewPlayerSubmission;
 import com.kospot.domain.multigame.submission.service.RoadViewPlayerSubmissionService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;

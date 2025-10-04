@@ -2,10 +2,10 @@ package com.kospot.application.multiplayer.gameroom.http.usecase;
 
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.multigame.gameRoom.adaptor.GameRoomAdaptor;
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multigame.gameRoom.service.GameRoomPlayerService;
-import com.kospot.domain.multigame.gameRoom.service.GameRoomService;
+import com.kospot.domain.multigame.room.adaptor.GameRoomAdaptor;
+import com.kospot.domain.multigame.room.entity.GameRoom;
+import com.kospot.domain.multigame.room.service.GameRoomPlayerService;
+import com.kospot.domain.multigame.room.service.GameRoomService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.kospot.presentation.multigame.gameroom.dto.response;
 
-import com.kospot.domain.multigame.gameRoom.entity.GameRoom;
-import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
+import com.kospot.domain.multigame.room.entity.GameRoom;
+import com.kospot.domain.multigame.room.vo.GameRoomPlayerInfo;
 import lombok.*;
 
 import java.util.List;

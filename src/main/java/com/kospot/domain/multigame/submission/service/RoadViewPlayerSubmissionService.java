@@ -1,7 +1,7 @@
 package com.kospot.domain.multigame.submission.service;
 
 import com.kospot.domain.multigame.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multigame.gameRound.entity.RoadViewGameRound;
+import com.kospot.domain.multigame.round.entity.RoadViewGameRound;
 import com.kospot.domain.multigame.submission.entity.roadView.RoadViewPlayerSubmission;
 import com.kospot.domain.multigame.submission.repository.RoadViewPlayerSubmissionRepository;
 

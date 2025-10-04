@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.redis.domain.multi.room.service;
 
-import com.kospot.domain.multigame.gameRoom.service.GameRoomPlayerService;
+import com.kospot.domain.multigame.room.service.GameRoomPlayerService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
