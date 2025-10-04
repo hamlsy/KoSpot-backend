@@ -6,16 +6,14 @@ import com.kospot.domain.multigame.gamePlayer.exception.GameTeamErrorStatus;
 import com.kospot.domain.multigame.gamePlayer.exception.GameTeamHandler;
 import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multigame.gameRoom.vo.RoomPlayerStats;
+import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -30,7 +28,6 @@ public class GameRoomRedisService {
 
     // Redis Key Patterns
     private static final String ROOM_PLAYERS_KEY = "game:room:%s:players";
-    private static final String ROOM_BANNED_KEY = "game:room:%s:banned";
     private static final String PLAYER_SESSION_KEY = "game:player:%s:session";
     private static final String SESSION_SUBSCRIPTIONS_KEY = "game:session:%s:subscriptions";
     private static final String SESSION_ROOM_KEY = "game:session:%s:room";
@@ -39,6 +36,7 @@ public class GameRoomRedisService {
     private static final int SESSION_EXPIRY_HOURS = 24;
     private static final int ROOM_DATA_EXPIRY_HOURS = 12;
 
+    private final GameRoomRedisRepository gameRoomRedisRepository;
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -51,8 +49,7 @@ public class GameRoomRedisService {
             String playerJson = objectMapper.writeValueAsString(playerInfo);
 
             //todo implement member detail statistic info in http methods -> 그냥 http 요청으로 처리, redis에 너무 많은 데이터
-            redisTemplate.opsForHash().put(roomKey, playerInfo.getMemberId().toString(), playerJson);
-            redisTemplate.expire(roomKey, ROOM_DATA_EXPIRY_HOURS, TimeUnit.HOURS);
+            gameRoomRedisRepository.savePlayer(roomKey, playerInfo.getMemberId().toString(), playerJson, ROOM_DATA_EXPIRY_HOURS);
 
             log.debug("Added player to room Redis - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
 
@@ -68,12 +65,12 @@ public class GameRoomRedisService {
      */
     public GameRoomPlayerInfo removePlayerFromRoom(String roomId, Long memberId) {
         try {
-            String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
-            String playerJson = (String) redisTemplate.opsForHash().get(roomKey, memberId.toString());
+            String roomKey = getRoomKey(roomId);
+            String playerJson = gameRoomRedisRepository.findPlayer(roomKey, memberId.toString());
 
             if (playerJson != null) {
                 GameRoomPlayerInfo playerInfo = objectMapper.readValue(playerJson, GameRoomPlayerInfo.class);
-                redisTemplate.opsForHash().delete(roomKey, memberId.toString());
+                gameRoomRedisRepository.deletePlayer(roomKey, memberId.toString());
 
                 log.debug("Removed player from room Redis - RoomId: {}, PlayerId: {}", roomId, memberId);
                 return playerInfo;
@@ -93,19 +90,21 @@ public class GameRoomRedisService {
      */
     public List<GameRoomPlayerInfo> getRoomPlayers(String roomId) {
         try {
-            String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
-            Map<Object, Object> players = redisTemplate.opsForHash().entries(roomKey);
+            String roomKey = getRoomKey(roomId);
+            Map<Object, Object> players = gameRoomRedisRepository.findAllPlayers(roomKey);
 
             return players.values().stream()
-                    .map(playerJson -> {
-                        try {
-                            return objectMapper.readValue((String) playerJson, GameRoomPlayerInfo.class);
-                        } catch (JsonProcessingException e) {
-                            log.error("Failed to deserialize player info: {}", playerJson);
-                            return null;
-                        }
-                    })
-                    .filter(player -> player != null)
+                    .map(playerJson ->
+                            {
+                                try {
+                                    return objectMapper.readValue((String) playerJson, GameRoomPlayerInfo.class);
+                                } catch (JsonProcessingException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+
+                    )
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
         } catch (Exception e) {
@@ -116,13 +115,13 @@ public class GameRoomRedisService {
 
     public void switchTeam(String roomId, Long memberId, String newTeam) {
         try {
-            if(isNotValidTeamCount(roomId, newTeam)) {
+            if (isNotValidTeamCount(roomId, newTeam)) {
                 log.warn("Team switch denied - RoomId: {}, PlayerId: {}, NewTeam: {} (Team full)",
                         roomId, memberId, newTeam);
                 return;
             }
             String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
-            String playerJson = (String) redisTemplate.opsForHash().get(roomKey, memberId.toString());
+            String playerJson = gameRoomRedisRepository.findPlayer(roomKey, memberId.toString());
 
             if (playerJson != null) {
                 GameRoomPlayerInfo playerInfo = objectMapper.readValue(playerJson, GameRoomPlayerInfo.class);
@@ -159,19 +158,19 @@ public class GameRoomRedisService {
         int redTeamSize = (totalPlayers + 1) / 2;
         Map<Object, Object> teamAssignments = new HashMap<>();
 
-        for(int i = 0; i < totalPlayers; i++) {
+        for (int i = 0; i < totalPlayers; i++) {
             GameRoomPlayerInfo player = players.get(i);
             String team = (i < redTeamSize) ? "RED" : "BLUE";
             player.setTeam(team);
             try {
                 teamAssignments.put(player.getMemberId().toString(), objectMapper.writeValueAsString(player));
-            }catch (JsonProcessingException e) {
+            } catch (JsonProcessingException e) {
                 log.error("Failed to serialize player info for Redis during team assignment - RoomId: {}, PlayerId: {}",
                         roomId, player.getMemberId(), e);
                 throw new GameTeamHandler(GameTeamErrorStatus.GAME_TEAM_ERROR_UNKNOWN);
             }
         }
-        if(!teamAssignments.isEmpty()) {
+        if (!teamAssignments.isEmpty()) {
             redisTemplate.opsForHash().putAll(roomKey, teamAssignments);
         }
 
@@ -183,33 +182,18 @@ public class GameRoomRedisService {
         List<GameRoomPlayerInfo> players = getRoomPlayers(roomId);
         Map<Object, Object> teamRemovals = new HashMap<>();
 
-        for(GameRoomPlayerInfo player : players) {
+        for (GameRoomPlayerInfo player : players) {
             player.setTeam(null);
             try {
                 teamRemovals.put(player.getMemberId().toString(), objectMapper.writeValueAsString(player));
-            }catch (JsonProcessingException e) {
+            } catch (JsonProcessingException e) {
                 log.error("Failed to serialize player info for Redis during team removal - RoomId: {}, PlayerId: {}",
                         roomId, player.getMemberId(), e);
                 throw new GameTeamHandler(GameTeamErrorStatus.GAME_TEAM_ERROR_UNKNOWN);
             }
         }
-        if(!teamRemovals.isEmpty()) {
+        if (!teamRemovals.isEmpty()) {
             redisTemplate.opsForHash().putAll(roomKey, teamRemovals);
-        }
-    }
-
-
-    /**
-     * 게임방 현재 인원 수 조회 (Redis 기반)
-     */
-    public int getCurrentPlayerCount(String roomId) {
-        try {
-            String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
-            Long count = redisTemplate.opsForHash().size(roomKey);
-            return count.intValue();
-        } catch (Exception e) {
-            log.error("Failed to get current player count from Redis - RoomId: {}", roomId, e);
-            return 0;
         }
     }
 
@@ -217,15 +201,22 @@ public class GameRoomRedisService {
      * 게임방이 비어있는지 확인
      */
     public boolean isRoomEmpty(String roomId) {
-        return getCurrentPlayerCount(roomId) == 0;
+        String roomKey = getRoomKey(roomId);
+        int currentPlayerCount = gameRoomRedisRepository.countPlayers(roomKey);
+        return currentPlayerCount == 0;
+    }
+
+    private String getRoomKey(String roomId) {
+        return String.format(ROOM_PLAYERS_KEY, roomId);
     }
 
     /**
-     *  "Read-Then-Check"
-     *  race condition 방지 안 됨 todo refactor
+     * "Read-Then-Check"
+     * race condition 방지 안 됨 todo refactor
      */
     public boolean cannotJoinRoom(String roomId, int maxPlayers) {
-        int currentCount = getCurrentPlayerCount(roomId);
+        String roomKey = getRoomKey(roomId);
+        int currentCount = gameRoomRedisRepository.countPlayers(roomKey);
         boolean canJoin = currentCount < maxPlayers;
 
         log.debug("Room capacity check - RoomId: {}, Current: {}, Max: {}, CanJoin: {}",
@@ -234,21 +225,6 @@ public class GameRoomRedisService {
         return !canJoin;
     }
 
-
-    /**
-     * 게임방 통계 정보 조회
-     */
-    public RoomPlayerStats getRoomPlayerStats(String roomId) {
-        int currentCount = getCurrentPlayerCount(roomId);
-        Set<String> bannedPlayers = redisTemplate.opsForSet().members(String.format(ROOM_BANNED_KEY, roomId));
-        int bannedCount = bannedPlayers != null ? bannedPlayers.size() : 0;
-
-        return RoomPlayerStats.builder()
-                .roomId(roomId)
-                .currentPlayerCount(currentCount)
-                .lastUpdated(System.currentTimeMillis())
-                .build();
-    }
 
     /**
      * 세션 정보 저장
@@ -339,10 +315,6 @@ public class GameRoomRedisService {
                         // 플레이어 목록 삭제
                         redisTemplate.delete(key);
 
-                        // 강퇴 목록 삭제
-                        String bannedKey = String.format(ROOM_BANNED_KEY, roomId);
-                        redisTemplate.delete(bannedKey);
-
                         cleanedRooms++;
                         log.debug("Cleaned up empty room - RoomId: {}", roomId);
                     }
@@ -374,7 +346,8 @@ public class GameRoomRedisService {
 
             for (String key : roomKeys) {
                 String roomId = extractRoomIdFromKey(key);
-                int playerCount = getCurrentPlayerCount(roomId);
+                String roomKey = getRoomKey(roomId);
+                int playerCount = gameRoomRedisRepository.countPlayers(roomKey);
 
                 totalPlayers += playerCount;
                 if (playerCount == 0) {
