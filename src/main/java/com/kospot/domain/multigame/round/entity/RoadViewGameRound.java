@@ -12,6 +12,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,11 @@ public class RoadViewGameRound extends BaseGameRound {
     @Override
     public GameMode getGameMode() {
         return GameMode.ROADVIEW;
+    }
+
+    @Override
+    public Duration getDuration() {
+        return Duration.
     }
     
     // Business methods

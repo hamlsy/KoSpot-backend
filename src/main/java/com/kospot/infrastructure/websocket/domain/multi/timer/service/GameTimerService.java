@@ -3,6 +3,7 @@ package com.kospot.infrastructure.websocket.domain.multi.timer.service;
 import com.kospot.application.multiplayer.timer.message.TimerStartMessage;
 import com.kospot.application.multiplayer.timer.message.TimerSyncMessage;
 import com.kospot.domain.game.vo.GameMode;
+import com.kospot.infrastructure.redis.domain.multi.round.dao.GameRoundRedisRepository;
 import com.kospot.infrastructure.redis.domain.multi.timer.dao.GameTimerRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,6 +20,7 @@ import java.util.concurrent.ScheduledFuture;
 @RequiredArgsConstructor
 public class GameTimerService {
 
+    private final GameRoundRedisRepository gameRoundRedisRepository;
     private final GameTimerRedisRepository gameTimerRedisRepository;
     private final SimpMessagingTemplate messagingTemplate;
     private final ApplicationEventPublisher eventPublisher;
@@ -62,7 +64,10 @@ public class GameTimerService {
         messagingTemplate.convertAndSend(destination, message);
     }
 
-    private void scheduleTimerSync(String gameId) {
+    /**
+     * 주기적 타이머 동기화 (5초마다)
+     */
+     private void scheduleTimerSync(String gameId) {
         String topic = getTimerTopic(gameId);
 
         ScheduledFuture<?> syncTask = taskScheduler.scheduleAtFixedRate(() -> {

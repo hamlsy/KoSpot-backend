@@ -8,6 +8,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public abstract class BaseGameRound extends BaseTimeEntity {
 
     private Integer roundNumber;
     private Boolean isFinished = false;
+    public Duration duration;
 
     @Builder.Default
     private List<Long> playerIds = new ArrayList<>();
