@@ -42,8 +42,6 @@ public class PhotoGameRound extends BaseGameRound {
     @Builder.Default
     @OneToMany(mappedBy = "photoGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhotoPlayerSubmission> playerSubmissions = new ArrayList<>();
-    
-    private Boolean isFinished;
 
     @Override
     public GameMode getGameMode() {
@@ -72,10 +70,6 @@ public class PhotoGameRound extends BaseGameRound {
         submission.setPhotoGameRound(this);
         
         return correctAnswersCount;
-    }
-    
-    public void finishRound() {
-        this.isFinished = true;
     }
     
     // 모든 플레이어가 정답을 맞췄는지 확인

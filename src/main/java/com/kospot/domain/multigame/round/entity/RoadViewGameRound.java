@@ -43,17 +43,10 @@ public class RoadViewGameRound extends BaseGameRound {
     @Builder.Default
     @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadViewTeamSubmission> roadViewTeamSubmissions = new ArrayList<>();
-    
-    private Boolean isFinished;
 
     @Override
     public GameMode getGameMode() {
         return GameMode.ROADVIEW;
-    }
-
-    @Override
-    public Duration getDuration() {
-        return Duration.
     }
     
     // Business methods

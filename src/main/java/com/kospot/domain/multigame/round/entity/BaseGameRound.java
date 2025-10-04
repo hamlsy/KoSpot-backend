@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +22,41 @@ public abstract class BaseGameRound extends BaseTimeEntity {
 
     private Integer roundNumber;
     private Boolean isFinished = false;
-    public Duration duration;
+    public Integer timeLimit; // in seconds
+
+    private Instant serverStartTime; // 서버 시작 시간
 
     @Builder.Default
     private List<Long> playerIds = new ArrayList<>();
 
     public abstract GameMode getGameMode();
+
+    //business methods
+    public Duration getDuration() {
+        if (timeLimit != null) {
+            return Duration.ofSeconds(timeLimit);
+        }
+        return getGameMode().getDuration(); //기본값
+    }
+
+    public void startRound() {
+        this.serverStartTime = Instant.now();
+    }
+
+    // 남은 시간
+    public long getRemainingTimeMs() {
+        if (this.serverStartTime == null) {
+            return getDuration().toMillis();
+        }
+        Duration elapsed = Duration.between(this.serverStartTime, Instant.now());
+        long remaining = getDuration().toMillis() - elapsed.toMillis();
+        return Math.max(remaining, 0);
+    }
+
+    //타이머 종료 여부
+    public boolean isTimeExpired() {
+        return getRemainingTimeMs() <= 0;
+    }
 
     public void finishRound() {
         validateRoundNotFinished();
