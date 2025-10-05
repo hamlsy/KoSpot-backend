@@ -6,6 +6,7 @@ import com.kospot.domain.multi.round.entity.BaseGameRound;
 import com.kospot.infrastructure.redis.domain.multi.round.dao.GameRoundRedisRepository;
 import com.kospot.infrastructure.redis.domain.multi.timer.dao.GameTimerRedisRepository;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
+import com.kospot.infrastructure.websocket.domain.multi.timer.event.RoundCompletionEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -36,12 +37,6 @@ public class GameTimerService {
     private static final int SYNC_INTERVAL_MS = 5000; // 5초마다 동기화
     private static final int FINAL_COUNTDOWN_THRESHOLD_MS = 10000; // 마지막 10초 카운트다운
 
-    private static final String TIMER_START_SUFFIX = "/timer/start";
-
-    private String getTimerTopic(String gameId) {
-        return String.format("/game/%s/timer/sync", gameId);
-    }
-
     /**
      * 라운드 시작
      * - Redis 저장으로 서버 재시작 시에도 타이머 유지
@@ -64,7 +59,7 @@ public class GameTimerService {
 //        broadcastToGame(gameRoomId, TIMER_START_SUFFIX, message);
 
         // 타이머 스케줄링
-         scheduleTimerSync(gameId, round);
+         scheduleTimerSync(gameRoomId, round);
         // scheduleRondCompletion(round);
 
     }
@@ -77,13 +72,11 @@ public class GameTimerService {
 
     /**
      * 주기적 타이머 동기화 (5초마다)
-     * todo gameId -> gameRoomId
      */
-    private void scheduleTimerSync(String gameId, BaseGameRound round) {
-        String taskKey = gameId + ":" + round.getRoundId();
+    private void scheduleTimerSync(String gameRoomId, BaseGameRound round) {
+        String taskKey = getTaskKey(gameRoomId, round);
         cancelSyncTask(taskKey);
         ScheduledFuture<?> syncTask = taskScheduler.scheduleAtFixedRate(() -> {
-            // redis 에서 roundId로 round 정보 가져오기
             long remainingTimeMs = round.getRemainingTimeMs();
             if (remainingTimeMs <= 0) {
                 cancelSyncTask(taskKey);
@@ -96,11 +89,15 @@ public class GameTimerService {
                     .serverTimestamp(System.currentTimeMillis())
                     .isFinalCountDown(isFinalCountdown)
                     .build();
-            String syncChannel = MultiGameChannelConstants.getTimerChannel(gameId) + "/sync";
+            String syncChannel = MultiGameChannelConstants.getTimerChannel(gameRoomId) + "/sync";
             messagingTemplate.convertAndSend(syncChannel, syncMessage);
 
         }, Instant.now().plusMillis(SYNC_INTERVAL_MS), Duration.ofMillis(SYNC_INTERVAL_MS)); // 현재 시각 기준으로 5초 뒤에 첫 실행, 이후 5초 간격으로 계속 반복
         syncTasks.put(taskKey, syncTask);
+    }
+
+    private static String getTaskKey(String gameRoomId, BaseGameRound round) {
+        return gameRoomId + ":" + round.getRoundId();
     }
 
     /**
@@ -113,32 +110,29 @@ public class GameTimerService {
     /**
      * 라운드 종료 스케줄링
      */
-    private void scheduleRoundCompletion(String gameId, BaseGameRound round) {
-        //todo implement
-        String taskKey = gameId + ":" + round.getRoundId();
+    private void scheduleRoundCompletion(String gameRoomId, BaseGameRound round) {
+        String taskKey = getTaskKey(gameRoomId, round);
         Instant completionTime = round.getServerStartTime().plus(round.getDuration());
         ScheduledFuture<?> completionTask = taskScheduler.schedule(() -> {
             try {
-                //todo implement
-                RoundCompletionEvent event = new RoundCompletionEvent(gameId, round.getRoundId());
+                RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, round.getRoundId());
                 eventPublisher.publishEvent(event);
 
                 // Task 정리
                 cancelAllTasks(taskKey);
 
             } catch (Exception e) {
-                log.error("Round completion error - GameId: {}, RoundId: {}", gameId, round.getRoundId(), e);
+                log.error("Round completion error - GameRoomId: {}, RoundId: {}", gameRoomId, round.getRoundId(), e);
             }
         }, completionTime);
-
+        completionTasks.put(taskKey, completionTask);
     }
 
     /**
      * 타이머 수동 중지
-     * todo gameId 중복 가능성??
      */
-    public void stopRoundTimer(String gameId, Long roundId) {
-        String taskKey = gameId + ":" + roundId;
+    public void stopRoundTimer(String gameRoomId, BaseGameRound round) {
+        String taskKey = getTaskKey(gameRoomId, round);
         cancelAllTasks(taskKey);
     }
 
