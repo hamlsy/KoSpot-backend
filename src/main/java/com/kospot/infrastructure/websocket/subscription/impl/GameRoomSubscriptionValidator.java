@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.websocket.subscription.impl;
 
-import com.kospot.domain.multigame.room.vo.GameRoomPlayerInfo;
+import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;

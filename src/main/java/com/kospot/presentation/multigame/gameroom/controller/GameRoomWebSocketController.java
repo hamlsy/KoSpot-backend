@@ -1,8 +1,8 @@
 package com.kospot.presentation.multigame.gameroom.controller;
 
-import com.kospot.application.multiplayer.gameroom.websocket.usecase.SendGameRoomMessageUseCase;
-import com.kospot.application.multiplayer.gameroom.websocket.usecase.SetGameRoomIdAttrUseCase;
-import com.kospot.application.multiplayer.gameroom.websocket.usecase.SwitchTeamUseCase;
+import com.kospot.application.multi.room.websocket.usecase.SendGameRoomMessageUseCase;
+import com.kospot.application.multi.room.websocket.usecase.SetGameRoomIdAttrUseCase;
+import com.kospot.application.multi.room.websocket.usecase.SwitchTeamUseCase;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;

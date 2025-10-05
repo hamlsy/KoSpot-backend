@@ -1,7 +1,7 @@
 package com.kospot.presentation.multigame.gameroom.controller;
 
 
-import com.kospot.application.multiplayer.gameroom.http.usecase.*;
+import com.kospot.application.multi.room.http.usecase.*;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;

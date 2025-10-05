@@ -1,7 +1,7 @@
 package com.kospot.infrastructure.redis.domain.multi.round.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kospot.domain.multigame.round.entity.BaseGameRound;
+import com.kospot.domain.multi.round.entity.BaseGameRound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;

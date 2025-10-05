@@ -3,9 +3,9 @@ package com.kospot.presentation.multigame.game.dto.response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.kospot.domain.multigame.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multigame.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multigame.round.entity.RoadViewGameRound;
+import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
+import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.presentation.multigame.gamePlayer.dto.response.GamePlayerResponse;
 import com.kospot.presentation.multigame.round.dto.response.RoadViewRoundResponse;
 import lombok.*;

@@ -1,17 +1,17 @@
 package com.kospot.multiGame.gameRoom.usecase;
 
-import com.kospot.application.multiplayer.gameroom.http.usecase.*;
+import com.kospot.application.multi.room.http.usecase.*;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.member.repository.MemberRepository;
-import com.kospot.domain.multigame.game.vo.PlayerMatchType;
-import com.kospot.domain.multigame.room.adaptor.GameRoomAdaptor;
-import com.kospot.domain.multigame.room.entity.GameRoom;
-import com.kospot.domain.multigame.room.vo.GameRoomStatus;
-import com.kospot.domain.multigame.room.repository.GameRoomRepository;
-import com.kospot.domain.multigame.room.service.GameRoomService;
+import com.kospot.domain.multi.game.vo.PlayerMatchType;
+import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
+import com.kospot.domain.multi.room.entity.GameRoom;
+import com.kospot.domain.multi.room.vo.GameRoomStatus;
+import com.kospot.domain.multi.room.repository.GameRoomRepository;
+import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multigame.gameroom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multigame.gameroom.dto.response.GameRoomDetailResponse;

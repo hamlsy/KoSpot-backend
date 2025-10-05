@@ -1,7 +1,7 @@
 package com.kospot.infrastructure.websocket.handler;
 
 import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
-import com.kospot.application.multiplayer.gameroom.http.usecase.LeaveGameRoomUseCase;
+import com.kospot.application.multi.room.http.usecase.LeaveGameRoomUseCase;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;

@@ -1,6 +1,6 @@
 package com.kospot.presentation.multigame.submission.dto.response;
 
-import com.kospot.domain.multigame.submission.entity.roadView.RoadViewPlayerSubmission;
+import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmission;
 import lombok.*;
 
 public class SubmissionResponse {

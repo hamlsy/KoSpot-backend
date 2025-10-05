@@ -1,8 +1,8 @@
 package com.kospot.infrastructure.websocket.domain.multi.timer.service;
 
-import com.kospot.application.multiplayer.timer.message.TimerStartMessage;
-import com.kospot.application.multiplayer.timer.message.TimerSyncMessage;
-import com.kospot.domain.multigame.round.entity.BaseGameRound;
+import com.kospot.application.multi.timer.message.TimerStartMessage;
+import com.kospot.application.multi.timer.message.TimerSyncMessage;
+import com.kospot.domain.multi.round.entity.BaseGameRound;
 import com.kospot.infrastructure.redis.domain.multi.round.dao.GameRoundRedisRepository;
 import com.kospot.infrastructure.redis.domain.multi.timer.dao.GameTimerRedisRepository;
 import lombok.RequiredArgsConstructor;

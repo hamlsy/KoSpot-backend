@@ -1,9 +1,9 @@
 package com.kospot.presentation.multigame.game.controller;
 
-import com.kospot.application.multiplayer.game.EndPlayerRoundRoadViewUseCase;
-import com.kospot.application.multiplayer.game.NextRoundRoadViewUseCase;
-import com.kospot.application.multiplayer.game.StartMultiRoadViewPlayerGameUseCase;
-import com.kospot.application.multiplayer.submission.SubmitRoadViewPlayerAnswerUseCase;
+import com.kospot.application.multi.game.EndRoadViewSoloRoundUseCase;
+import com.kospot.application.multi.game.NextRoadViewRoundUseCase;
+import com.kospot.application.multi.game.StartRoadViewSoloGameUseCase;
+import com.kospot.application.multi.submission.SubmitRoadViewPlayerAnswerUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
@@ -28,22 +28,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/multiRoadView") //todo team mode 구현
 public class MultiRoadViewGameController {
 
-    private final StartMultiRoadViewPlayerGameUseCase startMultiRoadViewPlayerGameUseCase;
+    private final StartRoadViewSoloGameUseCase startRoadViewSoloGameUseCase;
     private final SubmitRoadViewPlayerAnswerUseCase submitRoadViewPlayerAnswerUseCase;
-    private final NextRoundRoadViewUseCase nextRoundRoadViewUseCase;
-    private final EndPlayerRoundRoadViewUseCase endPlayerRoundRoadViewUseCase;
+    private final NextRoadViewRoundUseCase nextRoadViewRoundUseCase;
+    private final EndRoadViewSoloRoundUseCase endRoadViewSoloRoundUseCase;
 
     @Operation(summary = "멀티 로드뷰 개인전 게임 시작", description = "멀티 로드뷰 개인전 게임을 시작합니다.")
     @PostMapping("/player/start")
     public ApiResponseDto<MultiRoadViewGameResponse.StartPlayerGame> startPlayerGame(@CurrentMember Member member, @RequestBody MultiGameRequest.Start request) {
-        return ApiResponseDto.onSuccess(startMultiRoadViewPlayerGameUseCase.execute(member, request));
+        return ApiResponseDto.onSuccess(startRoadViewSoloGameUseCase.execute(member, request));
     }
 
     @Operation(summary = "멀티 로드뷰 팀 게임 시작", description = "멀티 로드뷰 팀 게임을 시작합니다.")
     @PostMapping("/team/start")
     //todo team 구현
     public ApiResponseDto<MultiRoadViewGameResponse.StartPlayerGame> startTeamGame(@CurrentMember Member member, @RequestBody MultiGameRequest.Start request) {
-        return ApiResponseDto.onSuccess(startMultiRoadViewPlayerGameUseCase.execute(member, request));
+        return ApiResponseDto.onSuccess(startRoadViewSoloGameUseCase.execute(member, request));
     }
 
     @Operation(summary = "멀티 로드뷰 개인 정답 제출", description = "로드뷰 게임 개인 정답을 제출합니다.")
@@ -69,7 +69,7 @@ public class MultiRoadViewGameController {
     public ApiResponseDto<RoadViewRoundResponse.PlayerResult> endPlayerRound(
             @PathVariable("multiGameId") Long multiGameId,
             @PathVariable("roundId") Long roundId) {
-        return ApiResponseDto.onSuccess(endPlayerRoundRoadViewUseCase.execute(multiGameId, roundId));
+        return ApiResponseDto.onSuccess(endRoadViewSoloRoundUseCase.execute(multiGameId, roundId));
     }
 
     @Operation(summary = "멀티 로드뷰 팀 라운드 종료", description = "멀티 로드뷰 게임 팀 라운드를 종료합니다.")
@@ -88,6 +88,6 @@ public class MultiRoadViewGameController {
     public ApiResponseDto<MultiRoadViewGameResponse.NextRound> nextRound(
             @PathVariable("multiGameId") Long multiGameId,
             @PathVariable("nextRound") int nextRound) {
-        return ApiResponseDto.onSuccess(nextRoundRoadViewUseCase.execute(multiGameId, nextRound));
+        return ApiResponseDto.onSuccess(nextRoadViewRoundUseCase.execute(multiGameId, nextRound));
     }
 }

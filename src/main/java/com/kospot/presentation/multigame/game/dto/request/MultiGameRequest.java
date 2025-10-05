@@ -14,6 +14,7 @@ public class MultiGameRequest {
         private Long gameRoomId;
         private String playerMatchTypeKey;
         private int totalRounds;
+        private Integer timeLimit;
 
     }
 

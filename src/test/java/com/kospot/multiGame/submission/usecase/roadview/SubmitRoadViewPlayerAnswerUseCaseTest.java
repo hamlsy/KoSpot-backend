@@ -1,20 +1,20 @@
 package com.kospot.multiGame.submission.usecase.roadview;
 
-import com.kospot.application.multiplayer.submission.SubmitRoadViewPlayerAnswerUseCase;
+import com.kospot.application.multi.submission.SubmitRoadViewPlayerAnswerUseCase;
 import com.kospot.domain.coordinate.entity.Address;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 
 import com.kospot.domain.coordinate.vo.Sido;
 import com.kospot.domain.coordinate.repository.nationwide.CoordinateNationwideRepository;
-import com.kospot.domain.multigame.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multigame.game.repository.MultiRoadViewGameRepository;
-import com.kospot.domain.multigame.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multigame.gamePlayer.vo.GamePlayerStatus;
-import com.kospot.domain.multigame.gamePlayer.repository.GamePlayerRepository;
-import com.kospot.domain.multigame.round.entity.RoadViewGameRound;
-import com.kospot.domain.multigame.round.repository.RoadViewGameRoundRepository;
-import com.kospot.domain.multigame.submission.entity.roadView.RoadViewPlayerSubmission;
-import com.kospot.domain.multigame.submission.repository.RoadViewPlayerSubmissionRepository;
+import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multi.game.repository.MultiRoadViewGameRepository;
+import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
+import com.kospot.domain.multi.gamePlayer.vo.GamePlayerStatus;
+import com.kospot.domain.multi.gamePlayer.repository.GamePlayerRepository;
+import com.kospot.domain.multi.round.entity.RoadViewGameRound;
+import com.kospot.domain.multi.round.repository.RoadViewGameRoundRepository;
+import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmission;
+import com.kospot.domain.multi.submission.repository.RoadViewPlayerSubmissionRepository;
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.presentation.multigame.submission.dto.request.SubmissionRequest;

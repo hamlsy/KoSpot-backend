@@ -1,7 +1,7 @@
 package com.kospot.infrastructure.websocket.domain.multi.game.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kospot.domain.multigame.game.entity.MultiGame;
+import com.kospot.domain.multi.game.entity.MultiGame;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
