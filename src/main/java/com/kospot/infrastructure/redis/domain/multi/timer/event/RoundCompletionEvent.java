@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.domain.multi.timer.event;
+package com.kospot.infrastructure.redis.domain.multi.timer.event;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 public class RoundCompletionEvent {
 
     private final String gameRoomId;
-    private final Long roundId;
+    private final String roundId;
     private final GameMode gameMode;
     private final PlayerMatchType playerMatchType;
     private final Long gameId;

@@ -2,11 +2,13 @@ package com.kospot.infrastructure.websocket.domain.multi.timer.service;
 
 import com.kospot.application.multi.timer.message.TimerStartMessage;
 import com.kospot.application.multi.timer.message.TimerSyncMessage;
+import com.kospot.domain.game.vo.GameMode;
+import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.round.entity.BaseGameRound;
 import com.kospot.infrastructure.redis.domain.multi.round.dao.GameRoundRedisRepository;
 import com.kospot.infrastructure.redis.domain.multi.timer.dao.GameTimerRedisRepository;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
-import com.kospot.infrastructure.websocket.domain.multi.timer.event.RoundCompletionEvent;
+import com.kospot.infrastructure.redis.domain.multi.timer.event.RoundCompletionEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -60,14 +62,8 @@ public class GameTimerService {
 
         // 타이머 스케줄링
          scheduleTimerSync(gameRoomId, round);
-        // scheduleRondCompletion(round);
+         scheduleRoundCompletion(round);
 
-    }
-
-    //todo gameId -> gameRoomId
-    private void broadcastToGame(String gameId, String suffix, Object message) {
-        String destination = "/topic/game/" + gameId + suffix;
-        messagingTemplate.convertAndSend(destination, message);
     }
 
     /**
@@ -110,12 +106,12 @@ public class GameTimerService {
     /**
      * 라운드 종료 스케줄링
      */
-    private void scheduleRoundCompletion(String gameRoomId, BaseGameRound round) {
+    private void scheduleRoundCompletion(String gameRoomId, BaseGameRound round, GameMode gameMode, PlayerMatchType matchType, Long gameId) {
         String taskKey = getTaskKey(gameRoomId, round);
         Instant completionTime = round.getServerStartTime().plus(round.getDuration());
         ScheduledFuture<?> completionTask = taskScheduler.schedule(() -> {
             try {
-                RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, round.getRoundId());
+                RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, round.getRoundId(), gameMode, matchType, gameId);
                 eventPublisher.publishEvent(event);
 
                 // Task 정리
