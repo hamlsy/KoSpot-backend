@@ -10,6 +10,7 @@ import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.service.RoadViewGameRoundService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;
 import com.kospot.presentation.multigame.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multigame.game.dto.response.MultiRoadViewGameResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class StartRoadViewSoloGameUseCase {
     private final MultiRoadViewGameService multiRoadViewGameService;
     private final RoadViewGameRoundService roadViewGameRoundService;
     private final GamePlayerService gamePlayerService;
+    private final GameTimerService gameTimerService;
 
     public MultiRoadViewGameResponse.StartPlayerGame execute(Member host, MultiGameRequest.Start request) {
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(request.getGameRoomId());
@@ -41,9 +43,10 @@ public class StartRoadViewSoloGameUseCase {
         // 게임 시작
         game.startGame();
         // 라운드 생성 (모드별 파라미터 전달)
-        //todo 플레이어 아이디 리스트 전달?
-        RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1, request.getTimeLimit());        // 게임 플레이어 생성
+        //todo 플레이어 아이디 리스트 전달? -> redis에서 가져옴
+        RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1, request.getTimeLimit());
         List<GamePlayer> gamePlayers = gamePlayerService.createRoadViewGamePlayers(gameRoom, game);
+        gameTimerService.startRoundTimer(gameRoom.getId().toString(), roadViewGameRound);
         return MultiRoadViewGameResponse.StartPlayerGame.from(game, roadViewGameRound, gamePlayers);
     }
 

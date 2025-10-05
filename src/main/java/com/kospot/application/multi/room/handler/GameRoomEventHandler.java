@@ -1,4 +1,4 @@
-package com.kospot.application.multi.room.event;
+package com.kospot.application.multi.room.handler;
 
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.entity.GameRoom;
