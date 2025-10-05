@@ -9,6 +9,7 @@ import com.kospot.infrastructure.redis.domain.multi.round.dao.GameRoundRedisRepo
 import com.kospot.infrastructure.redis.domain.multi.timer.dao.GameTimerRedisRepository;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import com.kospot.infrastructure.redis.domain.multi.timer.event.RoundCompletionEvent;
+import com.kospot.infrastructure.websocket.domain.multi.timer.vo.TimerCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -44,9 +45,10 @@ public class GameTimerService {
      * - Redis 저장으로 서버 재시작 시에도 타이머 유지
      */
 
-    public void startRoundTimer(String gameRoomId, BaseGameRound round) {
+    public void startRoundTimer(TimerCommand command) {
         Instant serverStartTime = Instant.now();
-
+        String gameRoomId = command.getGameRoomId();
+        BaseGameRound round = command.getRound();
         TimerStartMessage startMessage = TimerStartMessage.builder()
                 .roundId(round.getRoundId())
                 .gameMode(round.getGameMode())
@@ -58,18 +60,18 @@ public class GameTimerService {
         String startChannel = MultiGameChannelConstants.getTimerChannel(gameRoomId) + "/start";
         messagingTemplate.convertAndSend(startChannel, startMessage);
 
-//        broadcastToGame(gameRoomId, TIMER_START_SUFFIX, message);
-
         // 타이머 스케줄링
-         scheduleTimerSync(gameRoomId, round);
-         scheduleRoundCompletion(round);
+         scheduleTimerSync(command);
+         scheduleRoundCompletion(command);
 
     }
 
     /**
      * 주기적 타이머 동기화 (5초마다)
      */
-    private void scheduleTimerSync(String gameRoomId, BaseGameRound round) {
+    private void scheduleTimerSync(TimerCommand command) {
+        String gameRoomId = command.getGameRoomId();
+        BaseGameRound round = command.getRound();
         String taskKey = getTaskKey(gameRoomId, round);
         cancelSyncTask(taskKey);
         ScheduledFuture<?> syncTask = taskScheduler.scheduleAtFixedRate(() -> {
@@ -106,7 +108,13 @@ public class GameTimerService {
     /**
      * 라운드 종료 스케줄링
      */
-    private void scheduleRoundCompletion(String gameRoomId, BaseGameRound round, GameMode gameMode, PlayerMatchType matchType, Long gameId) {
+    private void scheduleRoundCompletion(TimerCommand command) {
+        String gameRoomId = command.getGameRoomId();
+        BaseGameRound round = command.getRound();
+        GameMode gameMode = command.getGameMode();
+        PlayerMatchType matchType = command.getMatchType();
+        long gameId = command.getGameId();
+
         String taskKey = getTaskKey(gameRoomId, round);
         Instant completionTime = round.getServerStartTime().plus(round.getDuration());
         ScheduledFuture<?> completionTask = taskScheduler.schedule(() -> {
