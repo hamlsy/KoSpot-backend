@@ -14,6 +14,6 @@ public class RoundCompletionEvent {
     private final String roundId;
     private final GameMode gameMode;
     private final PlayerMatchType playerMatchType;
-    private final Long gameId;
+    private final String gameId;
 
 }

@@ -24,44 +24,6 @@ public class GameRoundRedisRepository {
 
     private static final Duration BUFFER_DURATION = Duration.ofMinutes(5);
 
-    /**
-     * 라운드 저장 with TTL
-     */
-    public void saveRound(String gameId, BaseGameRound round) {
-        Duration ttl = round.getDuration().plus(BUFFER_DURATION);
 
-        // 1️⃣ UUID 기반 라운드 Key 생성
-        String roundUuid = UUID.randomUUID().toString();
-
-        // 1️⃣ 공통 메타데이터 저장 (HASH)
-        String metaKey = String.format(ROUND_META_KEY, gameId, roundUuid);
-        Map<String, Object> meta = Map.of(
-                "roundUuid", roundUuid,
-                "roundNumber", round.getRoundNumber(),
-                "type", round.getType().name(),
-                "isFinished", round.getIsFinished()
-        );
-
-        // 활성 라운드 인덱스에 추가 (Sorted Set - 종료 시간 기준)
-        long endTimestamp = round.getServerStartTime()
-                .plus(round.getDuration())
-                .toEpochMilli();
-
-        redisTemplate.opsForZSet().add(
-                ROUND_INDEX,
-                round.getRoundId(),
-                endTimestamp
-        );
-
-        // 플레이어별 현재 라운드 매핑
-        round.getPlayerIds().forEach(playerId -> {
-            String playerKey = String.format(PLAYER_ROUND, playerId);
-            redisTemplate.opsForValue().set(
-                    playerKey,
-                    round.getRoundId(),
-                    round.getDuration().plusMinutes(5)
-            );
-        });
-    }
 
 }

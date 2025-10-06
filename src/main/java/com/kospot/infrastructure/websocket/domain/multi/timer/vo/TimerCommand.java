@@ -8,7 +8,6 @@ import lombok.Getter;
 
 import java.util.List;
 
-//todo apply
 @Getter
 @Builder
 public class TimerCommand {
@@ -18,6 +17,5 @@ public class TimerCommand {
     private final GameMode gameMode;
     private final PlayerMatchType matchType;
     private final String gameId;
-    private final List<Long> playerIds;
 
 }

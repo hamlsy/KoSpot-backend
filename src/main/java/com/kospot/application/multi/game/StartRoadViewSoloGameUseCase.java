@@ -1,8 +1,10 @@
 package com.kospot.application.multi.game;
 
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.game.service.MultiRoadViewGameService;
+import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
@@ -45,23 +47,25 @@ public class StartRoadViewSoloGameUseCase {
         // 게임 시작
         game.startGame();
 
+        List<GamePlayer> gamePlayers = gamePlayerService.createRoadViewGamePlayers(gameRoom, game);
+        List<Long> playerIds = gamePlayers.stream().map(GamePlayer::getId).toList();
+
         // 라운드 생성 (모드별 파라미터 전달)
-        //todo 플레이어 아이디 리스트 전달? -> redis에서 가져옴
-        RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1, request.getTimeLimit());
+        RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1, request.getTimeLimit(), playerIds);
 
         // 타이머 커맨드 생성
-        TimerCommand command = createTimerCommand(request, game, roadViewGameRound);
-
-        List<GamePlayer> gamePlayers = gamePlayerService.createRoadViewGamePlayers(gameRoom, game);
+        TimerCommand command = createTimerCommand(gameRoom.getId(), game, roadViewGameRound);
         gameTimerService.startRoundTimer(command);
         return MultiRoadViewGameResponse.StartPlayerGame.from(game, roadViewGameRound, gamePlayers);
     }
 
-    private TimerCommand createTimerCommand(MultiGameRequest.Start request, MultiRoadViewGame game, BaseGameRound round) {
+    private TimerCommand createTimerCommand(Long gameRoomId, MultiRoadViewGame game, BaseGameRound round) {
         return TimerCommand.builder()
                 .round(round)
-                .gameRoomId()
-                .gameId()
+                .gameRoomId(gameRoomId.toString())
+                .gameId(game.getId().toString())
+                .gameMode(GameMode.ROADVIEW)
+                .matchType(PlayerMatchType.SOLO)
                 .build();
     }
 

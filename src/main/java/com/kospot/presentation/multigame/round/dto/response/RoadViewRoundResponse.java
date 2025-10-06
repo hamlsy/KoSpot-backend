@@ -25,7 +25,7 @@ public class RoadViewRoundResponse {
         public static Info from(RoadViewGameRound round) {
             return Info.builder()
                     .roundId(round.getId())
-                    .roundNumber(round.getCurrentRound())
+                    .roundNumber(round.getRoundNumber())
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())
                     .build();
@@ -48,7 +48,7 @@ public class RoadViewRoundResponse {
                                         List<RoadViewPlayerSubmission> submissions,
                                         List<GamePlayer> players) {
             return PlayerResult.builder()
-                    .roundNumber(round.getCurrentRound())
+                    .roundNumber(round.getRoundNumber())
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())
                     .playerSubmissionResults(

@@ -61,8 +61,8 @@ public class GameTimerService {
         messagingTemplate.convertAndSend(startChannel, startMessage);
 
         // 타이머 스케줄링
-         scheduleTimerSync(command);
-         scheduleRoundCompletion(command);
+        scheduleTimerSync(command);
+        scheduleRoundCompletion(command);
 
     }
 
@@ -113,7 +113,7 @@ public class GameTimerService {
         BaseGameRound round = command.getRound();
         GameMode gameMode = command.getGameMode();
         PlayerMatchType matchType = command.getMatchType();
-        long gameId = command.getGameId();
+        String gameId = command.getGameId();
 
         String taskKey = getTaskKey(gameRoomId, round);
         Instant completionTime = round.getServerStartTime().plus(round.getDuration());

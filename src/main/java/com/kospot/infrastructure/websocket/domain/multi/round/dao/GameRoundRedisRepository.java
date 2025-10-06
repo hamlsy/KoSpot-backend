@@ -16,8 +16,4 @@ public class GameRoundRedisRepository {
         return String.format("game:%s:round:%s", gameId, roundId);
     }
 
-    public void saveRound() {
-        String roundKey = getRoundKey();
-    }
-
 }
