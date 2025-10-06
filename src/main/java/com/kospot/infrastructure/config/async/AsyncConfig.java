@@ -31,7 +31,7 @@ public class AsyncConfig {
     public TaskScheduler gameTimerTaskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(10);
-        scheduler.setThreadNamePrefix("game-timer-");
+        scheduler.setThreadNamePrefix("timer-");
         scheduler.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         scheduler.setWaitForTasksToCompleteOnShutdown(true);
         scheduler.setAwaitTerminationSeconds(30);

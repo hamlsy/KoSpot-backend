@@ -10,6 +10,7 @@ import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.repository.GameRoomRepository;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
+import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,9 @@ class JoinGameRoomConcurrencyTest {
 
     @Autowired
     private GameRoomRedisService gameRoomRedisService;
+
+    @Autowired
+    private GameRoomRedisRepository gameRoomRedisRepository;
 
     @Autowired
     private GameRoomRepository gameRoomRepository;
@@ -129,7 +133,7 @@ class JoinGameRoomConcurrencyTest {
         log.info("   실패한 참가: {}", failureCount.get());
         log.info("   DB에서 실제 참가한 멤버 수: {}", countMembersInGameRoom());
         log.info("   Redis에서 실제 참가한 멤버 수: {}", 
-                gameRoomRedisService.getCurrentPlayerCount(testGameRoom.getId().toString()));
+                gameRoomRedisRepository.getPlayerCount(testGameRoom.getId().toString()));
 
         // 현재 설계에서는 Race Condition으로 인해 최대 인원을 초과할 수 있음
         // 이는 문제점을 보여주는 테스트이므로, 완벽한 검증보다는 상황 관찰에 중점
@@ -280,7 +284,7 @@ class JoinGameRoomConcurrencyTest {
 
         // then
         int dbCount = countMembersInGameRoom();
-        int redisCount = gameRoomRedisService.getCurrentPlayerCount(testGameRoom.getId().toString());
+        long redisCount = gameRoomRedisRepository.getPlayerCount(testGameRoom.getId().toString());
 
         log.info("📊 데이터 일관성 검증 결과:");
         log.info("   DB에 기록된 참가자 수: {}", dbCount);
