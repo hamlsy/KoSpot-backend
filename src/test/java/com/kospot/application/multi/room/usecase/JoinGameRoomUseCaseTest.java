@@ -18,6 +18,7 @@ import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
+import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
@@ -51,6 +52,9 @@ class JoinGameRoomUseCaseTest {
 
     @Autowired
     private GameRoomRedisService gameRoomRedisService;
+
+    @Autowired
+    private GameRoomRedisRepository gameRoomRedisRepository;
 
     @Autowired
     private GameRoomRepository gameRoomRepository;
@@ -98,7 +102,7 @@ class JoinGameRoomUseCaseTest {
     void shouldJoinGameRoomSuccessfully() {
         // given
         assertThat(testMember.getGameRoomId()).isNull();
-        assertThat(gameRoomRedisService.getCurrentPlayerCount(testGameRoom.getId().toString())).isEqualTo(0);
+        assertThat(gameRoomRedisRepository.getPlayerCount(testGameRoom.getId().toString())).isEqualTo(0);
 
         // when
         joinGameRoomUseCase.executeV1(testMember, testGameRoom.getId(), joinRequest);
@@ -130,7 +134,7 @@ class JoinGameRoomUseCaseTest {
 
         // then
         // Redis 상태 검증
-        assertThat(gameRoomRedisService.getCurrentPlayerCount(testGameRoom.getId().toString())).isEqualTo(1);
+        assertThat(gameRoomRedisRepository.getPlayerCount(testGameRoom.getId().toString())).isEqualTo(1);
 
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(testGameRoom.getId().toString());
         assertThat(players).hasSize(1);
@@ -138,7 +142,7 @@ class JoinGameRoomUseCaseTest {
         assertThat(players.get(0).getNickname()).isEqualTo(testMember.getNickname());
 
         log.info("✅ Redis 상태 업데이트 완료 - RoomId: {}, PlayerCount: {}", 
-                testGameRoom.getId(), gameRoomRedisService.getCurrentPlayerCount(testGameRoom.getId().toString()));
+                testGameRoom.getId(), gameRoomRedisRepository.getPlayerCount(testGameRoom.getId().toString()));
     }
 
     @Test
@@ -167,7 +171,7 @@ class JoinGameRoomUseCaseTest {
         assertThat(unchangedMember.getGameRoomId()).isNull();
 
         log.info("✅ 인원 초과 시 예외 처리 완료 - MaxPlayers: {}, CurrentCount: {}", 
-                maxPlayers, gameRoomRedisService.getCurrentPlayerCount(roomId));
+                maxPlayers, gameRoomRedisRepository.getPlayerCount(roomId));
     }
 
     @Test
@@ -301,15 +305,15 @@ class JoinGameRoomUseCaseTest {
 
         // Redis 검증
         String roomId = testGameRoom.getId().toString();
-        assertThat(gameRoomRedisService.getCurrentPlayerCount(roomId)).isEqualTo(2);
+        assertThat(gameRoomRedisRepository.getPlayerCount(roomId)).isEqualTo(2);
         
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(roomId);
         assertThat(players).hasSize(2);
         assertThat(players).extracting(GameRoomPlayerInfo::getMemberId)
                 .containsExactlyInAnyOrder(member1.getId(), member2.getId());
 
-        log.info("✅ Redis-DB 일관성 검증 완료 - DB Players: 2, Redis Players: {}", 
-                gameRoomRedisService.getCurrentPlayerCount(roomId));
+        log.info("✅ Redis-DB 일관성 검증 완료 - DB Players: 2, Redis Players: {}",
+                gameRoomRedisRepository.getPlayerCount(roomId));
     }
 
     // Helper Methods
