@@ -17,7 +17,7 @@ import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmissi
 import com.kospot.domain.multi.submission.repository.RoadViewPlayerSubmissionRepository;
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.presentation.multigame.submission.dto.request.SubmissionRequest;
+import com.kospot.presentation.multi.submission.dto.request.SubmissionRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;

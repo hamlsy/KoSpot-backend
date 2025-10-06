@@ -1,6 +1,5 @@
 package com.kospot.infrastructure.websocket.domain.multi.timer.listner;
 
-import com.kospot.application.multi.game.NextRoadViewRoundUseCase;
 import com.kospot.infrastructure.redis.domain.multi.timer.event.RoundCompletionEvent;
 import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +14,9 @@ import org.springframework.stereotype.Component;
 public class RoundCompletionEventListener {
 
     // 각 게임 모드별 UseCase 주입
-    private final NextRoadViewRoundUseCase nextRoadViewRoundUseCase;
-    //    private final NextPhotoRoundUseCase nextPhotoRoundUseCase; // 향후 구현
+    // private final NextRoadViewRoundUseCase nextRoadViewRoundUseCase;
+    // private final NextPhotoRoundUseCase nextPhotoRoundUseCase; // 향후 구현
+    // private final EndPhotoSoloRoundUseCase endPhotoSoloRoundUseCase; // 향후 구현
     private final GameTimerService gameTimerService;
 
     @Async
@@ -35,7 +35,12 @@ public class RoundCompletionEventListener {
         // 현재 라운드가 마지막 라운드인지 확인
 //        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(event.getGameId());
         // if !game.isLastRound()
-        // -> 다음 라운드 시작
+        // -> 라운드 결과 -> endRoadViewSoloRoundUseCase
+        switch (event.getPlayerMatchType()) {
+            case SOLO -> {
+                // endRoadViewSoloRoundUseCase.execute(event.getGameRoomId(), event.getRoundId());
+            }
+        }
 
     }
 

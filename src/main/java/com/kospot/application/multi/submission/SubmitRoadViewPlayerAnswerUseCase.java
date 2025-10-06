@@ -7,7 +7,7 @@ import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmission;
 import com.kospot.domain.multi.submission.service.RoadViewPlayerSubmissionService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.presentation.multigame.submission.dto.request.SubmissionRequest;
+import com.kospot.presentation.multi.submission.dto.request.SubmissionRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;

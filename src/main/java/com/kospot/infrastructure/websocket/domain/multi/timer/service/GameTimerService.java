@@ -32,7 +32,8 @@ public class GameTimerService {
     private final GameTimerRedisRepository gameTimerRedisRepository;
     private final SimpMessagingTemplate messagingTemplate;
     private final ApplicationEventPublisher eventPublisher;
-    private final TaskScheduler taskScheduler;
+
+    private final TaskScheduler gameTimerTaskScheduler;
 
     private final Map<String, ScheduledFuture<?>> syncTasks = new ConcurrentHashMap<>();
     private final Map<String, ScheduledFuture<?>> completionTasks = new ConcurrentHashMap<>();
@@ -74,7 +75,7 @@ public class GameTimerService {
         BaseGameRound round = command.getRound();
         String taskKey = getTaskKey(gameRoomId, round);
         cancelSyncTask(taskKey);
-        ScheduledFuture<?> syncTask = taskScheduler.scheduleAtFixedRate(() -> {
+        ScheduledFuture<?> syncTask = gameTimerTaskScheduler.scheduleAtFixedRate(() -> {
             long remainingTimeMs = round.getRemainingTimeMs();
             if (remainingTimeMs <= 0) {
                 cancelSyncTask(taskKey);
@@ -117,7 +118,7 @@ public class GameTimerService {
 
         String taskKey = getTaskKey(gameRoomId, round);
         Instant completionTime = round.getServerStartTime().plus(round.getDuration());
-        ScheduledFuture<?> completionTask = taskScheduler.schedule(() -> {
+        ScheduledFuture<?> completionTask = gameTimerTaskScheduler.schedule(() -> {
             try {
                 RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, round.getRoundId(), gameMode, matchType, gameId);
                 eventPublisher.publishEvent(event);
