@@ -1,4 +1,4 @@
-package com.kospot.multiGame.gameRoom.usecase;
+package com.kospot.multi.room.usecase;
 
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.entity.GameRoom;

@@ -1,4 +1,4 @@
-package com.kospot.multiGame.game.usecase;
+package com.kospot.multi.game.usecase;
 
 import com.kospot.application.coordinate.ImportCoordinateUseCase;
 import com.kospot.application.multi.round.StartRoadViewSoloRoundUseCase;
@@ -123,7 +123,7 @@ public class StartRoadViewSoloRoundUseCaseTest {
         // 라운드 생성 확인
         List<RoadViewGameRound> rounds = roadViewGameRoundRepository.findAllByMultiRoadViewGameId(game.getId());
         assertFalse(rounds.isEmpty());
-        assertEquals(1, rounds.get(0).getCurrentRound());
+        assertEquals(1, rounds.get(0).getRoundNumber());
         
         // 게임 플레이어 생성 확인
         assertEquals(players.size(), gamePlayerRepository.countByMultiRoadViewGameId(game.getId()));

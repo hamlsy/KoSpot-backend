@@ -1,4 +1,4 @@
-package com.kospot.multiGame.gameRoom.usecase;
+package com.kospot.multi.room.usecase;
 
 import com.kospot.application.multi.room.http.usecase.*;
 import com.kospot.domain.game.vo.GameMode;
@@ -12,6 +12,7 @@ import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.domain.multi.room.repository.GameRoomRepository;
 import com.kospot.domain.multi.room.service.GameRoomService;
+import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multi.gameroom.dto.response.GameRoomDetailResponse;
@@ -79,6 +80,9 @@ public class GameRoomUseCaseTest {
 
     @Autowired
     private GameRoomRedisService gameRoomRedisService;
+
+    @Autowired
+    private GameRoomRedisRepository gameRoomRedisRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -253,7 +257,7 @@ public class GameRoomUseCaseTest {
         leaveGameRoomUseCase.execute(player1, gameRoom.getId());
 
         //then
-        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        long currentPlayerCount = gameRoomRedisRepository.getPlayerCount(gameRoom.getId().toString());
         assertEquals(2, currentPlayerCount);
         assertNull(player1.getGameRoomId());
     }
@@ -292,7 +296,7 @@ public class GameRoomUseCaseTest {
 
         //then
         // Redis에서 현재 인원 수 확인
-        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        long currentPlayerCount = gameRoomRedisRepository.getPlayerCount(gameRoom.getId().toString());
         assertEquals(2, currentPlayerCount);
 
     }
@@ -317,7 +321,7 @@ public class GameRoomUseCaseTest {
         joinGameRoomUseCase.executeV1(member3, gameRoom.getId(), request);
 
         //then
-        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        long currentPlayerCount = gameRoomRedisRepository.getPlayerCount(gameRoom.getId().toString());
         log.info("현재 인원 수: " + currentPlayerCount);
         assertThrows(Exception.class, () -> joinGameRoomUseCase.executeV1(member5, gameRoom.getId(), request));
         assertNull(member5.getGameRoomId());
@@ -345,7 +349,7 @@ public class GameRoomUseCaseTest {
         assertThrows(Exception.class, () -> joinGameRoomUseCase.executeV1(member2, gameRoom.getId(), request1));
 
         //then
-        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        long currentPlayerCount = gameRoomRedisRepository.getPlayerCount(gameRoom.getId().toString());
         assertEquals(2, currentPlayerCount);
     }
 
@@ -365,7 +369,7 @@ public class GameRoomUseCaseTest {
 
         //then
         assertNotNull(member1.getGameRoomId());
-        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        long currentPlayerCount = gameRoomRedisRepository.getPlayerCount(gameRoom.getId().toString());
         assertEquals(2, currentPlayerCount);
     }
 
@@ -390,7 +394,7 @@ public class GameRoomUseCaseTest {
         joinGameRoomUseCase.executeV1(member1, gameRoom1.getId(), request1);
 
         //then
-        int currentPlayerCount = gameRoomRedisService.getCurrentPlayerCount(gameRoom.getId().toString());
+        long currentPlayerCount = gameRoomRedisRepository.getPlayerCount(gameRoom.getId().toString());
         assertEquals(2, currentPlayerCount);
     }
 

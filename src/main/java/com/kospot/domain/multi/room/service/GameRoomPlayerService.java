@@ -147,20 +147,6 @@ public class GameRoomPlayerService {
     }
 
     /**
-     * 게임방 현재 인원 수 조회
-     */
-    public int getCurrentPlayerCount(String roomId) {
-        return gameRoomRedisService.getCurrentPlayerCount(roomId);
-    }
-
-    /**
-     * 게임방 현재 인원 수 조회 (Long roomId용)
-     */
-    public int getCurrentPlayerCount(Long roomId) {
-        return getCurrentPlayerCount(roomId.toString());
-    }
-
-    /**
      * 게임방이 비어있는지 확인
      */
     public boolean isRoomEmpty(String roomId) {

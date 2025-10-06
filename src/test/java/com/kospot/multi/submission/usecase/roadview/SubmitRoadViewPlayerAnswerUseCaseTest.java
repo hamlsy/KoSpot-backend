@@ -1,4 +1,4 @@
-package com.kospot.multiGame.submission.usecase.roadview;
+package com.kospot.multi.submission.usecase.roadview;
 
 import com.kospot.application.multi.submission.SubmitRoadViewPlayerAnswerUseCase;
 import com.kospot.domain.coordinate.entity.Address;
@@ -98,12 +98,6 @@ class SubmitRoadViewPlayerAnswerUseCaseTest {
 
         multiRoadViewGameRepository.save(game);
 
-        // 라운드 생성 및 저장
-        round = RoadViewGameRound.createRound(1, coordinate);
-        round.setMultiRoadViewGame(game);
-
-        roadViewGameRoundRepository.save(round);
-
         // 플레이어 생성 및 저장
         gamePlayer = GamePlayer.builder()
                 .nickname("테스트 플레이어")
@@ -115,6 +109,13 @@ class SubmitRoadViewPlayerAnswerUseCaseTest {
         // ID 저장
         roundId = round.getId();
         playerId = gamePlayer.getId();
+
+        // 라운드 생성 및 저장
+        round = RoadViewGameRound.createRound(1, coordinate, 120, List.of(playerId));
+        round.setMultiRoadViewGame(game);
+
+        roadViewGameRoundRepository.save(round);
+
 
         // 영속성 컨텍스트 초기화
         flushAndClear();
@@ -221,7 +222,7 @@ class SubmitRoadViewPlayerAnswerUseCaseTest {
         void shouldThrowExceptionWhenRoundAlreadyFinished() {
             // given
             round = roadViewGameRoundRepository.findById(roundId).orElseThrow();
-            round.endRound(); // 라운드 종료 처리
+            round.finishRound(); // 라운드 종료 처리
             roadViewGameRoundRepository.save(round);
             flushAndClear();
 
@@ -306,7 +307,7 @@ class SubmitRoadViewPlayerAnswerUseCaseTest {
             
             // 예외를 발생시키기 위해 라운드를 종료 상태로 변경
             round = roadViewGameRoundRepository.findById(roundId).orElseThrow();
-            round.endRound();
+            round.finishRound();
             roadViewGameRoundRepository.save(round);
             flushAndClear();
             
