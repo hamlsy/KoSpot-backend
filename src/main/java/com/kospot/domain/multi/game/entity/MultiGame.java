@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.Duration;
+
 @Getter
 @SuperBuilder
 @AllArgsConstructor
@@ -31,6 +33,8 @@ public abstract class MultiGame extends BaseTimeEntity {
     // 게임 모드: 로드뷰 또는 사진
     @Enumerated(EnumType.STRING)
     private GameMode gameMode;
+
+    private Integer timeLimit;
 
     @Min(1)
     @Max(15)
@@ -69,6 +73,5 @@ public abstract class MultiGame extends BaseTimeEntity {
     public boolean isPhotoMode() {
         return GameMode.PHOTO.equals(this.gameMode);
     }
-    
 
 }

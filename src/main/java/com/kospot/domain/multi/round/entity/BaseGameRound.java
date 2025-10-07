@@ -25,8 +25,9 @@ public abstract class BaseGameRound extends BaseTimeEntity {
     private String roundId = UUID.randomUUID().toString();
     private Integer roundNumber;
     private Boolean isFinished = false;
-    public Integer timeLimit; // in seconds
 
+    // 비정규화
+    private Integer timeLimit; // in seconds
     private Instant serverStartTime; // 서버 시작 시간
 
     @Builder.Default
@@ -35,15 +36,15 @@ public abstract class BaseGameRound extends BaseTimeEntity {
     public abstract GameMode getGameMode();
 
     //business methods
-    public Duration getDuration() {
-        if (timeLimit != null) {
-            return Duration.ofSeconds(timeLimit);
-        }
-        return getGameMode().getDuration(); //기본값
-    }
-
     public void startRound() {
         this.serverStartTime = Instant.now();
+    }
+
+    public Duration getDuration() {
+        if(timeLimit != null) {
+            return Duration.ofSeconds(timeLimit);
+        }
+        return getGameMode().getDuration();
     }
 
     // 남은 시간

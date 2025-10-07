@@ -21,9 +21,10 @@ public class RoadViewGameRoundService {
     private final CoordinateService coordinateService;
     private final RoadViewGameRoundRepository roundRepository;
 
-    public RoadViewGameRound createGameRound(MultiRoadViewGame game, int currentRound, Integer timeLimit , List<Long> playerIds) {
+    public RoadViewGameRound createGameRound(MultiRoadViewGame game, List<Long> playerIds) {
         CoordinateNationwide coordinate = (CoordinateNationwide) coordinateService.getRandomNationwideCoordinate();
-        RoadViewGameRound gameRound = RoadViewGameRound.createRound(currentRound, coordinate, timeLimit, playerIds);
+        RoadViewGameRound gameRound = RoadViewGameRound.createRound(game.getCurrentRound(), coordinate,
+                game.getTimeLimit(), playerIds);
         gameRound.setMultiRoadViewGame(game);
         gameRound.startRound();
         return roundRepository.save(gameRound);

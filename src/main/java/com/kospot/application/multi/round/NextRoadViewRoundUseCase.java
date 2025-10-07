@@ -26,13 +26,13 @@ public class NextRoadViewRoundUseCase {
     private final RoadViewGameRoundService roadViewGameRoundService;
     private final GameTimerService gameTimerService;
 
-    public MultiRoadViewGameResponse.NextRound execute(Long gameRoomId, Long multiGameId, int currentRound, Integer timeLimit) {
-        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(multiGameId);
+    public MultiRoadViewGameResponse.NextRound execute(Long gameRoomId, Long gameId) {
+        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
         game.moveToNextRound();
 
         //todo playerIds를 redis에서 가져오기
         // List<Long> playerIds = gamePlayerRedisRepository.findPlayerIdsByGameId(multiGameId);
-        RoadViewGameRound round = roadViewGameRoundService.createGameRound(game, currentRound, timeLimit, null);
+        RoadViewGameRound round = roadViewGameRoundService.createGameRound(game, null);
 
         TimerCommand command = createTimerCommand(gameRoomId, game, round);
 
