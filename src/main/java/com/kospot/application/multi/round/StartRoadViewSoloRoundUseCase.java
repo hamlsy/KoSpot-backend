@@ -51,7 +51,7 @@ public class StartRoadViewSoloRoundUseCase {
         List<Long> playerIds = gamePlayers.stream().map(GamePlayer::getId).toList();
 
         // 라운드 생성 (모드별 파라미터 전달)
-        RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, 1, request.getTimeLimit(), playerIds);
+        RoadViewGameRound roadViewGameRound = roadViewGameRoundService.createGameRound(game, playerIds);
 
         // 타이머 커맨드 생성
         TimerCommand command = createTimerCommand(gameRoom.getId(), game, roadViewGameRound);

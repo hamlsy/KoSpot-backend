@@ -18,6 +18,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
@@ -121,7 +124,7 @@ class GameTimerServiceTest {
                 any(Runnable.class),
                 any(Instant.class),
                 eq(Duration.ofMillis(5000))
-        )).thenReturn(mockFuture);
+        )).thenReturn((ScheduledFuture) mockFuture);
 
         // When
         gameTimerService.startRoundTimer(command);
@@ -198,7 +201,7 @@ class GameTimerServiceTest {
         when(gameTimerTaskScheduler.schedule(
                 any(Runnable.class),
                 completionTimeCaptor.capture()
-        )).thenReturn(mockFuture);
+        )).thenReturn((ScheduledFuture)mockFuture);
 
         // When
         gameTimerService.startRoundTimer(command);
@@ -274,11 +277,11 @@ class GameTimerServiceTest {
 
         when(gameTimerTaskScheduler.scheduleAtFixedRate(
                 any(Runnable.class), any(Instant.class), any(Duration.class)
-        )).thenReturn(mockSyncFuture);
+        )).thenReturn((ScheduledFuture)mockSyncFuture);
 
         when(gameTimerTaskScheduler.schedule(
                 any(Runnable.class), any(Instant.class)
-        )).thenReturn(mockCompletionFuture);
+        )).thenReturn((ScheduledFuture)mockCompletionFuture);
 
         gameTimerService.startRoundTimer(command);
 

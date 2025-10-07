@@ -22,7 +22,7 @@ public class MultiRoadViewGameService {
     public MultiRoadViewGame createGame(GameRoom gameRoom, MultiGameRequest.Start request) {
         PlayerMatchType matchType = PlayerMatchType.fromKey(request.getPlayerMatchTypeKey());
         int totalRounds = request.getTotalRounds();
-        MultiRoadViewGame game = MultiRoadViewGame.createGame(gameRoom, matchType, totalRounds);
+        MultiRoadViewGame game = MultiRoadViewGame.createGame(gameRoom, matchType, totalRounds, request.getTimeLimit());
         return multiRoadViewGameRepository.save(game);
     }
 
