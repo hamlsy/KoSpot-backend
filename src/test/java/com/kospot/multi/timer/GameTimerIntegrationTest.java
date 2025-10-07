@@ -13,22 +13,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.mockito.Mockito;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doAnswer;
 
 /**
@@ -48,7 +44,7 @@ class GameTimerIntegrationTest {
     @Autowired
     private GameTimerService gameTimerService;
 
-    @Autowired
+    @MockitoBean
     private SimpMessagingTemplate messagingTemplate;
 
     private static final Long GAME_ROOM_ID = 999L;
@@ -81,13 +77,11 @@ class GameTimerIntegrationTest {
                         syncMsg.getRemainingTimeMs(), syncMsg.isFinalCountDown());
             }
 
-            messagingTemplate.convertAndSend(invocation.getArgument(0), message);
             return null;
         }).when(messagingTemplate).convertAndSend(anyString(), any(Object.class));
 
         // When
         log.info("⏰ 타이머 시작: {}초", timeLimitSeconds);
-        Instant testStartTime = Instant.now();
         gameTimerService.startRoundTimer(command);
 
         // 최소 2번의 동기화 메시지를 기다림 (최대 12초)
@@ -142,7 +136,6 @@ class GameTimerIntegrationTest {
                 latch.countDown();
             }
 
-            messagingTemplate.convertAndSend(invocation.getArgument(0), message);
             return null;
         }).when(messagingTemplate).convertAndSend(anyString(), any(Object.class));
 
@@ -197,7 +190,6 @@ class GameTimerIntegrationTest {
                 }
             }
 
-            messagingTemplate.convertAndSend(invocation.getArgument(0), message);
             return null;
         }).when(messagingTemplate).convertAndSend(anyString(), any(Object.class));
 
@@ -242,7 +234,6 @@ class GameTimerIntegrationTest {
                 syncMessageTimestamps.add(System.currentTimeMillis());
             }
 
-            messagingTemplate.convertAndSend(invocation.getArgument(0), message);
             return null;
         }).when(messagingTemplate).convertAndSend(anyString(), any(Object.class));
 
@@ -287,7 +278,6 @@ class GameTimerIntegrationTest {
                 latch.countDown();
             }
 
-            messagingTemplate.convertAndSend(invocation.getArgument(0), message);
             return null;
         }).when(messagingTemplate).convertAndSend(anyString(), any(Object.class));
 

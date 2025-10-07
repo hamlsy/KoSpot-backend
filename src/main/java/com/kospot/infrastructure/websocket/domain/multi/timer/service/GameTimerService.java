@@ -12,6 +12,7 @@ import com.kospot.infrastructure.redis.domain.multi.timer.event.RoundCompletionE
 import com.kospot.infrastructure.websocket.domain.multi.timer.vo.TimerCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
@@ -25,11 +26,8 @@ import java.util.concurrent.ScheduledFuture;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class GameTimerService {
 
-    private final GameRoundRedisRepository gameRoundRedisRepository;
-    private final GameTimerRedisRepository gameTimerRedisRepository;
     private final SimpMessagingTemplate messagingTemplate;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -40,6 +38,14 @@ public class GameTimerService {
 
     private static final int SYNC_INTERVAL_MS = 5000; // 5초마다 동기화
     private static final int FINAL_COUNTDOWN_THRESHOLD_MS = 10000; // 마지막 10초 카운트다운
+
+    public GameTimerService(SimpMessagingTemplate messagingTemplate,
+                            ApplicationEventPublisher eventPublisher,
+                            @Qualifier("gameTimerTaskScheduler") TaskScheduler gameTimerTaskScheduler) {
+        this.messagingTemplate = messagingTemplate;
+        this.eventPublisher = eventPublisher;
+        this.gameTimerTaskScheduler = gameTimerTaskScheduler;
+    }
 
     /**
      * 라운드 시작

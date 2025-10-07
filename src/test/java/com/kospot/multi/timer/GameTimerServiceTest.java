@@ -77,8 +77,6 @@ class GameTimerServiceTest {
     @BeforeEach
     void setUp() {
         gameTimerService = new GameTimerService(
-                gameRoundRedisRepository,
-                gameTimerRedisRepository,
                 messagingTemplate,
                 null, // EventPublisher는 이 테스트에서 불필요
                 gameTimerTaskScheduler
@@ -91,6 +89,7 @@ class GameTimerServiceTest {
         // Given
         RoadViewGameRound round = createTestRound(TIME_LIMIT_SECONDS);
         TimerCommand command = createTimerCommand(round);
+        round.startRound();
 
         // When
         gameTimerService.startRoundTimer(command);

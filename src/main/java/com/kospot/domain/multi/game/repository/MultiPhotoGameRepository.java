@@ -11,7 +11,5 @@ public interface MultiPhotoGameRepository extends JpaRepository<MultiPhotoGame, 
     
     @Query("SELECT g FROM MultiPhotoGame g WHERE g.gameRoom.id = :gameRoomId")
     Optional<MultiPhotoGame> findByGameRoomId(@Param("gameRoomId") Long gameRoomId);
-    
-    @Query("SELECT g FROM MultiPhotoGame g LEFT JOIN FETCH g.photoGameRounds WHERE g.id = :gameId")
-    Optional<MultiPhotoGame> findWithRoundsById(@Param("gameId") Long gameId);
+
 } 
