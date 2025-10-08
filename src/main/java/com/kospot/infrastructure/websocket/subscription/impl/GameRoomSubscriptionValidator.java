@@ -1,9 +1,9 @@
 package com.kospot.infrastructure.websocket.subscription.impl;
 
-import com.kospot.domain.multigame.gameRoom.vo.GameRoomPlayerInfo;
+import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
-import com.kospot.infrastructure.websocket.domain.gameroom.service.GameRoomRedisService;
+import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.websocket.subscription.SubscriptionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

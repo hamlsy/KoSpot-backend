@@ -5,14 +5,16 @@ import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.Duration;
 import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
 public enum GameMode {
-    ROADVIEW("로드뷰 모드"), PHOTO("사진 모드");
+    ROADVIEW("로드뷰 모드", Duration.ofMinutes(2)), PHOTO("사진 모드", Duration.ofSeconds(30));
 
     private final String mode;
+    private final Duration duration;
 
     public static GameMode fromKey(String key) {
         return Arrays.stream(GameMode.values())
