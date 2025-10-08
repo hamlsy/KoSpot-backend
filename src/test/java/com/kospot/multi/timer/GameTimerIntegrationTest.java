@@ -169,7 +169,7 @@ class GameTimerIntegrationTest {
     @DisplayName("[통합] 마지막 10초에 도달하면 isFinalCountDown 플래그가 활성화된다")
     void finalCountdown_FlagActivatesBelow10Seconds() throws InterruptedException {
         // Given
-        int timeLimitSeconds = 12; // 12초 타이머
+        int timeLimitSeconds = 16; // 16초 타이머 (5초 간격 동기화를 고려)
         RoadViewGameRound round = createTestRound(timeLimitSeconds);
         TimerCommand command = createTimerCommand(round);
 
@@ -183,6 +183,9 @@ class GameTimerIntegrationTest {
             if (destination.contains("/sync") && message instanceof TimerSyncMessage) {
                 TimerSyncMessage syncMsg = (TimerSyncMessage) message;
                 syncMessages.add(syncMsg);
+                
+                log.info("📡 동기화 메시지: 남은시간={}ms, isFinalCountDown={}", 
+                        syncMsg.getRemainingTimeMs(), syncMsg.isFinalCountDown());
 
                 // 마지막 10초 카운트다운 활성화 시 latch 해제
                 if (syncMsg.isFinalCountDown()) {
@@ -195,10 +198,14 @@ class GameTimerIntegrationTest {
 
         // When
         log.info("⏰ 타이머 시작: {}초 (10초 임계값 테스트)", timeLimitSeconds);
+        log.info("📊 예상 동기화 시점:");
+        log.info("   - 5초 후: 남은 11초 (isFinalCountDown=false)");
+        log.info("   - 10초 후: 남은 6초 (isFinalCountDown=true) ← 첫 활성화");
+        log.info("   - 15초 후: 남은 1초 (isFinalCountDown=true)");
         gameTimerService.startRoundTimer(command);
 
-        // 카운트다운 플래그 활성화 대기 (최대 8초)
-        boolean activated = latch.await(8, TimeUnit.SECONDS);
+        // 카운트다운 플래그 활성화 대기 (최대 12초)
+        boolean activated = latch.await(12, TimeUnit.SECONDS);
 
         // Then
         assertThat(activated).isTrue();
@@ -209,8 +216,10 @@ class GameTimerIntegrationTest {
                 .findFirst()
                 .orElseThrow();
 
+        // 5초 간격 동기화이므로, 10초 미만일 때 처음 감지됨
         assertThat(countdownMessage.getRemainingTimeMs()).isLessThanOrEqualTo(10000);
-        log.info("✅ 마지막 카운트다운 활성화: 남은시간={}ms", 
+        assertThat(countdownMessage.getRemainingTimeMs()).isGreaterThan(5000); // 두 번째 동기화 시점
+        log.info("✅ 마지막 카운트다운 활성화: 남은시간={}ms (10000ms 이하 첫 감지)", 
                 countdownMessage.getRemainingTimeMs());
 
         // Clean up

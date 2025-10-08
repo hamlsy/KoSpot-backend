@@ -91,6 +91,20 @@ class GameTimerServiceTest {
         TimerCommand command = createTimerCommand(round);
         round.startRound();
 
+        @SuppressWarnings("unchecked")
+        ScheduledFuture<Object> mockFuture = (ScheduledFuture<Object>) mock(ScheduledFuture.class);
+        
+        when(gameTimerTaskScheduler.scheduleAtFixedRate(
+                any(Runnable.class),
+                any(Instant.class),
+                any(Duration.class)
+        )).thenReturn((ScheduledFuture)mockFuture);
+        
+        when(gameTimerTaskScheduler.schedule(
+                any(Runnable.class),
+                any(Instant.class)
+        )).thenReturn((ScheduledFuture)mockFuture);
+
         // When
         gameTimerService.startRoundTimer(command);
 
@@ -115,6 +129,7 @@ class GameTimerServiceTest {
     void startTimer_SchedulesSyncEvery5Seconds() {
         // Given
         RoadViewGameRound round = createTestRound(TIME_LIMIT_SECONDS);
+        round.startRound(); // serverStartTime 설정
         TimerCommand command = createTimerCommand(round);
         
         @SuppressWarnings("unchecked")
@@ -123,6 +138,11 @@ class GameTimerServiceTest {
                 any(Runnable.class),
                 any(Instant.class),
                 eq(Duration.ofMillis(5000))
+        )).thenReturn((ScheduledFuture) mockFuture);
+        
+        when(gameTimerTaskScheduler.schedule(
+                any(Runnable.class),
+                any(Instant.class)
         )).thenReturn((ScheduledFuture) mockFuture);
 
         // When
@@ -170,6 +190,12 @@ class GameTimerServiceTest {
             return mock(ScheduledFuture.class);
         });
 
+        // schedule() 메서드도 mock 필요
+        when(gameTimerTaskScheduler.schedule(
+                any(Runnable.class),
+                any(Instant.class)
+        )).thenReturn(mock(ScheduledFuture.class));
+
         // When
         gameTimerService.startRoundTimer(command);
         
@@ -196,6 +222,13 @@ class GameTimerServiceTest {
         ArgumentCaptor<Instant> completionTimeCaptor = ArgumentCaptor.forClass(Instant.class);
         @SuppressWarnings("unchecked")
         ScheduledFuture<Object> mockFuture = (ScheduledFuture<Object>) mock(ScheduledFuture.class);
+        
+        // scheduleAtFixedRate도 mock 필요
+        when(gameTimerTaskScheduler.scheduleAtFixedRate(
+                any(Runnable.class),
+                any(Instant.class),
+                any(Duration.class)
+        )).thenReturn((ScheduledFuture)mockFuture);
         
         when(gameTimerTaskScheduler.schedule(
                 any(Runnable.class),
@@ -225,11 +258,26 @@ class GameTimerServiceTest {
     void multipleClients_ReceiveSameTimerInfo() throws InterruptedException {
         // Given
         RoadViewGameRound round = createTestRound(TIME_LIMIT_SECONDS);
+        round.startRound(); // serverStartTime 설정
         TimerCommand command = createTimerCommand(round);
         
         int clientCount = 10;
         CountDownLatch latch = new CountDownLatch(clientCount);
         List<Long> receivedStartTimes = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+        @SuppressWarnings("unchecked")
+        ScheduledFuture<Object> mockFuture = (ScheduledFuture<Object>) mock(ScheduledFuture.class);
+        
+        when(gameTimerTaskScheduler.scheduleAtFixedRate(
+                any(Runnable.class),
+                any(Instant.class),
+                any(Duration.class)
+        )).thenReturn((ScheduledFuture)mockFuture);
+        
+        when(gameTimerTaskScheduler.schedule(
+                any(Runnable.class),
+                any(Instant.class)
+        )).thenReturn((ScheduledFuture)mockFuture);
 
         // 메시지 전송 시 모든 클라이언트가 수신하는 상황 시뮬레이션
         doAnswer(invocation -> {
@@ -267,6 +315,7 @@ class GameTimerServiceTest {
     void stopTimer_CancelsAllScheduledTasks() {
         // Given
         RoadViewGameRound round = createTestRound(TIME_LIMIT_SECONDS);
+        round.startRound(); // serverStartTime 설정
         TimerCommand command = createTimerCommand(round);
 
         @SuppressWarnings("unchecked")
@@ -322,6 +371,12 @@ class GameTimerServiceTest {
             return mock(ScheduledFuture.class);
         });
 
+        // schedule() 메서드도 mock 필요
+        when(gameTimerTaskScheduler.schedule(
+                any(Runnable.class),
+                any(Instant.class)
+        )).thenReturn(mock(ScheduledFuture.class));
+
         // When
         gameTimerService.startRoundTimer(command);
         boolean completed = latch.await(2, TimeUnit.SECONDS);
@@ -333,7 +388,7 @@ class GameTimerServiceTest {
 
         Object syncMessage = messageCaptor.getValue();
         Boolean isFinalCountDown = (Boolean) ReflectionTestUtils.getField(
-                syncMessage, "finalCountDown"
+                syncMessage, "isFinalCountDown"
         );
         
         assertThat(isFinalCountDown).isTrue();
