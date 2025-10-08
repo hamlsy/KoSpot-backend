@@ -5,8 +5,8 @@ import com.kospot.domain.multi.room.vo.GameRoomNotification;
 import com.kospot.domain.multi.room.vo.GameRoomNotificationType;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multi.room.vo.GameRoomUpdateInfo;
-import com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.infrastructure.websocket.domain.multi.room.constants.*;
 import com.kospot.presentation.multi.gameroom.dto.message.GameRoomUpdateMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
 
 /**
