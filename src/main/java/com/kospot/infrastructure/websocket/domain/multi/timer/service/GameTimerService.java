@@ -85,6 +85,7 @@ public class GameTimerService {
             long remainingTimeMs = round.getRemainingTimeMs();
             if (remainingTimeMs <= 0) {
                 cancelSyncTask(taskKey);
+                return;
             }
             boolean isFinalCountdown = remainingTimeMs <= FINAL_COUNTDOWN_THRESHOLD_MS;
 
@@ -97,7 +98,7 @@ public class GameTimerService {
             String syncChannel = MultiGameChannelConstants.getTimerChannel(gameRoomId) + "/sync";
             messagingTemplate.convertAndSend(syncChannel, syncMessage);
 
-        }, Instant.now().plusMillis(SYNC_INTERVAL_MS), Duration.ofMillis(SYNC_INTERVAL_MS)); // 현재 시각 기준으로 5초 뒤에 첫 실행, 이후 5초 간격으로 계속 반복
+        }, Instant.now(), Duration.ofMillis(SYNC_INTERVAL_MS)); // 현재 시각 기준으로 5초 뒤에 첫 실행, 이후 5초 간격으로 계속 반복
         syncTasks.put(taskKey, syncTask);
     }
 
