@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoadViewTeamSubmission extends BaseTimeEntity {
+public class RoadViewTeamSubmission extends BaseRoadViewSubmission {
 
     //로드뷰 모드 한정
     @Id
@@ -27,22 +27,11 @@ public class RoadViewTeamSubmission extends BaseTimeEntity {
     
     // 팀 번호 (1 또는 2)
     private Integer teamNumber;
-    
-    private Double lat;
-    
-    private Double lng;
-    
-    // 프론트에서 계산된 정답과의 거리 (미터 단위)
-    private Double distance;
-    
+
     // 승패 여부 (협동전에서 사용)
     private Boolean isWinner;
     
     // Business methods
-    public void setRoadViewGameRound(RoadViewGameRound roadViewGameRound) {
-        this.roadViewGameRound = roadViewGameRound;
-    }
-    
     public void setWinner(Boolean isWinner) {
         this.isWinner = isWinner;
     }

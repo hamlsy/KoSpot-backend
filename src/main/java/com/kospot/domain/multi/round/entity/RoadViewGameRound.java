@@ -32,14 +32,6 @@ public class RoadViewGameRound extends BaseGameRound {
     @JoinColumn(name = "coordinate_id")
     private CoordinateNationwide targetCoordinate;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoadViewPlayerSubmission> roadViewPlayerSubmissions = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "roadViewGameRound", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoadViewTeamSubmission> roadViewTeamSubmissions = new ArrayList<>();
-
     @Override
     public GameMode getGameMode() {
         return GameMode.ROADVIEW;
@@ -49,17 +41,7 @@ public class RoadViewGameRound extends BaseGameRound {
     public void setMultiRoadViewGame(MultiRoadViewGame multiRoadViewGame) {
         this.multiRoadViewGame = multiRoadViewGame;
     }
-    
-    public void addPlayerSubmission(RoadViewPlayerSubmission submission) {
-        this.roadViewPlayerSubmissions.add(submission);
-        submission.setRoadViewGameRound(this);
-    }
-    
-    public void addTeamSubmission(RoadViewTeamSubmission submission) {
-        this.roadViewTeamSubmissions.add(submission);
-        submission.setRoadViewGameRound(this);
-    }
-    
+
     // create method
     public static RoadViewGameRound createRound(Integer roundNumber, CoordinateNationwide targetCoordinate, Integer timeLimit, List<Long> playerIds) {
         return RoadViewGameRound.builder()

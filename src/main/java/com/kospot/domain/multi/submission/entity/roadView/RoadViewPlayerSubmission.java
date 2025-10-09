@@ -17,26 +17,15 @@ import static com.kospot.domain.multi.game.util.ScoreRule.calculateScore;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoadViewPlayerSubmission extends BaseTimeEntity {
+public class RoadViewPlayerSubmission extends BaseRoadViewSubmission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_round_id")
-    private RoadViewGameRound roadViewGameRound;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_player_id")
     private GamePlayer gamePlayer;
-
-    private Double lat;
-
-    private Double lng;
-
-    // 프론트에서 계산된 정답과의 거리 (미터 단위)
-    private Double distance;
 
     // 순위에 따른 점수
     private Integer earnedScore;
@@ -44,13 +33,7 @@ public class RoadViewPlayerSubmission extends BaseTimeEntity {
     // 정답까지 걸린 시간(밀리초 단위)
     private Double timeToAnswer;
 
-
     // Business methods
-    public void setRoadViewGameRound(RoadViewGameRound roadViewGameRound) {
-        this.roadViewGameRound = roadViewGameRound;
-        roadViewGameRound.addPlayerSubmission(this);
-    }
-
     public void assignRankAndScore(Integer roundRank) {
         assignScore(calculateScore(roundRank));
     }
