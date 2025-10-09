@@ -29,4 +29,9 @@ public class RoadViewGameRoundAdaptor {
         );
     }
 
+    public RoadViewGameRound queryByIdFetchTeamSubmissions(Long id) {
+        return repository.findByIdFetchTeamSubmissions(id).orElseThrow(
+                () -> new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND)
+        );
+    }
 }

@@ -1,6 +1,5 @@
 package com.kospot.domain.multi.submission.entity.roadView;
 
-import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -16,7 +15,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoadViewTeamSubmission extends BaseRoadViewSubmission {
 
-    //로드뷰 모드 한정
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,24 +23,48 @@ public class RoadViewTeamSubmission extends BaseRoadViewSubmission {
     @JoinColumn(name = "game_round_id")
     private RoadViewGameRound roadViewGameRound;
     
-    // 팀 번호 (1 또는 2)
+    // 팀 번호 (1, 2, 3, 4)
     private Integer teamNumber;
-
-    // 승패 여부 (협동전에서 사용)
-    private Boolean isWinner;
+    
+    // 정답까지 걸린 시간(밀리초 단위) - 동점 처리용
+    private Double timeToAnswer;
     
     // Business methods
-    public void setWinner(Boolean isWinner) {
-        this.isWinner = isWinner;
+    public void setRound(RoadViewGameRound roadViewGameRound) {
+        this.roadViewGameRound = roadViewGameRound;
+        roadViewGameRound.addTeamSubmission(this);
+    }
+    
+    /**
+     * 팀 점수 규칙: 1등 10점, 2등 6점, 3등 2점, 4등 이상 0점
+     */
+    @Override
+    public void assignScore(Integer rank) {
+        this.earnedScore = calculateTeamScore(rank);
+    }
+    
+    private Integer calculateTeamScore(Integer rank) {
+        return switch (rank) {
+            case 1 -> 10;
+            case 2 -> 6;
+            case 3 -> 2;
+            default -> 0;
+        };
     }
     
     // 생성 메서드
-    public static RoadViewTeamSubmission createSubmission(Integer teamNumber, Double lat, Double lng, Double distance) {
+    public static RoadViewTeamSubmission createSubmission(
+            Integer teamNumber, 
+            Double lat, 
+            Double lng, 
+            Double distance,
+            Double timeToAnswer) {
         return RoadViewTeamSubmission.builder()
                 .teamNumber(teamNumber)
                 .lat(lat)
                 .lng(lng)
                 .distance(distance)
+                .timeToAnswer(timeToAnswer)
                 .build();
     }
 } 

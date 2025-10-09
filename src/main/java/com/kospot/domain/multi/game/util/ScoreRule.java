@@ -16,4 +16,6 @@ public class ScoreRule {
         return rank <= SCORES.length ? SCORES[rank - 1] : 0;
     }
 
+
+
 } 

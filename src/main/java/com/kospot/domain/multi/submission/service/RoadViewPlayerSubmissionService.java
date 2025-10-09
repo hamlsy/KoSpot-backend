@@ -28,7 +28,7 @@ public class RoadViewPlayerSubmissionService {
         validateSubmissionAllowed(round, gamePlayer.getId());
 
         submission.setGamePlayer(gamePlayer);
-        submission.setRoadViewGameRound(round);
+        submission.setRound(round);
         roadViewPlayerSubmissionRepository.save(submission);
     }
 
@@ -36,7 +36,7 @@ public class RoadViewPlayerSubmissionService {
         submissions.sort(Comparator.comparingDouble(RoadViewPlayerSubmission::getDistance)
                 .thenComparingDouble(RoadViewPlayerSubmission::getTimeToAnswer));
         IntStream.range(0, submissions.size()).forEach(
-                i -> submissions.get(i).assignRankAndScore(i + 1));
+                i -> submissions.get(i).assignScore(i + 1));
         //game player 점수 계산
         submissions.forEach(submission -> {
             GamePlayer gamePlayer = submission.getGamePlayer();

@@ -25,8 +25,11 @@ public class GamePlayerAdaptor {
         );
     }
 
-
     public List<GamePlayer> queryByMultiRoadViewGameId(Long gameId) {
         return repository.findAllByMultiRoadViewGameId(gameId);
+    }
+
+    public List<GamePlayer> queryByGameIdAndTeamNumber(Long gameId, Integer teamNumber) {
+        return repository.findAllByMultiRoadViewGameIdAndTeamNumber(gameId, teamNumber);
     }
 }

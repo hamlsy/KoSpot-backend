@@ -14,4 +14,10 @@ public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
 
     @Query("SELECT gp FROM GamePlayer gp WHERE gp.multiRoadViewGame.id = :gameId")
     List<GamePlayer> findAllByMultiRoadViewGameId(@Param("gameId") Long gameId);
+
+    @Query("SELECT gp FROM GamePlayer gp WHERE gp.multiRoadViewGame.id = :gameId AND gp.teamNumber = :teamNumber")
+    List<GamePlayer> findAllByMultiRoadViewGameIdAndTeamNumber(
+            @Param("gameId") Long gameId,
+            @Param("teamNumber") Integer teamNumber
+    );
 }
