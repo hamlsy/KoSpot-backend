@@ -1,6 +1,9 @@
 package com.kospot.infrastructure.websocket.domain.gameroom.service;
 
 
+import com.kospot.domain.multi.room.vo.GameRoomNotification;
+import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
+import com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
