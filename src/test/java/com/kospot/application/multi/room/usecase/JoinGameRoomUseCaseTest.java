@@ -5,6 +5,7 @@ import com.kospot.application.multi.room.http.usecase.JoinGameRoomUseCase;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.member.vo.Role;
@@ -12,7 +13,7 @@ import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.event.GameRoomJoinEvent;
 import com.kospot.domain.multi.room.repository.GameRoomRepository;
-import com.kospot.domain.multi.room.service.GameRoomPlayerService;
+import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
@@ -54,6 +55,9 @@ class JoinGameRoomUseCaseTest {
     private GameRoomRedisService gameRoomRedisService;
 
     @Autowired
+    private GameRoomService gameRoomService;
+
+    @Autowired
     private GameRoomRedisRepository gameRoomRedisRepository;
 
     @Autowired
@@ -66,13 +70,13 @@ class JoinGameRoomUseCaseTest {
     private MemberRepository memberRepository;
 
     @Autowired
+    private MemberAdaptor memberAdaptor;
+
+    @Autowired
     private GameRoomNotificationService gameRoomNotificationService;
 
     @Autowired
     private SessionContextRedisService sessionContextRedisService;
-
-    @Autowired
-    private GameRoomPlayerService gameRoomPlayerService;
 
     private Member testMember;
     private Member hostMember;
@@ -115,7 +119,7 @@ class JoinGameRoomUseCaseTest {
         // 2. 이벤트 처리 후 Redis 상태 검증 (실제 환경에서는 이벤트가 자동 처리됨)
         // 여기서는 Redis 상태 변화로 이벤트 처리를 간접 확인
 
-        log.info("✅ 정상적인 게임방 참가 완료 - MemberId: {}, GameRoomId: {}", 
+        log.info("✅ 정상적인 게임방 참가 완료 - MemberId: {}, GameRoomId: {}",
                 testMember.getId(), testGameRoom.getId());
     }
 
@@ -123,7 +127,7 @@ class JoinGameRoomUseCaseTest {
     @DisplayName("이벤트 처리 후 Redis 상태 검증 테스트")
     void shouldUpdateRedisAfterEventProcessing() {
         // given
-        GameRoomEventHandler eventHandler = new GameRoomEventHandler(gameRoomRedisService, gameRoomNotificationService, sessionContextRedisService, gameRoomPlayerService);
+        GameRoomEventHandler eventHandler = new GameRoomEventHandler(gameRoomRedisService, gameRoomNotificationService, gameRoomService, memberAdaptor);
 
         // when
         joinGameRoomUseCase.executeV1(testMember, testGameRoom.getId(), joinRequest);
@@ -141,7 +145,7 @@ class JoinGameRoomUseCaseTest {
         assertThat(players.get(0).getMemberId()).isEqualTo(testMember.getId());
         assertThat(players.get(0).getNickname()).isEqualTo(testMember.getNickname());
 
-        log.info("✅ Redis 상태 업데이트 완료 - RoomId: {}, PlayerCount: {}", 
+        log.info("✅ Redis 상태 업데이트 완료 - RoomId: {}, PlayerCount: {}",
                 testGameRoom.getId(), gameRoomRedisRepository.getPlayerCount(testGameRoom.getId().toString()));
     }
 
@@ -170,7 +174,7 @@ class JoinGameRoomUseCaseTest {
         Member unchangedMember = memberRepository.findById(testMember.getId()).orElseThrow();
         assertThat(unchangedMember.getGameRoomId()).isNull();
 
-        log.info("✅ 인원 초과 시 예외 처리 완료 - MaxPlayers: {}, CurrentCount: {}", 
+        log.info("✅ 인원 초과 시 예외 처리 완료 - MaxPlayers: {}, CurrentCount: {}",
                 maxPlayers, gameRoomRedisRepository.getPlayerCount(roomId));
     }
 
@@ -227,7 +231,7 @@ class JoinGameRoomUseCaseTest {
         // 다른 게임방 생성
         Member hostMember1 = createAndSaveMember("hostUser1", "호스트유저1");
         GameRoom anotherRoom = createAndSaveGameRoom(hostMember1);
-        
+
         // 먼저 testMember를 첫 번째 방에 참가시킴
         joinGameRoomUseCase.executeV1(testMember, testGameRoom.getId(), joinRequest);
 
@@ -282,7 +286,7 @@ class JoinGameRoomUseCaseTest {
         Member member1 = createAndSaveMember("member1", "멤버1");
         Member member2 = createAndSaveMember("member2", "멤버2");
 
-        GameRoomEventHandler eventHandler = new GameRoomEventHandler(gameRoomRedisService, gameRoomNotificationService, sessionContextRedisService, gameRoomPlayerService);
+        GameRoomEventHandler eventHandler = new GameRoomEventHandler(gameRoomRedisService, gameRoomNotificationService, gameRoomService, memberAdaptor);
 
         // when
         // 두 명의 플레이어가 순차적으로 참가
@@ -299,14 +303,14 @@ class JoinGameRoomUseCaseTest {
         // DB 검증
         Member updatedMember1 = memberRepository.findById(member1.getId()).orElseThrow();
         Member updatedMember2 = memberRepository.findById(member2.getId()).orElseThrow();
-        
+
         assertThat(updatedMember1.getGameRoomId()).isEqualTo(testGameRoom.getId());
         assertThat(updatedMember2.getGameRoomId()).isEqualTo(testGameRoom.getId());
 
         // Redis 검증
         String roomId = testGameRoom.getId().toString();
         assertThat(gameRoomRedisRepository.getPlayerCount(roomId)).isEqualTo(2);
-        
+
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(roomId);
         assertThat(players).hasSize(2);
         assertThat(players).extracting(GameRoomPlayerInfo::getMemberId)

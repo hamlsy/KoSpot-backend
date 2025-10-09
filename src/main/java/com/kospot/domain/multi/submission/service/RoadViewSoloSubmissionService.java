@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class RoadViewPlayerSubmissionService {
+public class RoadViewSoloSubmissionService {
 
     private final RoadViewPlayerSubmissionRepository roadViewPlayerSubmissionRepository;
 

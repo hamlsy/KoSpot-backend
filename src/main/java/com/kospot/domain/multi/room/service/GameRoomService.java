@@ -7,6 +7,8 @@ import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.repository.GameRoomRepository;
 import com.kospot.domain.multi.room.vo.GameRoomUpdateInfo;
+import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,6 @@ public class GameRoomService {
 
     private final MemberAdaptor memberAdaptor;
     private final GameRoomRepository gameRoomRepository;
-    private final GameRoomPlayerService gameRoomPlayerService;
 
     public GameRoom createGameRoom(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = request.toEntity();
@@ -40,20 +41,11 @@ public class GameRoomService {
     }
 
     public void leaveGameRoom(Member player, GameRoom gameRoom) {
-        //플레이어가 나간 경우
         gameRoom.leaveRoom(player);
-
-        //방장이 나간 경우 또는 남은 플레이어가 없는 경우 (Redis 기반 실시간 확인)
-        if (gameRoom.isHost(player) || gameRoomPlayerService.isRoomEmpty(gameRoom.getId().toString())) {
-            deleteRoom(gameRoom);
-        }
-
     }
 
-    // todo soft delete scheduling
-    private void deleteRoom(GameRoom gameRoom) {
+    public void deleteRoom(GameRoom gameRoom) {
         gameRoom.deleteRoom();
-        //남은 인원들 game room fk 초기화
         memberAdaptor.queryAllByGameRoomId(gameRoom.getId()).forEach(Member::leaveGameRoom);
     }
 
@@ -61,5 +53,20 @@ public class GameRoomService {
         gameRoom.kickPlayer(host, targetPlayer);
     }
 
+    public void updateMemberLeaveStatus(Member member) {
+        member.leaveGameRoom();
+    }
 
+    public void validateKickPermission(GameRoom gameRoom, Member host, Long targetMemberId) {
+        gameRoom.validateHost(host);
+
+        Member targetMember = memberAdaptor.queryById(targetMemberId);
+        if (!targetMember.getGameRoomId().equals(gameRoom.getId())) {
+            throw new WebSocketHandler(ErrorStatus._BAD_REQUEST);
+        }
+    }
+
+    public void changeHostToMember(GameRoom gameRoom, Member newHost) {
+        gameRoom.setHost(newHost);
+    }
 }
