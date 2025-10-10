@@ -1,6 +1,6 @@
 package com.kospot.multi.submission.usecase.roadview;
 
-import com.kospot.application.multi.submission.SubmitRoadViewPlayerAnswerUseCase;
+import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
 import com.kospot.domain.coordinate.entity.Address;
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
 
@@ -17,7 +17,7 @@ import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmissi
 import com.kospot.domain.multi.submission.repository.RoadViewPlayerSubmissionRepository;
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.presentation.multi.submission.dto.request.SubmissionRequest;
+import com.kospot.presentation.multi.submission.dto.request.SubmitRoadViewRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-class SubmitRoadViewPlayerAnswerUseCaseTest {
+class SubmitPlayerAnswerUseCaseTest {
 
     @Autowired
     private SubmitRoadViewPlayerAnswerUseCase submitRoadViewPlayerAnswerUseCase;
@@ -64,7 +64,7 @@ class SubmitRoadViewPlayerAnswerUseCaseTest {
     // 테스트 데이터
     private Long roundId;
     private Long playerId;
-    private SubmissionRequest.RoadViewPlayer request;
+    private SubmitRoadViewRequest.Player request;
     private RoadViewGameRound round;
     private GamePlayer gamePlayer;
     private MultiRoadViewGame game;
@@ -121,8 +121,8 @@ class SubmitRoadViewPlayerAnswerUseCaseTest {
         flushAndClear();
     }
 
-    private SubmissionRequest.RoadViewPlayer createSubmissionRequest() {
-        SubmissionRequest.RoadViewPlayer request = SubmissionRequest.RoadViewPlayer.builder()
+    private SubmitRoadViewRequest.Player createSubmissionRequest() {
+        SubmitRoadViewRequest.Player request = SubmitRoadViewRequest.Player.builder()
                 .playerId(playerId)
                 .distance(100.5)
                 .lng(126.9780)
@@ -183,7 +183,7 @@ class SubmitRoadViewPlayerAnswerUseCaseTest {
                 .build();
             gamePlayerRepository.save(secondPlayer);
             
-            SubmissionRequest.RoadViewPlayer secondRequest = new SubmissionRequest.RoadViewPlayer();
+            SubmitRoadViewRequest.Player secondRequest = new SubmitRoadViewRequest.Player();
             secondRequest.setPlayerId(secondPlayer.getId());
             secondRequest.setLat(37.5660);
             secondRequest.setLng(126.9775);
@@ -381,7 +381,7 @@ class SubmitRoadViewPlayerAnswerUseCaseTest {
             // when & then
             for (int i = 0; i < playerCount; i++) {
                 final int index = i;
-                SubmissionRequest.RoadViewPlayer playerRequest = new SubmissionRequest.RoadViewPlayer();
+                SubmitRoadViewRequest.Player playerRequest = new SubmitRoadViewRequest.Player();
                 playerRequest.setPlayerId(players[index].getId());
                 playerRequest.setLat(37.5665 + (index * 0.001));
                 playerRequest.setLng(126.9780 + (index * 0.001));

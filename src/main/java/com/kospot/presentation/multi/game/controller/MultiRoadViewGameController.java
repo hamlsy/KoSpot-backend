@@ -3,7 +3,7 @@ package com.kospot.presentation.multi.game.controller;
 import com.kospot.application.multi.round.EndRoadViewSoloRoundUseCase;
 import com.kospot.application.multi.round.NextRoadViewRoundUseCase;
 import com.kospot.application.multi.round.StartRoadViewSoloRoundUseCase;
-import com.kospot.application.multi.submission.SubmitRoadViewPlayerAnswerUseCase;
+import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
@@ -11,7 +11,7 @@ import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;
 import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
-import com.kospot.presentation.multi.submission.dto.request.SubmissionRequest;
+import com.kospot.presentation.multi.submission.dto.request.SubmitRoadViewRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,7 +50,7 @@ public class MultiRoadViewGameController {
     @PostMapping("/rounds/{roundId}/solo/submissions")
     public ApiResponseDto<?> submitPlayerAnswer(
             @PathVariable("roundId") Long roundId,
-            @RequestBody SubmissionRequest.RoadViewPlayer request) {
+            @RequestBody SubmitRoadViewRequest.Player request) {
         submitRoadViewPlayerAnswerUseCase.execute(roundId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
@@ -59,7 +59,7 @@ public class MultiRoadViewGameController {
     @PostMapping("/rounds/{roundId}/team/submissions")
     public ApiResponseDto<?> submitTeamAnswer(
             @PathVariable("roundId") Long roundId,
-            @RequestBody SubmissionRequest.RoadViewPlayer request) {
+            @RequestBody SubmitRoadViewRequest.Player request) {
         //todo implement
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }

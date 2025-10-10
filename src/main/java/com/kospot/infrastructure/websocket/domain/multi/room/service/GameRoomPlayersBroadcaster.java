@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.domain.gameroom.service;
+package com.kospot.infrastructure.websocket.domain.multi.room.service;
 
 
 import com.kospot.domain.multi.room.vo.GameRoomNotification;

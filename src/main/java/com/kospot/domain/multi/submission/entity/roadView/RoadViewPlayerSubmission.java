@@ -30,10 +30,7 @@ public class RoadViewPlayerSubmission extends BaseRoadViewSubmission {
     public void setGamePlayer(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;
     }
-    
-    /**
-     * Round 설정 시 양방향 관계 설정
-     */
+
     public void setRound(com.kospot.domain.multi.round.entity.RoadViewGameRound roadViewGameRound) {
         this.roadViewGameRound = roadViewGameRound;
         roadViewGameRound.addPlayerSubmission(this);

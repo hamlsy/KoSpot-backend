@@ -1,4 +1,4 @@
-package com.kospot.application.multi.submission;
+package com.kospot.application.multi.submission.http.usecase;
 
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import lombok.RequiredArgsConstructor;

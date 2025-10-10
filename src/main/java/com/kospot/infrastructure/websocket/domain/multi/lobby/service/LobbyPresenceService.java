@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.websocket.domain.multi.service;
+package com.kospot.infrastructure.websocket.domain.multi.lobby.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

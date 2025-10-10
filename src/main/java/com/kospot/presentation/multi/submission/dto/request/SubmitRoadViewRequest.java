@@ -3,14 +3,14 @@ package com.kospot.presentation.multi.submission.dto.request;
 import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmission;
 import lombok.*;
 
-public class SubmissionRequest {
+public class SubmitRoadViewRequest {
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class RoadViewPlayer {
+    public static class Player {
         
         private Long playerId;
         private Double lat;
@@ -34,7 +34,7 @@ public class SubmissionRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class RoadViewTeam {
+    public static class Team {
 
         private Long teamId;
         private Double lat;

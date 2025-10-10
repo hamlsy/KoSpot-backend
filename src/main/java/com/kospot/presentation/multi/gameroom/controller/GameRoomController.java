@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "OK")
 @Tag(name = "GameRoom Api", description = "멀티 게임 방 API")
-@RequestMapping("/gameRoom/")
+@RequestMapping("/rooms/")
 public class GameRoomController {
 
     private final FindAllGameRoomUseCase findAllGameRoomUseCase;
