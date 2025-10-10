@@ -1,6 +1,7 @@
 package com.kospot.domain.multi.submission.service;
 
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
+import com.kospot.domain.multi.round.entity.BaseGameRound;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmission;
 import com.kospot.domain.multi.submission.repository.RoadViewPlayerSubmissionRepository;
@@ -49,6 +50,12 @@ public class RoadViewPlayerSubmissionService {
         round.validateRoundNotFinished();
         if (roadViewPlayerSubmissionRepository.existsByRoundIdAndGamePlayerId(round.getId(), playerId)) {
             throw new GameRoundHandler(ErrorStatus.ROUND_ALREADY_SUBMITTED);
+        }
+    }
+
+    private void validateTimeLimit(BaseGameRound round) {
+        if (round.isTimeLimitExceeded()) {
+            throw new GameRoundHandler(ErrorStatus.ROUND_TIME_LIMIT_EXCEEDED);
         }
     }
 

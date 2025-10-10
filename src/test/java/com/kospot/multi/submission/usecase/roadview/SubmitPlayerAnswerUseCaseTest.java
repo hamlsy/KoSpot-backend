@@ -123,7 +123,6 @@ class SubmitPlayerAnswerUseCaseTest {
 
     private SubmitRoadViewRequest.Player createSubmissionRequest() {
         SubmitRoadViewRequest.Player request = SubmitRoadViewRequest.Player.builder()
-                .playerId(playerId)
                 .distance(100.5)
                 .lng(126.9780)
                 .lat(37.5665)

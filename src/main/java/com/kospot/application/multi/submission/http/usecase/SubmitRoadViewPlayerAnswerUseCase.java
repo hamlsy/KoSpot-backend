@@ -27,10 +27,11 @@ public class SubmitRoadViewPlayerAnswerUseCase {
     private final RoadViewPlayerSubmissionService roadViewPlayerSubmissionService;
     private final SubmissionNotificationService submissionNotificationService;
 
-    public void execute(Member member, Long gameRoomId, Long roundId, SubmitRoadViewRequest.Player request) {
+    public void execute(Member member, Long gameId,
+                        Long roundId, SubmitRoadViewRequest.Player request) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
-        GamePlayer player = gamePlayerAdaptor.queryById(request.getPlayerId());
-        validateMemberMatchPlayer(member, player);
+
+        GamePlayer player = gamePlayerAdaptor.queryByMemberId(member.getId());
 
         RoadViewPlayerSubmission submission = request.toEntity();
         roadViewPlayerSubmissionService.createSubmission(round, player, submission);
@@ -39,10 +40,5 @@ public class SubmitRoadViewPlayerAnswerUseCase {
         submissionNotificationService.notifySubmissionReceived();
     }
 
-    public void validateMemberMatchPlayer(Member member, GamePlayer player) {
-        if(!Objects.equals(member.getId(), player.getMemberId())) {
-            throw new IllegalArgumentException("Member does not match the player.");
-        }
-    }
 
 }

@@ -25,6 +25,12 @@ public class GamePlayerAdaptor {
         );
     }
 
+    public GamePlayer queryByMemberId(Long memberId) {
+        return repository.findByMemberId(memberId).orElseThrow(
+                () -> new GamePlayerHandler(ErrorStatus.GAME_PLAYER_NOT_FOUND)
+        );
+    }
+
     public List<GamePlayer> queryByMultiRoadViewGameId(Long gameId) {
         return repository.findAllByMultiRoadViewGameId(gameId);
     }
