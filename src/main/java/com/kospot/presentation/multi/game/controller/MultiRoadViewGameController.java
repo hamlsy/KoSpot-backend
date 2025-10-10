@@ -46,24 +46,6 @@ public class MultiRoadViewGameController {
         return ApiResponseDto.onSuccess(startRoadViewSoloRoundUseCase.execute(member, request));
     }
 
-    @Operation(summary = "멀티 로드뷰 개인 정답 제출", description = "로드뷰 게임 개인 정답을 제출합니다.")
-    @PostMapping("/rounds/{roundId}/solo/submissions")
-    public ApiResponseDto<?> submitPlayerAnswer(
-            @PathVariable("roundId") Long roundId,
-            @RequestBody SubmitRoadViewRequest.Player request) {
-        submitRoadViewPlayerAnswerUseCase.execute(roundId, request);
-        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
-    }
-
-    @Operation(summary = "멀티 로드뷰 팀 정답 제출", description = "로드뷰 게임 팀 정답을 제출합니다.")
-    @PostMapping("/rounds/{roundId}/team/submissions")
-    public ApiResponseDto<?> submitTeamAnswer(
-            @PathVariable("roundId") Long roundId,
-            @RequestBody SubmitRoadViewRequest.Player request) {
-        //todo implement
-        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
-    }
-
     @Operation(summary = "멀티 로드뷰 개인 라운드 종료", description = "멀티 로드뷰 게임 개인 라운드를 종료합니다.")
     @PostMapping("/games/{gameId}/rounds/{roundId}/solo/end")
     public ApiResponseDto<RoadViewRoundResponse.PlayerResult> endPlayerRound(

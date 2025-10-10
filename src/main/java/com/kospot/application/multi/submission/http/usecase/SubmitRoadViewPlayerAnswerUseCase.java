@@ -37,7 +37,7 @@ public class SubmitRoadViewPlayerAnswerUseCase {
         roadViewPlayerSubmissionService.createSubmission(round, player, submission);
 
         // notify
-        submissionNotificationService.notifySubmissionReceived();
+        submissionNotificationService.notifySubmissionReceived(gameId, roundId, player.getId());
     }
 
 

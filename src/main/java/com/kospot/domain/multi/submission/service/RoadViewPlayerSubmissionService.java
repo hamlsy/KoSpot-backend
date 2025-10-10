@@ -25,7 +25,8 @@ public class RoadViewPlayerSubmissionService {
 
     private final RoadViewPlayerSubmissionRepository roadViewPlayerSubmissionRepository;
 
-    public void createSubmission(RoadViewGameRound round, GamePlayer gamePlayer, RoadViewPlayerSubmission submission) {
+    public void createSubmission(RoadViewGameRound round, GamePlayer gamePlayer,
+                                 RoadViewPlayerSubmission submission) {
         validateSubmissionAllowed(round, gamePlayer.getId());
 
         submission.setGamePlayer(gamePlayer);
@@ -33,6 +34,8 @@ public class RoadViewPlayerSubmissionService {
         roadViewPlayerSubmissionRepository.save(submission);
     }
 
+    //todo 거리 기반 점수로 변경
+    //todo 시간 순 추가 점수
     public List<RoadViewPlayerSubmission> updateRankAndScore(List<RoadViewPlayerSubmission> submissions) {
         submissions.sort(Comparator.comparingDouble(RoadViewPlayerSubmission::getDistance)
                 .thenComparingDouble(RoadViewPlayerSubmission::getTimeToAnswer));
@@ -48,6 +51,11 @@ public class RoadViewPlayerSubmissionService {
 
     private void validateSubmissionAllowed(RoadViewGameRound round, Long playerId) {
         round.validateRoundNotFinished();
+        // 중복 제출 검증
+        validateNotAlreadySubmitted(round, playerId);
+    }
+
+    private void validateNotAlreadySubmitted(RoadViewGameRound round, Long playerId) {
         if (roadViewPlayerSubmissionRepository.existsByRoundIdAndGamePlayerId(round.getId(), playerId)) {
             throw new GameRoundHandler(ErrorStatus.ROUND_ALREADY_SUBMITTED);
         }
