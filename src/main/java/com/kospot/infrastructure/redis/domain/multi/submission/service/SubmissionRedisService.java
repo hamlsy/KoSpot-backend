@@ -48,4 +48,25 @@ public class SubmissionRedisService {
         return count != null ? Long.parseLong(count) : 0L;
     }
 
+    public boolean hasPlayerSubmitted(Long roundId, Long playerId) {
+        String playersKey = String.format(SUBMITTED_PLAYERS_KEY, roundId);
+        return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(playersKey, playerId));
+    }
+
+    public void initializeRound(Long roundId) {
+        String countKey = String.format(SUBMISSION_COUNT_KEY, roundId);
+        String playersKey = String.format(SUBMITTED_PLAYERS_KEY, roundId);
+
+        redisTemplate.opsForValue().set(countKey, "0");
+        redisTemplate.delete(playersKey);
+    }
+
+    public void cleanupRound(Long roundId) {
+        String countKey = String.format(SUBMISSION_COUNT_KEY, roundId);
+        String playersKey = String.format(SUBMITTED_PLAYERS_KEY, roundId);
+
+        redisTemplate.delete(countKey);
+        redisTemplate.delete(playersKey);
+    }
+
 }
