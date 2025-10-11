@@ -1,5 +1,6 @@
 package com.kospot.infrastructure.redis.domain.multi.submission.service;
 
+import com.kospot.domain.game.vo.GameMode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,14 +16,19 @@ public class SubmissionRedisService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    private static final String SUBMISSION_COUNT_KEY = "game:round:%s:submission:count";
-    private static final String SUBMITTED_PLAYERS_KEY = "game:round:%s:submitted:players";
+    /**
+    * Redis Keys Structure
+    * is roadview mode - game:roadview:round:{roundId}:submission:count
+    */
+
+    private static final String SUBMISSION_COUNT_KEY = "game:%s:round:%s:submission:count";
+    private static final String SUBMITTED_PLAYERS_KEY = "game:%s:round:%s:submitted:players";
 
     private static final int ROUND_DATA_EXPIRY_MINUTES = 10;
 
-    public Long recordSubmission(Long roundId, Long playerId) {
-        String playersKey = String.format(SUBMITTED_PLAYERS_KEY, roundId);
-        String countKey = String.format(SUBMISSION_COUNT_KEY, roundId);
+    public Long recordSubmission(GameMode mode, Long roundId, Long playerId) {
+        String playersKey = getPlayersKey(mode, roundId);
+        String countKey = getCountKey(mode, roundId);
 
         // add player in Set
         boolean isNewSubmission = Optional.ofNullable(
@@ -39,34 +45,42 @@ public class SubmissionRedisService {
             return currentCount;
         }
         log.warn("⚠️ Duplicate submission attempt - RoundId: {}, PlayerId: {}", roundId, playerId);
-        return getCurrentSubmissionCount(roundId);
+        return getCurrentSubmissionCount(mode, roundId);
     }
 
-    public long getCurrentSubmissionCount(Long roundId) {
-        String countKey = String.format(SUBMISSION_COUNT_KEY, roundId);
+    public long getCurrentSubmissionCount(GameMode mode, Long roundId) {
+        String countKey = getCountKey(mode, roundId);
         String count = redisTemplate.opsForValue().get(countKey);
         return count != null ? Long.parseLong(count) : 0L;
     }
 
-    public boolean hasPlayerSubmitted(Long roundId, Long playerId) {
-        String playersKey = String.format(SUBMITTED_PLAYERS_KEY, roundId);
+    public boolean hasPlayerSubmitted(GameMode mode, Long roundId, Long playerId) {
+        String playersKey = getPlayersKey(mode, roundId);
         return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(playersKey, playerId));
     }
 
-    public void initializeRound(Long roundId) {
-        String countKey = String.format(SUBMISSION_COUNT_KEY, roundId);
-        String playersKey = String.format(SUBMITTED_PLAYERS_KEY, roundId);
+    public void initializeRound(GameMode mode, Long roundId) {
+        String playersKey = getPlayersKey(mode, roundId);
+        String countKey = getCountKey(mode, roundId);
 
         redisTemplate.opsForValue().set(countKey, "0");
         redisTemplate.delete(playersKey);
     }
 
-    public void cleanupRound(Long roundId) {
-        String countKey = String.format(SUBMISSION_COUNT_KEY, roundId);
-        String playersKey = String.format(SUBMITTED_PLAYERS_KEY, roundId);
+    public void cleanupRound(GameMode mode, Long roundId) {
+        String playersKey = getPlayersKey(mode, roundId);
+        String countKey = getCountKey(mode, roundId);
 
         redisTemplate.delete(countKey);
         redisTemplate.delete(playersKey);
+    }
+
+    public String getCountKey(GameMode mode,Long roundId) {
+        return String.format(SUBMISSION_COUNT_KEY, mode.name().toLowerCase(),roundId);
+    }
+
+    public String getPlayersKey(GameMode mode,Long roundId) {
+        return String.format(SUBMITTED_PLAYERS_KEY, mode.name().toLowerCase(),roundId);
     }
 
 }
