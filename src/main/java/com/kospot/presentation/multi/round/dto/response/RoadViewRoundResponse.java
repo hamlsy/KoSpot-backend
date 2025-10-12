@@ -2,7 +2,7 @@ package com.kospot.presentation.multi.round.dto.response;
 
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.submission.entity.roadview.RoadViewPlayerSubmission;
+import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
 import com.kospot.presentation.multi.gamePlayer.dto.response.GamePlayerResponse;
 import com.kospot.presentation.multi.submission.dto.response.SubmissionResponse;
 import lombok.*;
@@ -45,7 +45,7 @@ public class RoadViewRoundResponse {
         private List<GamePlayerResponse> playerTotalResults;
 
         public static PlayerResult from(RoadViewGameRound round,
-                                        List<RoadViewPlayerSubmission> submissions,
+                                        List<RoadViewSubmission> submissions,
                                         List<GamePlayer> players) {
             return PlayerResult.builder()
                     .roundNumber(round.getRoundNumber())

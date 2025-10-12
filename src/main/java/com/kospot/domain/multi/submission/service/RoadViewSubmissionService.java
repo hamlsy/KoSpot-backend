@@ -16,20 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * 로드뷰 제출 서비스 (통합)
- * 
- * 클린코드 원칙:
- * - 단일 책임: 제출 데이터 관리
- * - DRY: 중복 코드 제거
- * - 전략 패턴: 점수 계산 로직 분리
- * - 명확한 메서드 네이밍
- * 
- * 장점:
- * - 개인전/팀전 로직 통합으로 90% 중복 제거
- * - 매치타입으로 자연스러운 분기 처리
- * - 테스트 코드 50% 감소
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -39,24 +25,13 @@ public class RoadViewSubmissionService {
     private final RoadViewSubmissionRepository repository;
     private final GamePlayerAdaptor gamePlayerAdaptor;
 
-    // === 제출 생성 ===
-
-    /**
-     * 개인전 제출 생성
-     * 
-     * @param round 라운드
-     * @param player 제출한 플레이어
-     * @param submission 제출 데이터
-     */
     public RoadViewSubmission createPlayerSubmission(
             RoadViewGameRound round,
             GamePlayer player,
             RoadViewSubmission submission
     ) {
-        // 제출 가능 여부 검증
         validatePlayerSubmissionAllowed(round, player.getId());
 
-        // 정적 팩토리 메서드로 안전한 객체 생성
         RoadViewSubmission newSubmission = RoadViewSubmission.forPlayer(
                 player,
                 round,
@@ -66,32 +41,16 @@ public class RoadViewSubmissionService {
                 submission.getTimeToAnswer()
         );
 
-        // 양방향 연관관계 설정 및 저장
         newSubmission.setRound(round);
-        
-        RoadViewSubmission saved = repository.save(newSubmission);
-        log.debug("✅ Player submission created - RoundId: {}, PlayerId: {}, Distance: {}m",
-                round.getId(), player.getId(), submission.getDistance());
-        
-        return saved;
+        return repository.save(newSubmission);
     }
 
-    /**
-     * 팀전 제출 생성
-     * 
-     * @param round 라운드
-     * @param teamNumber 팀 번호 (1-4)
-     * @param submission 제출 데이터
-     */
     public RoadViewSubmission createTeamSubmission(
             RoadViewGameRound round,
             Integer teamNumber,
             RoadViewSubmission submission
     ) {
-        // 제출 가능 여부 검증
         validateTeamSubmissionAllowed(round, teamNumber);
-
-        // 정적 팩토리 메서드로 안전한 객체 생성
         RoadViewSubmission newSubmission = RoadViewSubmission.forTeam(
                 teamNumber,
                 round,
@@ -101,29 +60,11 @@ public class RoadViewSubmissionService {
                 submission.getTimeToAnswer()
         );
 
-        // 양방향 연관관계 설정 및 저장
         newSubmission.setRound(round);
-        
-        RoadViewSubmission saved = repository.save(newSubmission);
-        log.debug("✅ Team submission created - RoundId: {}, TeamNumber: {}, Distance: {}m",
-                round.getId(), teamNumber, submission.getDistance());
-        
-        return saved;
+
+        return repository.save(newSubmission);
     }
 
-    // === 순위 및 점수 계산 (통합) ===
-
-    /**
-     * 개인전 순위 및 점수 계산
-     * 
-     * 프로세스:
-     * 1. 거리 순으로 정렬 (동일 거리면 시간 순)
-     * 2. 순위 부여 및 점수 계산
-     * 3. 각 플레이어에게 점수 부여
-     * 
-     * @param submissions 제출 목록
-     * @return 순위가 매겨진 제출 목록
-     */
     public List<RoadViewSubmission> calculatePlayerRankAndScore(List<RoadViewSubmission> submissions) {
         if (submissions.isEmpty()) {
             return submissions;
@@ -146,28 +87,12 @@ public class RoadViewSubmissionService {
             // 3. 플레이어에게 점수 부여
             if (submission.getGamePlayer() != null) {
                 submission.getGamePlayer().addScore(submission.getEarnedScore());
-                
-                log.debug("📊 Player score assigned - Rank: {}, PlayerId: {}, Distance: {}m, Score: {}",
-                        rank, submission.getGamePlayer().getId(), 
-                        submission.getDistance(), submission.getEarnedScore());
             }
         }
 
         return sorted;
     }
 
-    /**
-     * 팀전 순위 및 점수 계산
-     * 
-     * 프로세스:
-     * 1. 거리 순으로 정렬
-     * 2. 순위 부여 및 점수 계산 (1등: 10점, 2등: 6점, 3등: 2점, 4등 이상: 0점)
-     * 3. 팀원 모두에게 점수 분배
-     * 
-     * @param submissions 제출 목록
-     * @param gameId 게임 ID
-     * @return 순위가 매겨진 제출 목록
-     */
     public List<RoadViewSubmission> calculateTeamRankAndScore(
             List<RoadViewSubmission> submissions,
             Long gameId
@@ -201,9 +126,7 @@ public class RoadViewSubmissionService {
         return sorted;
     }
 
-    /**
-     * 팀 점수를 팀원 모두에게 분배
-     */
+
     private void distributeScoreToTeamMembers(Long gameId, RoadViewSubmission submission) {
         if (submission.getTeamNumber() == null) {
             return;
@@ -224,14 +147,6 @@ public class RoadViewSubmissionService {
     }
 
     // === 조회 메서드 ===
-
-    /**
-     * 모든 참가자가 제출했는지 확인 (매치타입별)
-     * 
-     * 사용처:
-     * - 조기 라운드 종료 체크
-     * - CheckAndCompleteRoundEarlyUseCase
-     */
     public boolean hasAllParticipantsSubmitted(
             Long roundId,
             PlayerMatchType matchType,
@@ -276,10 +191,6 @@ public class RoadViewSubmissionService {
 
     /**
      * 미제출 플레이어 0점 처리 (개인전)
-     * 
-     * 사용처:
-     * - 라운드 종료 시
-     * - EndRoadViewSoloRoundUseCase
      */
     public List<RoadViewSubmission> handleNonSubmittedPlayers(
             Long gameId,
@@ -292,9 +203,6 @@ public class RoadViewSubmissionService {
             log.debug("✅ All players submitted - RoundId: {}", round.getId());
             return List.of();
         }
-
-        log.info("⚠️ Non-submitted players found - RoundId: {}, Count: {}",
-                round.getId(), nonSubmittedPlayerIds.size());
 
         // 2. 각 미제출 플레이어에 대해 0점 제출 생성
         List<RoadViewSubmission> zeroSubmissions = nonSubmittedPlayerIds.stream()
@@ -332,9 +240,6 @@ public class RoadViewSubmissionService {
             return List.of();
         }
 
-        log.info("⚠️ Non-submitted teams found - RoundId: {}, Count: {}",
-                round.getId(), nonSubmittedTeamNumbers.size());
-
         // 2. 각 미제출 팀에 대해 0점 제출 생성
         List<RoadViewSubmission> zeroSubmissions = nonSubmittedTeamNumbers.stream()
                 .map(teamNumber -> {
@@ -349,13 +254,10 @@ public class RoadViewSubmissionService {
                 })
                 .toList();
 
-        log.info("✅ Non-submitted teams handled - RoundId: {}, Count: {}",
-                round.getId(), zeroSubmissions.size());
-
         return zeroSubmissions;
     }
 
-    // === Validation (클린코드: Guard Clause) ===
+    //Validation
 
     /**
      * 개인전 제출 가능 여부 검증

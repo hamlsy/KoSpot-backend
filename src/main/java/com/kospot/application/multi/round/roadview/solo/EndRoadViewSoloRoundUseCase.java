@@ -1,4 +1,4 @@
-package com.kospot.application.multi.round;
+package com.kospot.application.multi.round.roadview.solo;
 
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
@@ -6,8 +6,8 @@ import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.service.RoadViewGameRoundService;
-import com.kospot.domain.multi.submission.entity.roadview.RoadViewPlayerSubmission;
-import com.kospot.domain.multi.submission.service.RoadViewPlayerSubmissionService;
+import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
+import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +26,14 @@ public class EndRoadViewSoloRoundUseCase {
     private final RoadViewGameRoundService roadViewGameRoundService;
     private final GamePlayerAdaptor gamePlayerAdaptor;
     private final GamePlayerService gamePlayerService;
-    private final RoadViewPlayerSubmissionService roadViewPlayerSubmissionService;
+    private final RoadViewSubmissionService roadViewSubmissionService;
 
     public RoadViewRoundResponse.PlayerResult execute(Long gameId, Long roundId) {
-        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchPlayerSubmissionAndPlayers(roundId);
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchSubmissionsAndPlayers(roundId);
         //todo 제출 못 한 플레이어 0점처리 - service
 
         // 플레이어 간 거리 순으로 순위 점수 처리 - service
-        List<RoadViewPlayerSubmission> submission = roadViewPlayerSubmissionService.updateRankAndScore(round.getRoadViewPlayerSubmissions());
+        List<RoadViewSubmission> submission = roadViewSubmissionService.calculatePlayerRankAndScore(round.getRoadViewSubmissions());
 
         // 라운드 종료 처리 및 전체 순위 처리(이전 점수는 프론트가 기억) - service
         roadViewGameRoundService.endGameRound(round);

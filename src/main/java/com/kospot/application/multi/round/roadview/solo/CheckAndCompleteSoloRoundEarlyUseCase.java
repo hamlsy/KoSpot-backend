@@ -1,4 +1,4 @@
-package com.kospot.application.multi.round;
+package com.kospot.application.multi.round.roadview.solo;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
@@ -24,7 +24,7 @@ public class CheckAndCompleteSoloRoundEarlyUseCase {
 
     public boolean execute(GameMode mode, String gameRoomId, Long gameId, Long roundId) {
         // 1. redis에서 제출 수 확인
-        Long submissionCount = submissionRedisService.getCurrentSubmissionCount(mode, roundId);
+        long submissionCount = submissionRedisService.getCurrentSubmissionCount(mode, roundId);
 
         // 2. 게임 방 플레이어 수 조회
         Long playerCount = gameRoomRedisAdaptor.getCurrentPlayers(gameRoomId);
@@ -42,7 +42,7 @@ public class CheckAndCompleteSoloRoundEarlyUseCase {
     // 라운드 조기 종료 실행
     private boolean completeRoadViewRoundEarly(String gameRoomId, Long gameId, Long roundId) {
         //1. 라운드 상태 확인
-        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchPlayerSubmission(roundId);
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchSubmissions(roundId);
         round.validateRoundNotFinished();
 
         // 2. DB기반 최종 점검

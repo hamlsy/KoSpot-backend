@@ -1,8 +1,8 @@
 package com.kospot.presentation.multi.game.controller;
 
-import com.kospot.application.multi.round.EndRoadViewSoloRoundUseCase;
-import com.kospot.application.multi.round.NextRoadViewRoundUseCase;
-import com.kospot.application.multi.round.StartRoadViewSoloRoundUseCase;
+import com.kospot.application.multi.round.roadview.solo.EndRoadViewSoloRoundUseCase;
+import com.kospot.application.multi.round.roadview.solo.NextRoadViewRoundUseCase;
+import com.kospot.application.multi.round.roadview.solo.StartRoadViewSoloRoundUseCase;
 import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
@@ -11,7 +11,6 @@ import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;
 import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
-import com.kospot.presentation.multi.submission.dto.request.SubmitRoadViewRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

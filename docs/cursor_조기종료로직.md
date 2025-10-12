@@ -761,7 +761,7 @@ public class PlayerSubmissionCompletedEvent {
 // EarlyCompletionEventListener.java
 package com.kospot.application.multi.submission.listener;
 
-import com.kospot.application.multi.round.CheckAndCompleteSoloRoundEarlyUseCase;
+import com.kospot.application.multi.round.roadview.solo.CheckAndCompleteSoloRoundEarlyUseCase;
 import com.kospot.infrastructure.redis.domain.multi.submission.event.PlayerSubmissionCompletedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -2492,7 +2492,7 @@ public class PlayerSubmissionCompletedEvent {
 // EarlyCompletionEventListener.java
 package com.kospot.application.multi.submission.listener;
 
-import com.kospot.application.multi.round.CheckAndCompleteSoloRoundEarlyUseCase;
+import com.kospot.application.multi.round.roadview.solo.CheckAndCompleteSoloRoundEarlyUseCase;
 import com.kospot.infrastructure.redis.domain.multi.submission.event.PlayerSubmissionCompletedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

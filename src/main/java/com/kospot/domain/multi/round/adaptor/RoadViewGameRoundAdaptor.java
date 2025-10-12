@@ -40,31 +40,4 @@ public class RoadViewGameRoundAdaptor {
                 () -> new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND)
         );
     }
-
-    /**
-     * @deprecated Use queryByIdFetchSubmissionsAndPlayers() instead
-     * 하위 호환성을 위해 유지
-     */
-    @Deprecated
-    public RoadViewGameRound queryByIdFetchPlayerSubmissionAndPlayers(Long id) {
-        return queryByIdFetchSubmissionsAndPlayers(id);
-    }
-
-    /**
-     * @deprecated Use queryByIdFetchSubmissions() instead
-     * 하위 호환성을 위해 유지
-     */
-    @Deprecated
-    public RoadViewGameRound queryByIdFetchPlayerSubmission(Long id) {
-        return queryByIdFetchSubmissions(id);
-    }
-
-    /**
-     * @deprecated Use queryByIdFetchSubmissions() instead
-     * 하위 호환성을 위해 유지
-     */
-    @Deprecated
-    public RoadViewGameRound queryByIdFetchTeamSubmissions(Long id) {
-        return queryByIdFetchSubmissions(id);
-    }
 }

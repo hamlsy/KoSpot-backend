@@ -7,6 +7,7 @@ import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 로드뷰 제출 엔티티 (개인전 + 팀전 통합)
@@ -38,7 +39,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
+@SuperBuilder
 public class RoadViewSubmission extends BaseTimeEntity {
 
     @Id
@@ -49,87 +50,44 @@ public class RoadViewSubmission extends BaseTimeEntity {
     @Column(name = "match_type", nullable = false, length = 20)
     private PlayerMatchType matchType;
 
-    // === 다형성 연관관계 ===
-
-    /**
-     * 개인전: 제출한 플레이어
-     * - matchType = SOLO일 때만 not null
-     * - matchType = TEAM일 때는 null
-     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_player_id")
     private GamePlayer gamePlayer;
 
     /**
      * 팀전: 팀 번호 (1, 2, 3, 4)
-     * - matchType = TEAM일 때만 not null
-     * - matchType = SOLO일 때는 null
      */
     @Column(name = "team_number")
     private Integer teamNumber;
 
-    // === 공통 필드 (90%) ===
-
-    /**
-     * 라운드 참조
-     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_round_id", nullable = false)
     private RoadViewGameRound round;
 
-    /**
-     * 제출 위도
-     */
     @Column(nullable = false)
     private Double lat;
 
-    /**
-     * 제출 경도
-     */
     @Column(nullable = false)
     private Double lng;
 
-    /**
-     * 정답과의 거리 (미터 단위)
-     * - 프론트엔드에서 계산된 값
-     */
     @Column(nullable = false)
     private Double distance;
 
-    /**
-     * 정답까지 걸린 시간 (밀리초 단위)
-     * - 동점 처리용
-     */
     @Column(name = "time_to_answer", nullable = false)
     private Double timeToAnswer;
 
-    /**
-     * 획득 점수
-     */
     @Column(name = "earned_score")
     private Integer earnedScore;
 
-    /**
-     * 순위 (캐시용, 조회 성능 향상)
-     */
     @Column(name = "rank")
     private Integer rank;
 
-    // === 비즈니스 로직 ===
-
-    /**
-     * 라운드 설정 및 양방향 연관관계 설정
-     */
+    // business
     public void setRound(RoadViewGameRound round) {
         this.round = round;
         round.addSubmission(this);
     }
 
-    /**
-     * 제출자 ID 조회 (다형성 처리)
-     * 
-     * 장점: 클라이언트 코드가 개인전/팀전 구분 불필요
-     */
     public Long getSubmitterId() {
         return switch (matchType) {
             case SOLO -> gamePlayer != null ? gamePlayer.getId() : null;
@@ -137,26 +95,13 @@ public class RoadViewSubmission extends BaseTimeEntity {
         };
     }
 
-    /**
-     * 제출자 이름 조회 (다형성 처리)
-     */
-    public String getSubmitterName() {
-        return switch (matchType) {
-            case SOLO -> gamePlayer != null ? gamePlayer.getMember().getNickname() : "Unknown";
-            case TEAM -> teamNumber != null ? "Team " + teamNumber : "Unknown";
-        };
-    }
-
-    /**
-     * 점수 및 순위 설정
-     */
     public void assignRankAndScore(int rank, int score) {
         this.rank = rank;
         this.earnedScore = score;
     }
 
     /**
-     * 개인전 점수 부여 (ScoreRule 사용)
+     * 개인전 점수 부여 - todo refactoring
      */
     public void assignPlayerScore(int rank) {
         this.rank = rank;
@@ -177,16 +122,10 @@ public class RoadViewSubmission extends BaseTimeEntity {
         };
     }
 
-    /**
-     * 개인전 여부 확인
-     */
     public boolean isSoloMode() {
         return matchType == PlayerMatchType.SOLO;
     }
 
-    /**
-     * 팀전 여부 확인
-     */
     public boolean isTeamMode() {
         return matchType == PlayerMatchType.TEAM;
     }
@@ -195,11 +134,6 @@ public class RoadViewSubmission extends BaseTimeEntity {
 
     /**
      * 개인전 제출 생성
-     * 
-     * 장점: 
-     * - 매개변수 의미가 명확
-     * - 불변 객체 생성
-     * - null 안전성 보장
      */
     public static RoadViewSubmission forPlayer(
             GamePlayer player,
@@ -264,10 +198,10 @@ public class RoadViewSubmission extends BaseTimeEntity {
         return forPlayer(
                 player,
                 round,
-                0.0,  // 미제출 좌표
-                0.0,
+                null,  // 미제출 좌표
+                null,
                 Double.MAX_VALUE,  // 최대 거리 (최하위 순위)
-                round.getDuration().toMillis()  // 전체 시간 소모
+                (double) round.getDuration().toMillis()  // 전체 시간 소모
         );
     }
 
@@ -278,14 +212,14 @@ public class RoadViewSubmission extends BaseTimeEntity {
         return forTeam(
                 teamNumber,
                 round,
-                0.0,
-                0.0,
+                null,
+                null,
                 Double.MAX_VALUE,
-                round.getDuration().toMillis()
+                (double) round.getDuration().toMillis()
         );
     }
 
-    // === Validation 메서드 (클린코드: Guard Clause) ===
+    // Validation
 
     private static void validateNotNull(Object value, String message) {
         if (value == null) {

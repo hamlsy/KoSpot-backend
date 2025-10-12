@@ -1,6 +1,6 @@
 package com.kospot.domain.multi.submission.adaptor.roadview;
 
-import com.kospot.domain.multi.submission.repository.RoadViewPlayerSubmissionRepository;
+import com.kospot.domain.multi.submission.repository.RoadViewSubmissionRepository;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Adaptor
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class RoadViewPlayerSubmissionAdaptor {
+public class RoadViewSubmissionAdaptor {
 
-    private final RoadViewPlayerSubmissionRepository repository;
+    private final RoadViewSubmissionRepository repository;
 
 }

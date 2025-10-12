@@ -1,6 +1,6 @@
 package com.kospot.presentation.multi.submission.dto.response;
 
-import com.kospot.domain.multi.submission.entity.roadview.RoadViewPlayerSubmission;
+import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
 import lombok.*;
 
 public class SubmissionResponse {
@@ -17,7 +17,7 @@ public class SubmissionResponse {
         private Double timeToAnswer;
         private Integer earnedScore;
 
-        public static RoadViewPlayer from(RoadViewPlayerSubmission submission) {
+        public static RoadViewPlayer from(RoadViewSubmission submission) {
             return RoadViewPlayer.builder()
                     .lat(submission.getLat())
                     .lng(submission.getLng())

@@ -1,7 +1,7 @@
 package com.kospot.multi.game.usecase;
 
 import com.kospot.application.coordinate.ImportCoordinateUseCase;
-import com.kospot.application.multi.round.StartRoadViewSoloRoundUseCase;
+import com.kospot.application.multi.round.roadview.solo.StartRoadViewSoloRoundUseCase;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;

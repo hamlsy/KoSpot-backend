@@ -38,30 +38,4 @@ public interface RoadViewGameRoundRepository extends JpaRepository<RoadViewGameR
            "WHERE r.id = :id")
     Optional<RoadViewGameRound> findByIdFetchSubmissions(@Param("id") Long id);
 
-    /**
-     * @deprecated Use findByIdFetchSubmissionsAndPlayers() instead
-     * 하위 호환성을 위해 유지
-     */
-    @Deprecated
-    default Optional<RoadViewGameRound> findByIdFetchPlayerSubmissionAndPlayers(Long id) {
-        return findByIdFetchSubmissionsAndPlayers(id);
-    }
-
-    /**
-     * @deprecated Use findByIdFetchSubmissions() instead
-     * 하위 호환성을 위해 유지
-     */
-    @Deprecated
-    default Optional<RoadViewGameRound> findByIdFetchPlayerSubmission(Long id) {
-        return findByIdFetchSubmissions(id);
-    }
-
-    /**
-     * @deprecated Use findByIdFetchSubmissions() instead
-     * 하위 호환성을 위해 유지
-     */
-    @Deprecated
-    default Optional<RoadViewGameRound> findByIdFetchTeamSubmissions(Long id) {
-        return findByIdFetchSubmissions(id);
-    }
 }
