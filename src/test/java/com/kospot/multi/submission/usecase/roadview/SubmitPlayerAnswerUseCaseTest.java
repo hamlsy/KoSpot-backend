@@ -13,7 +13,7 @@ import com.kospot.domain.multi.gamePlayer.vo.GamePlayerStatus;
 import com.kospot.domain.multi.gamePlayer.repository.GamePlayerRepository;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.repository.RoadViewGameRoundRepository;
-import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmission;
+import com.kospot.domain.multi.submission.entity.roadview.RoadViewPlayerSubmission;
 import com.kospot.domain.multi.submission.repository.RoadViewPlayerSubmissionRepository;
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;

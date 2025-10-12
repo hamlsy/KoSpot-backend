@@ -3,7 +3,7 @@ package com.kospot.domain.multi.submission.service;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.round.entity.BaseGameRound;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmission;
+import com.kospot.domain.multi.submission.entity.roadview.RoadViewPlayerSubmission;
 import com.kospot.domain.multi.submission.repository.RoadViewPlayerSubmissionRepository;
 
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
@@ -23,6 +23,7 @@ import java.util.stream.IntStream;
 @Transactional
 public class RoadViewPlayerSubmissionService {
 
+    private final RoadViewPlayerSubmissionAdaptor
     private final RoadViewPlayerSubmissionRepository roadViewPlayerSubmissionRepository;
 
     public void createSubmission(RoadViewGameRound round, GamePlayer gamePlayer,
@@ -47,6 +48,10 @@ public class RoadViewPlayerSubmissionService {
             gamePlayer.addScore(submission.getEarnedScore());
         });
         return submissions;
+    }
+
+    public boolean hasAllPlayersSubmitted(Long roundId, int totalPlayers) {
+        long submissionCount =
     }
 
     private void validateSubmissionAllowed(RoadViewGameRound round, Long playerId) {

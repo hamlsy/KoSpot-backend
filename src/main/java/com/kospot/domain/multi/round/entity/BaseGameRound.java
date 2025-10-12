@@ -74,8 +74,5 @@ public abstract class BaseGameRound extends BaseTimeEntity {
         }
     }
 
-    public void validateTimeLimit() {
-
-    }
 
 }

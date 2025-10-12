@@ -1,6 +1,6 @@
 package com.kospot.presentation.multi.submission.dto.request;
 
-import com.kospot.domain.multi.submission.entity.roadView.RoadViewPlayerSubmission;
+import com.kospot.domain.multi.submission.entity.roadview.RoadViewPlayerSubmission;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;

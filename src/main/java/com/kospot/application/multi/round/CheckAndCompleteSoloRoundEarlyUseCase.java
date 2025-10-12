@@ -2,9 +2,9 @@ package com.kospot.application.multi.round;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
+import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
-import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class CheckAndCompleteRoundEarlyUseCase {
+public class CheckAndCompleteSoloRoundEarlyUseCase {
 
     private final RoadViewGameRoundAdaptor roadViewGameRoundAdaptor;
     private final SubmissionRedisService submissionRedisService;
@@ -36,13 +36,18 @@ public class CheckAndCompleteRoundEarlyUseCase {
 
         // 4. 동시성 제어 todo implement
         //
-        return completeRoundEarly(gameRoomId, gameId, roundId);
+        return completeRoadViewRoundEarly(gameRoomId, gameId, roundId);
     }
 
     // 라운드 조기 종료 실행
-    private boolean completeRoundEarly(String gameRoomId, Long gameId, Long roundId) {
+    private boolean completeRoadViewRoundEarly(String gameRoomId, Long gameId, Long roundId) {
         //1. 라운드 상태 확인
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchPlayerSubmission(roundId);
+        round.validateRoundNotFinished();
+
         // 2. DB기반 최종 점검
+
+
         // 3. 타이머 중지
         // 4. 조기 종료 이벤트 발행
 

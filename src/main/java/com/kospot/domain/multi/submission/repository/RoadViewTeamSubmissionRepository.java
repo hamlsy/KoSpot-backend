@@ -1,6 +1,6 @@
 package com.kospot.domain.multi.submission.repository;
 
-import com.kospot.domain.multi.submission.entity.roadView.RoadViewTeamSubmission;
+import com.kospot.domain.multi.submission.entity.roadview.RoadViewTeamSubmission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

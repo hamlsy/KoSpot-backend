@@ -3,7 +3,7 @@ package com.kospot.domain.multi.submission.service;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.submission.entity.roadView.RoadViewTeamSubmission;
+import com.kospot.domain.multi.submission.entity.roadview.RoadViewTeamSubmission;
 import com.kospot.domain.multi.submission.repository.RoadViewTeamSubmissionRepository;
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;

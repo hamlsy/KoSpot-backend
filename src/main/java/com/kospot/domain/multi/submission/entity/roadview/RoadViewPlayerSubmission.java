@@ -1,4 +1,4 @@
-package com.kospot.domain.multi.submission.entity.roadView;
+package com.kospot.domain.multi.submission.entity.roadview;
 
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import jakarta.persistence.*;
