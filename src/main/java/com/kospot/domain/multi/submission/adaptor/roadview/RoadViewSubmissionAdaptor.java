@@ -14,4 +14,8 @@ public class RoadViewSubmissionAdaptor {
 
     private final RoadViewSubmissionRepository repository;
 
+    public long queryCountByRoundId(Long roundId) {
+        return repository.countByRoundId(roundId);
+    }
+
 }

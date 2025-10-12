@@ -1,4 +1,4 @@
-package com.kospot.application.multi.round.roadview.solo;
+package com.kospot.application.multi.round.roadview;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;

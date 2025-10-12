@@ -153,7 +153,7 @@ public class RoadViewSubmissionService {
             int totalParticipants
     ) {
         long submissionCount = repository.countByRoundIdAndMatchType(roundId, matchType);
-        boolean allSubmitted = submissionCount >= totalParticipants;
+        boolean allSubmitted = submissionCount == totalParticipants;
 
         log.debug("📊 Submission check - RoundId: {}, Type: {}, Submitted: {}/{}, AllSubmitted: {}",
                 roundId, matchType, submissionCount, totalParticipants, allSubmitted);

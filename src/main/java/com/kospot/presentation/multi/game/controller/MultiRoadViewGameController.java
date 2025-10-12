@@ -1,7 +1,7 @@
 package com.kospot.presentation.multi.game.controller;
 
 import com.kospot.application.multi.round.roadview.solo.EndRoadViewSoloRoundUseCase;
-import com.kospot.application.multi.round.roadview.solo.NextRoadViewRoundUseCase;
+import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
 import com.kospot.application.multi.round.roadview.solo.StartRoadViewSoloRoundUseCase;
 import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
 import com.kospot.domain.member.entity.Member;

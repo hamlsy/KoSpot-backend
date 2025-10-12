@@ -23,10 +23,11 @@ public class SubmissionRedisService {
 
     private static final String SUBMISSION_COUNT_KEY = "game:%s:round:%s:submission:count";
     private static final String SUBMITTED_PLAYERS_KEY = "game:%s:round:%s:submitted:players";
+    private static final String SUBMITTED_TEAMS_KEY = "game:%s:round:%s:submitted:teams";
 
     private static final int ROUND_DATA_EXPIRY_MINUTES = 10;
 
-    public Long recordSubmission(GameMode mode, Long roundId, Long playerId) {
+    public Long recordPlayerSubmission(GameMode mode, Long roundId, Long playerId) {
         String playersKey = getPlayersKey(mode, roundId);
         String countKey = getCountKey(mode, roundId);
 
@@ -45,6 +46,28 @@ public class SubmissionRedisService {
             return currentCount;
         }
         log.warn("⚠️ Duplicate submission attempt - RoundId: {}, PlayerId: {}", roundId, playerId);
+        return getCurrentSubmissionCount(mode, roundId);
+    }
+
+    private Long recordTeamSubmission(GameMode mode, Long roundId, Long teamId) {
+        String teamsKey = getTeamsKey(mode, roundId);
+        String countKey = getCountKey(mode, roundId);
+
+        // add team in Set
+        boolean isNewSubmission = Optional.ofNullable(
+                redisTemplate.opsForSet().add(teamsKey, teamId.toString())
+        ).orElse(0L) > 0;
+
+        if(isNewSubmission) {
+            Long currentCount = redisTemplate.opsForValue().increment(countKey);
+
+            // TTL
+            redisTemplate.expire(teamsKey, ROUND_DATA_EXPIRY_MINUTES, TimeUnit.MINUTES);
+            redisTemplate.expire(countKey, ROUND_DATA_EXPIRY_MINUTES, TimeUnit.MINUTES);
+
+            return currentCount;
+        }
+        log.warn("⚠️ Duplicate team submission attempt - RoundId: {}, TeamId: {}", roundId, teamId);
         return getCurrentSubmissionCount(mode, roundId);
     }
 
@@ -81,6 +104,10 @@ public class SubmissionRedisService {
 
     public String getPlayersKey(GameMode mode,Long roundId) {
         return String.format(SUBMITTED_PLAYERS_KEY, mode.name().toLowerCase(),roundId);
+    }
+
+    public String getTeamsKey(GameMode mode, Long roundId) {
+        return String.format(SUBMITTED_TEAMS_KEY, mode.name().toLowerCase(),roundId);
     }
 
 }
