@@ -5,8 +5,6 @@ import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.Instant;
-
 @Getter
 @RequiredArgsConstructor
 public class EarlyRoundCompletionEvent {
