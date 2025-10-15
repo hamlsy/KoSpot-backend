@@ -9,31 +9,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-/**
- * 로드뷰 제출 엔티티 (개인전 + 팀전 통합)
- * 
- * 설계 철학:
- * - 개인전과 팀전의 공통점: 90% 이상
- * - 차이점: "누가 제출했는가" (플레이어 vs 팀)
- * - 해결: 다형성 연관관계 + 매치타입 구분
- * 
- * 클린코드 원칙:
- * - 단일 책임: 제출 데이터 관리
- * - DRY: 중복 코드 90% 제거
- * - 다형성: matchType으로 동작 분기
- * - 불변성: Setter 최소화, Builder 패턴
- * 
- * 실무 경험:
- * - 분리된 엔티티: 초기엔 깔끔해 보이지만 유지보수 지옥
- * - 통합 엔티티: 초기엔 복잡해 보이지만 장기적으로 훨씬 관리 용이
- */
+
 @Entity
 @Table(
         name = "road_view_submission",
         indexes = {
                 @Index(name = "idx_round_match_type", columnList = "game_round_id, match_type"),
-                @Index(name = "idx_round_player", columnList = "game_round_id, game_player_id"),
-                @Index(name = "idx_round_team", columnList = "game_round_id, team_number")
         }
 )
 @Getter
