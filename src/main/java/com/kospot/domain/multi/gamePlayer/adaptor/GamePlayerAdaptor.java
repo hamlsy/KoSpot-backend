@@ -38,4 +38,12 @@ public class GamePlayerAdaptor {
     public List<GamePlayer> queryByGameIdAndTeamNumber(Long gameId, Integer teamNumber) {
         return repository.findAllByMultiRoadViewGameIdAndTeamNumber(gameId, teamNumber);
     }
+
+    public int countPlayersByGameId(Long gameId) {
+        return repository.countByMultiRoadViewGameId(gameId);
+    }
+
+    public int countTeamsByGameId(Long gameId) {
+        return repository.countDistinctTeamsByGameId(gameId);
+    }
 }

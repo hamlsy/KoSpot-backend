@@ -4,6 +4,7 @@ import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
+import com.kospot.domain.multi.submission.event.EarlyRoundCompletionEvent;
 import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
@@ -12,6 +13,7 @@ import com.kospot.infrastructure.redis.domain.multi.submission.service.Submissio
 import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
@@ -22,48 +24,63 @@ public class CheckAndCompleteRoundEarlyUseCase {
 
     private final RoadViewGameRoundAdaptor roadViewGameRoundAdaptor;
     private final SubmissionRedisService submissionRedisService;
-    private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
     private final RoadViewSubmissionService roadViewSubmissionService;
     private final GameTimerService gameTimerService;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public boolean execute(GameMode mode, String gameRoomId, Long gameId, Long roundId) {
-        // 팀모드, 개인모드 구분
-        // 우선 개인모드만
-        // 1. redis에서 제출 수 확인
+    public boolean execute(GameMode mode, PlayerMatchType matchType, 
+                          String gameRoomId, Long gameId, Long roundId) {
         long submissionCount = submissionRedisService.getCurrentSubmissionCount(mode, roundId);
-
-        // 2. 게임 방 플레이어 수 조회
-        Long playerCount = gameRoomRedisAdaptor.getCurrentPlayers(gameRoomId);
-
-        // 3. 모든 플레이어가 제출하지 않았으면 false 리턴
-        if(submissionCount < playerCount) {
+        long expectedCount = getExpectedSubmissionCount(matchType, gameRoomId);
+        if (submissionCount < expectedCount) {
             return false;
         }
 
-        // 4. 동시성 제어 todo implement
-        return completeRoadViewRoundEarly(gameRoomId, gameId, roundId, playerCount);
+        // 4. DB 기반 최종 검증 및 조기 종료 실행
+        return completeRoundEarly(gameRoomId, gameId, roundId, mode, matchType);
     }
 
-    // 라운드 조기 종료 실행
-    private boolean completeRoadViewRoundEarly(String gameRoomId, Long gameId, Long roundId, long playerCount) {
-        //1. 라운드 상태 확인
+    private boolean completeRoundEarly(String gameRoomId, Long gameId, Long roundId,
+                                       GameMode mode, PlayerMatchType matchType) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchSubmissions(roundId);
         round.validateRoundNotFinished();
 
-        // 2. DB기반 최종 점검
-        boolean allSubmitted = roadViewSubmissionService.hasAllParticipantsSubmitted(roundId, PlayerMatchType.SOLO, (int) playerCount);
-        if(!allSubmitted) {
+        boolean allSubmitted = roadViewSubmissionService.hasAllParticipantsSubmitted(
+                gameId, roundId, matchType
+        );
+        
+        if (!allSubmitted) {
+            log.warn("⚠️ Redis-DB mismatch detected - RoundId: {}, MatchType: {}", 
+                    roundId, matchType);
             return false;
         }
 
-        // 3. 타이머 중지
         gameTimerService.stopRoundTimer(gameRoomId, round);
+        
+        log.info("✅ Round completed early - RoundId: {}, MatchType: {}", roundId, matchType);
 
-        // 4. 조기 종료 이벤트 발행
-        //
-        //eventPublisher.publishEvent();
+        EarlyRoundCompletionEvent event = new EarlyRoundCompletionEvent(
+                gameRoomId, gameId, roundId, mode, matchType
+        );
+        eventPublisher.publishEvent(event);
 
         return true;
+    }
+
+    /**
+     * 매치 타입에 따른 예상 제출 수 계산
+     * - 개인전: Redis에서 현재 플레이어 수 조회
+     * - 팀전: Redis에서 팀 수 조회 (향후 구현)
+     */
+    private long getExpectedSubmissionCount(PlayerMatchType matchType, String gameRoomId) {
+        return switch (matchType) {
+            case SOLO -> gameRoomRedisAdaptor.getCurrentPlayers(gameRoomId);
+            case TEAM -> {
+                // TODO: Redis에서 팀 수 조회 로직 구현
+                log.warn("⚠️ Team mode expected count not implemented yet");
+                yield gameRoomRedisAdaptor.getCurrentPlayers(gameRoomId);
+            }
+        };
     }
 }

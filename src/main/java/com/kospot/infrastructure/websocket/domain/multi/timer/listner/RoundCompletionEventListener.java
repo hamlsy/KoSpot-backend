@@ -1,5 +1,8 @@
 package com.kospot.infrastructure.websocket.domain.multi.timer.listner;
 
+import com.kospot.application.multi.round.roadview.solo.EndRoadViewSoloRoundUseCase;
+import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
+import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.infrastructure.redis.domain.multi.timer.event.RoundCompletionEvent;
 import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,8 @@ public class RoundCompletionEventListener {
     // private final NextPhotoRoundUseCase nextPhotoRoundUseCase; // 향후 구현
     // private final EndPhotoSoloRoundUseCase endPhotoSoloRoundUseCase; // 향후 구현
     private final GameTimerService gameTimerService;
+    private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
+    private final EndRoadViewSoloRoundUseCase endRoadViewSoloRoundUseCase;
 
     @Async
     @EventListener
@@ -33,12 +38,17 @@ public class RoundCompletionEventListener {
     //todo implement
     private void handleRoadViewRoundCompletion(RoundCompletionEvent event) {
         // 현재 라운드가 마지막 라운드인지 확인
-//        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(event.getGameId());
-        // if !game.isLastRound()
-        // -> 라운드 결과 -> endRoadViewSoloRoundUseCase
+        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(Long.parseLong(event.getGameId()));
+        if (!game.isLastRound()) {
+            return;
+        }
         switch (event.getPlayerMatchType()) {
             case SOLO -> {
-                // endRoadViewSoloRoundUseCase.execute(event.getGameRoomId(), event.getRoundId());
+                 endRoadViewSoloRoundUseCase.execute(Long.parseLong(event.getGameId())
+                         , Long.parseLong(event.getRoundId()));
+            }
+            case TEAM -> {
+                return;
             }
         }
 

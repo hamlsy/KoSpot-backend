@@ -18,4 +18,6 @@ public class GameRoomRedisAdaptor {
         return repository.getPlayerCount(roomKey);
     }
 
+
+
 }

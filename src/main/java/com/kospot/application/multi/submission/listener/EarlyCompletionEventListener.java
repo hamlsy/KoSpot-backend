@@ -15,15 +15,20 @@ public class EarlyCompletionEventListener {
 
     private final CheckAndCompleteRoundEarlyUseCase checkAndCompleteRoundEarlyUseCase;
 
-    @Async //todo custom
+    @Async
     @EventListener
     public void onPlayerSubmission(PlayerSubmissionCompletedEvent event) {
-        checkAndCompleteRoundEarlyUseCase.execute(
+        boolean completed = checkAndCompleteRoundEarlyUseCase.execute(
                 event.getMode(),
+                event.getMatchType(),
                 event.getGameRoomId(),
                 event.getGameId(),
                 event.getRoundId()
         );
+        
+        if (completed) {
+            log.info("🎉 Round completed early via event - RoundId: {}", event.getRoundId());
+        }
     }
 
 }

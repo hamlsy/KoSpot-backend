@@ -117,10 +117,6 @@ public class RoadViewSubmissionService {
             
             // 3. 팀원들에게 점수 분배
             distributeScoreToTeamMembers(gameId, submission);
-            
-            log.debug("📊 Team score assigned - Rank: {}, TeamNumber: {}, Distance: {}m, Score: {}",
-                    rank, submission.getTeamNumber(), 
-                    submission.getDistance(), submission.getEarnedScore());
         }
 
         return sorted;
@@ -147,23 +143,40 @@ public class RoadViewSubmissionService {
     }
 
     // === 조회 메서드 ===
-    public boolean hasAllParticipantsSubmitted(
-            Long roundId,
-            PlayerMatchType matchType,
-            int totalParticipants
-    ) {
-        long submissionCount = repository.countByRoundIdAndMatchType(roundId, matchType);
-        boolean allSubmitted = submissionCount == totalParticipants;
-
-        log.debug("📊 Submission check - RoundId: {}, Type: {}, Submitted: {}/{}, AllSubmitted: {}",
-                roundId, matchType, submissionCount, totalParticipants, allSubmitted);
-
-        return allSubmitted;
-    }
 
     /**
-     * 라운드별 제출 목록 조회 (거리 순)
+     * 모든 참가자(플레이어 또는 팀)의 제출 완료 여부 확인
+     *
+     * @param gameId 게임 ID
+     * @param roundId 라운드 ID
+     * @param matchType 매치 타입 (SOLO: 개인전, TEAM: 팀전)
+     * @return 모든 참가자가 제출했으면 true, 아니면 false
      */
+    public boolean hasAllParticipantsSubmitted(Long gameId, Long roundId, PlayerMatchType matchType) {
+        long submissionCount = repository.countByRoundIdAndMatchType(roundId, matchType);
+        int expectedCount = getExpectedSubmissionCount(gameId, matchType);
+        return submissionCount >= expectedCount;
+    }
+
+    public boolean hasAllPlayersSubmitted(Long gameId, Long roundId) {
+        long submissionCount = repository.countByRoundIdAndMatchType(roundId, PlayerMatchType.SOLO);
+        int totalPlayers = gamePlayerAdaptor.countPlayersByGameId(gameId);
+        return submissionCount >= totalPlayers;
+    }
+
+    public boolean hasAllTeamsSubmitted(Long gameId, Long roundId) {
+        long submissionCount = repository.countByRoundIdAndMatchType(roundId, PlayerMatchType.TEAM);
+        int totalTeams = gamePlayerAdaptor.countTeamsByGameId(gameId);
+        return submissionCount >= totalTeams;
+    }
+
+    private int getExpectedSubmissionCount(Long gameId, PlayerMatchType matchType) {
+        return switch (matchType) {
+            case SOLO -> gamePlayerAdaptor.countPlayersByGameId(gameId);
+            case TEAM -> gamePlayerAdaptor.countTeamsByGameId(gameId);
+        };
+    }
+
     public List<RoadViewSubmission> getSubmissionsByRoundOrderByDistance(
             Long roundId,
             PlayerMatchType matchType
@@ -174,9 +187,7 @@ public class RoadViewSubmissionService {
         };
     }
 
-    /**
-     * 라운드별 제출 목록 조회 (순위 순)
-     */
+
     public List<RoadViewSubmission> getSubmissionsByRoundOrderByRank(
             Long roundId,
             PlayerMatchType matchType

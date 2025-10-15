@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 public class RoundCompletionEvent {
 
     private final String gameRoomId;
+    private final String gameId;
     private final String roundId;
     private final GameMode gameMode;
     private final PlayerMatchType playerMatchType;
-    private final String gameId;
 
 }

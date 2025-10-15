@@ -127,7 +127,7 @@ public class GameTimerService {
         Instant completionTime = round.getServerStartTime().plus(round.getDuration());
         ScheduledFuture<?> completionTask = gameTimerTaskScheduler.schedule(() -> {
             try {
-                RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, round.getRoundId(), gameMode, matchType, gameId);
+                RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, gameId, round.getRoundId(), gameMode, matchType);
                 eventPublisher.publishEvent(event);
 
                 // Task 정리
