@@ -22,6 +22,7 @@ import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerS
 import com.kospot.infrastructure.websocket.domain.multi.timer.vo.TimerCommand;
 import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -52,6 +53,7 @@ import static org.awaitility.Awaitility.await;
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
+//@Transactional
 class RoundTimerExpirationTest {
 
     @Autowired
@@ -90,6 +92,9 @@ class RoundTimerExpirationTest {
     @MockitoBean
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private EntityManager entityManager;
+
     private Member hostMember;
     private List<Member> players;
     private GameRoom gameRoom;
@@ -125,7 +130,7 @@ class RoundTimerExpirationTest {
 
     @Test
     @DisplayName("[통합] 타이머가 만료되면 라운드가 자동으로 종료된다")
-    @Transactional
+//    @Transactional
     void whenTimerExpires_thenRoundEndsAutomatically() {
         // Given: 짧은 타이머(5초)로 게임 시작
         int shortTimerSeconds = 5;
@@ -282,7 +287,7 @@ class RoundTimerExpirationTest {
 
     @Test
     @DisplayName("[통합] 남은 시간이 10초 이하일 때 finalCountdown 플래그가 활성화된다")
-    @Transactional
+//    @Transactional
     void whenRemainingTimeLessThan10Seconds_thenFinalCountdownActivates() {
         // Given: 짧은 타이머(12초)로 게임 시작
         int timerSeconds = 12;
