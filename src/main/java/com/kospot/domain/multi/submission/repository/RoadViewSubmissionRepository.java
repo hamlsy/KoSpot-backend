@@ -21,7 +21,8 @@ public interface RoadViewSubmissionRepository extends JpaRepository<RoadViewSubm
     @Query("SELECT COUNT(s) FROM RoadViewSubmission s WHERE s.round.id = :roundId")
     long countByRoundId(@Param("roundId") Long roundId);
 
-    long countByRoundIdAndMatchType(Long roundId, PlayerMatchType matchType);
+    @Query("SELECT COUNT(s) FROM RoadViewSubmission s WHERE s.round.id = :roundId AND s.matchType = :matchType")
+    long countByRoundIdAndMatchType(@Param("roundId") Long roundId, @Param("matchType") PlayerMatchType matchType);
 
     // === 존재 여부 확인 ===
 

@@ -144,7 +144,7 @@ class RoadViewSubmissionEarlyCompletionTest {
 
     @Test
     @DisplayName("[통합] 모든 플레이어가 제출하면 라운드가 자동으로 조기 종료된다")
-    @Transactional
+//    @Transactional
     void whenAllPlayersSubmit_thenRoundCompletesEarly() throws InterruptedException {
         // Given: 게임 시작
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);
