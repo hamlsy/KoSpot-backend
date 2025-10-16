@@ -28,6 +28,7 @@ import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;
 import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
 import com.kospot.presentation.multi.submission.dto.request.SubmitRoadViewRequest;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -105,13 +106,16 @@ class RoadViewSubmissionEarlyCompletionTest {
     @MockitoBean
     private GameRoomRedisAdaptor gameRoomRedisAdaptor;
 
+    @Autowired
+    private EntityManager entityManager;
+
     private Member hostMember;
     private List<Member> players;
     private GameRoom gameRoom;
     private Image markerImage;
 
     @BeforeEach
-    @Transactional  // ✅ 트랜잭션 추가
+//    @Transactional  // ✅ 트랜잭션 추가
     void setUp() {
         // 마커 이미지 생성
         markerImage = Image.builder()
@@ -144,7 +148,7 @@ class RoadViewSubmissionEarlyCompletionTest {
 
     @Test
     @DisplayName("[통합] 모든 플레이어가 제출하면 라운드가 자동으로 조기 종료된다")
-    @Transactional
+//    @Transactional
     void whenAllPlayersSubmit_thenRoundCompletesEarly() throws InterruptedException {
         // Given: 게임 시작
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);
@@ -404,7 +408,7 @@ class RoadViewSubmissionEarlyCompletionTest {
         for (Member member : members) {
             savedRoom.join(member, null);
         }
-
+        memberRepository.saveAll(members);
         return gameRoomRepository.save(savedRoom);
     }
 
