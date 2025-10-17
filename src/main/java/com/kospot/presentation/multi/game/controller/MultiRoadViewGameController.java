@@ -48,17 +48,6 @@ public class MultiRoadViewGameController {
         return ApiResponseDto.onSuccess(startRoadViewSoloRoundUseCase.execute(member, request));
     }
 
-    @Operation(summary = "멀티 로드뷰 라운드 종료", description = "멀티 로드뷰 게임 라운드를 종료합니다.")
-    @DeleteMapping("/{gameId}/rounds/{roundId}")
-    public ApiResponseDto<RoadViewRoundResponse.PlayerResult> endRound(
-            @PathVariable("roomId") String roomId,
-            @PathVariable("gameId") Long gameId,
-            @PathVariable("roundId") Long roundId,
-            @RequestParam(value = "mode", defaultValue = "solo") String mode) {
-        // TODO: 팀 모드 분기 처리 필요
-        return ApiResponseDto.onSuccess(endRoadViewSoloRoundUseCase.execute(gameId, roundId));
-    }
-
     @Operation(summary = "멀티 로드뷰 다음 라운드", description = "멀티 로드뷰 게임의 다음 라운드를 시작합니다.")
     @PostMapping("/{gameId}/rounds")
     public ApiResponseDto<MultiRoadViewGameResponse.NextRound> createNextRound(

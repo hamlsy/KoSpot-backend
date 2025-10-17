@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface RoadViewSubmissionRepository extends JpaRepository<RoadViewSubmission, Long> {
 
+    List<RoadViewSubmission> findByRoundId(Long roundId);
+
     List<RoadViewSubmission> findByRoundIdOrderByRankAsc(Long roundId);
 
     List<RoadViewSubmission> findByRoundIdAndMatchTypeOrderByRankAsc(

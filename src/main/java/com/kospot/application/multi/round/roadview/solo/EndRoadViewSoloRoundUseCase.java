@@ -6,6 +6,7 @@ import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.service.RoadViewGameRoundService;
+import com.kospot.domain.multi.submission.adaptor.roadview.RoadViewSubmissionAdaptor;
 import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
 import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -27,13 +28,15 @@ public class EndRoadViewSoloRoundUseCase {
     private final GamePlayerAdaptor gamePlayerAdaptor;
     private final GamePlayerService gamePlayerService;
     private final RoadViewSubmissionService roadViewSubmissionService;
+    private final RoadViewSubmissionAdaptor roadViewSubmissionAdaptor;
 
     public RoadViewRoundResponse.PlayerResult execute(Long gameId, Long roundId) {
-        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchSubmissionsAndPlayers(roundId);
-        //todo 제출 못 한 플레이어 0점처리 - service
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
+        List<RoadViewSubmission> roadViewSubmissions = roadViewSubmissionAdaptor.queryByRoundId(roundId);
 
+        //todo 제출 못 한 플레이어 0점처리 - service
         // 플레이어 간 거리 순으로 순위 점수 처리 - service
-        List<RoadViewSubmission> submission = roadViewSubmissionService.calculatePlayerRankAndScore(round.getRoadViewSubmissions());
+        List<RoadViewSubmission> submission = roadViewSubmissionService.calculatePlayerRankAndScore(roadViewSubmissions);
 
         // 라운드 종료 처리 및 전체 순위 처리(이전 점수는 프론트가 기억) - service
         roadViewGameRoundService.endGameRound(round);

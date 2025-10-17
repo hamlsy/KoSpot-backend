@@ -51,10 +51,10 @@ public class SubmitRoadViewPlayerAnswerUseCase {
 
         eventPublisher.publishEvent(new PlayerSubmissionCompletedEvent(
                 roomId,
-                GameMode.ROADVIEW,
-                round.getMultiRoadViewGame().getMatchType(),
                 gameId,
-                roundId
+                roundId,
+                GameMode.ROADVIEW,
+                round.getMultiRoadViewGame().getMatchType()
         ));
     }
 

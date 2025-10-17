@@ -60,13 +60,12 @@ public class RoadViewSubmission extends BaseTimeEntity {
     @Column(name = "earned_score")
     private Integer earnedScore;
 
-    @Column(name = "rank")
+    @Column(name = "rank_value")
     private Integer rank;
 
     // business
     public void setRound(RoadViewGameRound round) {
         this.round = round;
-        round.addSubmission(this);
     }
 
     public Long getSubmitterId() {

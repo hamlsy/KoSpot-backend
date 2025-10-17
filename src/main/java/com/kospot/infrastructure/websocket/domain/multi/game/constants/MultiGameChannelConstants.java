@@ -62,6 +62,26 @@ public class MultiGameChannelConstants {
         return PREFIX_GAME + roomId + "/photo/answer";
     }
 
+    // ==================== 라운드 관련 채널 ====================
+    
+    /**
+     * 라운드 결과 알림 채널
+     * 용도: 라운드 종료 시 점수, 순위 등 결과 브로드캐스트
+     */
+    public static String getRoundResultChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/round/result";
+    }
+
+    /**
+     * 라운드 시작 알림 채널
+     * 용도: 새 라운드 시작 알림
+     */
+    public static String getRoundStartChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/round/start";
+    }
+
     // ==================== 유틸 ====================
     private static void validateId(String id, String name) {
         if (id == null || id.isBlank()) {

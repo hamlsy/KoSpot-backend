@@ -29,8 +29,8 @@ public class CheckAndCompleteRoundEarlyUseCase {
     private final GameTimerService gameTimerService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public boolean execute(GameMode mode, PlayerMatchType matchType, 
-                          String gameRoomId, Long gameId, Long roundId) {
+    public boolean execute(String gameRoomId, Long gameId, Long roundId,
+                           GameMode mode, PlayerMatchType matchType) {
         long submissionCount = submissionRedisService.getCurrentSubmissionCount(mode, roundId);
         long expectedCount = getExpectedSubmissionCount(matchType, gameRoomId);
         if (submissionCount < expectedCount) {
@@ -43,7 +43,7 @@ public class CheckAndCompleteRoundEarlyUseCase {
 
     private boolean completeRoundEarly(String gameRoomId, Long gameId, Long roundId,
                                        GameMode mode, PlayerMatchType matchType) {
-        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchSubmissions(roundId);
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
         round.validateRoundNotFinished();
 
         boolean allSubmitted = roadViewSubmissionService.hasAllParticipantsSubmitted(

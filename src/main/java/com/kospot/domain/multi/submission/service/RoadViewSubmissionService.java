@@ -66,6 +66,7 @@ public class RoadViewSubmissionService {
     }
 
     public List<RoadViewSubmission> calculatePlayerRankAndScore(List<RoadViewSubmission> submissions) {
+
         if (submissions.isEmpty()) {
             return submissions;
         }
@@ -146,11 +147,6 @@ public class RoadViewSubmissionService {
 
     /**
      * 모든 참가자(플레이어 또는 팀)의 제출 완료 여부 확인
-     *
-     * @param gameId 게임 ID
-     * @param roundId 라운드 ID
-     * @param matchType 매치 타입 (SOLO: 개인전, TEAM: 팀전)
-     * @return 모든 참가자가 제출했으면 true, 아니면 false
      */
     public boolean hasAllParticipantsSubmitted(Long gameId, Long roundId, PlayerMatchType matchType) {
         long submissionCount = repository.countByRoundIdAndMatchType(roundId, matchType);

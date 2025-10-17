@@ -23,21 +23,4 @@ public class RoadViewGameRoundAdaptor {
         );
     }
 
-    /**
-     * 제출 데이터와 플레이어 정보 함께 조회 (통합)
-     */
-    public RoadViewGameRound queryByIdFetchSubmissionsAndPlayers(Long id) {
-        return repository.findByIdFetchSubmissionsAndPlayers(id).orElseThrow(
-                () -> new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND)
-        );
-    }
-
-    /**
-     * 제출 데이터만 조회 (통합)
-     */
-    public RoadViewGameRound queryByIdFetchSubmissions(Long id) {
-        return repository.findByIdFetchSubmissions(id).orElseThrow(
-                () -> new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND)
-        );
-    }
 }

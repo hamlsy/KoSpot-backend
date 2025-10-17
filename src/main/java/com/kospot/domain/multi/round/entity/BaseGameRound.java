@@ -24,6 +24,8 @@ public abstract class BaseGameRound extends BaseTimeEntity {
     @Builder.Default
     private String roundId = UUID.randomUUID().toString();
     private Integer roundNumber;
+
+    @Builder.Default
     private Boolean isFinished = false;
 
     // 비정규화

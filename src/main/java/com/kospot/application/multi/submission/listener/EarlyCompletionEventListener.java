@@ -19,11 +19,11 @@ public class EarlyCompletionEventListener {
     @EventListener
     public void onPlayerSubmission(PlayerSubmissionCompletedEvent event) {
         boolean completed = checkAndCompleteRoundEarlyUseCase.execute(
-                event.getMode(),
-                event.getMatchType(),
                 event.getGameRoomId(),
                 event.getGameId(),
-                event.getRoundId()
+                event.getRoundId(),
+                event.getMode(),
+                event.getMatchType()
         );
         
         if (completed) {

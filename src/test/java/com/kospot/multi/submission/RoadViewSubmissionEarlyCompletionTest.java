@@ -164,6 +164,7 @@ class RoadViewSubmissionEarlyCompletionTest {
         // Redis 초기화
         submissionRedisService.initializeRound(GameMode.ROADVIEW, roundId);
 
+        entityManager.clear();
         // 라운드 상태 확인
         RoadViewGameRound round = roadViewGameRoundRepository.findById(roundId).orElseThrow();
         assertThat(round.getIsFinished()).isFalse();
@@ -227,7 +228,7 @@ class RoadViewSubmissionEarlyCompletionTest {
 
     @Test
     @DisplayName("[통합] 일부 플레이어만 제출한 경우 조기 종료되지 않는다")
-    @Transactional
+//    @Transactional
     void whenNotAllPlayersSubmit_thenRoundDoesNotComplete() throws InterruptedException {
         // Given: 게임 시작
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);
@@ -295,11 +296,11 @@ class RoadViewSubmissionEarlyCompletionTest {
         }
 
         boolean completed = checkAndCompleteRoundEarlyUseCase.execute(
-                GameMode.ROADVIEW,
-                PlayerMatchType.SOLO,
                 gameRoom.getId().toString(),
                 gameId,
-                roundId
+                roundId,
+                GameMode.ROADVIEW,
+                PlayerMatchType.SOLO
         );
 
         // Then: 4명 중 3명이므로 종료되지 않음
@@ -324,11 +325,11 @@ class RoadViewSubmissionEarlyCompletionTest {
         }
 
         completed = checkAndCompleteRoundEarlyUseCase.execute(
-                GameMode.ROADVIEW,
-                PlayerMatchType.SOLO,
                 gameRoom.getId().toString(),
                 gameId,
-                roundId
+                roundId,
+                GameMode.ROADVIEW,
+                PlayerMatchType.SOLO
         );
 
         // 모두 제출했으므로 종료
