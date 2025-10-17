@@ -174,8 +174,8 @@ class RoundCompletionPerformanceTest {
                     .findFirst()
                     .orElse("Unknown");
             
-            log.info("\n🏆 추천 방안: {} (평균 {}ms, 성공률 {:.1f}%)",
-                    fastestName, fastest.getAvgResponseTime(), fastest.getSuccessRate());
+            log.info("\n🏆 추천 방안: {} (평균 {}ms, 성공률 {}%)",
+                    fastestName, fastest.getAvgResponseTime(), String.format("%.1f", fastest.getSuccessRate()));
         }
 
         log.info("\n");
@@ -280,8 +280,8 @@ class RoundCompletionPerformanceTest {
                 cleanupGameEnvironment(context);
                 
                 if ((i + 1) % 10 == 0) {
-                    log.info("  진행률: {}/{} ({:.1f}%)", 
-                            i + 1, ITERATION_COUNT, (i + 1) * 100.0 / ITERATION_COUNT);
+                    log.info("  진행률: {}/{} ({}%)", 
+                            i + 1, ITERATION_COUNT, String.format("%.1f", (i + 1) * 100.0 / ITERATION_COUNT));
                 }
                 
             } catch (Exception e) {
@@ -311,8 +311,8 @@ class RoundCompletionPerformanceTest {
 
         log.info("-".repeat(80));
         log.info("✅ 테스트 완료: {}", name);
-        log.info("   성공: {}/{} ({:.1f}%), 예외: {}, 평균: {}ms, 최소: {}ms, 최대: {}ms",
-                result.getSuccessCount(), result.getIterationCount(), result.getSuccessRate(),
+        log.info("   성공: {}/{} ({}%), 예외: {}, 평균: {}ms, 최소: {}ms, 최대: {}ms",
+                result.getSuccessCount(), result.getIterationCount(), String.format("%.1f", result.getSuccessRate()),
                 result.getExceptionCount(), result.getAvgResponseTime(),
                 result.getMinResponseTime(), result.getMaxResponseTime());
         log.info("\n");
