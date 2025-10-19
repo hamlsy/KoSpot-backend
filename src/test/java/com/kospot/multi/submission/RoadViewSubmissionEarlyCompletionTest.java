@@ -38,7 +38,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,12 +48,6 @@ import static org.mockito.Mockito.when;
 
 /**
  * 로드뷰 제출 및 조기 종료 통합 테스트
- * 
- * 검증 항목:
- * 1. 모든 플레이어 제출 시 라운드 자동 조기 종료
- * 2. 타이머 만료 시 라운드 자동 종료
- * 3. 조기 종료 후 라운드 결과 정상 반환
- * 4. 개인전/팀전 각각의 조기 종료 로직
  */
 @Slf4j
 @SpringBootTest
@@ -271,7 +264,7 @@ class RoadViewSubmissionEarlyCompletionTest {
 
     @Test
     @DisplayName("[통합] 개인전에서 플레이어 수에 따라 올바르게 조기 종료 판단한다")
-    @Transactional
+//    @Transactional
     void earlyCompletion_BasedOnPlayerCount_NotTeamCount() throws InterruptedException {
         // Given: 게임 시작
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);
@@ -339,7 +332,7 @@ class RoadViewSubmissionEarlyCompletionTest {
 
     @Test
     @DisplayName("[통합] 중복 제출은 카운트되지 않는다")
-    @Transactional
+    //@Transactional
     void duplicateSubmission_DoesNotCount() throws InterruptedException {
         // Given: 게임 시작
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);

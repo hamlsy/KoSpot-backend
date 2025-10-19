@@ -64,9 +64,13 @@ public abstract class BaseGameRound extends BaseTimeEntity {
         return getRemainingTimeMs() <= 0;
     }
 
-    public void finishRound() {
-        validateRoundNotFinished();
+    public boolean finishRound() {
+//        validateRoundNotFinished();
+        if(this.isFinished) {
+            return false;
+        }
         this.isFinished = true;
+        return true;
     }
 
     // validate
