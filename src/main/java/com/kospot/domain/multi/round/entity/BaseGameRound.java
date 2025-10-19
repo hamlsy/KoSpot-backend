@@ -24,6 +24,8 @@ public abstract class BaseGameRound extends BaseTimeEntity {
     @Builder.Default
     private String roundId = UUID.randomUUID().toString();
     private Integer roundNumber;
+
+    @Builder.Default
     private Boolean isFinished = false;
 
     // 비정규화
@@ -62,9 +64,13 @@ public abstract class BaseGameRound extends BaseTimeEntity {
         return getRemainingTimeMs() <= 0;
     }
 
-    public void finishRound() {
-        validateRoundNotFinished();
+    public boolean finishRound() {
+//        validateRoundNotFinished();
+        if(this.isFinished) {
+            return false;
+        }
         this.isFinished = true;
+        return true;
     }
 
     // validate
@@ -73,5 +79,6 @@ public abstract class BaseGameRound extends BaseTimeEntity {
             throw new GameRoundHandler(ErrorStatus.ROUND_ALREADY_FINISHED);
         }
     }
+
 
 }

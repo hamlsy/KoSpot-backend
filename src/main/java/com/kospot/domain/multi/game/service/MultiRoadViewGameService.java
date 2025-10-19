@@ -26,8 +26,5 @@ public class MultiRoadViewGameService {
         return multiRoadViewGameRepository.save(game);
     }
 
-    public void startGame() {
-
-    }
 
 }

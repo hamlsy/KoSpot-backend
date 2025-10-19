@@ -31,7 +31,10 @@ public class RoadViewGameRoundService {
     }
 
     public void endGameRound(RoadViewGameRound round) {
-        round.finishRound();
+        boolean finished = round.finishRound();
+        if (!finished) {
+            log.warn("Round already finished - RoundId: {}", round.getId());
+        }
     }
 
 }

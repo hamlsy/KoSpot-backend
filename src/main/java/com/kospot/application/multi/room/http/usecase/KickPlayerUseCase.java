@@ -4,9 +4,11 @@ import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.domain.multi.room.service.GameRoomPlayerService;
 import com.kospot.domain.multi.room.service.GameRoomService;
+import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;
 import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,17 +23,25 @@ public class KickPlayerUseCase {
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
     private final MemberAdaptor memberAdaptor;
-    private final GameRoomPlayerService gameRoomPlayerService;
+    private final GameRoomRedisService gameRoomRedisService;
+    private final GameRoomNotificationService notificationService;
 
     public void execute(Member host, GameRoomRequest.Kick request, Long gameRoomId) {
-        GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
-        Member targetPlayer = memberAdaptor.queryById(request.getTargetPlayerId());
+        Long targetPlayerId = request.getTargetPlayerId();
         
-        // 데이터베이스 레벨에서 강퇴 처리
+        GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
+        Member targetPlayer = memberAdaptor.queryById(targetPlayerId);
+        
+        gameRoomService.validateKickPermission(gameRoom, host, targetPlayerId);
+        
         gameRoomService.kickPlayer(host, targetPlayer, gameRoom);
         
-        // WebSocket 레벨에서 실시간 강퇴 처리 (Redis + 실시간 알림)
-        gameRoomPlayerService.kickPlayer(gameRoomId, host.getId(), targetPlayer.getId());
+        gameRoomRedisService.removePlayerFromRoom(gameRoomId.toString(), targetPlayerId);
+        
+        GameRoomPlayerInfo targetPlayerInfo = GameRoomPlayerInfo.from(targetPlayer);
+        notificationService.notifyPlayerKicked(gameRoomId.toString(), targetPlayerInfo);
+        
+        log.info("Player kicked - HostId: {}, TargetId: {}, RoomId: {}", 
+                host.getId(), targetPlayerId, gameRoomId);
     }
-
 }

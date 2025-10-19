@@ -21,9 +21,24 @@ public class MultiGameChannelConstants {
     }
 
     // ==================== 로드뷰 게임 채널 ====================
-    public static String getRoadViewSubmitChannel(String roomId) {
-        validateId(roomId, "roomId");
-        return PREFIX_GAME + roomId + "/roadview/submit";
+
+    /**
+     * 로드뷰 개인전 제출 알림 채널
+     * 용도: 누가 제출했는지 실시간 알림
+     */
+     public static String getRoadViewPlayerSubmissionChannel(String gameId) {
+        validateId(gameId, "gameId");
+        return PREFIX_GAME + gameId + "/roadview/submissions/player";
+    }
+
+    /**
+     * 로드뷰 팀전 제출 알림 채널
+     * 용도: 팀원이 제출했는지 실시간 알림 (같은 팀만)
+     */
+    public static String getRoadViewTeamSubmissionChannel(String gameId, String teamId) {
+        validateId(gameId, "gameId");
+        validateId(teamId, "teamId");
+        return PREFIX_GAME + gameId + "/roadview/submissions/team/" + teamId;
     }
 
     /**
@@ -45,6 +60,26 @@ public class MultiGameChannelConstants {
     public static String getPhotoAnswerChannel(String roomId) {
         validateId(roomId, "roomId");
         return PREFIX_GAME + roomId + "/photo/answer";
+    }
+
+    // ==================== 라운드 관련 채널 ====================
+    
+    /**
+     * 라운드 결과 알림 채널
+     * 용도: 라운드 종료 시 점수, 순위 등 결과 브로드캐스트
+     */
+    public static String getRoundResultChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/round/result";
+    }
+
+    /**
+     * 라운드 시작 알림 채널
+     * 용도: 새 라운드 시작 알림
+     */
+    public static String getRoundStartChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/round/start";
     }
 
     // ==================== 유틸 ====================

@@ -25,8 +25,25 @@ public class GamePlayerAdaptor {
         );
     }
 
+    public GamePlayer queryByMemberId(Long memberId) {
+        return repository.findByMemberId(memberId).orElseThrow(
+                () -> new GamePlayerHandler(ErrorStatus.GAME_PLAYER_NOT_FOUND)
+        );
+    }
 
     public List<GamePlayer> queryByMultiRoadViewGameId(Long gameId) {
         return repository.findAllByMultiRoadViewGameId(gameId);
+    }
+
+    public List<GamePlayer> queryByGameIdAndTeamNumber(Long gameId, Integer teamNumber) {
+        return repository.findAllByMultiRoadViewGameIdAndTeamNumber(gameId, teamNumber);
+    }
+
+    public int countPlayersByGameId(Long gameId) {
+        return repository.countByMultiRoadViewGameId(gameId);
+    }
+
+    public int countTeamsByGameId(Long gameId) {
+        return repository.countDistinctTeamsByGameId(gameId);
     }
 }

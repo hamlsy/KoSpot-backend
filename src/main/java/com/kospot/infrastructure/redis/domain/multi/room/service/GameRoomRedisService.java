@@ -9,17 +9,12 @@ import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisReposi
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-/**
- * 게임방 Redis 데이터 관리 서비스
- * Redis 기반 플레이어 정보, 인원 수, 강퇴 목록 등을 관리
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -59,9 +54,6 @@ public class GameRoomRedisService {
         }
     }
 
-    /**
-     * 게임방에서 플레이어 정보 제거
-     */
     public GameRoomPlayerInfo removePlayerFromRoom(String roomId, Long memberId) {
         try {
             String roomKey = getRoomKey(roomId);
@@ -84,9 +76,6 @@ public class GameRoomRedisService {
         }
     }
 
-    /**
-     * 게임방의 현재 플레이어 목록 조회
-     */
     public List<GameRoomPlayerInfo> getRoomPlayers(String roomId) {
         try {
             String roomKey = getRoomKey(roomId);
@@ -196,9 +185,6 @@ public class GameRoomRedisService {
         }
     }
 
-    /**
-     * 게임방이 비어있는지 확인
-     */
     public boolean isRoomEmpty(String roomId) {
         String roomKey = getRoomKey(roomId);
         int currentPlayerCount = gameRoomRedisRepository.countPlayers(roomKey);
@@ -210,7 +196,6 @@ public class GameRoomRedisService {
     }
 
     /**
-     * "Read-Then-Check"
      * race condition 방지 안 됨 todo refactor
      */
     public boolean cannotJoinRoom(String roomId, int maxPlayers) {
@@ -243,17 +228,11 @@ public class GameRoomRedisService {
         redisTemplate.opsForValue().set(sessionRoomKey, roomId, SESSION_EXPIRY_HOURS, TimeUnit.HOURS);
     }
 
-    /**
-     * 세션에서 룸 ID 조회
-     */
     public String getRoomIdFromSession(String sessionId) {
         String sessionRoomKey = String.format(SESSION_ROOM_KEY, sessionId);
         return redisTemplate.opsForValue().get(sessionRoomKey);
     }
 
-    /**
-     * 세션에서 멤버 ID 조회
-     */
     public Long getMemberIdFromSession(String sessionId) {
         try {
             Set<String> playerKeys = redisTemplate.keys(String.format(PLAYER_SESSION_KEY, "*"));
@@ -274,9 +253,6 @@ public class GameRoomRedisService {
         }
     }
 
-    /**
-     * 플레이어 세션 정보 정리
-     */
     public void cleanupPlayerSession(Long memberId) {
         try {
             String playerSessionKey = String.format(PLAYER_SESSION_KEY, memberId);
@@ -297,85 +273,8 @@ public class GameRoomRedisService {
         }
     }
 
-    /**
-     * 비어있는 게임방의 Redis 데이터 정리
-     */
-    @Async("taskExecutor")
-    public void cleanupEmptyRooms() {
-        try {
-            Set<String> roomKeys = redisTemplate.keys(String.format(ROOM_PLAYERS_KEY, "*"));
-            int cleanedRooms = 0;
-
-            if (roomKeys != null) {
-                for (String key : roomKeys) {
-                    String roomId = extractRoomIdFromKey(key);
-
-                    if (isRoomEmpty(roomId)) {
-                        // 플레이어 목록 삭제
-                        redisTemplate.delete(key);
-
-                        cleanedRooms++;
-                        log.debug("Cleaned up empty room - RoomId: {}", roomId);
-                    }
-                }
-            }
-
-            log.info("Redis cleanup completed - {} empty rooms cleaned", cleanedRooms);
-
-        } catch (Exception e) {
-            log.error("Failed to cleanup empty rooms in Redis", e);
-        }
-    }
-
-    /**
-     * 게임방 통계 로깅
-     */
-    public void logRoomStatistics() {
-        try {
-            Set<String> roomKeys = redisTemplate.keys(String.format(ROOM_PLAYERS_KEY, "*"));
-
-            if (roomKeys == null || roomKeys.isEmpty()) {
-                log.info("Game Room Redis Statistics - No active rooms");
-                return;
-            }
-
-            int totalRooms = roomKeys.size();
-            int totalPlayers = 0;
-            int emptyRooms = 0;
-
-            for (String key : roomKeys) {
-                String roomId = extractRoomIdFromKey(key);
-                String roomKey = getRoomKey(roomId);
-                int playerCount = gameRoomRedisRepository.countPlayers(roomKey);
-
-                totalPlayers += playerCount;
-                if (playerCount == 0) {
-                    emptyRooms++;
-                }
-            }
-
-            log.info("Game Room Redis Statistics - Total Rooms: {}, Total Players: {}, Empty Rooms: {}, Avg Players/Room: {}",
-                    totalRooms, totalPlayers, emptyRooms,
-                    totalRooms > 0 ? (double) totalPlayers / totalRooms : 0);
-
-        } catch (Exception e) {
-            log.error("Failed to generate room statistics from Redis", e);
-        }
-    }
-
-    /**
-     * 활성 게임방 키 목록 조회
-     */
     public Set<String> getActiveRoomKeys() {
         return redisTemplate.keys(String.format(ROOM_PLAYERS_KEY, "*"));
     }
 
-    /**
-     * Redis 키에서 룸 ID 추출
-     */
-    private String extractRoomIdFromKey(String key) {
-        // game:room:{roomId}:players -> {roomId} 추출
-        String[] parts = key.split(":");
-        return parts.length >= 3 ? parts[2] : null;
-    }
 } 
