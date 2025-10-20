@@ -3,7 +3,6 @@ package com.kospot.domain.game.service;
 import com.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
 import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.entity.Sido;
-import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.domain.game.util.DistanceCalculator;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.domain.game.vo.GameType;
@@ -33,7 +32,7 @@ public class RoadViewGameService {
         return game;
     }
 
-    public RoadViewGame endGame(Member member, RoadViewGame game, EndGameRequest.RoadView request) {
+    public RoadViewGame finishGame(Member member, RoadViewGame game, EndGameRequest.RoadView request) {
         endGameUpdate(member, game, request);
 
         return game;

@@ -1,6 +1,7 @@
 package com.kospot.domain.multi.round.service;
 
-import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
+import com.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
+import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.repository.RoadViewGameRoundRepository;
@@ -17,11 +18,11 @@ import java.util.List;
 @Transactional
 public class RoadViewGameRoundService {
 
-    private final CoordinateService coordinateService;
+    private final CoordinateAdaptor coordinateAdaptor;
     private final RoadViewGameRoundRepository roundRepository;
 
     public RoadViewGameRound createGameRound(MultiRoadViewGame game, List<Long> playerIds) {
-        CoordinateNationwide coordinate = (CoordinateNationwide) coordinateService.getRandomNationwideCoordinate();
+        Coordinate coordinate = coordinateAdaptor.getRandomCoordinate();
         RoadViewGameRound gameRound = RoadViewGameRound.createRound(game.getCurrentRound(), coordinate,
                 game.getTimeLimit(), playerIds);
         gameRound.setMultiRoadViewGame(game);

@@ -34,17 +34,15 @@ public class EndRoadViewSoloRoundUseCase {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
         List<RoadViewSubmission> roadViewSubmissions = roadViewSubmissionAdaptor.queryByRoundId(roundId);
 
-        //todo 제출 못 한 플레이어 0점처리 - service
-        // 플레이어 간 거리 순으로 순위 점수 처리 - service
+        //플레이어 간 거리 순으로 순위 점수 처리 - service
         List<RoadViewSubmission> submission = roadViewSubmissionService.calculatePlayerRankAndScore(roadViewSubmissions);
 
-        // 라운드 종료 처리 및 전체 순위 처리(이전 점수는 프론트가 기억) - service
+        // 라운드 종료 처리 및 전체 순위 처리 - service
         roadViewGameRoundService.endGameRound(round);
 
         List<GamePlayer> players = gamePlayerAdaptor.queryByMultiRoadViewGameId(gameId);
         List<GamePlayer> updatedPlayers = gamePlayerService.updateTotalRank(players);
 
-        // 라운드 결과 response - dto convert, 각 플레이어가 제출한 좌표 포함
         return RoadViewRoundResponse.PlayerResult.from(
                 round,
                 submission,

@@ -2,7 +2,7 @@ package com.kospot.multi.timer;
 
 import com.kospot.application.multi.timer.message.TimerStartMessage;
 import com.kospot.application.multi.timer.message.TimerSyncMessage;
-import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
+import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.doAnswer;
 
 /**
  * GameTimer 실제 환경 통합 테스트
- * 
+ *
  * 실제 Spring 컨텍스트에서 타이머가 정확히 작동하는지 검증:
  * 1. 실제 TaskScheduler를 사용한 스케줄링
  * 2. 실제 시간 경과에 따른 동기화 메시지 전송
@@ -324,7 +324,7 @@ class GameTimerIntegrationTest {
     // === Helper Methods ===
 
     private RoadViewGameRound createTestRound(Integer timeLimit) {
-        CoordinateNationwide coordinate = CoordinateNationwide.builder()
+        Coordinate coordinate = Coordinate.builder()
                 .id(1L)
                 .lat(37.5665)
                 .lng(126.9780)

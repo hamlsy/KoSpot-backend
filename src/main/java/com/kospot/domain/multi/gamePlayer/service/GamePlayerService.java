@@ -32,7 +32,7 @@ public class GamePlayerService {
     //todo implement bulk update
     public List<GamePlayer> updateTotalRank(List<GamePlayer> gamePlayers) {
         // score 로 내림차순 정렬
-        gamePlayers.sort((a, b) -> b.getTotalScore() - a.getTotalScore());
+        gamePlayers.sort((a, b) -> Double.compare(b.getTotalScore(), a.getTotalScore()));
 
         int rank = 1;
         gamePlayers.get(0).updateRoundRank(rank);

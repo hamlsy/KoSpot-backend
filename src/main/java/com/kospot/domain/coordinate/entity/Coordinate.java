@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+@Entity
 @Getter
 @SuperBuilder
 @AllArgsConstructor
@@ -17,7 +18,6 @@ import lombok.experimental.SuperBuilder;
 indexes = {
         @Index(name = "idx_coordinate_sido", columnList = "sido")
 })
-@MappedSuperclass
 public class Coordinate extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +31,6 @@ public class Coordinate extends BaseTimeEntity {
 
     @Embedded
     private Address address;
-
-    @Enumerated(EnumType.STRING)
-    private Sido sido;
 
     @Enumerated(EnumType.STRING)
     private LocationType locationType;

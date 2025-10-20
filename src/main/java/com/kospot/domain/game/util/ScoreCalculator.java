@@ -19,5 +19,9 @@ public class ScoreCalculator {
         return Math.max(0, Math.min(MAX_SCORE, Math.round(baseScore * 100) / 100.0));
     }
 
+    public static double calculateMultiGameScore(double distance) {
+        double score = calculateScore(distance) / 10;
+        return Math.round(score * 100) / 100.0;
+    }
 
 }

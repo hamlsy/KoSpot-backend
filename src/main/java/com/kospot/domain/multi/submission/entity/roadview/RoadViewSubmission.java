@@ -1,7 +1,9 @@
 package com.kospot.domain.multi.submission.entity.roadview;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.multi.game.util.ScoreRule;
+import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.domain.game.util.DistanceCalculator;
+import com.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
@@ -58,7 +60,7 @@ public class RoadViewSubmission extends BaseTimeEntity {
     private Double timeToAnswer;
 
     @Column(name = "earned_score")
-    private Integer earnedScore;
+    private double earnedScore;
 
     @Column(name = "rank_value")
     private Integer rank;
@@ -81,25 +83,16 @@ public class RoadViewSubmission extends BaseTimeEntity {
     }
 
     /**
-     * 개인전 점수 부여 - todo refactoring
+     * 개인전 점수 부여
      */
-    public void assignPlayerScore(int rank) {
-        this.rank = rank;
-        this.earnedScore = ScoreRule.calculateScore(rank);
+    public void assignDistanceAndPlayerScore(Coordinate coordinate) {
+        this.distance = DistanceCalculator.calculateHaversineDistance(lat, lng, coordinate);
+        this.earnedScore = ScoreCalculator.calculateScore(distance);
     }
 
-    /**
-     * 팀전 점수 부여 (고정 점수)
-     * 1등: 10점, 2등: 6점, 3등: 2점, 4등 이상: 0점
-     */
-    public void assignTeamScore(int rank) {
-        this.rank = rank;
-        this.earnedScore = switch (rank) {
-            case 1 -> 10;
-            case 2 -> 6;
-            case 3 -> 2;
-            default -> 0;
-        };
+    public void assignDistanceAndTeamScore(Coordinate coordinate) {
+        this.distance = DistanceCalculator.calculateHaversineDistance(lat, lng, coordinate);
+        this.earnedScore = ScoreCalculator.calculateMultiGameScore(distance);
     }
 
     public boolean isSoloMode() {
@@ -120,15 +113,12 @@ public class RoadViewSubmission extends BaseTimeEntity {
             RoadViewGameRound round,
             Double lat,
             Double lng,
-            Double distance,
             Double timeToAnswer
     ) {
         validateNotNull(player, "GamePlayer cannot be null");
         validateNotNull(round, "RoadViewGameRound cannot be null");
         validateCoordinates(lat, lng);
-        validateDistance(distance);
         validateTime(timeToAnswer);
-
         return RoadViewSubmission.builder()
                 .matchType(PlayerMatchType.SOLO)
                 .gamePlayer(player)
@@ -136,7 +126,6 @@ public class RoadViewSubmission extends BaseTimeEntity {
                 .round(round)
                 .lat(lat)
                 .lng(lng)
-                .distance(distance)
                 .timeToAnswer(timeToAnswer)
                 .build();
     }
@@ -166,7 +155,6 @@ public class RoadViewSubmission extends BaseTimeEntity {
                 .round(round)
                 .lat(lat)
                 .lng(lng)
-                .distance(distance)
                 .timeToAnswer(timeToAnswer)
                 .build();
     }
@@ -180,7 +168,6 @@ public class RoadViewSubmission extends BaseTimeEntity {
                 round,
                 null,  // 미제출 좌표
                 null,
-                Double.MAX_VALUE,  // 최대 거리 (최하위 순위)
                 (double) round.getDuration().toMillis()  // 전체 시간 소모
         );
     }

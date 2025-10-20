@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,8 @@ public interface RoadViewGameRoundRepository extends JpaRepository<RoadViewGameR
     
     List<RoadViewGameRound> findAllByMultiRoadViewGameId(Long gameId);
 
+    @Query("SELECT rvr FROM RoadViewGameRound rvr " +
+           "JOIN FETCH rvr.targetCoordinate " +
+           "WHERE rvr.id = :id")
+    Optional<RoadViewGameRound> findByIdFetchCoordinate(@Param("id") Long id);
 }

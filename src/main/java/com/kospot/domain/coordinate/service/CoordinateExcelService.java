@@ -114,7 +114,6 @@ public class CoordinateExcelService {
         return Coordinate.builder()
                 .address(address)
                 .poiName(poiName)
-                .sido(sido)
                 .lng(lng)
                 .lat(lat)
                 .locationType(locationType)

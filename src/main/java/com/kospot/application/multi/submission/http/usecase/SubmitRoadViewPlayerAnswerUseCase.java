@@ -33,7 +33,7 @@ public class SubmitRoadViewPlayerAnswerUseCase {
 
     public void execute(Member member, String roomId, Long gameId,
                         Long roundId, SubmitRoadViewRequest.Player request) {
-        RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchCoordinate(roundId);
         GamePlayer player = gamePlayerAdaptor.queryByMemberId(member.getId());
 
         RoadViewSubmission submission = request.toEntity();
@@ -44,7 +44,7 @@ public class SubmitRoadViewPlayerAnswerUseCase {
                 roundId,
                 player.getId()
         );
-        log.info("📝 Submission recorded - RoomId: {}, RoundId: {}, PlayerId: {}, Count: {}",
+        log.info("Submission recorded - RoomId: {}, RoundId: {}, PlayerId: {}, Count: {}",
                 roomId, roundId, player.getId(), currentCount);
 
         submissionNotificationService.notifySubmissionReceived(gameId, roundId, player.getId());

@@ -1,5 +1,6 @@
 package com.kospot.application.game.roadview.rank.usecase;
 
+import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.event.RoadViewRankEvent;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
@@ -20,6 +21,7 @@ import org.springframework.context.ApplicationEventPublisher;
 @Transactional
 public class EndRoadViewRankUseCase {
 
+    private final RoadViewGameAdaptor roadViewGameAdaptor;
     private final RoadViewGameService roadViewGameService;
     private final GameRankAdaptor gameRankAdaptor;
     private final GameRankService gameRankService;
@@ -27,7 +29,8 @@ public class EndRoadViewRankUseCase {
 
     public EndGameResponse.RoadViewRank execute(Member member, EndGameRequest.RoadView request) {
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.ROADVIEW);
-        RoadViewGame game = roadViewGameService.endGame(member, request);
+        RoadViewGame game = roadViewGameAdaptor.queryByIdFetchCoordinate(request.getGameId());
+        roadViewGameService.finishGame(member, game, request);
 
         int currentRatingScore = gameRank.getRatingScore();
 

@@ -23,7 +23,7 @@ public class EndRoadViewPracticeUseCase {
 
     public EndGameResponse.RoadViewPractice execute(Member member, EndGameRequest.RoadView request) {
         RoadViewGame game = roadViewGameAdaptor.queryByIdFetchCoordinate(request.getGameId());
-        roadViewGameService.endGame(member, game, request);
+        roadViewGameService.finishGame(member, game, request);
 
         //event
         eventPublisher.publishEvent(new RoadViewPracticeEvent(member, game));

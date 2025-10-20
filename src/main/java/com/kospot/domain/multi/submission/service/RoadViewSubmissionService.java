@@ -37,11 +37,10 @@ public class RoadViewSubmissionService {
                 round,
                 submission.getLat(),
                 submission.getLng(),
-                submission.getDistance(),
                 submission.getTimeToAnswer()
         );
-
         newSubmission.setRound(round);
+        newSubmission.assignDistanceAndPlayerScore(round.getTargetCoordinate());
         return repository.save(newSubmission);
     }
 
@@ -77,13 +76,10 @@ public class RoadViewSubmissionService {
                         .thenComparingDouble(RoadViewSubmission::getTimeToAnswer))
                 .toList();
 
-        // 2. 순위 부여 및 점수 계산
+        // 2. 순위 부여
         for (int i = 0; i < sorted.size(); i++) {
             int rank = i + 1;
             RoadViewSubmission submission = sorted.get(i);
-            
-            // 개인전 점수 계산 (ScoreRule 사용)
-            submission.assignPlayerScore(rank);
             
             // 3. 플레이어에게 점수 부여
             if (submission.getGamePlayer() != null) {
@@ -112,10 +108,7 @@ public class RoadViewSubmissionService {
         for (int i = 0; i < sorted.size(); i++) {
             int rank = i + 1;
             RoadViewSubmission submission = sorted.get(i);
-            
-            // 팀전 점수 계산
-            submission.assignTeamScore(rank);
-            
+
             // 3. 팀원들에게 점수 분배
             distributeScoreToTeamMembers(gameId, submission);
         }
@@ -130,7 +123,7 @@ public class RoadViewSubmissionService {
         }
 
         Integer teamNumber = submission.getTeamNumber();
-        Integer teamScore = submission.getEarnedScore();
+        double teamScore = submission.getEarnedScore();
 
         // 해당 팀의 모든 플레이어 조회
         List<GamePlayer> teamMembers = gamePlayerAdaptor.queryByGameIdAndTeamNumber(gameId, teamNumber);
