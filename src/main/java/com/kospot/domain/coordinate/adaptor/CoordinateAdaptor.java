@@ -1,9 +1,9 @@
 package com.kospot.domain.coordinate.adaptor;
 
 import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.vo.Sido;
+import com.kospot.domain.coordinate.entity.Sido;
+import com.kospot.domain.coordinate.repository.CoordinateRepository;
 import com.kospot.domain.coordinate.repository.nationwide.CoordinateNationwideRepository;
-import com.kospot.domain.coordinate.service.DynamicCoordinateRepositoryFactory;
 import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 
@@ -12,50 +12,36 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Adaptor
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CoordinateAdaptor {
 
-    private final DynamicCoordinateRepositoryFactory factory;
-    private final CoordinateNationwideRepository nationwideRepository;
+    private final CoordinateRepository coordinateRepository;
 
-    public Coordinate queryById(Sido sido, Long id) {
-        return factory.getRepository(sido).findById(id)
-                .map(Coordinate.class::cast)
+    public Coordinate queryById(Long id) {
+        return coordinateRepository.findById(id)
                 .orElseThrow(
                 () -> new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND)
         );
     }
 
-    public boolean queryExistsById(Sido sido, Long id) {
-        return factory.getRepository(sido).existsById(id);
+    public Coordinate getRandomCoordinateBySido(Sido sido) {
+        long count = coordinateRepository.countBySido(sido);
+        if (count == 0) return null;
+
+        long randomOffset = ThreadLocalRandom.current().nextLong(count);
+        return coordinateRepository.findBySidoWithOffset(sido, randomOffset);
     }
 
-    public Long queryMaxIdBySido(Sido sido){
-        Long maxId = factory.getRepository(sido).findMaxId();
-        return Optional.ofNullable(maxId).orElse(0L);
+    public Coordinate getRandomCoordinate() {
+        long count = coordinateRepository.countAll();
+        if (count == 0) return null;
+
+        long randomOffset = ThreadLocalRandom.current().nextLong(count);
+        return coordinateRepository.findByRandomOffset(randomOffset);
     }
 
-    /**
-     *  Nationwide
-     */
-
-    public Coordinate queryNationwideById(Long id) {
-        return nationwideRepository.findById(id)
-                .map(Coordinate.class::cast)
-                .orElseThrow(
-                        () -> new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND)
-                );
-    }
-
-    public boolean queryNationwideExistsById(Long id) {
-        return nationwideRepository.existsById(id);
-    }
-
-    public Long queryNationwideMaxId() {
-        Long maxId = nationwideRepository.findMaxId();
-        return Optional.ofNullable(maxId).orElse(0L);
-    }
 }

@@ -2,7 +2,6 @@ package com.kospot.presentation.coordinate.controller;
 
 import com.kospot.application.coordinate.ImportCoordinateUseCase;
 import com.kospot.presentation.coordinate.dto.response.CoordinateResponse;
-import com.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;

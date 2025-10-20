@@ -1,6 +1,7 @@
 package com.kospot.domain.game.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameStatus;
 import com.kospot.domain.game.vo.GameType;
@@ -25,11 +26,9 @@ import java.util.Objects;
 public abstract class Game extends BaseTimeEntity {
 
     // 정답 좌표
-    @Column(nullable = false)
-    private double targetLng;
-
-    @Column(nullable = false)
-    private double targetLat;
+    @ManyToOne
+    @JoinColumn(name = "coordinate_id")
+    private Coordinate coordinate;
 
     // 제출 좌표
     private double submittedLng;
@@ -58,13 +57,15 @@ public abstract class Game extends BaseTimeEntity {
 
     private LocalDateTime endedAt;    // 게임 종료 시간
 
-    public Game(double targetLat, double targetLng, Member member, GameMode gameMode, GameType gameType, GameStatus gameStatus) {
+    public Game(Member member, GameMode gameMode, GameType gameType, GameStatus gameStatus) {
         this.member = member;
         this.gameMode = gameMode;
         this.gameType = gameType;
         this.gameStatus = gameStatus;
-        this.targetLat = targetLat;
-        this.targetLng = targetLng;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 
     // business

@@ -1,8 +1,7 @@
 package com.kospot.domain.coordinate.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
-import com.kospot.domain.coordinate.vo.LocationType;
+import com.kospot.domain.coordinate.vo.Address;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,8 +13,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "coordinates",
+indexes = {
+        @Index(name = "idx_coordinate_sido", columnList = "sido")
+})
 @MappedSuperclass
-public abstract class Coordinate extends BaseTimeEntity {
+public class Coordinate extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,14 +33,9 @@ public abstract class Coordinate extends BaseTimeEntity {
     private Address address;
 
     @Enumerated(EnumType.STRING)
-    private LocationType locationType;
+    private Sido sido;
 
-    public Coordinate(CoordinateNationwide coordinate) {
-        this.address = coordinate.getAddress();
-        this.lng = coordinate.getLng();
-        this.lat = coordinate.getLat();
-        this.poiName = coordinate.getPoiName();
-        this.locationType = coordinate.getLocationType();
-    }
+    @Enumerated(EnumType.STRING)
+    private LocationType locationType;
 
 }

@@ -1,7 +1,6 @@
 package com.kospot.domain.multi.round.service;
 
 import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
-import com.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.repository.RoadViewGameRoundRepository;

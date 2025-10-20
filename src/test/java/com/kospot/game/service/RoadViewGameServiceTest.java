@@ -74,7 +74,6 @@ public class RoadViewGameServiceTest {
 
         EndGameRequest.RoadView request = EndGameRequest.RoadView.builder()
                 .gameId(game.getId())
-                .answerDistance(200)
                 .build();
 
         // when
@@ -114,7 +113,6 @@ public class RoadViewGameServiceTest {
 
         EndGameRequest.RoadView request = EndGameRequest.RoadView.builder()
                 .gameId(game.getId())
-                .answerDistance(200)
                 .build();
 
         // when
