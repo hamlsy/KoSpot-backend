@@ -1,9 +1,8 @@
 package com.kospot.domain.multi.round.entity;
 
-import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
+import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -37,8 +36,7 @@ public class RoadViewGameRound extends BaseGameRound {
     // 라운드에 사용되는 정답 좌표
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coordinate_id")
-    private CoordinateNationwide targetCoordinate;
-
+    private Coordinate targetCoordinate;
 
     @Override
     public GameMode getGameMode() {
@@ -55,7 +53,7 @@ public class RoadViewGameRound extends BaseGameRound {
 
     public static RoadViewGameRound createRound(
             Integer roundNumber,
-            CoordinateNationwide targetCoordinate,
+            Coordinate targetCoordinate,
             Integer timeLimit,
             List<Long> playerIds
     ) {

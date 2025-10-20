@@ -1,5 +1,6 @@
 package com.kospot.application.game.roadview.practice.usecase;
 
+import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.presentation.game.dto.response.EndGameResponse;
 import com.kospot.domain.game.entity.RoadViewGame;
@@ -16,11 +17,13 @@ import org.springframework.context.ApplicationEventPublisher;
 @Transactional
 public class EndRoadViewPracticeUseCase {
 
+    private final RoadViewGameAdaptor roadViewGameAdaptor;
     private final RoadViewGameService roadViewGameService;
     private final ApplicationEventPublisher eventPublisher;
 
     public EndGameResponse.RoadViewPractice execute(Member member, EndGameRequest.RoadView request) {
-        RoadViewGame game = roadViewGameService.endGame(member, request);
+        RoadViewGame game = roadViewGameAdaptor.queryByIdFetchCoordinate(request.getGameId());
+        roadViewGameService.finishGame(member, game, request);
 
         //event
         eventPublisher.publishEvent(new RoadViewPracticeEvent(member, game));

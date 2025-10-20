@@ -33,8 +33,7 @@ public class RoadViewGame extends Game {
 
     public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType) {
         return RoadViewGame.builder()
-                .targetLat(coordinate.getLat())
-                .targetLng(coordinate.getLng())
+                .coordinate(coordinate)
                 .member(member)
                 .gameMode(GameMode.ROADVIEW)
                 .gameType(gameType)

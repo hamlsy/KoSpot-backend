@@ -1,12 +1,10 @@
 package com.kospot.domain.coordinate.service;
 
-import com.kospot.domain.coordinate.entity.Address;
+import com.kospot.domain.coordinate.repository.CoordinateRepository;
+import com.kospot.domain.coordinate.vo.Address;
 import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.vo.LocationType;
-import com.kospot.domain.coordinate.entity.converter.CoordinateConverter;
-import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
-import com.kospot.domain.coordinate.vo.Sido;
-import com.kospot.domain.coordinateidcache.service.CoordinateIdCacheService;
+import com.kospot.domain.coordinate.entity.LocationType;
+import com.kospot.domain.coordinate.entity.Sido;
 import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 
@@ -25,12 +23,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CoordinateExcelService {
 
-    private final DynamicCoordinateRepositoryFactory repositoryFactory;
-    private final CoordinateIdCacheService coordinateIdCacheService;
-
     private static final String FILE_PATH = "data/excel/";
     private final int BATCH_SIZE = 1000;
-    private final Sido NATIONWIDE = Sido.NATIONWIDE;
+    private final CoordinateRepository coordinateRepository;
 
     @Transactional
     public void importCoordinatesFromExcel(String fileName) {
@@ -43,47 +38,30 @@ public class CoordinateExcelService {
             Sheet sheet = workbook.getSheetAt(0); // 첫 번째 시트
             Iterator<Row> rowIterator = sheet.iterator(); // 반복 객체 생성
 
-            // 지역별 좌표 리스트를 저장하는 Map
-            Map<Sido, List<Coordinate>> coordinatesMap = new HashMap<>();
+            // 좌표 리스트를 저장하는 List
+            List<Coordinate> coordinatesList = new ArrayList<>();
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 if (row.getRowNum() == 0 || isRowEmpty(row)) continue; // 첫 번째 줄은 헤더이므로 건너뜀
 
-                CoordinateNationwide coordinateNationwide = rowToCoordinateNationwide(row);
-                Coordinate coordinate = CoordinateConverter.convertToDetailCoordinate(coordinateNationwide);
-                Sido sido = coordinate.getAddress().getSido();
+                Coordinate coordinate = rowToCoordinate(row);
 
-                // detail coordinate
-                coordinatesMap.putIfAbsent(sido, new ArrayList<>());
-                coordinatesMap.get(sido).add(coordinate);
-
-                // nation wide coordinate
-                coordinatesMap.putIfAbsent(NATIONWIDE, new ArrayList<>());
-                coordinatesMap.get(NATIONWIDE).add(coordinateNationwide);
+                // coordinate
+                coordinatesList.add(coordinate);
 
                 // BATCH_SIZE 마다 저장
                 // todo refactoring
-                if (isBatchSizeReached(sido, coordinatesMap)) {
-                    saveCoordinates(sido, coordinatesMap.get(sido));
-                    coordinatesMap.get(sido).clear();
+                if (isBatchSizeReached(coordinatesList)) {
+                    saveCoordinates(coordinatesList);
+                    coordinatesList.clear();
                 }
-
-                if (isBatchSizeReached(NATIONWIDE, coordinatesMap)) {
-                    saveCoordinates(NATIONWIDE, coordinatesMap.get(NATIONWIDE));
-                    coordinatesMap.get(NATIONWIDE).clear();
-                }
-
             }
 
             // 나머지 저장
-            for (Sido sido : coordinatesMap.keySet()) {
-                saveCoordinates(sido, coordinatesMap.get(sido));
-            }
+            saveCoordinates(coordinatesList);
+            coordinatesList.clear();
 
-            // 캐시 테이블 저장
-            // todo refactoring
-            coordinateIdCacheService.saveAllMaxId();
 
         } catch (FileNotFoundException e) {
             throw new CoordinateHandler(ErrorStatus.FILE_NOT_FOUND);
@@ -104,16 +82,16 @@ public class CoordinateExcelService {
     }
 
 
-    private boolean isBatchSizeReached(Sido sido, Map<Sido, List<Coordinate>> coordinatesMap) {
-        return coordinatesMap.get(sido).size() >= BATCH_SIZE;
+    private boolean isBatchSizeReached(List<Coordinate> coordinatesList) {
+        return coordinatesList.size() >= BATCH_SIZE;
     }
 
-    private void saveCoordinates(Sido sido, List<Coordinate> coordinates) {
-        repositoryFactory.getRepository(sido).saveAll(coordinates);
+    private void saveCoordinates(List<Coordinate> coordinates) {
+        coordinateRepository.saveAll(coordinates);
     }
 
     //excel row -> CoordinateNationwide
-    private CoordinateNationwide rowToCoordinateNationwide(Row row) {
+    private Coordinate rowToCoordinate(Row row) {
         Sido sido = Sido.fromName(getCellString(row, 0)); //A
         String sigungu = getCellString(row, 1); //B
         String cLine = getCellString(row, 2); //C
@@ -133,7 +111,7 @@ public class CoordinateExcelService {
                 .detailAddress(detailAddress)
                 .build();
 
-        return CoordinateNationwide.builder()
+        return Coordinate.builder()
                 .address(address)
                 .poiName(poiName)
                 .lng(lng)

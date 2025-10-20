@@ -1,4 +1,4 @@
-package com.kospot.domain.coordinate.vo;
+package com.kospot.domain.coordinate.entity;
 
 import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;

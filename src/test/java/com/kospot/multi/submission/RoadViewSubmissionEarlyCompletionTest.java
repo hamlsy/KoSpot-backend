@@ -174,7 +174,6 @@ class RoadViewSubmissionEarlyCompletionTest {
             SubmitRoadViewRequest.Player submitRequest = SubmitRoadViewRequest.Player.builder()
                     .lat(37.5665 + (i * 0.01)) // 각기 다른 위치
                     .lng(126.9780 + (i * 0.01))
-                    .distance(1000.0 + (i * 500.0)) // 거리 차이
                     .timeToAnswer(5000.0 + (i * 1000.0))
                     .build();
 
@@ -182,7 +181,7 @@ class RoadViewSubmissionEarlyCompletionTest {
 
             long currentCount = submissionRedisService.getCurrentSubmissionCount(GameMode.ROADVIEW, roundId);
             log.info("📝 제출 완료 ({}/4) - PlayerId: {}, Distance: {}m, Count: {}", 
-                    i + 1, gamePlayer.getId(), submitRequest.getDistance(), currentCount);
+                    i + 1, gamePlayer.getId(), currentCount);
 
             Thread.sleep(100); // 이벤트 처리 대기
         }
@@ -243,7 +242,6 @@ class RoadViewSubmissionEarlyCompletionTest {
             SubmitRoadViewRequest.Player submitRequest = SubmitRoadViewRequest.Player.builder()
                     .lat(37.5665)
                     .lng(126.9780)
-                    .distance(1000.0)
                     .timeToAnswer(5000.0)
                     .build();
 
@@ -311,7 +309,7 @@ class RoadViewSubmissionEarlyCompletionTest {
         RoadViewGameRound round = roadViewGameRoundRepository.findById(roundId).orElseThrow();
         for (GamePlayer gamePlayer : gamePlayers) {
             RoadViewSubmission submission = RoadViewSubmission.forPlayer(
-                    gamePlayer, round, 37.5665, 126.9780, 1000.0, 5000.0
+                    gamePlayer, round, 37.5665, 126.9780, 5000.0
             );
             submission.setRound(round);
             submissionRepository.save(submission);
@@ -352,7 +350,6 @@ class RoadViewSubmissionEarlyCompletionTest {
         SubmitRoadViewRequest.Player submitRequest = SubmitRoadViewRequest.Player.builder()
                 .lat(37.5665)
                 .lng(126.9780)
-                .distance(1000.0)
                 .timeToAnswer(5000.0)
                 .build();
 

@@ -20,4 +20,10 @@ public class RoadViewGameAdaptor {
                 () -> new GameHandler(ErrorStatus.GAME_NOT_FOUND)
         );
     }
+
+    public RoadViewGame queryByIdFetchCoordinate(Long gameId) {
+        return repository.findByIdFetchCoordinate(gameId).orElseThrow(
+                () -> new GameHandler(ErrorStatus.GAME_NOT_FOUND)
+        );
+    }
 }

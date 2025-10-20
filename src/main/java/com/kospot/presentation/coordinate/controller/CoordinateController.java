@@ -1,8 +1,9 @@
 package com.kospot.presentation.coordinate.controller;
 
 import com.kospot.application.coordinate.ImportCoordinateUseCase;
+import com.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
+import com.kospot.domain.coordinate.entity.Sido;
 import com.kospot.presentation.coordinate.dto.response.CoordinateResponse;
-import com.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CoordinateController {
 
-    private final CoordinateService coordinateService;
+    private final CoordinateAdaptor coordinateAdaptor;
     private final ImportCoordinateUseCase importCoordinateUseCase;
 
     /**
@@ -25,7 +26,7 @@ public class CoordinateController {
     @GetMapping("/randomCoord/{sido}")
     public ApiResponseDto<CoordinateResponse> getRandomCoordBySido(@PathVariable("sido") String sido) {
         return ApiResponseDto.onSuccess(CoordinateResponse.from(
-                coordinateService.getRandomCoordinateBySido(sido)
+                coordinateAdaptor.getRandomCoordinateBySido(Sido.fromKey(sido))
         ));
     }
 

@@ -15,7 +15,7 @@ public class SubmissionResponse {
         private Double lng;
         private Double distance;
         private Double timeToAnswer;
-        private Integer earnedScore;
+        private double earnedScore;
 
         public static RoadViewPlayer from(RoadViewSubmission submission) {
             return RoadViewPlayer.builder()

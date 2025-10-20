@@ -1,4 +1,4 @@
-package com.kospot.domain.coordinate.vo;
+package com.kospot.domain.coordinate.entity;
 
 import java.util.Map;
 

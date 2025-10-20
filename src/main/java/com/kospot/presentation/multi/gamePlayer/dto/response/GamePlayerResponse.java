@@ -13,8 +13,8 @@ public class GamePlayerResponse {
     private Long playerId;
     private String nickname;
     private String markerImageUrl;
-    private int totalScore;
-    private Integer roundRank;
+    private double totalScore;
+    private double roundRank;
 
     public static GamePlayerResponse from(GamePlayer gamePlayer) {
         return GamePlayerResponse.builder()

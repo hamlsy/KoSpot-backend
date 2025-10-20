@@ -38,7 +38,7 @@ public class GamePlayer {
     private Integer teamNumber;
 
     private Integer roundRank; // 해당 라운드 순위
-    private int totalScore;
+    private double totalScore;
 
     @Enumerated(EnumType.STRING)
     private GamePlayerStatus status;
@@ -87,7 +87,7 @@ public class GamePlayer {
         this.roundRank = rank;
     }
 
-    public void addScore(int points) {
+    public void addScore(double points) {
         this.totalScore += points;
     }
 }

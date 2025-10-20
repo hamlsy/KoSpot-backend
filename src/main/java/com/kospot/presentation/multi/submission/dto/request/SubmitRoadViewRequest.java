@@ -20,10 +20,6 @@ public class SubmitRoadViewRequest {
         @NotNull(message = "경도는 필수입니다")
         private Double lng;
 
-        @NotNull(message = "거리는 필수입니다")
-        @Positive(message = "거리는 0보다 커야 합니다")
-        private Double distance;
-
         @NotNull(message = "응답 시간은 필수입니다")
         @Positive(message = "응답 시간은 0보다 커야 합니다")
         private Double timeToAnswer; // 밀리초
@@ -32,7 +28,6 @@ public class SubmitRoadViewRequest {
             return RoadViewSubmission.builder()
                     .lat(lat)
                     .lng(lng)
-                    .distance(distance)
                     .timeToAnswer(timeToAnswer)
                     .build();
         }
@@ -49,7 +44,6 @@ public class SubmitRoadViewRequest {
         private Long teamId;
         private Double lat;
         private Double lng;
-        private Double distance;
 
     }
 
