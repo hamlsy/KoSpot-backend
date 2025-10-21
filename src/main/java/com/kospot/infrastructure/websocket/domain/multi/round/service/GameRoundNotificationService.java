@@ -29,6 +29,11 @@ public class GameRoundNotificationService {
         sendNotification(roomId, notification, MultiGameChannelConstants.getRoundStartChannel(roomId));
     }
 
+    public void broadcastRoundEnd(String roomId, Long gameId) {
+        String destination = MultiGameChannelConstants.getRoundResultChannel()
+        sendNotification(roomId, notification, MultiGameChannelConstants.getRoundEndChannel(roomId));
+    }
+
     private void sendNotification(String roomId, Object notification, String destination) {
         try {
             messagingTemplate.convertAndSend(destination, notification);
