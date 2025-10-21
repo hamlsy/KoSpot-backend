@@ -1,8 +1,10 @@
 package com.kospot.application.multi.round.listener;
 
 import com.kospot.application.multi.round.roadview.solo.EndRoadViewSoloRoundUseCase;
+import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.room.vo.GameRoomNotification;
 import com.kospot.domain.multi.submission.event.EarlyRoundCompletionEvent;
+import com.kospot.domain.multi.timer.event.RoundCompletionEvent;
 import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;
 import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.kospot.domain.multi.game.vo.PlayerMatchType.TEAM;
 
 @Slf4j
 @Component
@@ -24,30 +28,50 @@ public class RoundCompletionEventListener {
     private final GameRoundNotificationService gameRoundNotificationService;
 
 
+    // 조기 종료 이벤트
     @Async
     @EventListener
     @Transactional
     public void handleEarlyRoundCompletion(EarlyRoundCompletionEvent event) {
         switch (event.getGameMode()) {
-            case ROADVIEW -> handleRoadViewRoundCompletion(event);
+            case ROADVIEW -> handleRoadViewRoundCompletion(
+                    event.getGameRoomId(),
+                    event.getGameId(),
+                    event.getRoundId(),
+                    event.getPlayerMatchType()
+            );
             case PHOTO -> {
             }
         }
     }
 
-    private void handleRoadViewRoundCompletion(EarlyRoundCompletionEvent event) {
-        Long gameId = event.getGameId();
-        Long roundId = event.getRoundId();
-
-        switch (event.getPlayerMatchType()) {
-            case SOLO -> {// 1. 라운드 결과 계산 및 순위 산정
-                RoadViewRoundResponse.PlayerResult result = endRoadViewSoloRoundUseCase.execute(gameId, roundId);
-                // 2. WebSocket 결과 브로드캐스트
-                gameRoundNotificationService.broadcastRoundResults(event.getGameRoomId(), result);
+    // 정상 종료 이벤트 처리 (타이머 만료)
+    @Async
+    @EventListener
+    @Transactional
+    public void handleRoundCompletion(RoundCompletionEvent event) {
+        switch (event.getGameMode()) {
+            case ROADVIEW -> handleRoadViewRoundCompletion(
+                    event.getGameRoomId(),
+                    Long.parseLong(event.getGameId()),
+                    Long.parseLong(event.getRoundId()),
+                    event.getPlayerMatchType()
+            );
+            case PHOTO -> {
             }
         }
 
+    }
 
+    private void handleRoadViewRoundCompletion(String gameRoomId, Long gameId,
+                                               Long roundId, PlayerMatchType matchType) {
+        switch (matchType) {
+            case SOLO -> {
+                RoadViewRoundResponse.PlayerResult result = endRoadViewSoloRoundUseCase.execute(gameId, roundId);
+                gameRoundNotificationService.broadcastRoundResults(gameRoomId, result);
+            }
+            case TEAM -> log.warn("Team mode not yet implemented");
+        }
     }
 
 }

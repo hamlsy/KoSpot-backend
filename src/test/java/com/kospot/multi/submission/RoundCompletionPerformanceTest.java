@@ -659,7 +659,6 @@ class RoundCompletionPerformanceTest {
         return SubmitRoadViewRequest.Player.builder()
                 .lat(37.5665 + (index * 0.01))
                 .lng(126.9780 + (index * 0.01))
-                .distance(1000.0 + (index * 500.0))
                 .timeToAnswer(5000.0 + (index * 1000.0))
                 .build();
     }

@@ -3,15 +3,11 @@ package com.kospot.domain.coordinate.adaptor;
 import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.entity.Sido;
 import com.kospot.domain.coordinate.repository.CoordinateRepository;
-import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Adaptor

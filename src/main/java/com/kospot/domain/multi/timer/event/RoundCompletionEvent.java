@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.redis.domain.multi.timer.event;
+package com.kospot.domain.multi.timer.event;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;

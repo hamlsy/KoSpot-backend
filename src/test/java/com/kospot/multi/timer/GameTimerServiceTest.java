@@ -1,6 +1,6 @@
 package com.kospot.multi.timer;
 
-import com.kospot.domain.coordinate.entity.coordinates.CoordinateNationwide;
+import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
@@ -398,7 +398,7 @@ class GameTimerServiceTest {
     // === Helper Methods ===
 
     private RoadViewGameRound createTestRound(Integer timeLimit) {
-        CoordinateNationwide coordinate = CoordinateNationwide.builder()
+        Coordinate coordinate = Coordinate.builder()
                 .id(1L)
                 .lat(37.5665)
                 .lng(126.9780)
