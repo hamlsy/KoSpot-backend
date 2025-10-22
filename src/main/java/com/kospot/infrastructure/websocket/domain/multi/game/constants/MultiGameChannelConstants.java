@@ -91,6 +91,14 @@ public class MultiGameChannelConstants {
         return PREFIX_GAME + roomId + "/round/transition";
     }
 
+    /**
+     * 게임 종료 알림
+     */
+    public static String getGameFinishChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/game/finished";
+    }
+
     // ==================== 유틸 ====================
     private static void validateId(String id, String name) {
         if (id == null || id.isBlank()) {

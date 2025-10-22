@@ -1,6 +1,8 @@
 package com.kospot.infrastructure.websocket.domain.multi.round.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kospot.application.multi.round.message.GameFinishedMessage;
+import com.kospot.domain.multi.game.entity.MultiGame;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +31,10 @@ public class GameRoundNotificationService {
         sendNotification(roomId, notification, MultiGameChannelConstants.getRoundStartChannel(roomId));
     }
 
-    public void broadcastRoundEnd(String roomId, Long gameId) {
-        String destination = MultiGameChannelConstants.getRoundResultChannel()
-        sendNotification(roomId, notification, MultiGameChannelConstants.getRoundEndChannel(roomId));
-    }
+//    public void broadcastRoundEnd(String roomId, Long gameId) {
+//        String destination = MultiGameChannelConstants.getRoundResultChannel()
+//        sendNotification(roomId, notification, MultiGameChannelConstants.getRoundEndChannel(roomId));
+//    }
 
     private void sendNotification(String roomId, Object notification, String destination) {
         try {
@@ -43,4 +45,13 @@ public class GameRoundNotificationService {
         }
     }
 
+    public void notifyGameFinished(String roomId, Long gameId) {
+        String destination = MultiGameChannelConstants.getGameFinishChannel(roomId);
+        GameFinishedMessage message = GameFinishedMessage.builder()
+                .gameId(gameId)
+                .message("게임이 종료되었습니다.")
+                .timestamp(System.currentTimeMillis())
+                .build();
+        messagingTemplate.convertAndSend(destination, message);
+    }
 }
