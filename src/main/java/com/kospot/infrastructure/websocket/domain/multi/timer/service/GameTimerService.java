@@ -52,9 +52,7 @@ public class GameTimerService {
 
     /**
      * 라운드 시작
-     * - Redis 저장으로 서버 재시작 시에도 타이머 유지
      */
-
     public void startRoundTimer(TimerCommand command) {
         Instant serverStartTime = Instant.now();
         String gameRoomId = command.getGameRoomId();
@@ -144,7 +142,7 @@ public class GameTimerService {
     }
 
     /**
-     *  라운드 전환 대기 타이머 브로드캐스트
+     * 라운드 전환 대기 타이머 브로드캐스트
      * - 라운드 결과 표시 후 다음 라운드까지 10초 대기
      */
     public void startRoundTransitionTimer(String gameRoomId, MultiGame game,
@@ -158,18 +156,18 @@ public class GameTimerService {
         cancelTransitionSyncTask(taskKey);
 
         // 1. 초기 전환 타이머 브로드캐스트
-        broadcastRoundTransitionTimer(gameRoomId, game, transitionEndTime, NEXT_ROUND_DELAY_SECONDS * 1000L);
+        broadcastRoundTransitionTimer(gameRoomId, game);
 
         // 2. 2초마다 동기화 브로드캐스트 스케줄링
         scheduleTransitionSync(gameRoomId, game, transitionEndTime, taskKey);
 
         // 3. 10초 후 콜백 실행 스케줄링
-        scheduleRoundTransition(gameRoomId, game.getId(), onTransitionComplete, transitionEndTime, taskKey);
+        scheduleRoundTransitionCallBack(gameRoomId, game.getId(), onTransitionComplete, transitionEndTime, taskKey);
 
     }
 
     /**
-     * 🆕 라운드 전환 대기 중 2초마다 동기화
+     * 라운드 전환 대기 중 2초마다 동기화
      */
     private void scheduleTransitionSync(String gameRoomId, MultiGame game,
                                         Instant transitionEndTime, String taskKey) {
@@ -181,7 +179,7 @@ public class GameTimerService {
                         return;
                     }
 
-                    broadcastRoundTransitionTimer(gameRoomId, game, transitionEndTime, remainingMs);
+                    broadcastRoundTransitionTimer(gameRoomId, game);
 
                 }, Instant.now().plusMillis(TRANSITION_SYNC_INTERVAL_MS),
                 Duration.ofMillis(TRANSITION_SYNC_INTERVAL_MS));
@@ -198,29 +196,26 @@ public class GameTimerService {
 
         RoundTransitionTimerMessage message = RoundTransitionTimerMessage.builder()
                 .nextRoundStartTimeMs(nextRoundStartTime.toEpochMilli())
-                .waitDurationMs((long) NEXT_ROUND_DELAY_SECONDS * 1000)
                 .serverTimestamp(System.currentTimeMillis())
-                .currentRound(game.getCurrentRound())
-                .totalRounds(game.getTotalRounds())
                 .isLastRound(game.isLastRound())
                 .build();
 
         String destination = MultiGameChannelConstants.getRoundTransitionChannel(gameRoomId);
         messagingTemplate.convertAndSend(destination, message);
 
-        log.info("⏰ Round transition timer broadcasted - RoomId: {}, NextStartTime: {}, IsLastRound: {}",
+        log.info("Round transition timer broadcasted - RoomId: {}, NextStartTime: {}, IsLastRound: {}",
                 gameRoomId, nextRoundStartTime, game.isLastRound());
     }
 
     /**
      * 라운드 전환 콜백 스케줄링
      */
-    private void scheduleRoundTransition(String gameRoomId, Long gameId,
-                                         Runnable onTransitionComplete,
-                                         Instant transitionTime, String taskKey) {
+    private void scheduleRoundTransitionCallBack(String gameRoomId, Long gameId,
+                                                 Runnable onComplete,
+                                                 Instant executeTime, String taskKey) {
         ScheduledFuture<?> transitionTask = gameTimerTaskScheduler.schedule(() -> {
             try {
-                onTransitionComplete.run();
+                onComplete.run();
                 log.info("✅ Round transition completed - RoomId: {}, GameId: {}", gameRoomId, gameId);
             } catch (Exception e) {
                 log.error("🚨 Round transition failed - RoomId: {}, GameId: {}", gameRoomId, gameId, e);
@@ -228,7 +223,7 @@ public class GameTimerService {
                 cancelTransitionTask(taskKey);
                 cancelTransitionSyncTask(taskKey);
             }
-        }, transitionTime);
+        }, executeTime);
 
         transitionTasks.put(taskKey, transitionTask);
     }

@@ -6,7 +6,6 @@ import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiGame;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
-import com.kospot.domain.multi.room.vo.GameRoomNotification;
 import com.kospot.domain.multi.submission.event.EarlyRoundCompletionEvent;
 import com.kospot.domain.multi.timer.event.RoundCompletionEvent;
 import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;
@@ -20,7 +19,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.kospot.domain.multi.game.vo.PlayerMatchType.TEAM;
 
 @Slf4j
 @Component
@@ -92,33 +90,41 @@ public class RoundCompletionEventListener {
 
     private void processNextRound(String gameRoomId, MultiGame game) {
         if (game.isLastRound()) {
-            handleLastRound(gameRoomId, gameId, game);
+            handleLastRound(gameRoomId, game);
             return;
         }
-        handleNextRound(gameRoomId, gameId, game);
+        handleNextRound(gameRoomId, game);
     }
 
     /**
      * 마지막 라운드 처리 - 게임 종료
      */
-    private void handleLastRound(String gameRoomId, Long gameId, MultiRoadViewGame game) {
+    private void handleLastRound(String gameRoomId, MultiGame game) {
         game.finishGame();
         // add finish game usecase
-        gameRoundNotificationService.notifyGameFinished(gameRoomId, gameId);
+        gameRoundNotificationService.notifyGameFinished(gameRoomId, game.getId());
     }
 
     /**
      * 다음 라운드 처리 - 새 라운드 시작
      */
-    private void handleNextRound(String gameRoomId, Long gameId, MultiRoadViewGame game) {
-        // 다음 라운드 시작 (게임 상태 업데이트 + 라운드 생성 + 타이머 시작)
-        MultiRoadViewGameResponse.NextRound nextRound = nextRoadViewRoundUseCase.execute(
-                Long.parseLong(gameRoomId),
-                gameId
-        );
+    private void handleNextRound(String gameRoomId, MultiGame game) {
 
-        // 다음 라운드 시작 알림 브로드캐스트
-        gameRoundNotificationService.broadcastRoundStart(gameRoomId, nextRound);
+        switch (game.getGameMode()) {
+            case ROADVIEW -> {
+                // 다음 라운드 시작 (게임 상태 업데이트 + 라운드 생성 + 타이머 시작)
+                MultiRoadViewGameResponse.NextRound nextRound = nextRoadViewRoundUseCase.execute(
+                        Long.parseLong(gameRoomId),
+                        game.getId()
+                );
+
+                // 다음 라운드 시작 알림 브로드캐스트
+                gameRoundNotificationService.broadcastRoundStart(gameRoomId, nextRound);
+            }
+            case PHOTO -> {
+            }
+        }
+
     }
 
 
