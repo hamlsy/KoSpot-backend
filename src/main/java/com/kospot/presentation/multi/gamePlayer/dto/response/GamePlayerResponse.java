@@ -22,7 +22,7 @@ public class GamePlayerResponse {
                 .nickname(gamePlayer.getNickname())
                 .markerImageUrl(gamePlayer.getEquippedMarkerImageUrl())
                 .totalScore(gamePlayer.getTotalScore())
-                .roundRank(gamePlayer.getRoundRank())
+                .roundRank(gamePlayer.getRoundRank() != null ? gamePlayer.getRoundRank() : 0)
                 .build();
     }
 

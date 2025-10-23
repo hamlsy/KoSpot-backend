@@ -14,11 +14,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "coordinates",
+@Table(name = "coordinate",
 indexes = {
         @Index(name = "idx_coordinate_sido", columnList = "sido")
 })
 public class Coordinate extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

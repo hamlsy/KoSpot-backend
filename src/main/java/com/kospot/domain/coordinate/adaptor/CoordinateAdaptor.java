@@ -28,12 +28,16 @@ public class CoordinateAdaptor {
     }
 
     // 전체 랜덤 Coordinate
+    // todo refactoring
     public Coordinate getRandomCoordinate() {
         long count = coordinateRepository.countAllNative();
         if (count == 0) return null;
+        int randomOffset = ThreadLocalRandom.current().nextInt((int) count);
 
-        long randomOffset = ThreadLocalRandom.current().nextLong(count);
-        return coordinateRepository.findByRandomOffset(randomOffset, PageRequest.of(0, 1)).getContent().get(0);
+        return coordinateRepository.findAllCoordinates(PageRequest.of(randomOffset, 1))
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
 }
