@@ -58,8 +58,8 @@ public class RoundCompletionEventListener {
         switch (event.getGameMode()) {
             case ROADVIEW -> handleRoadViewRoundCompletion(
                     event.getGameRoomId(),
-                    Long.parseLong(event.getGameId()),
-                    Long.parseLong(event.getRoundId()),
+                    event.getGameId(),
+                    event.getRoundId(),
                     event.getPlayerMatchType()
             );
             case PHOTO -> {

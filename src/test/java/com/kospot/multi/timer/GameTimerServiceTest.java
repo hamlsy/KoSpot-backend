@@ -416,7 +416,7 @@ class GameTimerServiceTest {
         return TimerCommand.builder()
                 .round(round)
                 .gameRoomId(GAME_ROOM_ID.toString())
-                .gameId(GAME_ID.toString())
+                .gameId(GAME_ID)
                 .gameMode(GameMode.ROADVIEW)
                 .matchType(PlayerMatchType.SOLO)
                 .build();

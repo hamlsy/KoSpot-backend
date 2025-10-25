@@ -44,6 +44,11 @@ public class PhotoGameRound extends BaseGameRound {
     private List<PhotoPlayerSubmission> playerSubmissions = new ArrayList<>();
 
     @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
     public GameMode getGameMode() {
         return GameMode.PHOTO;
     }

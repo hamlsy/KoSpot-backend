@@ -46,7 +46,7 @@ public class NextRoadViewRoundUseCase {
         return TimerCommand.builder()
                 .round(round)
                 .gameRoomId(gameRoomId.toString())
-                .gameId(game.getId().toString())
+                .gameId(game.getId())
                 .gameMode(GameMode.ROADVIEW)
                 .matchType(PlayerMatchType.SOLO)
                 .build();

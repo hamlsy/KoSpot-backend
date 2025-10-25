@@ -175,10 +175,19 @@ class RoundTransitionAndNextRoundTest {
         Thread.sleep(1000);
         entityManager.clear();
 
-        round1 = roadViewGameRoundRepository.findById(round1Id).orElseThrow();
-        assertThat(round1.getIsFinished()).isTrue();
+        log.info("✅ 라운드 1 종료 확인");
+        await()
+                .atMost(5, TimeUnit.SECONDS)
+                .pollInterval(200, TimeUnit.MILLISECONDS)
+                .untilAsserted(() -> {
+                    entityManager.clear();
+                    RoadViewGameRound round = roadViewGameRoundRepository.findById(round1Id).orElseThrow();
+                    assertThat(round.getIsFinished()).isTrue();
+                });
         log.info("✅ 라운드 1 종료 확인");
 
+        round1 = roadViewGameRoundRepository.findById(round1Id).orElseThrow();
+        assertThat(round1.getIsFinished()).isTrue();
         // Then: 전환 타이머 대기 후 라운드 2 자동 생성 확인
         // (전환 타이머는 GameTimerService의 ROUND_TRANSITION_DELAY 설정에 따라 3초)
         await()

@@ -152,7 +152,7 @@ class RoundTimerExpirationTest {
         TimerCommand command = TimerCommand.builder()
                 .round(round)
                 .gameRoomId(gameRoom.getId().toString())
-                .gameId(startResponse.getGameId().toString())
+                .gameId(startResponse.getGameId())
                 .gameMode(GameMode.ROADVIEW)
                 .matchType(PlayerMatchType.SOLO)
                 .build();
@@ -254,7 +254,7 @@ class RoundTimerExpirationTest {
         TimerCommand command = TimerCommand.builder()
                 .round(round)
                 .gameRoomId(gameRoom.getId().toString())
-                .gameId(startResponse.getGameId().toString())
+                .gameId(startResponse.getGameId())
                 .gameMode(GameMode.ROADVIEW)
                 .matchType(PlayerMatchType.SOLO)
                 .build();
@@ -301,7 +301,7 @@ class RoundTimerExpirationTest {
         TimerCommand command = TimerCommand.builder()
                 .round(round)
                 .gameRoomId(gameRoom.getId().toString())
-                .gameId(startResponse.getGameId().toString())
+                .gameId(startResponse.getGameId())
                 .gameMode(GameMode.ROADVIEW)
                 .matchType(PlayerMatchType.SOLO)
                 .build();

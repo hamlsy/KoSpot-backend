@@ -58,7 +58,7 @@ public class GameTimerService {
         String gameRoomId = command.getGameRoomId();
         BaseGameRound round = command.getRound();
         TimerStartMessage startMessage = TimerStartMessage.builder()
-                .roundId(round.getRoundId())
+                .roundId(round.getId().toString())
                 .gameMode(round.getGameMode())
                 .serverStartTimeMs(serverStartTime.toEpochMilli())
                 .durationMs(round.getDuration().toMillis())
@@ -91,7 +91,7 @@ public class GameTimerService {
             boolean isFinalCountdown = remainingTimeMs <= FINAL_COUNTDOWN_THRESHOLD_MS;
 
             TimerSyncMessage syncMessage = TimerSyncMessage.builder()
-                    .roundId(round.getRoundId())
+                    .roundId(round.getId().toString())
                     .remainingTimeMs(remainingTimeMs)
                     .serverTimestamp(System.currentTimeMillis())
                     .isFinalCountDown(isFinalCountdown)
@@ -104,7 +104,7 @@ public class GameTimerService {
     }
 
     private static String getTaskKey(String gameRoomId, BaseGameRound round) {
-        return gameRoomId + ":" + round.getRoundId();
+        return gameRoomId + ":" + round.getId();
     }
 
     /**
@@ -122,20 +122,20 @@ public class GameTimerService {
         BaseGameRound round = command.getRound();
         GameMode gameMode = command.getGameMode();
         PlayerMatchType matchType = command.getMatchType();
-        String gameId = command.getGameId();
+        Long gameId = command.getGameId();
 
         String taskKey = getTaskKey(gameRoomId, round);
         Instant completionTime = round.getServerStartTime().plus(round.getDuration());
         ScheduledFuture<?> completionTask = gameTimerTaskScheduler.schedule(() -> {
             try {
-                RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, gameId, round.getRoundId(), gameMode, matchType);
+                RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, gameId, round.getId(), gameMode, matchType);
                 eventPublisher.publishEvent(event);
 
                 // Task 정리
                 cancelAllTasks(taskKey);
 
             } catch (Exception e) {
-                log.error("Round completion error - GameRoomId: {}, RoundId: {}", gameRoomId, round.getRoundId(), e);
+                log.error("Round completion error - GameRoomId: {}, RoundId: {}", gameRoomId, round.getId(), e);
             }
         }, completionTime);
         completionTasks.put(taskKey, completionTask);

@@ -39,9 +39,15 @@ public class RoadViewGameRound extends BaseGameRound {
     private Coordinate targetCoordinate;
 
     @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
     public GameMode getGameMode() {
         return GameMode.ROADVIEW;
     }
+
 
     // === Business methods ===
 
