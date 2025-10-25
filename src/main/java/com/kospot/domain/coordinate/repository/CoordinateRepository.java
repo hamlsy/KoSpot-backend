@@ -23,7 +23,7 @@ public interface CoordinateRepository extends JpaRepository<Coordinate, Long> {
     @Query(value = "SELECT COUNT(*) FROM coordinate", nativeQuery = true)
     long countAllNative();
 
-    @Query(value = "SELECT * FROM coordinate LIMIT 1 OFFSET :offset", nativeQuery = true)
-    Page<Coordinate> findByRandomOffset(@Param("offset") long offset, Pageable pageable);
+    @Query("SELECT c FROM Coordinate c")
+    Page<Coordinate> findAllCoordinates(Pageable pageable);
 
 }

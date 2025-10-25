@@ -57,6 +57,8 @@ public class GamePlayer {
                 .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
                 .multiRoadViewGame(game)
                 .status(GamePlayerStatus.PLAYING)
+                .roundRank(1) 
+                .totalScore(0.0)
                 .build();
     }
 
@@ -67,6 +69,8 @@ public class GamePlayer {
                 .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
                 .multiPhotoGame(game)
                 .status(GamePlayerStatus.PLAYING)
+                .roundRank(0) // 초기 순위 0으로 설정
+                .totalScore(0.0) // 초기 점수 0으로 설정
                 .build();
     }
 

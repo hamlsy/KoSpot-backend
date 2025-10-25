@@ -82,6 +82,23 @@ public class MultiGameChannelConstants {
         return PREFIX_GAME + roomId + "/round/start";
     }
 
+    /**
+     * 라운드 전환 대기 타이머 채널
+     * 용도: 라운드 종료 후 다음 라운드까지 대기 시간 동기화 (10초)
+     */
+    public static String getRoundTransitionChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/round/transition";
+    }
+
+    /**
+     * 게임 종료 알림
+     */
+    public static String getGameFinishChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/game/finished";
+    }
+
     // ==================== 유틸 ====================
     private static void validateId(String id, String name) {
         if (id == null || id.isBlank()) {

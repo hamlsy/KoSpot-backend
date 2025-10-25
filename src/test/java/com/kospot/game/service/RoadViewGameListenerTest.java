@@ -109,7 +109,6 @@ public class RoadViewGameListenerTest {
             requests.add(
                     EndGameRequest.RoadView.builder()
                             .gameId(game.getId())
-                            .answerDistance((int) (Math.random() * 301))
                             .build()
             );
         }

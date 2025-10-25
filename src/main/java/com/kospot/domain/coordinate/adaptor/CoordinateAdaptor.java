@@ -3,15 +3,11 @@ package com.kospot.domain.coordinate.adaptor;
 import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.entity.Sido;
 import com.kospot.domain.coordinate.repository.CoordinateRepository;
-import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Adaptor
@@ -32,12 +28,16 @@ public class CoordinateAdaptor {
     }
 
     // 전체 랜덤 Coordinate
+    // todo refactoring
     public Coordinate getRandomCoordinate() {
         long count = coordinateRepository.countAllNative();
         if (count == 0) return null;
+        int randomOffset = ThreadLocalRandom.current().nextInt((int) count);
 
-        long randomOffset = ThreadLocalRandom.current().nextLong(count);
-        return coordinateRepository.findByRandomOffset(randomOffset, PageRequest.of(0, 1)).getContent().get(0);
+        return coordinateRepository.findAllCoordinates(PageRequest.of(randomOffset, 1))
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
 }

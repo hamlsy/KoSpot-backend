@@ -12,7 +12,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @SuperBuilder
@@ -21,8 +20,6 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class BaseGameRound extends BaseTimeEntity {
 
-    @Builder.Default
-    private String roundId = UUID.randomUUID().toString();
     private Integer roundNumber;
 
     @Builder.Default
@@ -35,6 +32,7 @@ public abstract class BaseGameRound extends BaseTimeEntity {
     @Builder.Default
     private List<Long> playerIds = new ArrayList<>();
 
+    public abstract Long getId();
     public abstract GameMode getGameMode();
 
     //business methods

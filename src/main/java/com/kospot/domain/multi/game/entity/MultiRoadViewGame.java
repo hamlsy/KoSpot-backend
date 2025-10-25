@@ -38,4 +38,10 @@ public class MultiRoadViewGame extends MultiGame {
                 .build();
     }
 
+    @Override
+    public Long getId() {
+        return this.id;
+    }
+
+
 }

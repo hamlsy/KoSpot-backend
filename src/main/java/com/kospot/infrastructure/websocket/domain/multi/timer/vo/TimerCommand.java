@@ -6,8 +6,6 @@ import com.kospot.domain.multi.round.entity.BaseGameRound;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 @Builder
 public class TimerCommand {
@@ -16,6 +14,6 @@ public class TimerCommand {
     private final BaseGameRound round;
     private final GameMode gameMode;
     private final PlayerMatchType matchType;
-    private final String gameId;
+    private final Long gameId;
 
 }

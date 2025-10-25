@@ -23,6 +23,8 @@ import java.time.Duration;
 @MappedSuperclass
 public abstract class MultiGame extends BaseTimeEntity {
 
+    public abstract Long getId();
+
     // 방 제목
     private String title;
 

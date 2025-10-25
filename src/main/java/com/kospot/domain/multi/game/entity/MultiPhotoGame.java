@@ -57,4 +57,9 @@ public class MultiPhotoGame extends MultiGame {
     }
 
 
+    @Override
+    public Long getId() {
+        return this.id;
+    }
+
 }
