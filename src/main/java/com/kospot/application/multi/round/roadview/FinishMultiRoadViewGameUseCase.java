@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class FinishMultiGameUseCase {
+public class FinishMultiRoadViewGameUseCase {
 
     private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
     private final GameRoundNotificationService gameRoundNotificationService;

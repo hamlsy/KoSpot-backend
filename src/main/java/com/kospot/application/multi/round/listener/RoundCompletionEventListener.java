@@ -1,5 +1,6 @@
 package com.kospot.application.multi.round.listener;
 
+import com.kospot.application.multi.round.roadview.FinishMultiRoadViewGameUseCase;
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
 import com.kospot.application.multi.round.roadview.solo.EndRoadViewSoloRoundUseCase;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
@@ -27,6 +28,7 @@ public class RoundCompletionEventListener {
     // UseCases
     private final EndRoadViewSoloRoundUseCase endRoadViewSoloRoundUseCase;
     private final NextRoadViewRoundUseCase nextRoadViewRoundUseCase;
+    private final FinishMultiRoadViewGameUseCase finishMultiRoadViewGameUseCase;
 
     // ===
     private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
@@ -100,9 +102,13 @@ public class RoundCompletionEventListener {
      * 마지막 라운드 처리 - 게임 종료
      */
     private void handleLastRound(String gameRoomId, MultiGame game) {
-        game.finishGame();
-        // add finish game usecase
-        gameRoundNotificationService.notifyGameFinished(gameRoomId, game.getId());
+        switch (game.getGameMode()) {
+            case ROADVIEW ->
+                    finishMultiRoadViewGameUseCase.execute(gameRoomId, game.getId());
+            case PHOTO -> {
+            }
+        }
+
     }
 
     /**
