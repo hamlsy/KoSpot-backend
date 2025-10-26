@@ -24,7 +24,9 @@ public class GamePlayer {
 
     private String nickname;
 
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "multi_road_view_game_id")
@@ -53,7 +55,7 @@ public class GamePlayer {
     public static GamePlayer createRoadViewGamePlayer(Member member, MultiRoadViewGame game) {
         return GamePlayer.builder()
                 .nickname(member.getNickname())
-                .memberId(member.getId())
+                .member(member)
                 .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
                 .multiRoadViewGame(game)
                 .status(GamePlayerStatus.PLAYING)
@@ -65,12 +67,12 @@ public class GamePlayer {
     public static GamePlayer createPhotoGamePlayer(Member member, MultiPhotoGame game) {
         return GamePlayer.builder()
                 .nickname(member.getNickname())
-                .memberId(member.getId())
+                .member(member)
                 .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
                 .multiPhotoGame(game)
                 .status(GamePlayerStatus.PLAYING)
-                .roundRank(0) // 초기 순위 0으로 설정
-                .totalScore(0.0) // 초기 점수 0으로 설정
+                .roundRank(0)
+                .totalScore(0.0)
                 .build();
     }
 

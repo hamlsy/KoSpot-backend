@@ -35,6 +35,10 @@ public class GamePlayerAdaptor {
         return repository.findAllByMultiRoadViewGameId(gameId);
     }
 
+    public List<GamePlayer> queryByMultiRoadViewGameIdWithMember(Long gameId) {
+        return repository.findAllByMultiRoadViewGameIdWithMember(gameId);
+    }
+
     public List<GamePlayer> queryByGameIdAndTeamNumber(Long gameId, Integer teamNumber) {
         return repository.findAllByMultiRoadViewGameIdAndTeamNumber(gameId, teamNumber);
     }

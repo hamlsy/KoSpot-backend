@@ -551,7 +551,7 @@ class RoundTransitionAndNextRoundTest {
                                   Long gameId, Long roundId) {
         for (int i = 0; i < gamePlayers.size(); i++) {
             GamePlayer gamePlayer = gamePlayers.get(i);
-            Member member = memberRepository.findById(gamePlayer.getMemberId()).orElseThrow();
+            Member member = memberRepository.findById(gamePlayer.getMember().getId()).orElseThrow();
 
             SubmitRoadViewRequest.Player submitRequest = SubmitRoadViewRequest.Player.builder()
                     .lat(37.5665 + (i * 0.01))

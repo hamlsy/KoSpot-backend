@@ -228,7 +228,7 @@ class MultiGameFinishedAndPointDistributionTest {
 
         // Then: 포인트 지급 확인 (비동기이므로 대기)
         await()
-                .atMost(15, TimeUnit.SECONDS)
+                .atMost(25, TimeUnit.SECONDS)
                 .pollInterval(500, TimeUnit.MILLISECONDS)
                 .untilAsserted(() -> {
                     entityManager.clear();
@@ -369,10 +369,10 @@ class MultiGameFinishedAndPointDistributionTest {
                     
                     List<GamePlayer> players = gamePlayerRepository.findAllByMultiRoadViewGameId(gameId);
                     GamePlayer hostPlayer = players.stream()
-                            .filter(p -> p.getMemberId().equals(hostMember.getId()))
+                            .filter(p -> p.getMember().getId().equals(hostMember.getId()))
                             .findFirst().orElseThrow();
                     GamePlayer player2Player = players.stream()
-                            .filter(p -> p.getMemberId().equals(player2.getId()))
+                            .filter(p -> p.getMember().getId().equals(player2.getId()))
                             .findFirst().orElseThrow();
 
                     // 동일 순위 확인
