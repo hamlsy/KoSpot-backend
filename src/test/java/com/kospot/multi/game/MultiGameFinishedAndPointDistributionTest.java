@@ -51,7 +51,7 @@ import static org.mockito.Mockito.*;
  * 테스트 범위:
  * 1. 게임 종료 시 최종 결과 생성 및 전송
  * 2. 순위별 포인트 계산
- * 3. 포인트 지급 (비동기)
+ * 3. 포인트 지급 (동기 - 단일 트랜잭션)
  * 4. 포인트 히스토리 저장
  * 
  * 검증 항목:
@@ -213,40 +213,37 @@ class MultiGameFinishedAndPointDistributionTest {
         submitAnswer(player2, roomId, gameId, roundId, 35.1796, 129.0756);
         submitAnswer(player3, roomId, gameId, roundId, 36.3504, 127.3845);
 
-        await().atMost(13, TimeUnit.SECONDS).until(() -> {
+        // 라운드 종료 대기
+        await().atMost(3, TimeUnit.SECONDS).until(() -> {
             entityManager.clear();
             return roadViewGameRoundRepository.findById(roundId).orElseThrow().getIsFinished();
         });
 
         // 초기 포인트 저장
-        int hostInitialPoint = hostMember.getPoint();
-        int player2InitialPoint = player2.getPoint();
-        int player3InitialPoint = player3.getPoint();
+        entityManager.clear();
+        int hostInitialPoint = memberRepository.findById(hostMember.getId()).orElseThrow().getPoint();
+        int player2InitialPoint = memberRepository.findById(player2.getId()).orElseThrow().getPoint();
+        int player3InitialPoint = memberRepository.findById(player3.getId()).orElseThrow().getPoint();
 
-        // When: 게임 종료
-//        finishMultiRoadViewGameUseCase.execute(roomId, gameId);
+        // When: 게임 종료 (동기 처리 - 포인트 지급 포함)
+        finishMultiRoadViewGameUseCase.execute(roomId, gameId);
 
-        // Then: 포인트 지급 확인 (비동기이므로 대기)
-        await()
-                .atMost(25, TimeUnit.SECONDS)
-                .pollInterval(500, TimeUnit.MILLISECONDS)
-                .untilAsserted(() -> {
-                    entityManager.clear();
-                    
-                    Member updatedHost = memberRepository.findById(hostMember.getId()).orElseThrow();
-                    Member updatedPlayer2 = memberRepository.findById(player2.getId()).orElseThrow();
-                    Member updatedPlayer3 = memberRepository.findById(player3.getId()).orElseThrow();
+        // Then: 포인트 지급 확인 (동기 처리되었으므로 즉시 검증 가능)
+        entityManager.clear();
+        
+        Member updatedHost = memberRepository.findById(hostMember.getId()).orElseThrow();
+        Member updatedPlayer2 = memberRepository.findById(player2.getId()).orElseThrow();
+        Member updatedPlayer3 = memberRepository.findById(player3.getId()).orElseThrow();
 
-                    // 포인트가 증가했는지 확인
-                    assertThat(updatedHost.getPoint()).isGreaterThan(hostInitialPoint);
-                    assertThat(updatedPlayer2.getPoint()).isGreaterThan(player2InitialPoint);
-                    assertThat(updatedPlayer3.getPoint()).isGreaterThan(player3InitialPoint);
+        // 포인트가 증가했는지 확인
+        assertThat(updatedHost.getPoint()).isGreaterThan(hostInitialPoint);
+        assertThat(updatedPlayer2.getPoint()).isGreaterThan(player2InitialPoint);
+        assertThat(updatedPlayer3.getPoint()).isGreaterThan(player3InitialPoint);
 
-                    log.info("✅ Points distributed - Host: +{}, Player2: +{}, Player3: +{}",
-                            updatedHost.getPoint() - hostInitialPoint,
-                            updatedPlayer2.getPoint() - player2InitialPoint,
-                            updatedPlayer3.getPoint() - player3InitialPoint);
-                });
+        log.info("✅ Points distributed - Host: +{}, Player2: +{}, Player3: +{}",
+                updatedHost.getPoint() - hostInitialPoint,
+                updatedPlayer2.getPoint() - player2InitialPoint,
+                updatedPlayer3.getPoint() - player3InitialPoint);
 
         log.info("✅ Points distributed successfully based on rank");
     }
@@ -269,37 +266,33 @@ class MultiGameFinishedAndPointDistributionTest {
         submitAnswer(player2, roomId, gameId, roundId, 35.1796, 129.0756);
         submitAnswer(player3, roomId, gameId, roundId, 36.3504, 127.3845);
 
+        // 라운드 종료 대기
         await().atMost(3, TimeUnit.SECONDS).until(() -> {
             entityManager.clear();
             return roadViewGameRoundRepository.findById(roundId).orElseThrow().getIsFinished();
         });
 
         // 초기 히스토리 개수
+        entityManager.clear();
         long initialHistoryCount = pointHistoryRepository.count();
 
-        // When: 게임 종료
+        // When: 게임 종료 (동기 처리 - 포인트 지급 및 히스토리 저장 포함)
         finishMultiRoadViewGameUseCase.execute(roomId, gameId);
 
-        // Then: 포인트 히스토리 확인
-        await()
-                .atMost(5, TimeUnit.SECONDS)
-                .pollInterval(500, TimeUnit.MILLISECONDS)
-                .untilAsserted(() -> {
-                    entityManager.clear();
-                    
-                    long currentHistoryCount = pointHistoryRepository.count();
-                    assertThat(currentHistoryCount).isEqualTo(initialHistoryCount + 3);
+        // Then: 포인트 히스토리 확인 (동기 처리되었으므로 즉시 검증 가능)
+        entityManager.clear();
+        
+        long currentHistoryCount = pointHistoryRepository.count();
+        assertThat(currentHistoryCount).isEqualTo(initialHistoryCount + 3);
 
-                    // MULTI_GAME 타입 히스토리 확인
-                    long multiGameHistoryCount = pointHistoryRepository.findAll().stream()
-                            .filter(h -> h.getPointHistoryType() == PointHistoryType.MULTI_GAME)
-                            .count();
-                    
-                    assertThat(multiGameHistoryCount).isGreaterThanOrEqualTo(3);
+        // MULTI_GAME 타입 히스토리 확인
+        long multiGameHistoryCount = pointHistoryRepository.findAll().stream()
+                .filter(h -> h.getPointHistoryType() == PointHistoryType.MULTI_GAME)
+                .count();
+        
+        assertThat(multiGameHistoryCount).isGreaterThanOrEqualTo(3);
 
-                    log.info("✅ Point histories saved with MULTI_GAME type: {}", multiGameHistoryCount);
-                });
-
+        log.info("✅ Point histories saved with MULTI_GAME type: {}", multiGameHistoryCount);
         log.info("✅ Point histories saved correctly");
     }
 
@@ -350,46 +343,43 @@ class MultiGameFinishedAndPointDistributionTest {
         submitAnswer(player2, roomId, gameId, roundId, lat, lng);
         submitAnswer(player3, roomId, gameId, roundId, 35.1796, 129.0756); // 다른 위치
 
+        // 라운드 종료 대기
         await().atMost(3, TimeUnit.SECONDS).until(() -> {
             entityManager.clear();
             return roadViewGameRoundRepository.findById(roundId).orElseThrow().getIsFinished();
         });
 
-        int hostInitialPoint = hostMember.getPoint();
-        int player2InitialPoint = player2.getPoint();
+        entityManager.clear();
+        int hostInitialPoint = memberRepository.findById(hostMember.getId()).orElseThrow().getPoint();
+        int player2InitialPoint = memberRepository.findById(player2.getId()).orElseThrow().getPoint();
 
-        // When: 게임 종료
+        // When: 게임 종료 (동기 처리 - 포인트 지급 포함)
         finishMultiRoadViewGameUseCase.execute(roomId, gameId);
 
-        // Then: 동점자 확인
-        await()
-                .atMost(5, TimeUnit.SECONDS)
-                .untilAsserted(() -> {
-                    entityManager.clear();
-                    
-                    List<GamePlayer> players = gamePlayerRepository.findAllByMultiRoadViewGameId(gameId);
-                    GamePlayer hostPlayer = players.stream()
-                            .filter(p -> p.getMember().getId().equals(hostMember.getId()))
-                            .findFirst().orElseThrow();
-                    GamePlayer player2Player = players.stream()
-                            .filter(p -> p.getMember().getId().equals(player2.getId()))
-                            .findFirst().orElseThrow();
+        // Then: 동점자 확인 (동기 처리되었으므로 즉시 검증 가능)
+        entityManager.clear();
+        
+        List<GamePlayer> players = gamePlayerRepository.findAllByMultiRoadViewGameId(gameId);
+        GamePlayer hostPlayer = players.stream()
+                .filter(p -> p.getMember().getId().equals(hostMember.getId()))
+                .findFirst().orElseThrow();
+        GamePlayer player2Player = players.stream()
+                .filter(p -> p.getMember().getId().equals(player2.getId()))
+                .findFirst().orElseThrow();
 
-                    // 동일 순위 확인
-                    assertThat(hostPlayer.getRoundRank()).isEqualTo(player2Player.getRoundRank());
-                    
-                    // 동일 포인트 지급 확인
-                    Member updatedHost = memberRepository.findById(hostMember.getId()).orElseThrow();
-                    Member updatedPlayer2 = memberRepository.findById(player2.getId()).orElseThrow();
-                    
-                    int hostEarnedPoint = updatedHost.getPoint() - hostInitialPoint;
-                    int player2EarnedPoint = updatedPlayer2.getPoint() - player2InitialPoint;
-                    
-                    assertThat(hostEarnedPoint).isEqualTo(player2EarnedPoint);
+        // 동일 순위 확인
+        assertThat(hostPlayer.getRoundRank()).isEqualTo(player2Player.getRoundRank());
+        
+        // 동일 포인트 지급 확인
+        Member updatedHost = memberRepository.findById(hostMember.getId()).orElseThrow();
+        Member updatedPlayer2 = memberRepository.findById(player2.getId()).orElseThrow();
+        
+        int hostEarnedPoint = updatedHost.getPoint() - hostInitialPoint;
+        int player2EarnedPoint = updatedPlayer2.getPoint() - player2InitialPoint;
+        
+        assertThat(hostEarnedPoint).isEqualTo(player2EarnedPoint);
 
-                    log.info("✅ Same rank players received same points: {}pt", hostEarnedPoint);
-                });
-
+        log.info("✅ Same rank players received same points: {}pt", hostEarnedPoint);
         log.info("✅ Same score players handled correctly");
     }
 
