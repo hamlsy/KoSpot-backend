@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @Table(
         name = "road_view_submission",
         indexes = {
-                @Index(name = "idx_round_match_type", columnList = "game_round_id, match_type"),
+                @Index(name = "idx_round_match_type", columnList = "road_view_game_round_id, match_type"),
         }
 )
 @Getter
@@ -43,9 +43,8 @@ public class RoadViewSubmission extends BaseTimeEntity {
     @Column(name = "team_number")
     private Integer teamNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_round_id", nullable = false)
-    private RoadViewGameRound round;
+    @Column(name = "road_view_game_round_id", nullable = false)
+    private Long roundId;
 
     @Column(nullable = false)
     private Double lat;
@@ -65,10 +64,7 @@ public class RoadViewSubmission extends BaseTimeEntity {
     @Column(name = "rank_value")
     private Integer rank;
 
-    // business
-    public void setRound(RoadViewGameRound round) {
-        this.round = round;
-    }
+    // business methods removed - roundId is immutable
 
     public Long getSubmitterId() {
         return switch (matchType) {
@@ -87,7 +83,7 @@ public class RoadViewSubmission extends BaseTimeEntity {
      */
     public void assignDistanceAndPlayerScore(Coordinate coordinate) {
         this.distance = DistanceCalculator.calculateHaversineDistance(lat, lng, coordinate);
-        this.earnedScore = ScoreCalculator.calculateScore(distance);
+        this.earnedScore = ScoreCalculator.calculateMultiGameScore(distance);
     }
 
     public void assignDistanceAndTeamScore(Coordinate coordinate) {
@@ -110,20 +106,20 @@ public class RoadViewSubmission extends BaseTimeEntity {
      */
     public static RoadViewSubmission forPlayer(
             GamePlayer player,
-            RoadViewGameRound round,
+            Long roundId,
             Double lat,
             Double lng,
             Double timeToAnswer
     ) {
         validateNotNull(player, "GamePlayer cannot be null");
-        validateNotNull(round, "RoadViewGameRound cannot be null");
+        validateNotNull(roundId, "Round ID cannot be null");
         validateCoordinates(lat, lng);
         validateTime(timeToAnswer);
         return RoadViewSubmission.builder()
                 .matchType(PlayerMatchType.SOLO)
                 .gamePlayer(player)
                 .teamNumber(null)  // 명시적 null
-                .round(round)
+                .roundId(roundId)
                 .lat(lat)
                 .lng(lng)
                 .timeToAnswer(timeToAnswer)
@@ -135,14 +131,14 @@ public class RoadViewSubmission extends BaseTimeEntity {
      */
     public static RoadViewSubmission forTeam(
             Integer teamNumber,
-            RoadViewGameRound round,
+            Long roundId,
             Double lat,
             Double lng,
             Double distance,
             Double timeToAnswer
     ) {
         validateNotNull(teamNumber, "Team number cannot be null");
-        validateNotNull(round, "RoadViewGameRound cannot be null");
+        validateNotNull(roundId, "Round ID cannot be null");
         validateTeamNumber(teamNumber);
         validateCoordinates(lat, lng);
         validateDistance(distance);
@@ -152,7 +148,7 @@ public class RoadViewSubmission extends BaseTimeEntity {
                 .matchType(PlayerMatchType.TEAM)
                 .gamePlayer(null)  // 명시적 null
                 .teamNumber(teamNumber)
-                .round(round)
+                .roundId(roundId)
                 .lat(lat)
                 .lng(lng)
                 .timeToAnswer(timeToAnswer)
@@ -162,27 +158,27 @@ public class RoadViewSubmission extends BaseTimeEntity {
     /**
      * 미제출자 0점 생성 (개인전)
      */
-    public static RoadViewSubmission zeroForPlayer(GamePlayer player, RoadViewGameRound round) {
+    public static RoadViewSubmission zeroForPlayer(GamePlayer player, Long roundId, Double maxTime) {
         return forPlayer(
                 player,
-                round,
+                roundId,
                 null,  // 미제출 좌표
                 null,
-                (double) round.getDuration().toMillis()  // 전체 시간 소모
+                maxTime  // 전체 시간 소모
         );
     }
 
     /**
      * 미제출 팀 0점 생성 (팀전)
      */
-    public static RoadViewSubmission zeroForTeam(Integer teamNumber, RoadViewGameRound round) {
+    public static RoadViewSubmission zeroForTeam(Integer teamNumber, Long roundId, Double maxTime) {
         return forTeam(
                 teamNumber,
-                round,
+                roundId,
                 null,
                 null,
                 Double.MAX_VALUE,
-                (double) round.getDuration().toMillis()
+                maxTime
         );
     }
 

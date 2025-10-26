@@ -169,7 +169,7 @@ class RoadViewSubmissionEarlyCompletionTest {
 
         for (int i = 0; i < gamePlayers.size(); i++) {
             GamePlayer gamePlayer = gamePlayers.get(i);
-            Member member = memberRepository.findById(gamePlayer.getMemberId()).orElseThrow();
+            Member member = memberRepository.findById(gamePlayer.getMember().getId()).orElseThrow();
 
             SubmitRoadViewRequest.Player submitRequest = SubmitRoadViewRequest.Player.builder()
                     .lat(37.5665 + (i * 0.01)) // 각기 다른 위치
@@ -237,7 +237,7 @@ class RoadViewSubmissionEarlyCompletionTest {
         List<GamePlayer> gamePlayers = gamePlayerRepository.findAllByMultiRoadViewGameId(gameId);
         for (int i = 0; i < 2; i++) {
             GamePlayer gamePlayer = gamePlayers.get(i);
-            Member member = memberRepository.findById(gamePlayer.getMemberId()).orElseThrow();
+            Member member = memberRepository.findById(gamePlayer.getMember().getId()).orElseThrow();
 
             SubmitRoadViewRequest.Player submitRequest = SubmitRoadViewRequest.Player.builder()
                     .lat(37.5665)
@@ -309,9 +309,8 @@ class RoadViewSubmissionEarlyCompletionTest {
         RoadViewGameRound round = roadViewGameRoundRepository.findById(roundId).orElseThrow();
         for (GamePlayer gamePlayer : gamePlayers) {
             RoadViewSubmission submission = RoadViewSubmission.forPlayer(
-                    gamePlayer, round, 37.5665, 126.9780, 5000.0
+                    gamePlayer, round.getId(), 37.5665, 126.9780, 5000.0
             );
-            submission.setRound(round);
             submissionRepository.save(submission);
         }
 
@@ -345,7 +344,7 @@ class RoadViewSubmissionEarlyCompletionTest {
 
         // When: 같은 플레이어가 두 번 제출 시도
         GamePlayer player1 = gamePlayerRepository.findAllByMultiRoadViewGameId(gameId).get(0);
-        Member member1 = memberRepository.findById(player1.getMemberId()).orElseThrow();
+        Member member1 = memberRepository.findById(player1.getMember().getId()).orElseThrow();
 
         SubmitRoadViewRequest.Player submitRequest = SubmitRoadViewRequest.Player.builder()
                 .lat(37.5665)

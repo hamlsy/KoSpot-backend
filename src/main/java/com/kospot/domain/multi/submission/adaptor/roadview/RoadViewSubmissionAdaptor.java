@@ -25,4 +25,8 @@ public class RoadViewSubmissionAdaptor {
         return repository.findByRoundId(roundId);
     }
 
+    public List<RoadViewSubmission> queryByRoundIdFetchGamePlayer(Long roundId) {
+        return repository.findByRoundIdFetchGamePlayer(roundId);
+    }
+
 }
