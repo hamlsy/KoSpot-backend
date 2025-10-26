@@ -19,6 +19,11 @@ public interface RoadViewSubmissionRepository extends JpaRepository<RoadViewSubm
             PlayerMatchType matchType
     );
 
+    @Query("SELECT s FROM RoadViewSubmission s " +
+           "JOIN FETCH s.gamePlayer gp " +
+           "WHERE s.round.id = :id")
+    List<RoadViewSubmission> findByRoundIdFetchGamePlayer(@Param("id") Long roundId);
+
     // === 카운트 조회 ===
     @Query("SELECT COUNT(s) FROM RoadViewSubmission s WHERE s.round.id = :roundId")
     long countByRoundId(@Param("roundId") Long roundId);

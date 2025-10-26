@@ -37,7 +37,7 @@ public class GamePlayer {
     // 협동전의 경우 팀 번호 (1 또는 2) todo color team 으로 수정
     private Integer teamNumber;
 
-    private Integer roundRank; // 해당 라운드 순위
+    private Integer roundRank; // 누적 순위 (매 라운드마다 업데이트)
     private double totalScore;
 
     @Enumerated(EnumType.STRING)

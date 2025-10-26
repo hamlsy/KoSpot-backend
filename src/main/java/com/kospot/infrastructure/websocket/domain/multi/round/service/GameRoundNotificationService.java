@@ -45,6 +45,11 @@ public class GameRoundNotificationService {
         }
     }
 
+    /**
+     * 게임 종료 알림 (간단한 메시지만)
+     * @deprecated Use notifyGameFinishedWithResults instead
+     */
+    @Deprecated
     public void notifyGameFinished(String roomId, Long gameId) {
         String destination = MultiGameChannelConstants.getGameFinishChannel(roomId);
         GameFinishedMessage message = GameFinishedMessage.builder()
@@ -53,5 +58,14 @@ public class GameRoundNotificationService {
                 .timestamp(System.currentTimeMillis())
                 .build();
         messagingTemplate.convertAndSend(destination, message);
+    }
+    
+    /**
+     * 게임 종료 알림 (최종 결과 포함)
+     */
+    public void notifyGameFinishedWithResults(String roomId, Object finalResult) {
+        String destination = MultiGameChannelConstants.getGameFinishChannel(roomId);
+        messagingTemplate.convertAndSend(destination, finalResult);
+        log.info("Game finished notification sent with results - RoomId: {}", roomId);
     }
 }

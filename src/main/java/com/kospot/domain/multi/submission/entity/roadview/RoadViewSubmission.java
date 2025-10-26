@@ -87,7 +87,7 @@ public class RoadViewSubmission extends BaseTimeEntity {
      */
     public void assignDistanceAndPlayerScore(Coordinate coordinate) {
         this.distance = DistanceCalculator.calculateHaversineDistance(lat, lng, coordinate);
-        this.earnedScore = ScoreCalculator.calculateScore(distance);
+        this.earnedScore = ScoreCalculator.calculateMultiGameScore(distance);
     }
 
     public void assignDistanceAndTeamScore(Coordinate coordinate) {

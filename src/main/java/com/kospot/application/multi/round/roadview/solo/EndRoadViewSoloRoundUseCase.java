@@ -32,7 +32,7 @@ public class EndRoadViewSoloRoundUseCase {
 
     public RoadViewRoundResponse.PlayerResult execute(Long gameId, Long roundId) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
-        List<RoadViewSubmission> roadViewSubmissions = roadViewSubmissionAdaptor.queryByRoundId(roundId);
+        List<RoadViewSubmission> roadViewSubmissions = roadViewSubmissionAdaptor.queryByRoundIdFetchGamePlayer(roundId);
 
         //플레이어 간 거리 순으로 순위 점수 처리 - service
         List<RoadViewSubmission> submission = roadViewSubmissionService.calculatePlayerRankAndScore(roadViewSubmissions);
