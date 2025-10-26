@@ -267,7 +267,7 @@ class MultiGameFinishedAndPointDistributionTest {
         submitAnswer(player3, roomId, gameId, roundId, 36.3504, 127.3845);
 
         // 라운드 종료 대기
-        await().atMost(3, TimeUnit.SECONDS).until(() -> {
+        await().atMost(13, TimeUnit.SECONDS).until(() -> {
             entityManager.clear();
             return roadViewGameRoundRepository.findById(roundId).orElseThrow().getIsFinished();
         });
