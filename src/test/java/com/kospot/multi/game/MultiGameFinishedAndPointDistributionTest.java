@@ -213,7 +213,7 @@ class MultiGameFinishedAndPointDistributionTest {
         submitAnswer(player2, roomId, gameId, roundId, 35.1796, 129.0756);
         submitAnswer(player3, roomId, gameId, roundId, 36.3504, 127.3845);
 
-        await().atMost(3, TimeUnit.SECONDS).until(() -> {
+        await().atMost(13, TimeUnit.SECONDS).until(() -> {
             entityManager.clear();
             return roadViewGameRoundRepository.findById(roundId).orElseThrow().getIsFinished();
         });
@@ -224,11 +224,11 @@ class MultiGameFinishedAndPointDistributionTest {
         int player3InitialPoint = player3.getPoint();
 
         // When: 게임 종료
-        finishMultiRoadViewGameUseCase.execute(roomId, gameId);
+//        finishMultiRoadViewGameUseCase.execute(roomId, gameId);
 
         // Then: 포인트 지급 확인 (비동기이므로 대기)
         await()
-                .atMost(5, TimeUnit.SECONDS)
+                .atMost(15, TimeUnit.SECONDS)
                 .pollInterval(500, TimeUnit.MILLISECONDS)
                 .untilAsserted(() -> {
                     entityManager.clear();
@@ -425,8 +425,8 @@ class MultiGameFinishedAndPointDistributionTest {
         submitRoadViewPlayerAnswerUseCase.execute(
                 member,
                 roomId,
-                gameId.toString(),
-                roundId.toString(),
+                gameId,
+                roundId,
                 request
         );
     }

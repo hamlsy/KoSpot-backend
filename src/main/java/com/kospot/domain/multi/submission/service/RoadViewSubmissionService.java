@@ -34,12 +34,11 @@ public class RoadViewSubmissionService {
 
         RoadViewSubmission newSubmission = RoadViewSubmission.forPlayer(
                 player,
-                round,
+                round.getId(),
                 submission.getLat(),
                 submission.getLng(),
                 submission.getTimeToAnswer()
         );
-        newSubmission.setRound(round);
         newSubmission.assignDistanceAndPlayerScore(round.getTargetCoordinate());
         return repository.save(newSubmission);
     }
@@ -52,14 +51,12 @@ public class RoadViewSubmissionService {
         validateTeamSubmissionAllowed(round, teamNumber);
         RoadViewSubmission newSubmission = RoadViewSubmission.forTeam(
                 teamNumber,
-                round,
+                round.getId(),
                 submission.getLat(),
                 submission.getLng(),
                 submission.getDistance(),
                 submission.getTimeToAnswer()
         );
-
-        newSubmission.setRound(round);
 
         return repository.save(newSubmission);
     }
@@ -205,11 +202,15 @@ public class RoadViewSubmissionService {
         }
 
         // 2. 각 미제출 플레이어에 대해 0점 제출 생성
+        Double maxTime = (double) round.getDuration().toMillis();
         List<RoadViewSubmission> zeroSubmissions = nonSubmittedPlayerIds.stream()
                 .map(playerId -> {
                     GamePlayer player = gamePlayerAdaptor.queryById(playerId);
-                    RoadViewSubmission zeroSubmission = RoadViewSubmission.zeroForPlayer(player, round);
-                    zeroSubmission.setRound(round);
+                    RoadViewSubmission zeroSubmission = RoadViewSubmission.zeroForPlayer(
+                            player, 
+                            round.getId(),
+                            maxTime
+                    );
                     
                     RoadViewSubmission saved = repository.save(zeroSubmission);
                     log.debug("📝 Zero submission created - RoundId: {}, PlayerId: {}",
@@ -241,10 +242,14 @@ public class RoadViewSubmissionService {
         }
 
         // 2. 각 미제출 팀에 대해 0점 제출 생성
+        Double maxTime = (double) round.getDuration().toMillis();
         List<RoadViewSubmission> zeroSubmissions = nonSubmittedTeamNumbers.stream()
                 .map(teamNumber -> {
-                    RoadViewSubmission zeroSubmission = RoadViewSubmission.zeroForTeam(teamNumber, round);
-                    zeroSubmission.setRound(round);
+                    RoadViewSubmission zeroSubmission = RoadViewSubmission.zeroForTeam(
+                            teamNumber, 
+                            round.getId(),
+                            maxTime
+                    );
                     
                     RoadViewSubmission saved = repository.save(zeroSubmission);
                     log.debug("📝 Zero submission created - RoundId: {}, TeamNumber: {}",

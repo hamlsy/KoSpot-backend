@@ -309,9 +309,8 @@ class RoadViewSubmissionEarlyCompletionTest {
         RoadViewGameRound round = roadViewGameRoundRepository.findById(roundId).orElseThrow();
         for (GamePlayer gamePlayer : gamePlayers) {
             RoadViewSubmission submission = RoadViewSubmission.forPlayer(
-                    gamePlayer, round, 37.5665, 126.9780, 5000.0
+                    gamePlayer, round.getId(), 37.5665, 126.9780, 5000.0
             );
-            submission.setRound(round);
             submissionRepository.save(submission);
         }
 
