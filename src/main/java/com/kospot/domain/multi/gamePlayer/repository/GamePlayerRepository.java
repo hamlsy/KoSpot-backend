@@ -31,12 +31,23 @@ public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
             @Param("teamNumber") Integer teamNumber
     );
 
-    /**
-     * 게임 내 팀 수 계산
-     * 팀전에서 제출 완료 여부를 확인할 때 사용
-     */
     @Query("SELECT COUNT(DISTINCT gp.teamNumber) FROM GamePlayer gp " +
            "WHERE gp.multiRoadViewGame.id = :gameId " +
            "AND gp.teamNumber IS NOT NULL")
     int countDistinctTeamsByGameId(@Param("gameId") Long gameId);
+
+    @Query("select count(gp) from GamePlayer gp where gp.member.id = :memberId")
+    long countByMemberId(@Param("memberId") Long memberId);
+
+    @Query("select coalesce(avg(gp.totalScore), 0.0) from GamePlayer gp where gp.member.id = :memberId")
+    double findAverageScoreByMemberId(@Param("memberId") Long memberId);
+
+    @Query("select count(gp) from GamePlayer gp where gp.member.id = :memberId and gp.roundRank = :rank and gp.status = 'FINISHED'")
+    long countByMemberIdAndRank(@Param("memberId") Long memberId, @Param("rank") Integer rank);
+
+    @Query("select gp.createdDate from GamePlayer gp where gp.member.id = :memberId order by gp.createdDate desc")
+    List<java.time.LocalDateTime> findAllCreatedDatesByMemberId(@Param("memberId") Long memberId);
+
+    @Query("select gp.createdDate from GamePlayer gp where gp.member.id = :memberId and gp.status = 'FINISHED' order by gp.createdDate desc limit 1")
+    java.time.LocalDateTime findLatestPlayDateByMemberId(@Param("memberId") Long memberId);
 }

@@ -45,5 +45,10 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
     List<MemberItemResponse> findAllByMemberAndItemTypeFetch(@Param("member") Member member,
                                                              @Param("itemType") ItemType itemType);
 
+    @Query("select count(mi) from MemberItem mi where mi.member = :member")
+    long countByMember(@Param("member") Member member);
+
+    @Query("select count(mi) from MemberItem mi where mi.member = :member and mi.isEquipped = true")
+    long countEquippedByMember(@Param("member") Member member);
 
 }
