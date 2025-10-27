@@ -31,10 +31,6 @@ public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
             @Param("teamNumber") Integer teamNumber
     );
 
-    /**
-     * 게임 내 팀 수 계산
-     * 팀전에서 제출 완료 여부를 확인할 때 사용
-     */
     @Query("SELECT COUNT(DISTINCT gp.teamNumber) FROM GamePlayer gp " +
            "WHERE gp.multiRoadViewGame.id = :gameId " +
            "AND gp.teamNumber IS NOT NULL")
