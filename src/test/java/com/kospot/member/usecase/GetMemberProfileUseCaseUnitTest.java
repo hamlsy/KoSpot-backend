@@ -205,6 +205,7 @@ public class GetMemberProfileUseCaseUnitTest {
                 .nickname("testNickname")
                 .email("test@kospot.com")
                 .role(Role.USER)
+                .createdDate(LocalDateTime.now())
                 .point(10000)
                 .build();
     }
