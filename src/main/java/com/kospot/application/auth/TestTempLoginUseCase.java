@@ -1,6 +1,7 @@
 package com.kospot.application.auth;
 
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.member.service.MemberStatisticService;
 import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -24,10 +25,15 @@ public class TestTempLoginUseCase {
 
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
+    private final MemberStatisticService memberStatisticService;
 
     public AuthResponse.TempLogin testLogin(String username) {
         Member member = memberRepository.findByUsername(username)
-                .orElseGet(() -> memberRepository.save(createTemporary(username)));
+                .orElseGet(() -> {
+                    Member newMember = memberRepository.save(createTemporary(username));
+                    memberStatisticService.initializeStatistic(newMember);
+                    return newMember;
+                });
 
         CustomUserDetails userDetails = CustomUserDetails.from(member);
 
