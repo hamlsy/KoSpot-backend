@@ -6,7 +6,6 @@ import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.member.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.MemberStatistic;
-import com.kospot.domain.memberitem.repository.MemberItemRepository;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics;
@@ -15,7 +14,6 @@ import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameSta
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics.MultiGameStats;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.RankInfo;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.RankInfo.RoadViewRank;
-import com.kospot.presentation.member.dto.response.MemberProfileResponse.ItemInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,22 +23,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class GetMemberProfileUseCase {
 
     private final MemberStatisticAdaptor memberStatisticAdaptor;
-    private final MemberItemRepository memberItemRepository;
     private final GameRankAdaptor gameRankAdaptor;
 
     public MemberProfileResponse execute(Member member) {
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(member);
+        String profileImageUrl = member.getEquippedMarkerImage() != null 
+                ? member.getEquippedMarkerImage().getImageUrl() 
+                : null;
         
         return MemberProfileResponse.builder()
                 .nickname(member.getNickname())
                 .email(member.getEmail())
+                .profileImageUrl(profileImageUrl)
                 .currentPoint(member.getPoint())
                 .joinedAt(member.getCreatedDate())
                 .lastPlayedAt(statistic.getLastPlayedAt())
                 .currentStreak(statistic.getCurrentStreak())
                 .statistics(buildGameStatistics(statistic))
                 .rankInfo(buildRankInfo(member))
-                .itemInfo(buildItemInfo(member))
                 .build();
     }
 
@@ -76,16 +76,6 @@ public class GetMemberProfileUseCase {
                         .level(roadViewRank.getRankLevel())
                         .ratingScore(roadViewRank.getRatingScore())
                         .build())
-                .build();
-    }
-
-    private ItemInfo buildItemInfo(Member member) {
-        long totalItems = memberItemRepository.countByMember(member);
-        long equippedItems = memberItemRepository.countEquippedByMember(member);
-
-        return ItemInfo.builder()
-                .totalItems((int) totalItems)
-                .equippedItems((int) equippedItems)
                 .build();
     }
 }

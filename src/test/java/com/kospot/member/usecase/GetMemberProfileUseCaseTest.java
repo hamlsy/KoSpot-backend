@@ -6,16 +6,11 @@ import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.repository.GameRankRepository;
 import com.kospot.domain.gamerank.vo.RankLevel;
 import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.item.entity.Item;
-import com.kospot.domain.item.repository.ItemRepository;
-import com.kospot.domain.item.vo.ItemType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.MemberStatistic;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.member.repository.MemberStatisticRepository;
 import com.kospot.domain.member.vo.Role;
-import com.kospot.domain.memberitem.entity.MemberItem;
-import com.kospot.domain.memberitem.repository.MemberItemRepository;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +43,6 @@ public class GetMemberProfileUseCaseTest {
 
     @Autowired
     private GameRankRepository gameRankRepository;
-
-    @Autowired
-    private ItemRepository itemRepository;
-
-    @Autowired
-    private MemberItemRepository memberItemRepository;
 
     private Member testMember;
     private MemberStatistic testStatistic;
@@ -123,26 +112,15 @@ public class GetMemberProfileUseCaseTest {
         assertEquals(1850, rankInfo.getRoadViewRank().getRatingScore());
     }
 
-    @DisplayName("아이템 정보가 올바르게 조회된다")
+    @DisplayName("프로필 이미지 URL이 올바르게 조회된다")
     @Test
-    void getMemberProfile_ItemInfo() {
-        // given
-        Item item1 = createTestItem("marker1", ItemType.MARKER);
-        Item item2 = createTestItem("marker2", ItemType.MARKER);
-        Item item3 = createTestItem("marker3", ItemType.MARKER);
-        
-        createTestMemberItem(testMember, item1, true);
-        createTestMemberItem(testMember, item2, true);
-        createTestMemberItem(testMember, item3, false);
-
+    void getMemberProfile_ProfileImageUrl() {
         // when
         MemberProfileResponse response = getMemberProfileUseCase.execute(testMember);
-        MemberProfileResponse.ItemInfo itemInfo = response.getItemInfo();
 
         // then
-        assertNotNull(itemInfo);
-        assertEquals(3, itemInfo.getTotalItems());
-        assertEquals(2, itemInfo.getEquippedItems());
+        assertNotNull(response);
+        assertNull(response.getProfileImageUrl());
     }
 
     @DisplayName("연속 플레이 기록이 올바르게 조회된다")
@@ -250,22 +228,5 @@ public class GetMemberProfileUseCaseTest {
         return gameRankRepository.save(gameRank);
     }
 
-    private Item createTestItem(String name, ItemType itemType) {
-        Item item = Item.builder()
-                .name(name)
-                .itemType(itemType)
-                .isAvailable(true)
-                .build();
-        return itemRepository.save(item);
-    }
-
-    private MemberItem createTestMemberItem(Member member, Item item, boolean isEquipped) {
-        MemberItem memberItem = MemberItem.builder()
-                .member(member)
-                .item(item)
-                .isEquipped(isEquipped)
-                .build();
-        return memberItemRepository.save(memberItem);
-    }
 }
 

@@ -10,7 +10,6 @@ import com.kospot.domain.member.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.MemberStatistic;
 import com.kospot.domain.member.vo.Role;
-import com.kospot.domain.memberitem.repository.MemberItemRepository;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,9 +34,6 @@ public class GetMemberProfileUseCaseUnitTest {
     private MemberStatisticAdaptor memberStatisticAdaptor;
 
     @Mock
-    private MemberItemRepository memberItemRepository;
-
-    @Mock
     private GameRankAdaptor gameRankAdaptor;
 
     @InjectMocks
@@ -60,8 +56,6 @@ public class GetMemberProfileUseCaseUnitTest {
         // given
         when(memberStatisticAdaptor.queryByMember(testMember)).thenReturn(testStatistic);
         when(gameRankAdaptor.queryByMemberAndGameMode(testMember, GameMode.ROADVIEW)).thenReturn(testGameRank);
-        when(memberItemRepository.countByMember(testMember)).thenReturn(5L);
-        when(memberItemRepository.countEquippedByMember(testMember)).thenReturn(2L);
 
         // when
         MemberProfileResponse response = getMemberProfileUseCase.execute(testMember);
@@ -72,6 +66,7 @@ public class GetMemberProfileUseCaseUnitTest {
         assertEquals("test@kospot.com", response.getEmail());
         assertEquals(10000, response.getCurrentPoint());
         assertNotNull(response.getJoinedAt());
+        assertNull(response.getProfileImageUrl());
     }
 
     @DisplayName("게임 통계가 MemberStatistic에서 올바르게 조회된다")
@@ -80,8 +75,6 @@ public class GetMemberProfileUseCaseUnitTest {
         // given
         when(memberStatisticAdaptor.queryByMember(testMember)).thenReturn(testStatistic);
         when(gameRankAdaptor.queryByMemberAndGameMode(any(), any())).thenReturn(testGameRank);
-        when(memberItemRepository.countByMember(any())).thenReturn(0L);
-        when(memberItemRepository.countEquippedByMember(any())).thenReturn(0L);
 
         // when
         MemberProfileResponse response = getMemberProfileUseCase.execute(testMember);
@@ -107,8 +100,6 @@ public class GetMemberProfileUseCaseUnitTest {
         // given
         when(memberStatisticAdaptor.queryByMember(any())).thenReturn(testStatistic);
         when(gameRankAdaptor.queryByMemberAndGameMode(testMember, GameMode.ROADVIEW)).thenReturn(testGameRank);
-        when(memberItemRepository.countByMember(any())).thenReturn(0L);
-        when(memberItemRepository.countEquippedByMember(any())).thenReturn(0L);
 
         // when
         MemberProfileResponse response = getMemberProfileUseCase.execute(testMember);
@@ -121,23 +112,18 @@ public class GetMemberProfileUseCaseUnitTest {
         assertEquals(2100, rankInfo.getRoadViewRank().getRatingScore());
     }
 
-    @DisplayName("아이템 정보가 Repository에서 올바르게 조회된다")
+    @DisplayName("프로필 이미지가 없는 경우 null을 반환한다")
     @Test
-    void execute_ItemInfo() {
+    void execute_ProfileImageUrl_WhenNull() {
         // given
         when(memberStatisticAdaptor.queryByMember(any())).thenReturn(testStatistic);
         when(gameRankAdaptor.queryByMemberAndGameMode(any(), any())).thenReturn(testGameRank);
-        when(memberItemRepository.countByMember(testMember)).thenReturn(12L);
-        when(memberItemRepository.countEquippedByMember(testMember)).thenReturn(4L);
 
         // when
         MemberProfileResponse response = getMemberProfileUseCase.execute(testMember);
-        MemberProfileResponse.ItemInfo itemInfo = response.getItemInfo();
 
         // then
-        assertNotNull(itemInfo);
-        assertEquals(12, itemInfo.getTotalItems());
-        assertEquals(4, itemInfo.getEquippedItems());
+        assertNull(response.getProfileImageUrl());
     }
 
     @DisplayName("연속 플레이 기록이 올바르게 반환된다")
@@ -146,8 +132,6 @@ public class GetMemberProfileUseCaseUnitTest {
         // given
         when(memberStatisticAdaptor.queryByMember(testMember)).thenReturn(testStatistic);
         when(gameRankAdaptor.queryByMemberAndGameMode(any(), any())).thenReturn(testGameRank);
-        when(memberItemRepository.countByMember(any())).thenReturn(0L);
-        when(memberItemRepository.countEquippedByMember(any())).thenReturn(0L);
 
         // when
         MemberProfileResponse response = getMemberProfileUseCase.execute(testMember);
@@ -164,8 +148,6 @@ public class GetMemberProfileUseCaseUnitTest {
         MemberStatistic emptyStatistic = MemberStatistic.create(testMember);
         when(memberStatisticAdaptor.queryByMember(testMember)).thenReturn(emptyStatistic);
         when(gameRankAdaptor.queryByMemberAndGameMode(any(), any())).thenReturn(testGameRank);
-        when(memberItemRepository.countByMember(any())).thenReturn(0L);
-        when(memberItemRepository.countEquippedByMember(any())).thenReturn(0L);
 
         // when
         MemberProfileResponse response = getMemberProfileUseCase.execute(testMember);
@@ -184,8 +166,6 @@ public class GetMemberProfileUseCaseUnitTest {
         // given
         when(memberStatisticAdaptor.queryByMember(testMember)).thenReturn(testStatistic);
         when(gameRankAdaptor.queryByMemberAndGameMode(any(), any())).thenReturn(testGameRank);
-        when(memberItemRepository.countByMember(any())).thenReturn(5L);
-        when(memberItemRepository.countEquippedByMember(any())).thenReturn(2L);
 
         // when
         MemberProfileResponse response1 = getMemberProfileUseCase.execute(testMember);

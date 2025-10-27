@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class MemberProfileResponse {
     private String nickname;
     private String email;
+    private String profileImageUrl;
     private int currentPoint;
     private LocalDateTime joinedAt;
     private LocalDateTime lastPlayedAt;
@@ -19,7 +20,6 @@ public class MemberProfileResponse {
     
     private GameStatistics statistics;
     private RankInfo rankInfo;
-    private ItemInfo itemInfo;
 
     @Getter
     @Builder
@@ -67,11 +67,6 @@ public class MemberProfileResponse {
         }
     }
 
-    @Getter
-    @Builder
-    public static class ItemInfo {
-        private int totalItems;
-        private int equippedItems;
-    }
 }
+
 
