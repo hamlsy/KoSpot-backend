@@ -1,0 +1,44 @@
+package com.kospot.application.admin.coordinate;
+
+import com.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
+import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.domain.coordinate.entity.Sido;
+import com.kospot.domain.coordinate.vo.Address;
+import com.kospot.domain.coordinate.entity.LocationType;
+import com.kospot.domain.member.entity.Member;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.presentation.admin.dto.request.AdminCoordinateRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+
+@UseCase
+@RequiredArgsConstructor
+public class CreateCoordinateUseCase {
+
+    private final CoordinateAdaptor coordinateAdaptor;
+
+    @Transactional
+    public Long execute(Member admin, AdminCoordinateRequest.Create request) {
+        admin.validateAdmin();
+
+        Sido sido = Sido.fromKey(request.getSidoKey());
+        
+        Address address = Address.builder()
+                .sido(sido)
+                .sigungu(request.getSigungu())
+                .detailAddress(request.getDetailAddress())
+                .build();
+
+        Coordinate coordinate = Coordinate.builder()
+                .lat(request.getLat())
+                .lng(request.getLng())
+                .poiName(request.getPoiName())
+                .address(address)
+                .locationType(LocationType.fromString(request.getLocationType()))
+                .build();
+
+        Coordinate saved = coordinateAdaptor.save(coordinate);
+        return saved.getId();
+    }
+}
+

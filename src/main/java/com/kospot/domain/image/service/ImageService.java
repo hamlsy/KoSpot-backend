@@ -29,6 +29,7 @@ public class ImageService {
     private static final String S3_IMAGE_PATH = "file/image/";
     private static final String S3_NOTICE_PATH = S3_IMAGE_PATH + "notice/";
     private static final String S3_ITEM_PATH = S3_IMAGE_PATH + "item/";
+    private static final String S3_BANNER_PATH = S3_IMAGE_PATH + "banner/";
 
     public void uploadItemImage(MultipartFile file, Item item) {
         if(isValidImage(file)){
@@ -90,6 +91,20 @@ public class ImageService {
         awsS3Service.deleteFile(image.getS3Key());
     }
 
-    //todo implement upload notice images, banner image, event images
+    public Image uploadBannerImage(MultipartFile file) {
+        if (isNotValidImage(file)) {
+            return null;
+        }
+        return uploadImage(file, S3_BANNER_PATH, ImageType.BANNER);
+    }
+
+    public void deleteBannerImage(Image image) {
+        if (image != null) {
+            awsS3Service.deleteFile(image.getS3Key());
+            imageRepository.delete(image);
+        }
+    }
+
+    //todo implement upload event images
 
 }
