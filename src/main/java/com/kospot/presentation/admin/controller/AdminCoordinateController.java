@@ -46,12 +46,12 @@ public class AdminCoordinateController {
     }
 
     @Operation(summary = "좌표 엑셀 업로드", description = "관리자가 엑셀 파일을 통해 좌표를 일괄 등록합니다.")
-    @PostMapping("/import-excel")
+    @PostMapping(value = "/import-excel", consumes = "multipart/form-data")
     public ApiResponseDto<?> importCoordinateByExcel(
             @CurrentMember Member admin,
-            @Valid @RequestBody AdminCoordinateRequest.ImportExcel request
+            @Valid @ModelAttribute AdminCoordinateRequest.ImportExcel request
     ) {
-        importCoordinateByExcelUseCase.execute(admin, request.getFileName());
+        importCoordinateByExcelUseCase.execute(admin, request.getFile());
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

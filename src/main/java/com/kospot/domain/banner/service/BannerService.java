@@ -9,17 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class BannerService {
 
     private final BannerRepository bannerRepository;
     private final ImageService imageService;
 
-    @Transactional
     public Banner createBanner(String title, MultipartFile imageFile, String linkUrl, String description, Integer displayOrder) {
         Image image = imageService.uploadBannerImage(imageFile);
         
@@ -34,7 +31,6 @@ public class BannerService {
         return bannerRepository.save(banner);
     }
 
-    @Transactional
     public void updateBanner(Banner banner, String title, MultipartFile newImageFile, String linkUrl, String description, Integer displayOrder) {
         Image newImage = null;
         if (newImageFile != null && !newImageFile.isEmpty()) {
@@ -49,23 +45,19 @@ public class BannerService {
         banner.update(title, newImage, linkUrl, description, displayOrder);
     }
 
-    @Transactional
     public void activateBanner(Banner banner) {
         banner.activate();
     }
 
-    @Transactional
     public void deactivateBanner(Banner banner) {
         banner.deactivate();
     }
 
-    @Transactional
     public void deleteBanner(Banner banner) {
         if (banner.getImage() != null) {
             imageService.deleteBannerImage(banner.getImage());
         }
         bannerRepository.delete(banner);
     }
-
 }
 

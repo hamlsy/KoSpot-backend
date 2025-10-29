@@ -38,8 +38,8 @@ public class AdminCoordinateRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ImportExcel {
-        @NotBlank(message = "파일 이름은 필수입니다.")
-        private String fileName;
+        @NotNull(message = "엑셀 파일은 필수입니다.")
+        private org.springframework.web.multipart.MultipartFile file;
     }
 }
 

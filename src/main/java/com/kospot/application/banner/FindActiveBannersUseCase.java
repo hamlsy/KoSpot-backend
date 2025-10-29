@@ -1,6 +1,6 @@
 package com.kospot.application.banner;
 
-import com.kospot.domain.banner.service.BannerService;
+import com.kospot.domain.banner.adaptor.BannerAdaptor;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.banner.dto.response.BannerResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FindActiveBannersUseCase {
 
-    private final BannerService bannerService;
+    private final BannerAdaptor bannerAdaptor;
 
     public List<BannerResponse.BannerInfo> execute() {
-        return bannerService.getActiveBanners()
+        return bannerAdaptor.queryAllActive()
                 .stream()
                 .map(BannerResponse.BannerInfo::from)
                 .collect(Collectors.toList());

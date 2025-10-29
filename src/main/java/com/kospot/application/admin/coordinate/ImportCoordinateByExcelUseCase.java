@@ -5,6 +5,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @UseCase
 @RequiredArgsConstructor
@@ -13,9 +14,9 @@ public class ImportCoordinateByExcelUseCase {
     private final CoordinateExcelService coordinateExcelService;
 
     @Transactional
-    public void execute(Member admin, String fileName) {
+    public void execute(Member admin, MultipartFile file) {
         admin.validateAdmin();
-        coordinateExcelService.importCoordinatesFromExcel(fileName);
+        coordinateExcelService.importCoordinatesFromExcelFile(file);
     }
 }
 

@@ -25,13 +25,16 @@ public class CreateGameConfigUseCase {
                 ? PlayerMatchType.fromKey(request.getPlayerMatchTypeKey())
                 : null;
 
-        GameConfig config = gameConfigService.createGameConfig(
-                gameMode,
-                playerMatchType,
-                request.getIsSingleMode()
-        );
+        GameConfig gameConfig = GameConfig.builder()
+                .gameMode(gameMode)
+                .playerMatchType(playerMatchType)
+                .isSingleMode(request.getIsSingleMode())
+                .isActive(true)
+                .build();
 
-        return config.getId();
+        GameConfig saved = gameConfigService.createGameConfig(gameConfig);
+
+        return saved.getId();
     }
 }
 

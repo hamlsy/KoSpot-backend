@@ -45,28 +45,13 @@ public class CoordinateAdaptor {
                 .orElse(null);
     }
 
-    @Transactional
-    public Coordinate save(Coordinate coordinate) {
-        return coordinateRepository.save(coordinate);
-    }
-
-    public Coordinate findById(Long id) {
+    public Coordinate queryById(Long id) {
         return coordinateRepository.findById(id)
                 .orElseThrow(() -> new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND));
     }
 
-    public Page<Coordinate> findAll(Pageable pageable) {
+    public Page<Coordinate> queryAll(Pageable pageable) {
         return coordinateRepository.findAllCoordinates(pageable);
-    }
-
-    @Transactional
-    public void delete(Coordinate coordinate) {
-        coordinateRepository.delete(coordinate);
-    }
-
-    @Transactional
-    public void saveAll(List<Coordinate> coordinates) {
-        coordinateRepository.saveAll(coordinates);
     }
 
 }

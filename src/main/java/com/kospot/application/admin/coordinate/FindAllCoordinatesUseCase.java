@@ -17,7 +17,7 @@ public class FindAllCoordinatesUseCase {
     public Page<AdminCoordinateResponse.CoordinateInfo> execute(Member admin, Pageable pageable) {
         admin.validateAdmin();
 
-        return coordinateAdaptor.findAll(pageable)
+        return coordinateAdaptor.queryAll(pageable)
                 .map(AdminCoordinateResponse.CoordinateInfo::from);
     }
 }

@@ -6,18 +6,16 @@ import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import com.kospot.infrastructure.exception.object.domain.BannerHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Adaptor
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BannerAdaptor {
 
     private final BannerRepository bannerRepository;
-
-    public Banner save(Banner banner) {
-        return bannerRepository.save(banner);
-    }
 
     public Banner queryById(Long id) {
         return bannerRepository.findById(id)

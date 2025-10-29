@@ -19,8 +19,9 @@ public class UpdateBannerUseCase {
     @Transactional
     public void execute(Member admin, Long bannerId, AdminBannerRequest.Update request) {
         admin.validateAdmin();
+        
         Banner banner = bannerAdaptor.queryById(bannerId);
-
+        
         bannerService.updateBanner(
                 banner,
                 request.getTitle(),

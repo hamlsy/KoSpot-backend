@@ -127,22 +127,29 @@ POST /admin/coordinates
 
 ```http
 POST /admin/coordinates/import-excel
+Content-Type: multipart/form-data
 ```
 
-**Request Body:**
-```json
-{
-  "fileName": "coordinates.xlsx"
-}
-```
+**Request Body (Form Data):**
+- `file` (required, file): 엑셀 파일 (.xlsx, .xls)
 
-> **Note:** 엑셀 파일은 `src/main/resources/data/excel/` 경로에 미리 업로드되어 있어야 합니다.
+**예시 (curl):**
+```bash
+curl -X POST "http://localhost:8080/admin/coordinates/import-excel" \
+  -H "Authorization: Bearer {access_token}" \
+  -F "file=@coordinates.xlsx"
+```
 
 **엑셀 파일 형식:**
 
 | A (시도) | B (시군구) | C (상세주소1) | D (상세주소2) | E (경도) | F (위도) | G | H (POI명) | I (위치타입) |
 |---------|-----------|-------------|-------------|---------|---------|---|----------|------------|
 | 서울특별시 | 중구 | 태평로1가 | 31 | 126.9780 | 37.5665 | | 서울시청 | LANDMARK |
+
+> **Note:** 
+> - 첫 번째 행은 헤더로 건너뜁니다.
+> - 1000개 단위로 배치 처리됩니다.
+> - 지원 형식: xlsx, xls
 
 **Response:**
 ```json
@@ -616,8 +623,8 @@ public class CreateBannerUseCase {
 
 ### 3. 좌표 관리 플로우
 
-1. 폼으로 단일 좌표 등록 → POST `/admin/coordinates`
-2. 엑셀로 대량 좌표 등록 → POST `/admin/coordinates/import-excel`
+1. 폼으로 단일 좌표 등록 → POST `/admin/coordinates` (JSON)
+2. 엑셀로 대량 좌표 등록 → POST `/admin/coordinates/import-excel` (multipart/form-data, 파일 직접 업로드)
 3. 좌표 목록 조회 → GET `/admin/coordinates`
 4. 좌표 삭제 → DELETE `/admin/coordinates/{coordinateId}`
 
@@ -634,8 +641,12 @@ public class CreateBannerUseCase {
    - 지원 형식: jpg, jpeg, png, gif
    - S3 경로: `file/image/banner/`
 4. **배너 순서**: `displayOrder` 값이 작을수록 먼저 노출됩니다.
-5. **좌표 타입**: `LocationType`은 `LANDMARK`, `TOURIST_SPOT`, `STREET`, `BUILDING` 등이 있습니다.
-6. **게임 설정**: 멀티 모드는 반드시 `playerMatchTypeKey`를 지정해야 합니다.
+5. **좌표 관리**:
+   - 엑셀 업로드: 클라이언트에서 파일을 직접 multipart/form-data로 전송합니다.
+   - 배치 처리: 1000개 단위로 자동 배치 처리됩니다.
+   - 엑셀 형식: 첫 번째 행은 헤더로 간주하고 건너뜁니다.
+6. **좌표 타입**: `LocationType`은 `LANDMARK`, `TOURIST_SPOT`, `STREET`, `BUILDING` 등이 있습니다.
+7. **게임 설정**: 멀티 모드는 반드시 `playerMatchTypeKey`를 지정해야 합니다.
 
 ---
 
