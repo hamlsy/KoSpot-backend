@@ -4,6 +4,20 @@
 
 KoSpot 백엔드의 관리자 기능 API 문서입니다. 관리자는 회원 관리, 좌표 관리, 배너 관리, 게임 설정 관리 기능을 사용할 수 있습니다.
 
+## 목차
+
+1. [회원 관리 API](#1-회원-관리-api)
+2. [좌표 관리 API](#2-좌표-관리-api)
+3. [배너 관리 API](#3-배너-관리-api)
+4. [게임 설정 관리 API](#4-게임-설정-관리-api)
+5. [메인 페이지 API](#메인-페이지-api)
+6. [도메인 구조](#도메인-구조)
+7. [UseCase 패턴](#usecase-패턴)
+8. [에러 코드](#에러-코드)
+9. [사용 플로우 예시](#사용-플로우-예시)
+10. [주의사항](#주의사항)
+11. [향후 확장 가능성](#향후-확장-가능성)
+
 ## 인증
 
 모든 관리자 API는 **관리자 권한(ROLE_ADMIN)**이 필요합니다. 요청 시 JWT 토큰을 Bearer 방식으로 전달해야 합니다.
@@ -647,6 +661,95 @@ public class CreateBannerUseCase {
    - 엑셀 형식: 첫 번째 행은 헤더로 간주하고 건너뜁니다.
 6. **좌표 타입**: `LocationType`은 `LANDMARK`, `TOURIST_SPOT`, `STREET`, `BUILDING` 등이 있습니다.
 7. **게임 설정**: 멀티 모드는 반드시 `playerMatchTypeKey`를 지정해야 합니다.
+
+---
+
+## 메인 페이지 API
+
+사용자가 메인 페이지에 접속할 때 필요한 모든 정보를 한 번에 제공하는 API입니다.
+
+### 메인 페이지 정보 조회
+
+```http
+GET /main
+```
+
+**인증:** 선택 사항 (로그인하지 않은 사용자도 접근 가능)
+
+**Response:**
+```json
+{
+  "code": 2000,
+  "isSuccess": true,
+  "message": "OK",
+  "result": {
+    "isAdmin": true,
+    "gameModeStatus": {
+      "roadviewEnabled": true,
+      "photoEnabled": true,
+      "multiplayEnabled": false
+    },
+    "recentNotices": [
+      {
+        "noticeId": 3,
+        "title": "신규 게임 모드 오픈",
+        "createdDate": "2025-10-28T10:00:00"
+      },
+      {
+        "noticeId": 2,
+        "title": "서버 정기 점검 안내",
+        "createdDate": "2025-10-27T15:30:00"
+      },
+      {
+        "noticeId": 1,
+        "title": "KoSpot 서비스 오픈",
+        "createdDate": "2025-10-26T09:00:00"
+      }
+    ],
+    "banners": [
+      {
+        "bannerId": 1,
+        "title": "신규 이벤트",
+        "imageUrl": "https://s3.amazonaws.com/bucket/banner/image1.jpg",
+        "linkUrl": "https://kospot.com/events/1",
+        "description": "신규 이벤트에 참여하세요!",
+        "displayOrder": 1
+      }
+    ]
+  }
+}
+```
+
+**Response 필드 설명:**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `isAdmin` | Boolean | 현재 사용자가 관리자인지 여부 (네비게이션바에 관리자 버튼 표시 결정) |
+| `gameModeStatus` | Object | 게임 모드별 활성화 상태 |
+| `gameModeStatus.roadviewEnabled` | Boolean | 로드뷰 모드 활성화 여부 (싱글/멀티 포함) |
+| `gameModeStatus.photoEnabled` | Boolean | 포토 모드 활성화 여부 (싱글/멀티 포함) |
+| `gameModeStatus.multiplayEnabled` | Boolean | 멀티플레이 모드 활성화 여부 (로드뷰/포토 포함) |
+| `recentNotices` | Array | 최근 공지사항 3개 (생성일 기준 내림차순) |
+| `recentNotices[].noticeId` | Long | 공지사항 ID |
+| `recentNotices[].title` | String | 공지사항 제목 |
+| `recentNotices[].createdDate` | DateTime | 공지사항 생성일시 |
+| `banners` | Array | 활성화된 배너 목록 (displayOrder 오름차순) |
+| `banners[].bannerId` | Long | 배너 ID |
+| `banners[].title` | String | 배너 제목 |
+| `banners[].imageUrl` | String | 배너 이미지 S3 URL |
+| `banners[].linkUrl` | String | 배너 클릭 시 이동할 URL |
+| `banners[].description` | String | 배너 설명 |
+| `banners[].displayOrder` | Integer | 배너 노출 순서 |
+
+**특징:**
+- 인증이 필요하지 않은 경우 `isAdmin: false`로 응답
+- 한 번의 API 호출로 메인 페이지에 필요한 모든 데이터를 조회
+- 게임 모드는 3가지 카테고리(로드뷰, 포토, 멀티플레이)의 활성화 여부만 제공
+  - `roadviewEnabled`: 로드뷰 싱글 또는 로드뷰 멀티가 하나라도 활성화되면 true
+  - `photoEnabled`: 포토 싱글 또는 포토 멀티가 하나라도 활성화되면 true
+  - `multiplayEnabled`: 모든 멀티플레이 모드 중 하나라도 활성화되면 true
+- 최근 공지사항은 항상 최대 3개까지만 조회
+- 비활성화된 배너는 자동으로 제외됨
 
 ---
 
