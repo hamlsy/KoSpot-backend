@@ -1,7 +1,7 @@
 package com.kospot.domain.banner.service;
 
-import com.kospot.domain.banner.adaptor.BannerAdaptor;
 import com.kospot.domain.banner.entity.Banner;
+import com.kospot.domain.banner.repository.BannerRepository;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class BannerService {
 
-    private final BannerAdaptor bannerAdaptor;
+    private final BannerRepository bannerRepository;
     private final ImageService imageService;
 
     @Transactional
@@ -31,25 +31,11 @@ public class BannerService {
                 .displayOrder(displayOrder)
                 .isActive(true)
                 .build();
-        return bannerAdaptor.save(banner);
-    }
-
-    public Banner getBanner(Long id) {
-        return bannerAdaptor.findById(id);
-    }
-
-    public List<Banner> getAllBanners() {
-        return bannerAdaptor.findAll();
-    }
-
-    public List<Banner> getActiveBanners() {
-        return bannerAdaptor.findAllActive();
+        return bannerRepository.save(banner);
     }
 
     @Transactional
-    public void updateBanner(Long id, String title, MultipartFile newImageFile, String linkUrl, String description, Integer displayOrder) {
-        Banner banner = bannerAdaptor.findById(id);
-        
+    public void updateBanner(Banner banner, String title, MultipartFile newImageFile, String linkUrl, String description, Integer displayOrder) {
         Image newImage = null;
         if (newImageFile != null && !newImageFile.isEmpty()) {
             // 기존 이미지 삭제
@@ -64,27 +50,22 @@ public class BannerService {
     }
 
     @Transactional
-    public void activateBanner(Long id) {
-        Banner banner = bannerAdaptor.findById(id);
+    public void activateBanner(Banner banner) {
         banner.activate();
     }
 
     @Transactional
-    public void deactivateBanner(Long id) {
-        Banner banner = bannerAdaptor.findById(id);
+    public void deactivateBanner(Banner banner) {
         banner.deactivate();
     }
 
     @Transactional
-    public void deleteBanner(Long id) {
-        Banner banner = bannerAdaptor.findById(id);
-        
-        // S3에서 이미지 삭제
+    public void deleteBanner(Banner banner) {
         if (banner.getImage() != null) {
             imageService.deleteBannerImage(banner.getImage());
         }
-        
-        bannerAdaptor.delete(banner);
+        bannerRepository.delete(banner);
     }
+
 }
 

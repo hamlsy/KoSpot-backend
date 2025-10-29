@@ -19,21 +19,26 @@ public class BannerAdaptor {
         return bannerRepository.save(banner);
     }
 
-    public Banner findById(Long id) {
+    public Banner queryById(Long id) {
         return bannerRepository.findById(id)
                 .orElseThrow(() -> new BannerHandler(ErrorStatus.BANNER_NOT_FOUND));
     }
 
-    public List<Banner> findAll() {
+    public List<Banner> queryAll() {
         return bannerRepository.findAllByOrderByDisplayOrderAsc();
     }
 
-    public List<Banner> findAllActive() {
+    public List<Banner> queryAllActive() {
         return bannerRepository.findAllByIsActiveTrueOrderByDisplayOrderAsc();
     }
 
-    public void delete(Banner banner) {
-        bannerRepository.delete(banner);
+    public Banner queryByIdFetchImage(Long id) {
+        return bannerRepository.findByIdFetchImage(id)
+                .orElseThrow(() -> new BannerHandler(ErrorStatus.BANNER_NOT_FOUND));
+    }
+
+    public List<Banner> queryAllFetchImage() {
+        return bannerRepository.findAllFetchImage();
     }
 }
 

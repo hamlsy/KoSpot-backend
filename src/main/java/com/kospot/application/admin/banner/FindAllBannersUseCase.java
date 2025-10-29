@@ -1,5 +1,6 @@
 package com.kospot.application.admin.banner;
 
+import com.kospot.domain.banner.adaptor.BannerAdaptor;
 import com.kospot.domain.banner.service.BannerService;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -13,12 +14,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FindAllBannersUseCase {
 
-    private final BannerService bannerService;
+    private final BannerAdaptor bannerAdaptor;
 
     public List<AdminBannerResponse.BannerInfo> execute(Member admin) {
         admin.validateAdmin();
 
-        return bannerService.getAllBanners()
+        return bannerAdaptor.queryAllFetchImage()
                 .stream()
                 .map(AdminBannerResponse.BannerInfo::from)
                 .collect(Collectors.toList());
