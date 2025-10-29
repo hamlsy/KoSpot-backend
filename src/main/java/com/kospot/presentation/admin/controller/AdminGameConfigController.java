@@ -26,6 +26,7 @@ import java.util.List;
 public class AdminGameConfigController {
 
     private final CreateGameConfigUseCase createGameConfigUseCase;
+    private final InitializeAllGameConfigsUseCase initializeAllGameConfigsUseCase;
     private final ActivateGameConfigUseCase activateGameConfigUseCase;
     private final DeactivateGameConfigUseCase deactivateGameConfigUseCase;
     private final FindAllGameConfigsUseCase findAllGameConfigsUseCase;
@@ -39,6 +40,21 @@ public class AdminGameConfigController {
     ) {
         Long configId = createGameConfigUseCase.execute(admin, request);
         return ApiResponseDto.onSuccess(configId);
+    }
+
+    @Operation(
+            summary = "모든 기본 게임 설정 초기화",
+            description = "관리자가 모든 기본 게임 모드 설정을 한 번에 생성합니다. " +
+                    "이미 존재하는 설정은 건너뛰고 없는 설정만 생성합니다. " +
+                    "(싱글 로드뷰/포토, 멀티 로드뷰/포토 개인전/팀전 총 6개)"
+    )
+    @PostMapping("/initialize")
+    public ApiResponseDto<List<AdminGameConfigResponse.GameConfigInfo>> initializeAllGameConfigs(
+            @CurrentMember Member admin
+    ) {
+        initializeAllGameConfigsUseCase.execute(admin);
+        List<AdminGameConfigResponse.GameConfigInfo> configs = findAllGameConfigsUseCase.execute(admin);
+        return ApiResponseDto.onSuccess(configs);
     }
 
     @Operation(summary = "게임 설정 활성화", description = "관리자가 특정 게임 모드를 활성화합니다.")

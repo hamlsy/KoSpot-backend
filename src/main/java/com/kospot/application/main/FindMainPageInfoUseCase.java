@@ -34,15 +34,27 @@ public class FindMainPageInfoUseCase {
         // 활성화된 게임 모드 조회
         List<GameConfig> activeGameConfigs = gameConfigAdaptor.queryAllActive();
 
-        // 게임 모드별 활성화 상태 확인
-        Boolean roadviewEnabled = activeGameConfigs.stream()
-                .anyMatch(config -> config.getGameMode() == GameMode.ROADVIEW);
+        // GameConfig가 하나도 없으면 기본값으로 모두 활성화 (true)
+        Boolean roadviewEnabled;
+        Boolean photoEnabled;
+        Boolean multiplayEnabled;
 
-        Boolean photoEnabled = activeGameConfigs.stream()
-                .anyMatch(config -> config.getGameMode() == GameMode.PHOTO);
+        if (activeGameConfigs.isEmpty()) {
+            // 기본값: 모두 활성화
+            roadviewEnabled = true;
+            photoEnabled = true;
+            multiplayEnabled = true;
+        } else {
+            // 실제 설정 기반으로 활성화 여부 확인
+            roadviewEnabled = activeGameConfigs.stream()
+                    .anyMatch(config -> config.getGameMode() == GameMode.ROADVIEW);
 
-        Boolean multiplayEnabled = activeGameConfigs.stream()
-                .anyMatch(config -> !config.getIsSingleMode());
+            photoEnabled = activeGameConfigs.stream()
+                    .anyMatch(config -> config.getGameMode() == GameMode.PHOTO);
+
+            multiplayEnabled = activeGameConfigs.stream()
+                    .anyMatch(config -> !config.getIsSingleMode());
+        }
 
         MainPageResponse.GameModeStatus gameModeStatus = MainPageResponse.GameModeStatus.of(
                 roadviewEnabled,

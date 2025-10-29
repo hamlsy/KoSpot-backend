@@ -405,7 +405,64 @@ DELETE /admin/banners/{bannerId}
 - `PHOTO` + `SOLO` (사진 개인전)
 - `PHOTO` + `TEAM` (사진 팀전)
 
-#### 4.1 게임 설정 생성
+#### 4.1 모든 기본 게임 설정 초기화 (권장)
+
+```http
+POST /admin/game-configs/initialize
+```
+
+**설명:**
+- 모든 기본 게임 모드 설정을 한 번에 생성합니다.
+- 이미 존재하는 설정은 건너뛰고 **없는 설정만** 생성합니다.
+- 총 6개 설정: 싱글 로드뷰/포토, 멀티 로드뷰/포토 개인전/팀전
+- 생성 후 자동으로 전체 설정 목록을 반환합니다.
+- 기본값은 모두 **활성화 상태(isActive: true)**입니다.
+
+**Response:**
+```json
+{
+  "code": 2000,
+  "isSuccess": true,
+  "message": "OK",
+  "result": [
+    {
+      "configId": 1,
+      "gameMode": "ROADVIEW",
+      "playerMatchType": null,
+      "isSingleMode": true,
+      "isActive": true,
+      "description": "싱글 로드뷰 모드",
+      "createdAt": "2024-01-01T00:00:00",
+      "updatedAt": "2024-01-01T00:00:00"
+    },
+    {
+      "configId": 2,
+      "gameMode": "PHOTO",
+      "playerMatchType": null,
+      "isSingleMode": true,
+      "isActive": true,
+      "description": "싱글 사진 모드",
+      "createdAt": "2024-01-01T00:00:00",
+      "updatedAt": "2024-01-01T00:00:00"
+    },
+    {
+      "configId": 3,
+      "gameMode": "ROADVIEW",
+      "playerMatchType": "SOLO",
+      "isSingleMode": false,
+      "isActive": true,
+      "description": "멀티 로드뷰 모드 - 개인전",
+      "createdAt": "2024-01-01T00:00:00",
+      "updatedAt": "2024-01-01T00:00:00"
+    }
+    // ... 나머지 3개
+  ]
+}
+```
+
+> **💡 팁**: 서비스 최초 실행 시 이 API를 한 번 호출하면 모든 기본 설정이 생성됩니다.
+
+#### 4.2 게임 설정 개별 생성
 
 ```http
 POST /admin/game-configs
@@ -438,7 +495,7 @@ POST /admin/game-configs
 }
 ```
 
-#### 4.2 게임 설정 목록 조회
+#### 4.3 게임 설정 목록 조회
 
 ```http
 GET /admin/game-configs
@@ -475,7 +532,7 @@ GET /admin/game-configs
 }
 ```
 
-#### 4.3 게임 설정 활성화
+#### 4.4 게임 설정 활성화
 
 ```http
 PUT /admin/game-configs/{configId}/activate
@@ -490,7 +547,7 @@ PUT /admin/game-configs/{configId}/activate
 }
 ```
 
-#### 4.4 게임 설정 비활성화
+#### 4.5 게임 설정 비활성화
 
 ```http
 PUT /admin/game-configs/{configId}/deactivate
@@ -505,7 +562,7 @@ PUT /admin/game-configs/{configId}/deactivate
 }
 ```
 
-#### 4.5 게임 설정 삭제
+#### 4.6 게임 설정 삭제
 
 ```http
 DELETE /admin/game-configs/{configId}
@@ -629,6 +686,15 @@ public class CreateBannerUseCase {
 
 ### 2. 게임 모드 설정 플로우
 
+#### 권장 플로우 (최초 설정)
+1. **모든 기본 설정 생성** → POST `/admin/game-configs/initialize`
+   - 6개의 기본 설정이 한 번에 생성됨 (싱글 로드뷰/포토, 멀티 로드뷰/포토 개인전/팀전)
+   - 이미 있는 설정은 건너뛰고 없는 것만 생성
+   - 자동으로 전체 목록 반환
+2. 필요에 따라 특정 모드 비활성화 → PUT `/admin/game-configs/{configId}/deactivate`
+3. 다시 활성화 → PUT `/admin/game-configs/{configId}/activate`
+
+#### 개별 관리 플로우
 1. 싱글 로드뷰 모드 생성 → POST `/admin/game-configs` (gameModeKey: ROADVIEW, isSingleMode: true)
 2. 멀티 로드뷰 개인전 생성 → POST `/admin/game-configs` (gameModeKey: ROADVIEW, playerMatchTypeKey: SOLO, isSingleMode: false)
 3. 설정 목록 조회 → GET `/admin/game-configs`
@@ -660,7 +726,10 @@ public class CreateBannerUseCase {
    - 배치 처리: 1000개 단위로 자동 배치 처리됩니다.
    - 엑셀 형식: 첫 번째 행은 헤더로 간주하고 건너뜁니다.
 6. **좌표 타입**: `LocationType`은 `LANDMARK`, `TOURIST_SPOT`, `STREET`, `BUILDING` 등이 있습니다.
-7. **게임 설정**: 멀티 모드는 반드시 `playerMatchTypeKey`를 지정해야 합니다.
+7. **게임 설정**:
+   - 멀티 모드는 반드시 `playerMatchTypeKey`를 지정해야 합니다.
+   - **최초 실행 시**: `/admin/game-configs/initialize`를 호출하여 모든 기본 설정을 생성하세요.
+   - GameConfig가 없어도 메인 페이지는 정상 작동합니다 (기본값 true로 표시).
 
 ---
 
@@ -748,6 +817,9 @@ GET /main
   - `roadviewEnabled`: 로드뷰 싱글 또는 로드뷰 멀티가 하나라도 활성화되면 true
   - `photoEnabled`: 포토 싱글 또는 포토 멀티가 하나라도 활성화되면 true
   - `multiplayEnabled`: 모든 멀티플레이 모드 중 하나라도 활성화되면 true
+- **GameConfig가 없는 경우**: 기본값으로 모든 모드가 활성화(true)된 것처럼 표시됨
+  - 서비스 최초 실행 시에도 사용자는 정상적으로 게임 모드를 볼 수 있음
+  - 관리자가 `/admin/game-configs/initialize`로 실제 설정을 생성하면 그때부터 관리 가능
 - 최근 공지사항은 항상 최대 3개까지만 조회
 - 비활성화된 배너는 자동으로 제외됨
 
