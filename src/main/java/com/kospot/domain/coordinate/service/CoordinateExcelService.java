@@ -13,10 +13,12 @@ import org.apache.poi.ss.usermodel.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @Service
@@ -25,16 +27,35 @@ public class CoordinateExcelService {
 
     private static final String FILE_PATH = "data/excel/";
     private final int BATCH_SIZE = 1000;
-    private final CoordinateRepository coordinateRepository;
+    private final CoordinateService coordinateService;
 
     @Transactional
     public void importCoordinatesFromExcel(String fileName) {
         try {
             ClassPathResource resource = new ClassPathResource(FILE_PATH + fileName);
             FileInputStream fis = new FileInputStream(resource.getFile());
+            processExcelFile(fis);
+        } catch (FileNotFoundException e) {
+            throw new CoordinateHandler(ErrorStatus.FILE_NOT_FOUND);
+        } catch (IOException e) {
+            throw new CoordinateHandler(ErrorStatus.FILE_READ_ERROR);
+        }
+    }
 
+    @Transactional
+    public void importCoordinatesFromExcelFile(MultipartFile file) {
+        try {
+            InputStream inputStream = file.getInputStream();
+            processExcelFile(inputStream);
+        } catch (IOException e) {
+            throw new CoordinateHandler(ErrorStatus.FILE_READ_ERROR);
+        }
+    }
+
+    private void processExcelFile(InputStream inputStream) {
+        try {
             //excel -> Apache POI workbook 객체로 로드
-            Workbook workbook = WorkbookFactory.create(fis);
+            Workbook workbook = WorkbookFactory.create(inputStream);
             Sheet sheet = workbook.getSheetAt(0); // 첫 번째 시트
             Iterator<Row> rowIterator = sheet.iterator(); // 반복 객체 생성
 
@@ -51,7 +72,6 @@ public class CoordinateExcelService {
                 coordinatesList.add(coordinate);
 
                 // BATCH_SIZE 마다 저장
-                // todo refactoring
                 if (isBatchSizeReached(coordinatesList)) {
                     saveCoordinates(coordinatesList);
                     coordinatesList.clear();
@@ -62,13 +82,11 @@ public class CoordinateExcelService {
             saveCoordinates(coordinatesList);
             coordinatesList.clear();
 
-
-        } catch (FileNotFoundException e) {
-            throw new CoordinateHandler(ErrorStatus.FILE_NOT_FOUND);
+            workbook.close();
+            inputStream.close();
         } catch (IOException e) {
             throw new CoordinateHandler(ErrorStatus.FILE_READ_ERROR);
         }
-
     }
     private boolean isRowEmpty(Row row) {
         if (row == null) return true; //row 자체가 null이면 빈 행으로 처리
@@ -87,7 +105,7 @@ public class CoordinateExcelService {
     }
 
     private void saveCoordinates(List<Coordinate> coordinates) {
-        coordinateRepository.saveAll(coordinates);
+        coordinateService.saveAllCoordinates(coordinates);
     }
 
     //excel row -> CoordinateNationwide

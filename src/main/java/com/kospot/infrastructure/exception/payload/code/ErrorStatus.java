@@ -101,6 +101,11 @@ public enum ErrorStatus implements BaseCode {
     // WebSocket Channel Error (4351 ~ 4360)
     INVALID_DESTINATION(BAD_REQUEST, 4351, "유효하지 않은 구독 목적지입니다."),
 
+    // Banner Error (4361 ~ 4370)
+    BANNER_NOT_FOUND(NOT_FOUND, 4361, "해당 배너를 찾을 수 없습니다."),
+
+    // GameConfig Error (4371 ~ 4380)
+    GAME_CONFIG_NOT_FOUND(NOT_FOUND, 4371, "게임 설정을 찾을 수 없습니다."),
 
 
     ;

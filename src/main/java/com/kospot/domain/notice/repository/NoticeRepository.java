@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
@@ -16,4 +17,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 
     @Query("select n from Notice n left join fetch n.images where n.id = :id")
     Optional<Notice> findByIdFetchImage(@Param("id") Long id);
+
+    @Query("select n from Notice n order by n.createdDate desc limit :limit")
+    List<Notice> findTopNByOrderByCreatedDateDesc(@Param("limit") int limit);
 }

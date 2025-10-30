@@ -36,10 +36,10 @@ public class CoordinateController {
      * @return
      */
 
-    @GetMapping("/importFromExcel")
-    public ApiResponseDto<?> importFromExcel(@RequestParam("fileName") String fileName) {
-        importCoordinateUseCase.execute(fileName);
-        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
-    }
+//    @GetMapping("/importFromExcel")
+//    public ApiResponseDto<?> importFromExcel(@RequestParam("fileName") String fileName) {
+//        importCoordinateUseCase.execute(fileName);
+//        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+//    }
 
 }

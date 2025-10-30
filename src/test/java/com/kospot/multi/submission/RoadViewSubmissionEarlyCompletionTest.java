@@ -130,7 +130,7 @@ class RoadViewSubmissionEarlyCompletionTest {
         gameRoom = createGameRoom(hostMember, players);
 
         // 좌표 데이터 import
-        importCoordinateUseCase.execute("test_coordinates_excel.xlsx");
+//        importCoordinateUseCase.execute("test_coordinates_excel.xlsx");
 
         // Redis Mock 설정
         when(gameRoomRedisAdaptor.getCurrentPlayers(anyString())).thenReturn(4L);

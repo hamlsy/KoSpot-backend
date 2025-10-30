@@ -4,10 +4,15 @@ import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.coordinate.entity.Sido;
 import com.kospot.domain.coordinate.repository.CoordinateRepository;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.infrastructure.exception.object.domain.CoordinateHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Adaptor
@@ -38,6 +43,15 @@ public class CoordinateAdaptor {
                 .stream()
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Coordinate queryById(Long id) {
+        return coordinateRepository.findById(id)
+                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND));
+    }
+
+    public Page<Coordinate> queryAll(Pageable pageable) {
+        return coordinateRepository.findAllCoordinates(pageable);
     }
 
 }
