@@ -99,7 +99,7 @@ public class StartRoadViewSoloRoundUseCaseTest {
         // 게임룸 생성
         gameRoom = createAndSaveGameRoom(hostMember, players);
 
-        importCoordinateUseCase.execute("test_coordinates_excel.xlsx");
+//        importCoordinateUseCase.execute("test_coordinates_excel.xlsx");
     }
     
     @Test

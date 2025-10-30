@@ -43,11 +43,11 @@ public class MemberAdaptor {
     }
 
     public Page<Member> queryAllWithPaging(Pageable pageable) {
-        return repository.findAllByOrderByCreatedAtDesc(pageable);
+        return repository.findAllByOrderByCreatedDateDesc(pageable);
     }
 
     public Page<Member> queryAllByRoleWithPaging(Role role, Pageable pageable) {
-        return repository.findAllByRoleOrderByCreatedAtDesc(role, pageable);
+        return repository.findAllByRoleOrderByCreatedDateDesc(role, pageable);
     }
 
     public List<Member> findAll() {

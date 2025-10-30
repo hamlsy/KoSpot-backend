@@ -64,9 +64,7 @@ public class GameConfigService {
                     .isActive(true) // 기본값: 활성화
                     .build();
             gameConfigRepository.save(config);
-            
-            log.info("GameConfig 자동 생성: gameMode={}, playerMatchType={}, isSingleMode={}", 
-                    gameMode, playerMatchType, isSingleMode);
+
         }
     }
 }

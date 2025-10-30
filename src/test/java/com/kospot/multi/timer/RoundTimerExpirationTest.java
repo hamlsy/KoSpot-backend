@@ -122,7 +122,7 @@ class RoundTimerExpirationTest {
         gameRoom = createGameRoom(hostMember, players);
 
         // 좌표 데이터 import
-        importCoordinateUseCase.execute("test_coordinates_excel.xlsx");
+//        importCoordinateUseCase.execute("test_coordinates_excel.xlsx");
 
         log.info("✅ 테스트 환경 설정 완료 - 플레이어 수: {}, 방 ID: {}", 
                 players.size(), gameRoom.getId());

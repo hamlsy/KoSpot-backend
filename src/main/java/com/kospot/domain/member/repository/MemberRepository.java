@@ -20,8 +20,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByUsername(String username);
 
-    Page<Member> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Member> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
-    Page<Member> findAllByRoleOrderByCreatedAtDesc(Role role, Pageable pageable);
+    Page<Member> findAllByRoleOrderByCreatedDateDesc(Role role, Pageable pageable);
 
 }

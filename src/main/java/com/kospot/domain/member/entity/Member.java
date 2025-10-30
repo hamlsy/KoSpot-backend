@@ -106,6 +106,6 @@ public class Member extends BaseTimeEntity {
 
     public boolean isAdmin() {
         return this.role == Role.ADMIN;
-    }}
+    }
 
 }
