@@ -116,7 +116,7 @@ class MultiGameFinishedAndPointDistributionTest {
     @BeforeEach
     void setUp() {
         // 좌표 데이터 임포트
-        importCoordinateUseCase.execute("test_coordinates_excel.xlsx");
+//        importCoordinateUseCase.execute("test_coordinates_excel.xlsx");
 
         // 마커 이미지 생성
         markerImage = imageRepository.save(Image.builder()

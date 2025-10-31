@@ -28,8 +28,6 @@ public class Image extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
-    //todo Notice, Event <- manny o one, Banner <- one to one
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
     private Notice notice;

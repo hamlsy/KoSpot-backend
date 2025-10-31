@@ -1,6 +1,7 @@
 package com.kospot.infrastructure.auth.service;
 
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.member.service.MemberStatisticService;
 import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.infrastructure.auth.domain.CustomOAuthUser;
@@ -30,6 +31,7 @@ import java.util.UUID;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
+    private final MemberStatisticService memberStatisticService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -66,13 +68,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private Member signupSocialMember(String username, String email) {
-        String nickname = "kospot_" + UUID.randomUUID().toString().substring(0, 8); // 임시 닉네임 생성
+        String nickname = "kospot_" + UUID.randomUUID().toString().substring(0, 8);
         Member member = Member.builder()
                 .username(username)
                 .nickname(nickname)
                 .email(email)
                 .role(Role.USER)
                 .build();
-        return memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+        memberStatisticService.initializeStatistic(savedMember);
+        return savedMember;
     }
 }

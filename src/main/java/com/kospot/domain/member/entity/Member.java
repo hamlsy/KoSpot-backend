@@ -100,8 +100,12 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    private boolean isNotAdmin() {
+    public boolean isNotAdmin() {
         return this.role != Role.ADMIN;
+    }
+
+    public boolean isAdmin() {
+        return this.role == Role.ADMIN;
     }
 
 }
