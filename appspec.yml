@@ -8,6 +8,7 @@ files:
 
 permissions:
   - object: /home/ubuntu/kospot
+    pattern: "**"
     owner: ubuntu
     group: ubuntu
     mode: 755
@@ -19,6 +20,12 @@ permissions:
     mode: 755
     type:
       - directory
+  - object: /home/ubuntu/kospot/kospot-backend.tar  
+    owner: ubuntu
+    group: ubuntu
+    mode: 644
+    type:
+      - file
 
 hooks:
   ApplicationStop:
