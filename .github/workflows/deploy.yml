@@ -9,7 +9,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
-  S3_BUCKET_NAME: kospot-deploy-bucket
+  S3_BUCKET_NAME: kospot-bucket-deploy
   CODE_DEPLOY_APPLICATION_NAME: kospot-application
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: kospot-deployment-group
   DOCKER_IMAGE_NAME: kospot-backend
