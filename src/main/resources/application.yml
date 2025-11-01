@@ -1,6 +1,7 @@
 spring:
-  profiles:
-    active: local
+  mvc:
+    servlet:
+      path: /api
   datasource:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?serverTimezone=UTC
     username: ${DB_USERNAME}
