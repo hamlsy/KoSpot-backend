@@ -13,4 +13,14 @@ public interface GameRankRepository extends JpaRepository<GameRank, Long> {
             "and r.gameMode = :gameMode")
     GameRank findByMemberAndGameMode(@Param("member") Member member, @Param("gameMode") GameMode gameMode);
 
+    @Query("select count(gr) from GameRank gr where gr.gameMode = :gameMode")
+    long countByGameMode(@Param("gameMode") GameMode gameMode);
+
+    @Query("select count(gr) from GameRank gr where gr.gameMode = :gameMode " +
+            "and gr.ratingScore > :ratingScore")
+    long countByGameModeAndRatingScoreGreaterThan(
+            @Param("gameMode") GameMode gameMode,
+            @Param("ratingScore") int ratingScore
+    );
+
 }

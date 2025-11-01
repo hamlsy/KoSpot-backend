@@ -17,4 +17,12 @@ public class GameRankAdaptor {
         return repository.findByMemberAndGameMode(member, gameMode);
     }
 
+    public long queryTotalRankCountByGameMode(GameMode gameMode) {
+        return repository.countByGameMode(gameMode);
+    }
+
+    public long queryHigherRankCountByGameModeAndRatingScore(GameMode gameMode, int ratingScore) {
+        return repository.countByGameModeAndRatingScoreGreaterThan(gameMode, ratingScore);
+    }
+
 }

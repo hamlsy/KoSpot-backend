@@ -27,7 +27,21 @@ public class GameRankService {
 
         // gameRank update
         gameRank.changeRatingScore(RECOVERY_SCORE + changeRatingScore);
+    }
 
+    /**
+     * 전체 랭킹 중 상위 몇 퍼센트인지 계산
+     * @param higherRankCount 나보다 높은 랭크 수
+     * @param totalRankCount 전체 랭크 수
+     * @return 상위 퍼센트 (소수점 첫째 자리까지)
+     */
+    public double calculateRankPercentage(long higherRankCount, long totalRankCount) {
+        if (totalRankCount == 0) {
+            return 0.0;
+        }
+        // 내 순위 = 나보다 높은 랭크 수 + 1
+        long myRank = higherRankCount + 1;
+        return Math.round((double) myRank / totalRankCount * 1000.0) / 10.0;
     }
 
 }

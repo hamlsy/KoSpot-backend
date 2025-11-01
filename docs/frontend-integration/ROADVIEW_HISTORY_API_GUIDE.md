@@ -1,6 +1,8 @@
 # 로드뷰 게임 기록 조회 API 가이드
 
-## 1. 최근 3개 기록 조회
+## 1. 로드뷰 메인 페이지 (최근 3개 기록 + 랭크 정보)
+
+**주요 용도**: 로드뷰 메인 페이지(연습/랭크/테마 선택 화면)에서 사용
 
 ### 요청
 ```
@@ -15,7 +17,17 @@ Authorization: Bearer {JWT_TOKEN}
   "code": "2000",
   "message": "OK",
   "result": {
-    "games": [
+    "rankInfo": {
+      "rankTier": "SILVER",
+      "rankLevel": "TWO",
+      "ratingScore": 1650,
+      "rankPercentage": 23.5
+    },
+    "statisticInfo": {
+      "totalPlayCount": 47,
+      "bestScore": 978.5
+    },
+    "recentGames": [
       {
         "gameId": 123,
         "poiName": "N서울타워",
@@ -35,6 +47,16 @@ Authorization: Bearer {JWT_TOKEN}
         "playedAt": "2025-11-01T13:15:00",
         "gameType": "PRACTICE",
         "practiceSido": "SEOUL"
+      },
+      {
+        "gameId": 121,
+        "poiName": "부산 해운대",
+        "answerDistance": 5000.0,
+        "score": 320.0,
+        "answerTime": 60.0,
+        "playedAt": "2025-11-01T12:00:00",
+        "gameType": "PRACTICE",
+        "practiceSido": "BUSAN"
       }
     ]
   }
@@ -42,6 +64,21 @@ Authorization: Bearer {JWT_TOKEN}
 ```
 
 ### 필드 설명
+
+#### rankInfo (랭크 정보)
+- `rankTier`: 현재 티어
+  - 가능한 값: `BRONZE`, `SILVER`, `GOLD`, `PLATINUM`, `DIAMOND`, `MASTER`
+- `rankLevel`: 현재 레벨
+  - 가능한 값: `ONE`, `TWO`, `THREE`, `FOUR`, `FIVE`
+- `ratingScore`: 현재 레이팅 점수
+- `rankPercentage`: 전체 랭킹 중 상위 몇 퍼센트 (소수점 첫째 자리)
+  - 예: 23.5 = 상위 23.5%
+
+#### statisticInfo (통계 정보)
+- `totalPlayCount`: 총 플레이 수 (연습 + 랭크)
+- `bestScore`: 최고 점수
+
+#### recentGames (최근 3개 기록)
 - `gameId`: 게임 ID
 - `poiName`: 정답 지역 이름
 - `answerDistance`: 정답과의 거리 (미터)

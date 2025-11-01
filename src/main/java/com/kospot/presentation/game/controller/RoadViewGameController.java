@@ -97,7 +97,13 @@ public class RoadViewGameController {
     /**
      * -----------------HISTORY------------------
      */
-    @Operation(summary = "로드뷰 게임 최근 3개 기록 조회", description = "로드뷰 게임의 최근 3개 완료된 기록을 조회합니다.")
+    @Operation(
+            summary = "로드뷰 메인 페이지 조회",
+            description = "로드뷰 메인 페이지에 필요한 정보를 조회합니다. " +
+                    "현재 랭크 정보(티어, 레벨, 레이팅 점수, 상위 퍼센트), " +
+                    "통계 정보(총 플레이 수, 최고 점수), " +
+                    "최근 3개 게임 기록을 포함합니다."
+    )
     @GetMapping("/history/recent")
     public ApiResponseDto<RoadViewGameHistoryResponse.RecentThree> getRecentThreeGames(@CurrentMember Member member) {
         return ApiResponseDto.onSuccess(getRecentThreeRoadViewGamesUseCase.execute(member));
