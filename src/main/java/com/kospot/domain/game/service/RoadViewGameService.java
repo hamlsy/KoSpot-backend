@@ -26,7 +26,7 @@ public class RoadViewGameService {
     public RoadViewGame startPracticeGame(Member member, String sidoKey) {
         Sido sido = Sido.fromKey(sidoKey);
         Coordinate coordinate = coordinateAdaptor.getRandomCoordinateBySido(sido);
-        RoadViewGame game = RoadViewGame.create(coordinate, member, GameType.PRACTICE);
+        RoadViewGame game = RoadViewGame.create(coordinate, member, GameType.PRACTICE, sido);
         repository.save(game);
 
         return game;
@@ -40,7 +40,7 @@ public class RoadViewGameService {
 
     public RoadViewGame startRankGame(Member member) {
         Coordinate coordinate = coordinateAdaptor.getRandomCoordinate();
-        RoadViewGame game = RoadViewGame.create(coordinate, member, GameType.RANK);
+        RoadViewGame game = RoadViewGame.create(coordinate, member, GameType.RANK, null);
         repository.save(game);
 
         return game;

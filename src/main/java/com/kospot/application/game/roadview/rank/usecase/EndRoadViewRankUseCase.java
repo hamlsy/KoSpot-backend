@@ -32,7 +32,7 @@ public class EndRoadViewRankUseCase {
         RoadViewGame game = roadViewGameAdaptor.queryByIdFetchCoordinate(request.getGameId());
         roadViewGameService.finishGame(member, game, request);
 
-        int currentRatingScore = gameRank.getRatingScore();
+        int previousRatingScore = gameRank.getRatingScore();
 
         // calculate rating point
         gameRankService.updateRatingScoreAfterGameEnd(gameRank, game);
@@ -40,7 +40,7 @@ public class EndRoadViewRankUseCase {
         //event
         eventPublisher.publishEvent(new RoadViewRankEvent(member, game, gameRank));
 
-        return EndGameResponse.RoadViewRank.from(game, currentRatingScore, gameRank.getRatingScore());
+        return EndGameResponse.RoadViewRank.from(game, previousRatingScore, gameRank);
     }
 
 

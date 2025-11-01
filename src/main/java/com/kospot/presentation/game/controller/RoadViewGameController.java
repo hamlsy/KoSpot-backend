@@ -1,5 +1,7 @@
 package com.kospot.presentation.game.controller;
 
+import com.kospot.application.game.roadview.history.usecase.GetAllRoadViewGamesUseCase;
+import com.kospot.application.game.roadview.history.usecase.GetRecentThreeRoadViewGamesUseCase;
 import com.kospot.application.game.roadview.practice.usecase.EndRoadViewPracticeUseCase;
 import com.kospot.application.game.roadview.practice.usecase.StartRoadViewPracticeUseCase;
 import com.kospot.application.game.roadview.rank.usecase.EndRoadViewRankUseCase;
@@ -7,6 +9,7 @@ import com.kospot.application.game.roadview.rank.usecase.StartRoadViewRankUseCas
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.presentation.game.dto.response.EndGameResponse;
+import com.kospot.presentation.game.dto.response.RoadViewGameHistoryResponse;
 import com.kospot.presentation.game.dto.response.StartGameResponse;
 import com.kospot.domain.game.service.AESService;
 import com.kospot.domain.game.util.ScoreCalculator;
@@ -17,6 +20,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -31,6 +36,8 @@ public class RoadViewGameController {
     private final StartRoadViewRankUseCase startRoadViewRankUseCase;
     private final EndRoadViewRankUseCase endRoadViewRankUseCase;
     private final EndRoadViewPracticeUseCase endRoadViewPracticeUseCase;
+    private final GetRecentThreeRoadViewGamesUseCase getRecentThreeRoadViewGamesUseCase;
+    private final GetAllRoadViewGamesUseCase getAllRoadViewGamesUseCase;
 
     private final AESService aesService;
 
@@ -81,6 +88,30 @@ public class RoadViewGameController {
     @PostMapping("/rank/end")
     public ApiResponseDto<EndGameResponse.RoadViewRank> endRankGame(@CurrentMember Member member, @RequestBody EndGameRequest.RoadView request) {
         return ApiResponseDto.onSuccess(endRoadViewRankUseCase.execute(member, request));
+    }
+
+    /**
+     *  ------------------------------------------
+     */
+
+    /**
+     * -----------------HISTORY------------------
+     */
+    @Operation(summary = "로드뷰 게임 최근 3개 기록 조회", description = "로드뷰 게임의 최근 3개 완료된 기록을 조회합니다.")
+    @GetMapping("/history/recent")
+    public ApiResponseDto<RoadViewGameHistoryResponse.RecentThree> getRecentThreeGames(@CurrentMember Member member) {
+        return ApiResponseDto.onSuccess(getRecentThreeRoadViewGamesUseCase.execute(member));
+    }
+
+    @Operation(summary = "로드뷰 게임 전체 기록 조회", description = "로드뷰 게임의 전체 완료된 기록을 페이지네이션으로 조회합니다.")
+    @GetMapping("/history")
+    public ApiResponseDto<RoadViewGameHistoryResponse.All> getAllGames(
+            @CurrentMember Member member,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponseDto.onSuccess(getAllRoadViewGamesUseCase.execute(member, pageable));
     }
 
     /**

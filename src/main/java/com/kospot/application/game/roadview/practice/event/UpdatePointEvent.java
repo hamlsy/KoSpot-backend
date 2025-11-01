@@ -23,14 +23,14 @@ public class UpdatePointEvent {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updatePoint(Member member, RoadViewGame game) {
-        //earn point
-        Member persistMember = memberAdaptor.queryById(member.getId()); // persist
+        // persist member 조회
+        Member persistMember = memberAdaptor.queryById(member.getId());
 
+        // 포인트 계산 및 지급
         int point = PointCalculator.getPracticePoint(game.getScore());
-        pointService.addPoint(member, point);
+        pointService.addPoint(persistMember, point);
 
-        // save point history
-        pointHistoryService.savePointHistory(member, point, PointHistoryType.PRACTICE_GAME);
-
+        // 포인트 히스토리 저장
+        pointHistoryService.savePointHistory(persistMember, point, PointHistoryType.PRACTICE_GAME);
     }
 }

@@ -4,8 +4,14 @@ import com.kospot.domain.gamerank.vo.RankTier;
 
 public class PointCalculator {
 
-    private static final int BASE_PRACTICE_POINT = 50;
-    private static final int BASE_RANK_POINT = 100;
+    // 싱글 게임 (로드뷰) 포인트 상수
+    private static final double PRACTICE_SCORE_MULTIPLIER = 0.08;  // 연습: 점수당 0.08 포인트
+    private static final int PRACTICE_BASE_POINT = 30;             // 연습: 기본 30 포인트
+    
+    private static final double RANK_SCORE_MULTIPLIER = 0.2;       // 랭크: 점수당 0.2 포인트
+    private static final int RANK_BASE_POINT = 50;                 // 랭크: 기본 50 포인트
+    
+    // 멀티 게임 포인트 상수
     private static final int BASE_MULTI_GAME_POINT = 100;
     private static final double BASE_POINT_ADJUSTMENT = 0.1;
     
@@ -13,12 +19,22 @@ public class PointCalculator {
     private static final int[] RANK_BONUS_POINTS = {150, 100, 70, 50, 30};
     private static final int DEFAULT_PARTICIPATION_POINT = 20;
 
+    /**
+     * 로드뷰 연습 게임 포인트 계산
+     * 공식: score * 0.08 + 30
+     * 예: 0점 = 30P, 500점 = 70P, 1000점 = 110P
+     */
     public static int getPracticePoint(double score){
-        return (int) (getAdjustedPoint(score) * BASE_POINT_ADJUSTMENT + BASE_PRACTICE_POINT);
+        return (int) (score * PRACTICE_SCORE_MULTIPLIER + PRACTICE_BASE_POINT);
     }
 
+    /**
+     * 로드뷰 랭크 게임 포인트 계산
+     * 공식: (score * 0.2 + 50) * tierMultiplier
+     * 예: Bronze 1000점 = 250P, Master 1000점 = 625P
+     */
     public static int getRankPoint(RankTier tier, double score) {
-        double basePoint = (getAdjustedPoint(score) + BASE_RANK_POINT) * tier.getPointMultiplier();
+        double basePoint = (score * RANK_SCORE_MULTIPLIER + RANK_BASE_POINT) * tier.getPointMultiplier();
         return (int) basePoint;
     }
     

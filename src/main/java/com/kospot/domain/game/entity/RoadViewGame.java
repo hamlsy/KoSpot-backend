@@ -1,6 +1,7 @@
 package com.kospot.domain.game.entity;
 
 import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.domain.coordinate.entity.Sido;
 import com.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameStatus;
@@ -31,7 +32,10 @@ public class RoadViewGame extends Game {
 
     private double score;
 
-    public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType) {
+    @Enumerated(EnumType.STRING)
+    private Sido practiceSido;
+
+    public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType, Sido practiceSido) {
         return RoadViewGame.builder()
                 .coordinate(coordinate)
                 .member(member)
@@ -39,6 +43,7 @@ public class RoadViewGame extends Game {
                 .gameType(gameType)
                 .poiName(coordinate.getPoiName())
                 .gameStatus(GameStatus.ABANDONED)
+                .practiceSido(practiceSido)
                 .build();
     }
 
