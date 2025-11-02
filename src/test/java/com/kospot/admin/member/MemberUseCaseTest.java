@@ -70,9 +70,9 @@ public class MemberUseCaseTest {
             memberStatisticRepository.save(
                     MemberStatistic.builder()
                             .member(member)
-                            .singlePracticeGames((long) (10 * i))
-                            .singleRankGames((long) (5 * i))
-                            .multiGames((long) (3 * i))
+                            .roadviewPracticeGames((long) (10 * i))
+                            .roadviewRankGames((long) (5 * i))
+                            .roadviewMultiGames((long) (3 * i))
                             .build()
             );
         }
@@ -103,15 +103,15 @@ public class MemberUseCaseTest {
         memberStatisticRepository.save(
                 MemberStatistic.builder()
                         .member(member)
-                        .singlePracticeGames(20L)
-                        .singlePracticeAvgScore(80.5)
-                        .singleRankGames(15L)
-                        .singleRankAvgScore(75.3)
-                        .multiGames(15L)
-                        .multiAvgScore(70.2)
-                        .multiFirstPlace(5L)
-                        .multiSecondPlace(5L)
-                        .multiThirdPlace(5L)
+                        .roadviewPracticeGames(20L)
+                        .roadviewPracticeAvgScore(80.5)
+                        .roadviewRankGames(15L)
+                        .roadviewRankAvgScore(75.3)
+                        .roadviewMultiGames(15L)
+                        .roadviewMultiAvgScore(70.2)
+                        .roadviewMultiFirstPlace(5L)
+                        .roadviewMultiSecondPlace(5L)
+                        .roadviewMultiThirdPlace(5L)
                         .bestScore(95.5)
                         .currentStreak(3)
                         .longestStreak(7)
@@ -126,15 +126,15 @@ public class MemberUseCaseTest {
         assertEquals("testuser", detail.getUsername());
         assertEquals("테스트유저", detail.getNickname());
         assertEquals(Role.USER, detail.getRole());
-        assertEquals(20L, detail.getSinglePracticeGames());
-        assertEquals(80.5, detail.getSinglePracticeAvgScore());
-        assertEquals(15L, detail.getSingleRankGames());
-        assertEquals(75.3, detail.getSingleRankAvgScore());
-        assertEquals(15L, detail.getMultiGames());
-        assertEquals(70.2, detail.getMultiAvgScore());
-        assertEquals(5L, detail.getMultiFirstPlace());
-        assertEquals(5L, detail.getMultiSecondPlace());
-        assertEquals(5L, detail.getMultiThirdPlace());
+        assertEquals(20L, detail.getRoadviewPracticeGames());
+        assertEquals(80.5, detail.getRoadviewPracticeAvgScore());
+        assertEquals(15L, detail.getRoadviewRankGames());
+        assertEquals(75.3, detail.getRoadviewRankAvgScore());
+        assertEquals(15L, detail.getRoadviewMultiGames());
+        assertEquals(70.2, detail.getRoadviewMultiAvgScore());
+        assertEquals(5L, detail.getRoadviewMultiFirstPlace());
+        assertEquals(5L, detail.getRoadviewMultiSecondPlace());
+        assertEquals(5L, detail.getRoadviewMultiThirdPlace());
         assertEquals(95.5, detail.getBestScore());
         assertEquals(3, detail.getCurrentStreak());
         assertEquals(7, detail.getLongestStreak());

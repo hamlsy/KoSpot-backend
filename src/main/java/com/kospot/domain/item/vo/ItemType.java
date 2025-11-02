@@ -10,7 +10,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum ItemType {
-    MARKER("마커"), NONE("none");
+    MARKER("마커"), MARKER_ANIMATION("마커 애니메이션"),NONE("none");
 
     private final String type;
 

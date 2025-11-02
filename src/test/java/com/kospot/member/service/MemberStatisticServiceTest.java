@@ -52,9 +52,9 @@ public class MemberStatisticServiceTest {
         // then
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(testMember);
         assertNotNull(statistic);
-        assertEquals(0L, statistic.getSinglePracticeGames());
-        assertEquals(0L, statistic.getSingleRankGames());
-        assertEquals(0L, statistic.getMultiGames());
+        assertEquals(0L, statistic.getRoadviewPracticeGames());
+        assertEquals(0L, statistic.getRoadviewRankGames());
+        assertEquals(0L, statistic.getRoadviewMultiGames());
         assertEquals(0.0, statistic.getBestScore());
         assertEquals(0, statistic.getCurrentStreak());
     }
@@ -71,9 +71,9 @@ public class MemberStatisticServiceTest {
 
         // then
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(testMember);
-        assertEquals(1L, statistic.getSinglePracticeGames());
-        assertEquals(3500.0, statistic.getSinglePracticeAvgScore());
-        assertEquals(3500.0, statistic.getSinglePracticeTotalScore());
+        assertEquals(1L, statistic.getRoadviewPracticeGames());
+        assertEquals(3500.0, statistic.getRoadviewPracticeAvgScore());
+        assertEquals(3500.0, statistic.getRoadviewPracticeTotalScore());
         assertEquals(3500.0, statistic.getBestScore());
         assertEquals(1, statistic.getCurrentStreak());
         assertEquals(playTime, statistic.getLastPlayedAt());
@@ -91,9 +91,9 @@ public class MemberStatisticServiceTest {
 
         // then
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(testMember);
-        assertEquals(1L, statistic.getSingleRankGames());
-        assertEquals(4200.0, statistic.getSingleRankAvgScore());
-        assertEquals(4200.0, statistic.getSingleRankTotalScore());
+        assertEquals(1L, statistic.getRoadviewRankGames());
+        assertEquals(4200.0, statistic.getRoadviewRankAvgScore());
+        assertEquals(4200.0, statistic.getRoadviewRankTotalScore());
         assertEquals(4200.0, statistic.getBestScore());
     }
 
@@ -111,9 +111,9 @@ public class MemberStatisticServiceTest {
 
         // then
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(testMember);
-        assertEquals(3L, statistic.getSinglePracticeGames());
-        assertEquals(4000.0, statistic.getSinglePracticeAvgScore());
-        assertEquals(12000.0, statistic.getSinglePracticeTotalScore());
+        assertEquals(3L, statistic.getRoadviewPracticeGames());
+        assertEquals(4000.0, statistic.getRoadviewPracticeAvgScore());
+        assertEquals(12000.0, statistic.getRoadviewPracticeTotalScore());
     }
 
     @DisplayName("멀티 게임 통계를 업데이트한다")
@@ -128,12 +128,12 @@ public class MemberStatisticServiceTest {
 
         // then
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(testMember);
-        assertEquals(1L, statistic.getMultiGames());
-        assertEquals(3800.0, statistic.getMultiAvgScore());
-        assertEquals(3800.0, statistic.getMultiTotalScore());
-        assertEquals(1L, statistic.getMultiFirstPlace());
-        assertEquals(0L, statistic.getMultiSecondPlace());
-        assertEquals(0L, statistic.getMultiThirdPlace());
+        assertEquals(1L, statistic.getRoadviewMultiGames());
+        assertEquals(3800.0, statistic.getRoadviewMultiAvgScore());
+        assertEquals(3800.0, statistic.getRoadviewMultiTotalScore());
+        assertEquals(1L, statistic.getRoadviewMultiFirstPlace());
+        assertEquals(0L, statistic.getRoadviewMultiSecondPlace());
+        assertEquals(0L, statistic.getRoadviewMultiThirdPlace());
     }
 
     @DisplayName("멀티 게임 순위별 통계가 올바르게 누적된다")
@@ -151,10 +151,10 @@ public class MemberStatisticServiceTest {
 
         // then
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(testMember);
-        assertEquals(4L, statistic.getMultiGames());
-        assertEquals(2L, statistic.getMultiFirstPlace());
-        assertEquals(1L, statistic.getMultiSecondPlace());
-        assertEquals(1L, statistic.getMultiThirdPlace());
+        assertEquals(4L, statistic.getRoadviewMultiGames());
+        assertEquals(2L, statistic.getRoadviewMultiFirstPlace());
+        assertEquals(1L, statistic.getRoadviewMultiSecondPlace());
+        assertEquals(1L, statistic.getRoadviewMultiThirdPlace());
     }
 
     @DisplayName("최고 점수가 올바르게 업데이트된다")
@@ -237,7 +237,7 @@ public class MemberStatisticServiceTest {
         // then
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(testMember);
         assertEquals(1, statistic.getCurrentStreak());
-        assertEquals(3L, statistic.getSinglePracticeGames());
+        assertEquals(3L, statistic.getRoadviewPracticeGames());
     }
 
     @DisplayName("최근 플레이 시간이 올바르게 업데이트된다")
@@ -273,12 +273,12 @@ public class MemberStatisticServiceTest {
 
         // then
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(testMember);
-        assertEquals(1L, statistic.getSinglePracticeGames());
-        assertEquals(1L, statistic.getSingleRankGames());
-        assertEquals(1L, statistic.getMultiGames());
-        assertEquals(3000.0, statistic.getSinglePracticeAvgScore());
-        assertEquals(4000.0, statistic.getSingleRankAvgScore());
-        assertEquals(3500.0, statistic.getMultiAvgScore());
+        assertEquals(1L, statistic.getRoadviewPracticeGames());
+        assertEquals(1L, statistic.getRoadviewRankGames());
+        assertEquals(1L, statistic.getRoadviewMultiGames());
+        assertEquals(3000.0, statistic.getRoadviewPracticeAvgScore());
+        assertEquals(4000.0, statistic.getRoadviewRankAvgScore());
+        assertEquals(3500.0, statistic.getRoadviewMultiAvgScore());
     }
 
     private Member createTestMember(String username, String nickname) {

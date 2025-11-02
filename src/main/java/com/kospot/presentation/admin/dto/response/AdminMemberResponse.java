@@ -51,16 +51,29 @@ public class AdminMemberResponse {
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
 
-        // 통계 정보
-        private Long singlePracticeGames;
-        private Double singlePracticeAvgScore;
-        private Long singleRankGames;
-        private Double singleRankAvgScore;
-        private Long multiGames;
-        private Double multiAvgScore;
-        private Long multiFirstPlace;
-        private Long multiSecondPlace;
-        private Long multiThirdPlace;
+        // 통계 정보 (로드뷰 모드)
+        private Long roadviewPracticeGames;
+        private Double roadviewPracticeAvgScore;
+        private Long roadviewRankGames;
+        private Double roadviewRankAvgScore;
+        private Long roadviewMultiGames;
+        private Double roadviewMultiAvgScore;
+        private Long roadviewMultiFirstPlace;
+        private Long roadviewMultiSecondPlace;
+        private Long roadviewMultiThirdPlace;
+        
+        // 통계 정보 (포토 모드)
+        private Long photoPracticeGames;
+        private Double photoPracticeAvgScore;
+        private Long photoRankGames;
+        private Double photoRankAvgScore;
+        private Long photoMultiGames;
+        private Double photoMultiAvgScore;
+        private Long photoMultiFirstPlace;
+        private Long photoMultiSecondPlace;
+        private Long photoMultiThirdPlace;
+        
+        // 공통 통계
         private Double bestScore;
         private Integer currentStreak;
         private Integer longestStreak;
@@ -75,15 +88,24 @@ public class AdminMemberResponse {
                     .point(member.getPoint())
                     .createdAt(member.getCreatedDate())
                     .updatedAt(member.getLastModifiedDate())
-                    .singlePracticeGames(statistic.getSinglePracticeGames())
-                    .singlePracticeAvgScore(statistic.getSinglePracticeAvgScore())
-                    .singleRankGames(statistic.getSingleRankGames())
-                    .singleRankAvgScore(statistic.getSingleRankAvgScore())
-                    .multiGames(statistic.getMultiGames())
-                    .multiAvgScore(statistic.getMultiAvgScore())
-                    .multiFirstPlace(statistic.getMultiFirstPlace())
-                    .multiSecondPlace(statistic.getMultiSecondPlace())
-                    .multiThirdPlace(statistic.getMultiThirdPlace())
+                    .roadviewPracticeGames(statistic.getRoadviewPracticeGames())
+                    .roadviewPracticeAvgScore(statistic.getRoadviewPracticeAvgScore())
+                    .roadviewRankGames(statistic.getRoadviewRankGames())
+                    .roadviewRankAvgScore(statistic.getRoadviewRankAvgScore())
+                    .roadviewMultiGames(statistic.getRoadviewMultiGames())
+                    .roadviewMultiAvgScore(statistic.getRoadviewMultiAvgScore())
+                    .roadviewMultiFirstPlace(statistic.getRoadviewMultiFirstPlace())
+                    .roadviewMultiSecondPlace(statistic.getRoadviewMultiSecondPlace())
+                    .roadviewMultiThirdPlace(statistic.getRoadviewMultiThirdPlace())
+                    .photoPracticeGames(statistic.getPhotoPracticeGames())
+                    .photoPracticeAvgScore(statistic.getPhotoPracticeAvgScore())
+                    .photoRankGames(statistic.getPhotoRankGames())
+                    .photoRankAvgScore(statistic.getPhotoRankAvgScore())
+                    .photoMultiGames(statistic.getPhotoMultiGames())
+                    .photoMultiAvgScore(statistic.getPhotoMultiAvgScore())
+                    .photoMultiFirstPlace(statistic.getPhotoMultiFirstPlace())
+                    .photoMultiSecondPlace(statistic.getPhotoMultiSecondPlace())
+                    .photoMultiThirdPlace(statistic.getPhotoMultiThirdPlace())
                     .bestScore(statistic.getBestScore())
                     .currentStreak(statistic.getCurrentStreak())
                     .longestStreak(statistic.getLongestStreak())

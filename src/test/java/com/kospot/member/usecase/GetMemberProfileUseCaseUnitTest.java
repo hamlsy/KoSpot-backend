@@ -82,15 +82,15 @@ public class GetMemberProfileUseCaseUnitTest {
 
         // then
         assertNotNull(stats);
-        assertEquals(50L, stats.getSingleGame().getPractice().getTotalGames());
-        assertEquals(3200.5, stats.getSingleGame().getPractice().getAverageScore());
-        assertEquals(30L, stats.getSingleGame().getRank().getTotalGames());
-        assertEquals(4100.0, stats.getSingleGame().getRank().getAverageScore());
-        assertEquals(25L, stats.getMultiGame().getTotalGames());
-        assertEquals(3900.0, stats.getMultiGame().getAverageScore());
-        assertEquals(8L, stats.getMultiGame().getFirstPlaceCount());
-        assertEquals(10L, stats.getMultiGame().getSecondPlaceCount());
-        assertEquals(5L, stats.getMultiGame().getThirdPlaceCount());
+        assertEquals(50L, stats.getRoadView().getPractice().getTotalGames());
+        assertEquals(3200.5, stats.getRoadView().getPractice().getAverageScore());
+        assertEquals(30L, stats.getRoadView().getRank().getTotalGames());
+        assertEquals(4100.0, stats.getRoadView().getRank().getAverageScore());
+        assertEquals(25L, stats.getRoadView().getMulti().getTotalGames());
+        assertEquals(3900.0, stats.getRoadView().getMulti().getAverageScore());
+        assertEquals(8L, stats.getRoadView().getMulti().getFirstPlaceCount());
+        assertEquals(10L, stats.getRoadView().getMulti().getSecondPlaceCount());
+        assertEquals(5L, stats.getRoadView().getMulti().getThirdPlaceCount());
         assertEquals(4800.0, stats.getBestScore());
     }
 
@@ -154,8 +154,8 @@ public class GetMemberProfileUseCaseUnitTest {
 
         // then
         assertNotNull(response);
-        assertEquals(0L, response.getStatistics().getSingleGame().getPractice().getTotalGames());
-        assertEquals(0.0, response.getStatistics().getSingleGame().getPractice().getAverageScore());
+        assertEquals(0L, response.getStatistics().getRoadView().getPractice().getTotalGames());
+        assertEquals(0.0, response.getStatistics().getRoadView().getPractice().getAverageScore());
         assertEquals(0, response.getCurrentStreak());
         assertNull(response.getLastPlayedAt());
     }
@@ -194,18 +194,30 @@ public class GetMemberProfileUseCaseUnitTest {
         return MemberStatistic.builder()
                 .id(1L)
                 .member(testMember)
-                .singlePracticeGames(50L)
-                .singlePracticeAvgScore(3200.5)
-                .singlePracticeTotalScore(160025.0)
-                .singleRankGames(30L)
-                .singleRankAvgScore(4100.0)
-                .singleRankTotalScore(123000.0)
-                .multiGames(25L)
-                .multiAvgScore(3900.0)
-                .multiTotalScore(97500.0)
-                .multiFirstPlace(8L)
-                .multiSecondPlace(10L)
-                .multiThirdPlace(5L)
+                .roadviewPracticeGames(50L)
+                .roadviewPracticeAvgScore(3200.5)
+                .roadviewPracticeTotalScore(160025.0)
+                .roadviewRankGames(30L)
+                .roadviewRankAvgScore(4100.0)
+                .roadviewRankTotalScore(123000.0)
+                .roadviewMultiGames(25L)
+                .roadviewMultiAvgScore(3900.0)
+                .roadviewMultiTotalScore(97500.0)
+                .roadviewMultiFirstPlace(8L)
+                .roadviewMultiSecondPlace(10L)
+                .roadviewMultiThirdPlace(5L)
+                .photoPracticeGames(0L)
+                .photoPracticeAvgScore(0.0)
+                .photoPracticeTotalScore(0.0)
+                .photoRankGames(0L)
+                .photoRankAvgScore(0.0)
+                .photoRankTotalScore(0.0)
+                .photoMultiGames(0L)
+                .photoMultiAvgScore(0.0)
+                .photoMultiTotalScore(0.0)
+                .photoMultiFirstPlace(0L)
+                .photoMultiSecondPlace(0L)
+                .photoMultiThirdPlace(0L)
                 .bestScore(4800.0)
                 .currentStreak(15)
                 .longestStreak(20)

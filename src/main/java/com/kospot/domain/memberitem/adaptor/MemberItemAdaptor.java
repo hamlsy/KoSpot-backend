@@ -48,5 +48,8 @@ public class MemberItemAdaptor {
         return repository.findAllByMemberAndItemTypeFetch(member, itemType);
     }
 
+    public List<MemberItemResponse> queryAllByMemberFetch(Member member) {
+        return repository.findAllByMemberFetch(member);
+    }
 
 }

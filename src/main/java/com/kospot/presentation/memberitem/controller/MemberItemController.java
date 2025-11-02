@@ -2,6 +2,7 @@ package com.kospot.presentation.memberitem.controller;
 
 import com.kospot.application.memberitem.EquipMemberItemUseCase;
 import com.kospot.application.memberitem.FindAllMemberItemsByItemTypeUseCase;
+import com.kospot.application.memberitem.FindAllMemberItemsUseCase;
 import com.kospot.application.memberitem.PurchaseItemUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
@@ -30,6 +31,7 @@ public class MemberItemController {
 
     private final EquipMemberItemUseCase equipMemberItemUseCase;
     private final FindAllMemberItemsByItemTypeUseCase findAllMemberItemsByItemTypeUseCase;
+    private final FindAllMemberItemsUseCase findAllMemberItemsUseCase;
     private final PurchaseItemUseCase purchaseItemUseCase;
 
     //todo refactoring
@@ -52,6 +54,12 @@ public class MemberItemController {
     public ApiResponseDto<List<MemberItemResponse>> findAllMemberItemByItemType(
             @CurrentMember Member member, @PathVariable("itemType") String itemType) {
         return ApiResponseDto.onSuccess(findAllMemberItemsByItemTypeUseCase.execute(member, itemType));
+    }
+
+    @Operation(summary = "내 아이템 전체 조회", description = "내 인벤토리에서 아이템들을 조회합니다.")
+    @GetMapping("/inventory")
+    public ApiResponseDto<List<MemberItemResponse>> findAllMemberItems(@CurrentMember Member member) {
+        return ApiResponseDto.onSuccess(findAllMemberItemsUseCase.execute(member));
     }
 
 }

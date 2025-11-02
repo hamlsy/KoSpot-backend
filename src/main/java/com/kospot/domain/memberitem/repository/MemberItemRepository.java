@@ -51,4 +51,10 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
     @Query("select count(mi) from MemberItem mi where mi.member = :member and mi.isEquipped = true")
     long countEquippedByMember(@Param("member") Member member);
 
+    @Query("select new com.kospot.presentation.memberitem.dto.response.MemberItemResponse(" +
+            "mi.id, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
+            "from MemberItem mi join mi.item " +
+            "where mi.member = :member")
+    List<MemberItemResponse> findAllByMemberFetch(@Param("member") Member member);
+
 }
