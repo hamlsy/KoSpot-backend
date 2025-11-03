@@ -25,52 +25,59 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Spring Profile
+      # -------------------- Spring Profile --------------------
       - SPRING_PROFILES_ACTIVE=prod
       
-      # Database Configuration (RDS)
-      # application.yml의 플레이스홀더와 일치시킴
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_NAME}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
+      # -------------------- Database (RDS) --------------------
+      # .env의 DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD 사용
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
       
-      # Redis Configuration
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      # -------------------- Redis --------------------
+      # .env의 REDIS_PASSWORD 사용, HOST/PORT는 docker network 내부 사용
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_DATA_REDIS_PASSWORD=${REDIS_PASSWORD}
       
-      # JWT Configuration
-      - JWT_SECRET=${JWT_SECRET}
+      # -------------------- JWT --------------------
+      # .env의 JWT_SECRET 사용
+      - APP_JWT_SECRET=${JWT_SECRET}
       
-      # OAuth2 Configuration
-      - OAUTH_GOOGLE_CLIENT_ID=${OAUTH_GOOGLE_CLIENT_ID}
-      - OAUTH_GOOGLE_CLIENT_SECRET=${OAUTH_GOOGLE_CLIENT_SECRET}
-      - OAUTH_NAVER_CLIENT_ID=${OAUTH_NAVER_CLIENT_ID}
-      - OAUTH_NAVER_CLIENT_SECRET=${OAUTH_NAVER_CLIENT_SECRET}
-      - OAUTH_KAKAO_CLIENT_ID=${OAUTH_KAKAO_CLIENT_ID}
-      - OAUTH_KAKAO_CLIENT_SECRET=${OAUTH_KAKAO_CLIENT_SECRET}
+      # -------------------- OAuth2 --------------------
+      # .env의 OAUTH_* 변수들 사용
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID=${OAUTH_GOOGLE_CLIENT_ID}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET=${OAUTH_GOOGLE_CLIENT_SECRET}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_NAVER_CLIENT_ID=${OAUTH_NAVER_CLIENT_ID}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_NAVER_CLIENT_SECRET=${OAUTH_NAVER_CLIENT_SECRET}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENT_ID=${OAUTH_KAKAO_CLIENT_ID}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENT_SECRET=${OAUTH_KAKAO_CLIENT_SECRET}
       
-      # AWS Configuration
-      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
-      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
-      - AWS_REGION=${AWS_REGION}
+      # -------------------- AWS Configuration --------------------
+      # .env의 AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION 사용
+      - CLOUD_AWS_CREDENTIALS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - CLOUD_AWS_CREDENTIALS_SECRET_KEY=${AWS_SECRET_KEY}
+      - CLOUD_AWS_REGION_STATIC=${AWS_REGION}
       
-      # AWS S3 Buckets
-      # 이미지 저장용 버킷 (배너, 포토모드, 아이템 등)
-      - S3_BUCKET=${S3_BUCKET}
+      # -------------------- AWS S3 Buckets --------------------
+      # .env의 S3_BUCKET 사용 (이미지 저장용)
+      - CLOUD_AWS_S3_BUCKET=${S3_BUCKET}
       
-      # Application Configuration
+      # -------------------- Application --------------------
+      # .env의 SERVER_PORT 사용
       - SERVER_PORT=${SERVER_PORT:-8080}
       
-      # CORS Configuration
-      - CORS_FRONT_URL=${CORS_FRONT_URL}
+      # -------------------- CORS --------------------
+      # .env의 CORS_FRONT_URL 사용
+      - APP_CORS_FRONT_PATH=${CORS_FRONT_URL}
       
-      # WebSocket Configuration
+      # -------------------- WebSocket --------------------
+      # .env의 WEBSOCKET_ALLOWED_ORIGINS 사용
       - WEBSOCKET_ALLOWED_ORIGINS=${WEBSOCKET_ALLOWED_ORIGINS}
       
-      # AES Encryption
+      # -------------------- AES Encryption --------------------
+      # .env의 AES_SECRET_KEY 사용
       - AES_SECRET_KEY=${AES_SECRET_KEY}
       
     depends_on:
