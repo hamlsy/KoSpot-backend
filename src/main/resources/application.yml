@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active:
-      - local
   mvc:
     servlet:
       path: /api
