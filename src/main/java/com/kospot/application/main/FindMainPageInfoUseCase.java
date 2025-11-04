@@ -29,7 +29,11 @@ public class FindMainPageInfoUseCase {
 
     public MainPageResponse.MainPageInfo execute(Member member) {
         // 관리자 여부 확인
-        Boolean isAdmin = member.isAdmin();
+
+        Boolean isAdmin = false;
+        if (member != null) {
+            isAdmin = member.isAdmin();
+        }
 
         // 활성화된 게임 모드 조회
         List<GameConfig> activeGameConfigs = gameConfigAdaptor.queryAllActive();
