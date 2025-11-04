@@ -2,6 +2,7 @@ package com.kospot.infrastructure.security.resolver;
 
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.infrastructure.security.aop.CurrentMemberOrNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -24,7 +25,8 @@ public final class CustomAuthenticationPrincipalArgumentResolver implements Hand
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return findMethodAnnotation(CurrentMember.class, parameter) != null;
+        return findMethodAnnotation(CurrentMember.class, parameter) != null
+                || findMethodAnnotation(CurrentMemberOrNull.class, parameter) != null;
     }
 
     @Override
@@ -32,6 +34,14 @@ public final class CustomAuthenticationPrincipalArgumentResolver implements Hand
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            // nullable 버전이면 null 리턴
+            if (hasAnnotation(parameter, CurrentMemberOrNull.class)) {
+                return null;
+            }
+            // 필수 버전이면 예외
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
 
         Object principal = authentication.getPrincipal();
         CurrentMember annotation = findMethodAnnotation(CurrentMember.class, parameter);
@@ -57,5 +67,7 @@ public final class CustomAuthenticationPrincipalArgumentResolver implements Hand
 
         return null;
     }
-
+    private boolean hasAnnotation(MethodParameter parameter, Class<? extends Annotation> annotationClass) {
+        return parameter.getParameterAnnotation(annotationClass) != null;
+    }
 }

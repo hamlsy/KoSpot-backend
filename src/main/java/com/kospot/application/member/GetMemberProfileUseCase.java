@@ -9,11 +9,13 @@ import com.kospot.domain.member.entity.MemberStatistic;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics;
-import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics.SingleGameStats;
-import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics.SingleGameStats.GameModeStats;
+import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics.RoadViewGameStats;
+import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics.PhotoGameStats;
+import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics.GameModeStats;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics.MultiGameStats;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.RankInfo;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.RankInfo.RoadViewRank;
+import com.kospot.presentation.member.dto.response.MemberProfileResponse.RankInfo.PhotoRank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,22 +48,39 @@ public class GetMemberProfileUseCase {
 
     private GameStatistics buildGameStatistics(MemberStatistic statistic) {
         return GameStatistics.builder()
-                .singleGame(SingleGameStats.builder()
+                .roadView(RoadViewGameStats.builder()
                         .practice(GameModeStats.builder()
-                                .totalGames(statistic.getSinglePracticeGames())
-                                .averageScore(statistic.getSinglePracticeAvgScore())
+                                .totalGames(statistic.getRoadviewPracticeGames())
+                                .averageScore(statistic.getRoadviewPracticeAvgScore())
                                 .build())
                         .rank(GameModeStats.builder()
-                                .totalGames(statistic.getSingleRankGames())
-                                .averageScore(statistic.getSingleRankAvgScore())
+                                .totalGames(statistic.getRoadviewRankGames())
+                                .averageScore(statistic.getRoadviewRankAvgScore())
+                                .build())
+                        .multi(MultiGameStats.builder()
+                                .totalGames(statistic.getRoadviewMultiGames())
+                                .averageScore(statistic.getRoadviewMultiAvgScore())
+                                .firstPlaceCount(statistic.getRoadviewMultiFirstPlace())
+                                .secondPlaceCount(statistic.getRoadviewMultiSecondPlace())
+                                .thirdPlaceCount(statistic.getRoadviewMultiThirdPlace())
                                 .build())
                         .build())
-                .multiGame(MultiGameStats.builder()
-                        .totalGames(statistic.getMultiGames())
-                        .averageScore(statistic.getMultiAvgScore())
-                        .firstPlaceCount(statistic.getMultiFirstPlace())
-                        .secondPlaceCount(statistic.getMultiSecondPlace())
-                        .thirdPlaceCount(statistic.getMultiThirdPlace())
+                .photo(PhotoGameStats.builder()
+                        .practice(GameModeStats.builder()
+                                .totalGames(statistic.getPhotoPracticeGames())
+                                .averageScore(statistic.getPhotoPracticeAvgScore())
+                                .build())
+                        .rank(GameModeStats.builder()
+                                .totalGames(statistic.getPhotoRankGames())
+                                .averageScore(statistic.getPhotoRankAvgScore())
+                                .build())
+                        .multi(MultiGameStats.builder()
+                                .totalGames(statistic.getPhotoMultiGames())
+                                .averageScore(statistic.getPhotoMultiAvgScore())
+                                .firstPlaceCount(statistic.getPhotoMultiFirstPlace())
+                                .secondPlaceCount(statistic.getPhotoMultiSecondPlace())
+                                .thirdPlaceCount(statistic.getPhotoMultiThirdPlace())
+                                .build())
                         .build())
                 .bestScore(statistic.getBestScore())
                 .build();
@@ -69,12 +88,18 @@ public class GetMemberProfileUseCase {
 
     private RankInfo buildRankInfo(Member member) {
         GameRank roadViewRank = gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.ROADVIEW);
+        GameRank photoRank = gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.PHOTO);
 
         return RankInfo.builder()
                 .roadViewRank(RoadViewRank.builder()
                         .tier(roadViewRank.getRankTier())
                         .level(roadViewRank.getRankLevel())
                         .ratingScore(roadViewRank.getRatingScore())
+                        .build())
+                .photoRank(PhotoRank.builder()
+                        .tier(photoRank.getRankTier())
+                        .level(photoRank.getRankLevel())
+                        .ratingScore(photoRank.getRatingScore())
                         .build())
                 .build();
     }

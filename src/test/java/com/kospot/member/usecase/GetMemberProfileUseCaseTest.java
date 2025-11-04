@@ -52,6 +52,7 @@ public class GetMemberProfileUseCaseTest {
         testMember = createTestMember("testUser", "testNickname");
         testStatistic = createTestStatistic(testMember);
         createTestGameRank(testMember);
+        createTestGameRankForPhoto(testMember);
     }
 
     @DisplayName("회원 프로필을 정상적으로 조회한다")
@@ -78,20 +79,25 @@ public class GetMemberProfileUseCaseTest {
         // then
         assertNotNull(statistics);
         
-        // 싱글 게임 - 연습 모드
-        assertEquals(10L, statistics.getSingleGame().getPractice().getTotalGames());
-        assertEquals(3500.5, statistics.getSingleGame().getPractice().getAverageScore());
+        // 로드뷰 모드 - 연습
+        assertEquals(10L, statistics.getRoadView().getPractice().getTotalGames());
+        assertEquals(3500.5, statistics.getRoadView().getPractice().getAverageScore());
         
-        // 싱글 게임 - 랭크 모드
-        assertEquals(20L, statistics.getSingleGame().getRank().getTotalGames());
-        assertEquals(4200.8, statistics.getSingleGame().getRank().getAverageScore());
+        // 로드뷰 모드 - 랭크
+        assertEquals(20L, statistics.getRoadView().getRank().getTotalGames());
+        assertEquals(4200.8, statistics.getRoadView().getRank().getAverageScore());
         
-        // 멀티 게임
-        assertEquals(15L, statistics.getMultiGame().getTotalGames());
-        assertEquals(3800.0, statistics.getMultiGame().getAverageScore());
-        assertEquals(5L, statistics.getMultiGame().getFirstPlaceCount());
-        assertEquals(7L, statistics.getMultiGame().getSecondPlaceCount());
-        assertEquals(3L, statistics.getMultiGame().getThirdPlaceCount());
+        // 로드뷰 모드 - 멀티
+        assertEquals(15L, statistics.getRoadView().getMulti().getTotalGames());
+        assertEquals(3800.0, statistics.getRoadView().getMulti().getAverageScore());
+        assertEquals(5L, statistics.getRoadView().getMulti().getFirstPlaceCount());
+        assertEquals(7L, statistics.getRoadView().getMulti().getSecondPlaceCount());
+        assertEquals(3L, statistics.getRoadView().getMulti().getThirdPlaceCount());
+        
+        // 포토 모드는 0으로 초기화
+        assertEquals(0L, statistics.getPhoto().getPractice().getTotalGames());
+        assertEquals(0L, statistics.getPhoto().getRank().getTotalGames());
+        assertEquals(0L, statistics.getPhoto().getMulti().getTotalGames());
         
         // 최고 점수
         assertEquals(4950.0, statistics.getBestScore());
@@ -110,6 +116,9 @@ public class GetMemberProfileUseCaseTest {
         assertEquals(RankTier.GOLD, rankInfo.getRoadViewRank().getTier());
         assertEquals(RankLevel.THREE, rankInfo.getRoadViewRank().getLevel());
         assertEquals(1850, rankInfo.getRoadViewRank().getRatingScore());
+        
+        // 포토 랭크도 확인
+        assertNotNull(rankInfo.getPhotoRank());
     }
 
     @DisplayName("프로필 이미지 URL이 올바르게 조회된다")
@@ -152,14 +161,17 @@ public class GetMemberProfileUseCaseTest {
         MemberStatistic emptyStatistic = MemberStatistic.create(newMember);
         memberStatisticRepository.save(emptyStatistic);
         createTestGameRank(newMember);
+        createTestGameRankForPhoto(newMember);
 
         // when
         MemberProfileResponse response = getMemberProfileUseCase.execute(newMember);
 
         // then
         assertNotNull(response);
-        assertEquals(0L, response.getStatistics().getSingleGame().getPractice().getTotalGames());
-        assertEquals(0.0, response.getStatistics().getSingleGame().getPractice().getAverageScore());
+        assertEquals(0L, response.getStatistics().getRoadView().getPractice().getTotalGames());
+        assertEquals(0.0, response.getStatistics().getRoadView().getPractice().getAverageScore());
+        assertEquals(0L, response.getStatistics().getPhoto().getPractice().getTotalGames());
+        assertEquals(0.0, response.getStatistics().getPhoto().getPractice().getAverageScore());
         assertEquals(0, response.getCurrentStreak());
         assertNull(response.getLastPlayedAt());
     }
@@ -196,18 +208,30 @@ public class GetMemberProfileUseCaseTest {
     private MemberStatistic createTestStatistic(Member member) {
         MemberStatistic statistic = MemberStatistic.builder()
                 .member(member)
-                .singlePracticeGames(10L)
-                .singlePracticeAvgScore(3500.5)
-                .singlePracticeTotalScore(35005.0)
-                .singleRankGames(20L)
-                .singleRankAvgScore(4200.8)
-                .singleRankTotalScore(84016.0)
-                .multiGames(15L)
-                .multiAvgScore(3800.0)
-                .multiTotalScore(57000.0)
-                .multiFirstPlace(5L)
-                .multiSecondPlace(7L)
-                .multiThirdPlace(3L)
+                .roadviewPracticeGames(10L)
+                .roadviewPracticeAvgScore(3500.5)
+                .roadviewPracticeTotalScore(35005.0)
+                .roadviewRankGames(20L)
+                .roadviewRankAvgScore(4200.8)
+                .roadviewRankTotalScore(84016.0)
+                .roadviewMultiGames(15L)
+                .roadviewMultiAvgScore(3800.0)
+                .roadviewMultiTotalScore(57000.0)
+                .roadviewMultiFirstPlace(5L)
+                .roadviewMultiSecondPlace(7L)
+                .roadviewMultiThirdPlace(3L)
+                .photoPracticeGames(0L)
+                .photoPracticeAvgScore(0.0)
+                .photoPracticeTotalScore(0.0)
+                .photoRankGames(0L)
+                .photoRankAvgScore(0.0)
+                .photoRankTotalScore(0.0)
+                .photoMultiGames(0L)
+                .photoMultiAvgScore(0.0)
+                .photoMultiTotalScore(0.0)
+                .photoMultiFirstPlace(0L)
+                .photoMultiSecondPlace(0L)
+                .photoMultiThirdPlace(0L)
                 .bestScore(4950.0)
                 .currentStreak(7)
                 .longestStreak(10)
@@ -224,6 +248,17 @@ public class GetMemberProfileUseCaseTest {
                 .ratingScore(1850)
                 .rankTier(RankTier.GOLD)
                 .rankLevel(RankLevel.THREE)
+                .build();
+        return gameRankRepository.save(gameRank);
+    }
+
+    private GameRank createTestGameRankForPhoto(Member member) {
+        GameRank gameRank = GameRank.builder()
+                .member(member)
+                .gameMode(GameMode.PHOTO)
+                .ratingScore(1000)
+                .rankTier(RankTier.BRONZE)
+                .rankLevel(RankLevel.ONE)
                 .build();
         return gameRankRepository.save(gameRank);
     }

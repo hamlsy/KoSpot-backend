@@ -45,6 +45,9 @@ public class Member extends BaseTimeEntity {
 
     private int point;
 
+    @Column(nullable = false)
+    private boolean firstVisited = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image equippedMarkerImage;
@@ -108,4 +111,7 @@ public class Member extends BaseTimeEntity {
         return this.role == Role.ADMIN;
     }
 
+    public void markVisited() {
+        this.firstVisited = true;
+    }
 }

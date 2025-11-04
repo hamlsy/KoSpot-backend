@@ -24,22 +24,31 @@ public class MemberProfileResponse {
     @Getter
     @Builder
     public static class GameStatistics {
-        private SingleGameStats singleGame;
-        private MultiGameStats multiGame;
+        private RoadViewGameStats roadView;
+        private PhotoGameStats photo;
         private double bestScore;
         
         @Getter
         @Builder
-        public static class SingleGameStats {
+        public static class RoadViewGameStats {
             private GameModeStats practice;
             private GameModeStats rank;
-            
-            @Getter
-            @Builder
-            public static class GameModeStats {
-                private long totalGames;
-                private double averageScore;
-            }
+            private MultiGameStats multi;
+        }
+        
+        @Getter
+        @Builder
+        public static class PhotoGameStats {
+            private GameModeStats practice;
+            private GameModeStats rank;
+            private MultiGameStats multi;
+        }
+        
+        @Getter
+        @Builder
+        public static class GameModeStats {
+            private long totalGames;
+            private double averageScore;
         }
         
         @Getter
@@ -57,10 +66,19 @@ public class MemberProfileResponse {
     @Builder
     public static class RankInfo {
         private RoadViewRank roadViewRank;
+        private PhotoRank photoRank;
         
         @Getter
         @Builder
         public static class RoadViewRank {
+            private RankTier tier;
+            private RankLevel level;
+            private int ratingScore;
+        }
+        
+        @Getter
+        @Builder
+        public static class PhotoRank {
             private RankTier tier;
             private RankLevel level;
             private int ratingScore;

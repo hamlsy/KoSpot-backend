@@ -15,18 +15,21 @@ public class MainPageResponse {
     @AllArgsConstructor
     public static class MainPageInfo {
         private Boolean isAdmin;
+        private Boolean isFirstVisited;
         private GameModeStatus gameModeStatus;
         private List<NoticeResponse.Summary> recentNotices;
         private List<BannerResponse.BannerInfo> banners;
 
         public static MainPageInfo of(
                 Boolean isAdmin,
+                Boolean isFirstVisited,
                 GameModeStatus gameModeStatus,
                 List<NoticeResponse.Summary> recentNotices,
                 List<BannerResponse.BannerInfo> banners
         ) {
             return MainPageInfo.builder()
                     .isAdmin(isAdmin)
+                    .isFirstVisited(isFirstVisited)
                     .gameModeStatus(gameModeStatus)
                     .recentNotices(recentNotices)
                     .banners(banners)

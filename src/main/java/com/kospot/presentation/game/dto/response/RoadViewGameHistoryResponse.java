@@ -67,7 +67,7 @@ public class RoadViewGameHistoryResponse {
         private double bestScore;
 
         public static StatisticInfo from(MemberStatistic statistic) {
-            long totalPlayCount = statistic.getSingleRankGames() + statistic.getSinglePracticeGames();
+            long totalPlayCount = statistic.getRoadviewRankGames() + statistic.getRoadviewPracticeGames();
             return StatisticInfo.builder()
                     .totalPlayCount(totalPlayCount)
                     .bestScore(statistic.getBestScore())
