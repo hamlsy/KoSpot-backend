@@ -64,6 +64,7 @@ Authorization: Bearer {access_token}
 
 **응답 필드 설명**
 - `isAdmin`: 관리자 여부
+- 'isFirstVisit': 첫 접속 여부
 - `gameModeStatus`: 게임 모드 활성화 상태
   - `roadviewEnabled`: 로드뷰 모드 활성화 여부
   - `photoEnabled`: 포토 모드 활성화 여부

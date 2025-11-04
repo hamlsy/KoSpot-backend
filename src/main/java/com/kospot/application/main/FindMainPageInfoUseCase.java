@@ -6,6 +6,7 @@ import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.gameconfig.adaptor.GameConfigAdaptor;
 import com.kospot.domain.gameconfig.entity.GameConfig;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.member.service.MemberService;
 import com.kospot.domain.notice.adaptor.NoticeAdaptor;
 import com.kospot.domain.notice.entity.Notice;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FindMainPageInfoUseCase {
 
+    private final MemberService memberService;
     private final GameConfigAdaptor gameConfigAdaptor;
     private final NoticeAdaptor noticeAdaptor;
     private final BannerAdaptor bannerAdaptor;
@@ -31,9 +33,13 @@ public class FindMainPageInfoUseCase {
         // 관리자 여부 확인
 
         Boolean isAdmin = false;
-        if (member != null) {
+        Boolean isFirstVisited = false;
+        if(member != null) {
             isAdmin = member.isAdmin();
+            isFirstVisited = member.isFirstVisited();
+            memberService.markVisited(member);
         }
+
 
         // 활성화된 게임 모드 조회
         List<GameConfig> activeGameConfigs = gameConfigAdaptor.queryAllActive();
@@ -78,7 +84,8 @@ public class FindMainPageInfoUseCase {
                 .map(BannerResponse.BannerInfo::from)
                 .collect(Collectors.toList());
 
-        return MainPageResponse.MainPageInfo.of(isAdmin, gameModeStatus, noticeSummaries, banners);
+        return MainPageResponse.MainPageInfo.of(isAdmin, isFirstVisited,
+                gameModeStatus, noticeSummaries, banners);
     }
 }
 
