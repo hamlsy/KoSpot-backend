@@ -53,7 +53,7 @@ jobs:
       # 7. Docker 이미지 빌드
       - name: Build Docker image
         run: |
-          docker build -t ${{ env.DOCKER_IMAGE_NAME }}:latest .
+          docker build --no-cache -t ${{ env.DOCKER_IMAGE_NAME }}:latest .
           docker save -o ${{ env.DOCKER_IMAGE_NAME }}.tar ${{ env.DOCKER_IMAGE_NAME }}:latest
       
       # 8. AWS 자격 증명 설정
