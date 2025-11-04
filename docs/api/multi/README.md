@@ -446,138 +446,36 @@ Content-Type: application/json
 
 ## WebSocket API
 
-### 1. 글로벌 로비 채팅
+멀티플레이 게임의 실시간 통신을 위한 WebSocket API는 별도 문서로 분리되었습니다.
 
-**구독 (Subscribe)**
-```
-/topic/lobby
-```
+### 📡 [WebSocket API 상세 문서 보기](../websocket/README.md)
 
-**메시지 전송 (Send)**
-```
-/app/chat.message.lobby
-```
+**포함된 내용:**
+- [글로벌 로비 WebSocket](../websocket/LOBBY_WEBSOCKET.md) - 로비 채팅 및 입장/퇴장
+- [게임방 WebSocket](../websocket/GAMEROOM_WEBSOCKET.md) - 게임방 채팅, 플레이어 목록, 알림
 
-**메시지 형식**
-```json
-{
-  "message": "안녕하세요!",
-  "nickname": "홍길동"
-}
-```
+### 주요 기능 요약
 
-**로비 입장**
-```
-/app/chat.join.lobby
-```
+#### 글로벌 로비
+- 로비 입장/퇴장
+- 실시간 채팅
+- 메시지 구독
 
-**로비 퇴장**
-```
-/app/chat.leave.lobby
-```
+#### 게임방
+- 게임방 채팅 (일반/팀)
+- 플레이어 목록 실시간 동기화 (10초마다 자동)
+- 플레이어 입장/퇴장/강퇴 알림
+- 팀 변경 (팀전)
+- 게임 시작 알림
 
----
+### 빠른 참조
 
-### 2. 게임 방 채팅
+| 기능 | 전송 경로 | 구독 경로 |
+|------|----------|----------|
+| 로비 채팅 | `/app/chat.message.lobby` | `/topic/lobby` |
+| 게임방 채팅 | `/app/room.{roomId}.chat` | `/topic/room/{roomId}/chat` |
+| 플레이어 목록 | - | `/topic/room/{roomId}/playerList` |
+| 팀 변경 | `/app/room.{roomId}.switchTeam` | - |
 
-**구독 (Subscribe)**
-```
-/topic/room/{roomId}/chat
-```
-
-**메시지 전송 (Send)**
-```
-/app/room.{roomId}.chat
-```
-
-**메시지 형식**
-```json
-{
-  "message": "준비 완료!",
-  "nickname": "홍길동"
-}
-```
-
----
-
-### 3. 게임 방 플레이어 목록
-
-**구독 (Subscribe)**
-```
-/topic/room/{roomId}/playerList
-```
-
-플레이어가 입장/퇴장하거나 상태가 변경되면 자동으로 업데이트가 전송됩니다.
-
-**업데이트 메시지 형식**
-```json
-{
-  "players": [
-    {
-      "playerId": 1,
-      "nickname": "홍길동",
-      "isHost": true,
-      "isReady": true,
-      "team": "TEAM_A"
-    }
-  ]
-}
-```
-
----
-
-### 4. 팀 변경
-
-**메시지 전송 (Send)**
-```
-/app/room.{roomId}.switchTeam
-```
-
-**메시지 형식**
-```json
-{
-  "team": "TEAM_B"
-}
-```
-
-**참고사항**
-- 팀전 모드에서만 사용 가능합니다.
-- 팀은 자동으로 균형이 맞춰집니다.
-
----
-
-## WebSocket 연결 설정
-
-### 엔드포인트
-```
-ws://localhost:8080/ws
-```
-
-### SockJS 사용 예시 (JavaScript)
-```javascript
-const socket = new SockJS('http://localhost:8080/ws');
-const stompClient = Stomp.over(socket);
-
-stompClient.connect({
-  'Authorization': 'Bearer ' + accessToken
-}, function(frame) {
-  console.log('Connected: ' + frame);
-  
-  // 로비 채팅 구독
-  stompClient.subscribe('/topic/lobby', function(message) {
-    console.log('Received: ' + message.body);
-  });
-  
-  // 메시지 전송
-  stompClient.send('/app/chat.message.lobby', {}, JSON.stringify({
-    message: '안녕하세요!',
-    nickname: '홍길동'
-  }));
-});
-```
-
-**참고사항**
-- WebSocket 연결 시 Authorization 헤더에 JWT 토큰이 필요합니다.
-- STOMP 프로토콜을 사용합니다.
-- SockJS를 통한 fallback이 지원됩니다.
+**상세 내용은 [WebSocket API 문서](../websocket/README.md)를 참조하세요.**
 
