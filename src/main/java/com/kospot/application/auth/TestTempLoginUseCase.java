@@ -1,5 +1,6 @@
 package com.kospot.application.auth;
 
+import com.kospot.domain.gamerank.service.GameRankService;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.service.MemberStatisticService;
 import com.kospot.domain.member.vo.Role;
@@ -26,12 +27,14 @@ public class TestTempLoginUseCase {
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
     private final MemberStatisticService memberStatisticService;
+    private final GameRankService gameRankService;
 
     public AuthResponse.TempLogin testLogin(String username) {
         Member member = memberRepository.findByUsername(username)
                 .orElseGet(() -> {
                     Member newMember = memberRepository.save(createTemporary(username));
                     memberStatisticService.initializeStatistic(newMember);
+                    gameRankService.initGameRank(newMember);
                     return newMember;
                 });
 

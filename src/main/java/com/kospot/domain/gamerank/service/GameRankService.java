@@ -1,8 +1,11 @@
 package com.kospot.domain.gamerank.service;
 
 import com.kospot.domain.game.entity.Game;
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.gamerank.entity.GameRank;
+import com.kospot.domain.gamerank.repository.GameRankRepository;
 import com.kospot.domain.gamerank.util.RatingScoreCalculator;
+import com.kospot.domain.member.entity.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +17,14 @@ import org.springframework.stereotype.Service;
 public class GameRankService {
 
     private static final int RECOVERY_SCORE = 100;
-    private final EntityManager em;
+    private final GameRankRepository gameRankRepository;
+
+    public void initGameRank(Member member) {
+        GameRank roadViewGameRank = GameRank.create(member, GameMode.ROADVIEW);
+        GameRank photoGameRank = GameRank.create(member, GameMode.PHOTO);
+        gameRankRepository.save(roadViewGameRank);
+        gameRankRepository.save(photoGameRank);
+    }
 
     public void applyPenaltyForAbandon(GameRank gameRank) {
         gameRank.applyPenaltyForAbandon();

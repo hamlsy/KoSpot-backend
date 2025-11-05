@@ -1,5 +1,6 @@
 package com.kospot.infrastructure.auth.service;
 
+import com.kospot.domain.gamerank.service.GameRankService;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.service.MemberStatisticService;
 import com.kospot.domain.member.vo.Role;
@@ -32,6 +33,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
     private final MemberStatisticService memberStatisticService;
+    private final GameRankService gameRankService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -78,6 +80,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .build();
         Member savedMember = memberRepository.save(member);
         memberStatisticService.initializeStatistic(savedMember);
+        gameRankService.initGameRank(savedMember);
         return savedMember;
     }
 }
