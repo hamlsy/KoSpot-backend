@@ -34,7 +34,8 @@ public final class CustomAuthenticationPrincipalArgumentResolver implements Hand
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal() == null) {
+        Object principal = authentication.getPrincipal();
+        if (authentication == null || authentication.getPrincipal() == null || principal.equals("anonymousUser")) {
             // nullable 버전이면 null 리턴
             if (hasAnnotation(parameter, CurrentMemberOrNull.class)) {
                 return null;
@@ -43,11 +44,7 @@ public final class CustomAuthenticationPrincipalArgumentResolver implements Hand
             throw new RuntimeException("로그인이 필요합니다.");
         }
 
-        Object principal = authentication.getPrincipal();
         CurrentMember annotation = findMethodAnnotation(CurrentMember.class, parameter);
-        if (principal == "anonymousUser") {
-            throw new RuntimeException();
-        }
         findMethodAnnotation(CurrentMember.class, parameter);
         return memberAdaptor.queryById(Long.parseLong(authentication.getName()));
     }
