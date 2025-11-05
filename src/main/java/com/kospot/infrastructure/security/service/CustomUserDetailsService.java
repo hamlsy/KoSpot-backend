@@ -15,8 +15,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final MemberAdaptor memberAdaptor;
 
     @Override
-    public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
-        Member member = memberAdaptor.queryById(Long.parseLong(memberId));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Member member = memberAdaptor.queryByUsername(username);
         return CustomUserDetails.from(member);
     }
 

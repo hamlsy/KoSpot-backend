@@ -73,6 +73,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .username(username)
                 .nickname(nickname)
                 .email(email)
+                .firstVisited(true)
                 .role(Role.USER)
                 .build();
         Member savedMember = memberRepository.save(member);

@@ -157,8 +157,8 @@ public class TokenService {
                 .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication return
-        String memberId = claims.getSubject();
-        UserDetails principal = userDetailsService.loadUserByUsername(memberId);
+        String username = claims.getSubject();
+        UserDetails principal = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
