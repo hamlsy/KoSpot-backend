@@ -26,9 +26,6 @@ public class MemberStatisticAdaptor {
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
     }
 
-    @Transactional
-    public MemberStatistic save(MemberStatistic memberStatistic) {
-        return repository.save(memberStatistic);
-    }
+
 }
 

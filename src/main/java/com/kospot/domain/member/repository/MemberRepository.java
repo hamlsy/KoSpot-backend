@@ -24,4 +24,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Page<Member> findAllByRoleOrderByCreatedDateDesc(Role role, Pageable pageable);
 
+    boolean existsByNickname(String nickname);
+
 }

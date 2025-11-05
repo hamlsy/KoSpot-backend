@@ -57,6 +57,11 @@ public class Member extends BaseTimeEntity {
 
     //business
 
+    //set Nickname
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     //set marker
     public void equippedMarkerImage(Image image) {
         this.equippedMarkerImage = image;

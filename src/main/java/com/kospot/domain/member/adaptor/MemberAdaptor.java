@@ -53,4 +53,8 @@ public class MemberAdaptor {
     public List<Member> findAll() {
         return repository.findAll();
     }
+
+    public boolean existsByNickname(String nickname) {
+        return repository.existsByNickname(nickname);
+    }
 }
