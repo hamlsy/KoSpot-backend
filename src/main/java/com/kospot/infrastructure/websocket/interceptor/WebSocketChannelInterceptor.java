@@ -95,7 +95,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         }
         
         // 확장 가능한 구독 권한 검증
-        validateSubscriptionAccess(principal, destination);
+//        validateSubscriptionAccess(principal, destination); // 나중에 확장 적용
         
         // 세션 정보 저장 (연결 해제 시 정리용)
         webSocketSessionService.saveSessionInfo(accessor.getSessionId(), destination, principal);

@@ -55,6 +55,7 @@ public class TestTempLoginUseCase {
                 .username(username)
                 .nickname(username)
                 .role(Role.USER)
+                .firstVisited(true)
                 .point(100000)
                 .build();
     }

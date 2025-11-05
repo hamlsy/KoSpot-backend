@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private void markVisited(Member member) {
-        if(!member.isFirstVisited()) {
+        if(member.isFirstVisited()) {
             member.markVisited();
         }
     }

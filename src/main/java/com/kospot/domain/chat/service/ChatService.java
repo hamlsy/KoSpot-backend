@@ -30,7 +30,7 @@ public class ChatService {
         processAndSend(
                 chatMessage,
                 ChatMessageEvent.GlobalLobby::from,  // DTO 변환 전략
-                PREFIX_CHAT + GLOBAL_LOBBY_CHANNEL      // 채널
+                GLOBAL_LOBBY_CHANNEL      // 채널
         );
     }
 

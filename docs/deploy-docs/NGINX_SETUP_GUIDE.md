@@ -137,7 +137,7 @@ server {
 
     # WebSocket 프록시
     location /ws/ {
-        proxy_pass http://kospot_backend;
+        proxy_pass http://kospot_backend/api/ws/;
         proxy_http_version 1.1;
         
         proxy_set_header Upgrade $http_upgrade;
