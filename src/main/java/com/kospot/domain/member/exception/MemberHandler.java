@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.exception.object.domain;
+package com.kospot.domain.member.exception;
 
 import com.kospot.infrastructure.exception.object.general.GeneralException;
 import com.kospot.infrastructure.exception.payload.code.BaseCode;

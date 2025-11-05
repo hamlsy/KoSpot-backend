@@ -3,7 +3,7 @@ package com.kospot.domain.member.entity;
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.member.vo.Role;
-import com.kospot.infrastructure.exception.object.domain.MemberHandler;
+import com.kospot.domain.member.exception.MemberHandler;
 import com.kospot.infrastructure.exception.object.domain.PointHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;

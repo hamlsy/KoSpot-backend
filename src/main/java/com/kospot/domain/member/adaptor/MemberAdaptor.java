@@ -1,9 +1,10 @@
 package com.kospot.domain.member.adaptor;
 
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.member.exception.MemberErrorStatus;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.member.vo.Role;
-import com.kospot.infrastructure.exception.object.domain.MemberHandler;
+import com.kospot.domain.member.exception.MemberHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class MemberAdaptor {
 
     public Member queryById(Long memberId) {
         return repository.findById(memberId).orElseThrow(
-                () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)
+                () -> new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND)
         );
     }
 
@@ -32,13 +33,13 @@ public class MemberAdaptor {
 
     public Member queryByUsernameFetchEquippedMarkerImage(String username) {
         return repository.findByUsernameFetchEquippedMarkerImage(username).orElseThrow(
-                () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)
+                () -> new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND)
         );
     }
 
     public Member queryByUsername(String username) {
         return repository.findByUsername(username).orElseThrow(
-                () -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND)
+                () -> new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND)
         );
     }
 
