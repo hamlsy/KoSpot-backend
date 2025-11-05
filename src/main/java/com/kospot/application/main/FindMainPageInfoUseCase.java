@@ -37,7 +37,6 @@ public class FindMainPageInfoUseCase {
         if(member != null) {
             isAdmin = member.isAdmin();
             isFirstVisited = member.isFirstVisited();
-            memberService.markVisited(member);
         }
 
 

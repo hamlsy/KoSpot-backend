@@ -46,7 +46,7 @@ public class Member extends BaseTimeEntity {
     private int point;
 
     @Column(nullable = false)
-    private boolean firstVisited = false;
+    private boolean firstVisited = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
@@ -117,6 +117,6 @@ public class Member extends BaseTimeEntity {
     }
 
     public void markVisited() {
-        this.firstVisited = true;
+        this.firstVisited = false;
     }
 }
