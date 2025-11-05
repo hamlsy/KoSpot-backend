@@ -2,9 +2,6 @@ spring:
 #  profiles:
 #    active:
 #      - local
-  mvc:
-    servlet:
-      path: /api
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
@@ -36,6 +33,7 @@ spring:
             client-secret: ${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET}
             scope:
               - email
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
 
           naver:
             client-id: ${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_NAVER_CLIENT_ID}
@@ -72,6 +70,8 @@ spring:
 
 server:
   port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api
 
 logging:
   level:
@@ -79,7 +79,7 @@ logging:
     org.springframework.web: info
 
 auth:
-  success-redirect-uri: "{baseUrl}/login/oauth2/callback"
+  success-redirect-uri: ${AUTH_SUCCESS_REDIRECT_URI}
 
 app:
   jwt:

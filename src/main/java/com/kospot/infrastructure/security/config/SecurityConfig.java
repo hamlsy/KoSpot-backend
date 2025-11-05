@@ -92,9 +92,20 @@ public class SecurityConfig {
                                     "/*.ico", "/error", "/images/**").permitAll()
                             .requestMatchers(permitAllRequest()).permitAll()        //비인증 api 허용 처리
                             .requestMatchers(authRelatedEndpoints()).permitAll()
+                            .requestMatchers(oauth2Endpoints()).permitAll()
                             .requestMatchers(additionalSwaggerRequests()).permitAll()
                             .anyRequest().permitAll();      //지정하지 않은 url의 경우 인증 처리
+
                 });
+    }
+
+    private RequestMatcher[] oauth2Endpoints() {
+        List<RequestMatcher> requestMatchers = List.of(
+                antMatcher("/oauth2/**"),
+                antMatcher("/login/oauth2/**"),
+                antMatcher("/login/**")  // 기본 로그인 페이지용
+        );
+        return requestMatchers.toArray(RequestMatcher[]::new);
     }
 
     private RequestMatcher[] permitAllRequest() {
@@ -106,7 +117,7 @@ public class SecurityConfig {
 
     private RequestMatcher[] authRelatedEndpoints() {
         List<RequestMatcher> requestMatchers = List.of(
-                antMatcher("/api/tokens/**")
+                antMatcher("/tokens/**")
         );
         return requestMatchers.toArray(RequestMatcher[]::new);
     }
