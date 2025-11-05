@@ -14,6 +14,9 @@ public class MainPageResponse {
     @Builder
     @AllArgsConstructor
     public static class MainPageInfo {
+        private String nickname;
+        private String email;
+        private String equippedMarkerImageUrl;
         private Boolean isAdmin;
         private Boolean isFirstVisited;
         private GameModeStatus gameModeStatus;
@@ -21,6 +24,9 @@ public class MainPageResponse {
         private List<BannerResponse.BannerInfo> banners;
 
         public static MainPageInfo of(
+                String nickname,
+                String email,
+                String equippedMarkerImageUrl,
                 Boolean isAdmin,
                 Boolean isFirstVisited,
                 GameModeStatus gameModeStatus,
@@ -28,6 +34,9 @@ public class MainPageResponse {
                 List<BannerResponse.BannerInfo> banners
         ) {
             return MainPageInfo.builder()
+                    .nickname(nickname)
+                    .email(email)
+                    .equippedMarkerImageUrl(equippedMarkerImageUrl)
                     .isAdmin(isAdmin)
                     .isFirstVisited(isFirstVisited)
                     .gameModeStatus(gameModeStatus)

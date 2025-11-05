@@ -37,13 +37,13 @@ public class GameRoomController {
     private final KickPlayerUseCase kickPlayerUseCase;
 
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
-    @GetMapping
+    @GetMapping("/")
     public ApiResponseDto<List<FindGameRoomResponse>> findAllRooms(@RequestParam("page") int page) {
         return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(page));
     }
 
     @Operation(summary = "게임 방 생성", description = "멀티 게임 방을 생성합니다.")
-    @PostMapping
+    @PostMapping("/")
     public ApiResponseDto<GameRoomResponse> createRoom(@CurrentMember Member member, @RequestBody GameRoomRequest.Create request) {
         return ApiResponseDto.onSuccess(createGameRoomUseCase.execute(member, request));
     }
@@ -63,7 +63,7 @@ public class GameRoomController {
     }
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
-    @PostMapping("/{roomId}/players")
+    @PostMapping("/{roomId}/join")
     public ApiResponseDto<?> joinRoom(@CurrentMember Member member, 
                                       @PathVariable("roomId") Long roomId,
                                       @RequestBody GameRoomRequest.Join request) {
@@ -72,14 +72,14 @@ public class GameRoomController {
     }
 
     @Operation(summary = "게임 방 퇴장", description = "게임 방에서 퇴장합니다.")
-    @DeleteMapping("/{roomId}/players")
+    @DeleteMapping("/{roomId}/leave")
     public ApiResponseDto<?> leaveRoom(@CurrentMember Member member, @PathVariable("roomId") Long roomId) {
         leaveGameRoomUseCase.execute(member, roomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "게임 방 플레이어 강퇴", description = "게임 방에서 플레이어를 강퇴시킵니다.")
-    @DeleteMapping("/{roomId}/players/kick")
+    @DeleteMapping("/{roomId}/kick")
     public ApiResponseDto<?> kickPlayer(@CurrentMember Member member, 
                                        @PathVariable("roomId") Long roomId,
                                        @RequestBody GameRoomRequest.Kick request) {

@@ -12,13 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    public void markVisited(Member member) {
-        if(!member.isFirstVisited()) {
+    private void markVisited(Member member) {
+        if(member.isFirstVisited()) {
             member.markVisited();
         }
     }
 
     public void setNickname(Member member, String nickname) {
+        markVisited(member);
+        member.setNickname(nickname);
+    }
+
+    public void updateNickname(Member member, String nickname) {
         member.setNickname(nickname);
     }
 

@@ -1,6 +1,8 @@
 package com.kospot.infrastructure.security.service;
 
 import com.kospot.domain.member.adaptor.MemberAdaptor;
+import com.kospot.domain.member.entity.Member;
+import com.kospot.infrastructure.auth.domain.CustomOAuthUser;
 import com.kospot.infrastructure.exception.object.general.GeneralException;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.security.dto.JwtToken;
@@ -63,6 +65,8 @@ public class TokenService {
         Claims claims = parseClaims(refreshToken);
         String memberId = claims.getSubject();
         CustomUserDetails customUserDetails = CustomUserDetails.from(memberAdaptor.queryById(Long.parseLong(memberId)));
+//        Member member = memberAdaptor.queryById(Long.parseLong(memberId));
+//        CustomOAuthUser customUserDetails = CustomOAuthUser.from(member);
         Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, "",
                 customUserDetails.getAuthorities());
 
@@ -79,7 +83,25 @@ public class TokenService {
         long now = (new Date()).getTime();
 
         // 추가 정보 추출
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Object principal = authentication.getPrincipal();
+        Long memberId;
+        String nickname;
+        String email;
+        String role;
+//        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        if (principal instanceof CustomUserDetails cud) {
+            memberId = cud.getMemberId();
+            nickname = cud.getNickname();
+            email = cud.getEmail();
+            role = cud.getRole();
+        } else if (principal instanceof CustomOAuthUser oau) {
+            memberId = oau.getMember().getId();
+            nickname = oau.getMember().getNickname();
+            email = oau.getMember().getEmail();
+            role = oau.getMember().getRole().name();
+        } else {
+            throw new IllegalStateException("Unsupported principal: " + principal);
+        }
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRATION_TIME);   // 30분
@@ -87,10 +109,10 @@ public class TokenService {
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName()) // = customUserDetails.getUsername()
                 .claim("auth", authorities)
-                .claim("memberId", userDetails.getMemberId())
-                .claim("nickname", userDetails.getNickname())
-                .claim("email", userDetails.getEmail())
-                .claim("role", userDetails.getRole())
+                .claim("memberId", memberId)
+                .claim("nickname", nickname)
+                .claim("email", email)
+                .claim("role", role)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -135,8 +157,8 @@ public class TokenService {
                 .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication return
-        String memberId = claims.getSubject();
-        UserDetails principal = userDetailsService.loadUserByUsername(memberId);
+        String username = claims.getSubject();
+        UserDetails principal = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

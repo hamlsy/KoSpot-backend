@@ -34,10 +34,15 @@ public class FindMainPageInfoUseCase {
 
         Boolean isAdmin = false;
         Boolean isFirstVisited = false;
+        String nickname = null;
+        String email = null;
+        String equippedMarkerImageUrl = null;
         if(member != null) {
             isAdmin = member.isAdmin();
             isFirstVisited = member.isFirstVisited();
-            memberService.markVisited(member);
+            nickname = member.getNickname();
+            email = member.getEmail();
+            equippedMarkerImageUrl = member.getEquippedMarkerImage().getImageUrl();
         }
 
 
@@ -84,7 +89,9 @@ public class FindMainPageInfoUseCase {
                 .map(BannerResponse.BannerInfo::from)
                 .collect(Collectors.toList());
 
-        return MainPageResponse.MainPageInfo.of(isAdmin, isFirstVisited,
+        return MainPageResponse.MainPageInfo.of(
+                nickname, email, equippedMarkerImageUrl,
+                isAdmin, isFirstVisited,
                 gameModeStatus, noticeSummaries, banners);
     }
 }

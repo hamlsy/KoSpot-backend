@@ -27,7 +27,7 @@ public class GlobalLobbyChatController {
     private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
 
     @MessageMapping("/chat.message.lobby")
-    @SendTo("/topic/lobby")
+//    @SendTo("/topic/lobby")
     public void sendGlobalMessage(@Valid @Payload ChatMessageDto.Lobby dto, SimpMessageHeaderAccessor headerAccessor) {
         sendGlobalLobbyMessageUseCase.execute(dto, headerAccessor);
     }
