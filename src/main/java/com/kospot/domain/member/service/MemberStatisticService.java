@@ -4,6 +4,7 @@ import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.member.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.entity.MemberStatistic;
+import com.kospot.domain.member.repository.MemberStatisticRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +17,12 @@ import java.time.LocalDateTime;
 public class MemberStatisticService {
 
     private final MemberStatisticAdaptor memberStatisticAdaptor;
+    private final MemberStatisticRepository memberStatisticRepository;
 
     @Transactional
     public void initializeStatistic(Member member) {
         MemberStatistic statistic = MemberStatistic.create(member);
-        memberStatisticAdaptor.save(statistic);
+        memberStatisticRepository.save(statistic);
     }
 
     @Transactional

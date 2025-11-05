@@ -18,4 +18,8 @@ public class MemberService {
         }
     }
 
+    public void setNickname(Member member, String nickname) {
+        member.setNickname(nickname);
+    }
+
 }
