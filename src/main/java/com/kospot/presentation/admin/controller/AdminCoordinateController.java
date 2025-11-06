@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -49,9 +50,9 @@ public class AdminCoordinateController {
     @PostMapping(value = "/import-excel", consumes = "multipart/form-data")
     public ApiResponseDto<?> importCoordinateByExcel(
             @CurrentMember Member admin,
-            @Valid @ModelAttribute AdminCoordinateRequest.ImportExcel request
+            @RequestParam("file") MultipartFile file
     ) {
-        importCoordinateByExcelUseCase.execute(admin, request.getFile());
+        importCoordinateByExcelUseCase.execute(admin, file);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

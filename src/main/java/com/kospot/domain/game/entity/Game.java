@@ -57,6 +57,8 @@ public abstract class Game extends BaseTimeEntity {
 
     private LocalDateTime endedAt;    // 게임 종료 시간
 
+    abstract public Long getId();
+
     public Game(Member member, GameMode gameMode, GameType gameType, GameStatus gameStatus) {
         this.member = member;
         this.gameMode = gameMode;

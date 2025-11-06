@@ -3,10 +3,7 @@ package com.kospot.domain.coordinate.entity;
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.coordinate.vo.Address;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -38,6 +35,7 @@ public class Coordinate extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private LocationType locationType;
 
+    @Builder.Default
     @Column(name = "is_valid", nullable = false)
     private boolean isValid = true;
 

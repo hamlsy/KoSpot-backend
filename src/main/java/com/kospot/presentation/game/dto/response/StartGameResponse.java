@@ -9,7 +9,7 @@ public class StartGameResponse {
     @Builder
     public static class RoadView {
 
-        private String gameId;
+        private Long gameId;
         private String targetLat;
         private String targetLng;
         private String markerImageUrl;
