@@ -1,5 +1,6 @@
 package com.kospot.infrastructure.auth.service;
 
+import com.kospot.application.member.RegisterSocialMemberUseCase;
 import com.kospot.domain.gamerank.service.GameRankService;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.service.MemberStatisticService;
@@ -34,6 +35,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final MemberRepository memberRepository;
     private final MemberStatisticService memberStatisticService;
     private final GameRankService gameRankService;
+    private final RegisterSocialMemberUseCase registerSocialMemberUseCase;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -62,25 +64,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String username = registrationId + "_" + socialId;
         Optional<Member> targetMember = memberRepository.findByUsername(username);
-        Member member = targetMember.orElseGet(() -> signupSocialMember(username, email));
+        Member member = targetMember.orElseGet(() -> registerSocialMemberUseCase.execute(username, email));
 
         return new CustomOAuthUser(member,
                 Collections.singleton(new SimpleGrantedAuthority(member.getRole().getName())),
                 attributes);
     }
 
-    private Member signupSocialMember(String username, String email) {
-        String nickname = "kospot_" + UUID.randomUUID().toString().substring(0, 8);
-        Member member = Member.builder()
-                .username(username)
-                .nickname(nickname)
-                .email(email)
-                .firstVisited(true)
-                .role(Role.USER)
-                .build();
-        Member savedMember = memberRepository.save(member);
-        memberStatisticService.initializeStatistic(savedMember);
-        gameRankService.initGameRank(savedMember);
-        return savedMember;
-    }
 }
