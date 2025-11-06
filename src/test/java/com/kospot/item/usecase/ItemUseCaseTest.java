@@ -88,13 +88,13 @@ public class ItemUseCaseTest {
         ItemRequest.Create request = ItemRequest.Create.builder()
                 .name("name1")
                 .itemTypeKey("marker")
-                .image(mock(MultipartFile.class))
                 .build();
 
         //when
         // not admin
-        assertThrows(Exception.class, () -> registerItemUseCase.execute(member, request));
-        itemService.registerItem(request);
+        assertThrows(Exception.class, () -> registerItemUseCase.execute(member, request, mock(MultipartFile.class)));
+
+//        itemService.registerItem(request, );
 
         //then
         Item item = itemRepository.findById(1L).orElseThrow();

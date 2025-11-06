@@ -1,5 +1,6 @@
 package com.kospot.domain.item.service;
 
+import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.item.adaptor.ItemAdaptor;
 import com.kospot.domain.item.vo.ItemType;
 import com.kospot.presentation.item.dto.request.ItemRequest;
@@ -10,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -22,9 +24,8 @@ public class ItemService {
 
     //todo optimize image upload transaction
     // Item Create가 실패해도 S3에 이미지가 올라가는 문제 발생
-    public Item registerItem(ItemRequest.Create request) {
-        Item item = request.toEntity();
-
+    public Item registerItem(ItemRequest.Create request, Image image) {
+        Item item = request.toEntity(image);
         return itemRepository.save(item);
     }
 
