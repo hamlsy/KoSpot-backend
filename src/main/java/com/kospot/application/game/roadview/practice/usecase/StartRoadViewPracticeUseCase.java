@@ -25,7 +25,7 @@ public class StartRoadViewPracticeUseCase {
     //encrypt -> response
     private StartGameResponse.RoadView getEncryptedRoadViewGameResponse(Member member, RoadViewGame game) {
         return StartGameResponse.RoadView.builder()
-                .gameId(aesService.toEncryptString(game.getId()))
+                .gameId(game.getId())
                 .targetLat(aesService.toEncryptString(game.getCoordinate().getLat()))
                 .targetLng(aesService.toEncryptString(game.getCoordinate().getLng()))
                 .markerImageUrl(member.getEquippedMarkerImage().getImageUrl())

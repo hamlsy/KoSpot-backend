@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 
 @Service
@@ -44,8 +41,7 @@ public class CoordinateExcelService {
 
     @Transactional
     public void importCoordinatesFromExcelFile(MultipartFile file) {
-        try {
-            InputStream inputStream = file.getInputStream();
+        try (InputStream inputStream = new ByteArrayInputStream(file.getBytes())){
             processExcelFile(inputStream);
         } catch (IOException e) {
             throw new CoordinateHandler(ErrorStatus.FILE_READ_ERROR);
@@ -116,8 +112,8 @@ public class CoordinateExcelService {
         String dLine = getCellString(row, 3);//D
         String detailAddress = cLine + " " + dLine;
 
-        double lng = row.getCell(4).getNumericCellValue();
-        double lat = row.getCell(5).getNumericCellValue();
+        double lng = row.getCell(4).getNumericCellValue(); //E
+        double lat = row.getCell(5).getNumericCellValue(); //F
 
         String poiName = getCellString(row, 7); //H line
         String locationTypeString = getCellString(row, 8); //I line
@@ -139,6 +135,9 @@ public class CoordinateExcelService {
     }
 
     private String getCellString(Row row, int index) {
+        if (row == null) return "";
+        Cell cell = row.getCell(index);
+        if (cell == null) return "";
         return row.getCell(index).getStringCellValue();
     }
 

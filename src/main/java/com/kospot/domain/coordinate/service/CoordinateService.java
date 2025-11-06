@@ -15,6 +15,10 @@ public class CoordinateService {
 
     private final CoordinateRepository coordinateRepository;
 
+    public void invalidateCoordinate(Coordinate coordinate) {
+        coordinate.invalidate();
+    }
+
     public Coordinate createCoordinate(Coordinate coordinate) {
         return coordinateRepository.save(coordinate);
     }

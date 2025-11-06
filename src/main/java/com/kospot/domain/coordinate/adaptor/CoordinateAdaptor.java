@@ -35,7 +35,7 @@ public class CoordinateAdaptor {
     // 전체 랜덤 Coordinate
     // todo refactoring
     public Coordinate getRandomCoordinate() {
-        long count = coordinateRepository.countAllNative();
+        long count = coordinateRepository.countAll();
         if (count == 0) return null;
         int randomOffset = ThreadLocalRandom.current().nextInt((int) count);
 

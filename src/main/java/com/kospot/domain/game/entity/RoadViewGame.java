@@ -35,6 +35,11 @@ public class RoadViewGame extends Game {
     @Enumerated(EnumType.STRING)
     private Sido practiceSido;
 
+    @Override
+    public Long getId() {
+        return id;
+    }
+
     public static RoadViewGame create(Coordinate coordinate, Member member, GameType gameType, Sido practiceSido) {
         return RoadViewGame.builder()
                 .coordinate(coordinate)
