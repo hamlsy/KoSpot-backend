@@ -35,7 +35,7 @@ public class DefaultItemInitializer implements CommandLineRunner {
                 DEFAULT_MARKER_IMAGE_URL,
                 ImageType.ITEM
         );
-        Item item = Item.create("기본 마커", "기본으로 제공되는 마커입니다.", ItemType.MARKER, 0, 0, image);
+        Item item = Item.createDefault("기본 마커", "기본으로 제공되는 마커입니다.", ItemType.MARKER, image);
 
         itemRepository.save(item);
     }

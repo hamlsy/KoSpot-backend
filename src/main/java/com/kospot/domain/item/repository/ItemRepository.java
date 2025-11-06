@@ -13,6 +13,13 @@ import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
+    @Query("""
+            select i from Item i
+            join fetch i.image
+            where i.itemType = :itemType and i.isDefault = true
+            """)
+    Optional<Item> findDefaultItemByType(@Param("itemType") ItemType itemType);
+
     List<Item> findAllByItemType(ItemType itemType);
 
     @Query("select i from Item i join fetch i.image im where i.id = :id")

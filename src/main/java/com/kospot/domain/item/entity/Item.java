@@ -37,6 +37,8 @@ public class Item extends BaseTimeEntity {
     private ItemType itemType;
 
     private boolean isAvailable = true;
+    // 기본 아이템 식별
+    private boolean isDefault = false;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
@@ -51,6 +53,20 @@ public class Item extends BaseTimeEntity {
                 .price(price)
                 .stock(stock)
                 .isAvailable(true)
+                .isDefault(false)
+                .image(image)
+                .build();
+    }
+
+    public static Item createDefault(String name, String description, ItemType itemType, Image image) {
+        return Item.builder()
+                .name(name)
+                .description(description)
+                .itemType(itemType)
+                .price(0)
+                .stock(0)
+                .isAvailable(true)
+                .isDefault(true)
                 .image(image)
                 .build();
     }
