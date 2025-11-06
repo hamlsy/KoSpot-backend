@@ -23,6 +23,12 @@ public class ItemAdaptor {
 
     private final ItemRepository repository;
 
+    public Item queryDefaultItemByItemType(ItemType itemType) {
+        return repository.findDefaultItemByType(itemType).orElseThrow(
+                () -> new ItemHandler(ErrorStatus.ITEM_NOT_FOUND)
+        );
+    }
+
     public List<Item> queryAllByItemType(ItemType itemType) {
         return repository.findAllByItemType(itemType);
     }

@@ -22,8 +22,8 @@ public class MemberItemService {
     private final MemberItemAdaptor memberItemAdaptor;
     private final MemberItemRepository memberItemRepository;
 
-    public void equipItem(Member member, Long memberItemId) {
-        MemberItem memberItem = memberItemAdaptor.queryByIdFetchItemAndImage(memberItemId);
+    public void equipItem(Member member, MemberItem memberItem) {
+
 
         ItemType memberItemType = memberItem.getItem().getItemType();
         if(memberItemType.equals(ItemType.MARKER)) {
@@ -53,9 +53,9 @@ public class MemberItemService {
         memberItemRepository.deleteAllByItemId(itemId);
     }
 
-    public void purchaseItem(Member member, Item item) {
+    public MemberItem purchaseItem(Member member, Item item) {
         MemberItem memberItem = MemberItem.create(member, item);
-        memberItemRepository.save(memberItem);
+        return memberItemRepository.save(memberItem);
     }
 
 

@@ -145,8 +145,10 @@ public class MemberItemUseCaseTest {
     void equipMemberItemUseCaseTest() {
         //given
         logStart();
-        memberItemService.equipItem(member, 1L);
-        memberItemService.equipItem(member, 2L);
+        MemberItem memberItem1 = memberItemRepository.findById(1L).orElseThrow();
+        MemberItem memberItem2 = memberItemRepository.findById(2L).orElseThrow();
+        memberItemService.equipItem(member, memberItem1);
+        memberItemService.equipItem(member, memberItem2);
 
         //when
         logWhen();
@@ -154,10 +156,10 @@ public class MemberItemUseCaseTest {
 
         //then
         logThen();
-        MemberItem memberItem1 = memberItemRepository.findByIdFetchItem(1L).orElseThrow();
-        MemberItem memberItem2 = memberItemRepository.findById(3L).orElseThrow();
-        assertEquals(true, memberItem2.getIsEquipped());
-        assertEquals(false, memberItem1.getIsEquipped());
+        MemberItem newMemberItem1 = memberItemRepository.findByIdFetchItem(1L).orElseThrow();
+        MemberItem newMemberItem2 = memberItemRepository.findById(3L).orElseThrow();
+        assertEquals(true, newMemberItem2.getIsEquipped());
+        assertEquals(false, newMemberItem1.getIsEquipped());
 
     }
 

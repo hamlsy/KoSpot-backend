@@ -19,10 +19,11 @@ public class ItemRequest {
         private int price;
         private String itemTypeKey;
         private int quantity;
+        //todo add image
 
         public Item toEntity(){
             return Item.create(name, description,
-                    ItemType.fromKey(itemTypeKey), price, quantity);
+                    ItemType.fromKey(itemTypeKey), price, quantity, null);
         }
 
     }

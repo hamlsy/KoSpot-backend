@@ -1,10 +1,12 @@
 package com.kospot.application.auth;
 
+import com.kospot.application.member.RegisterSocialMemberUseCase;
 import com.kospot.domain.gamerank.service.GameRankService;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.service.MemberStatisticService;
 import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.member.repository.MemberRepository;
+import com.kospot.domain.point.service.PointService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.service.TokenService;
@@ -26,15 +28,14 @@ public class TestTempLoginUseCase {
 
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
-    private final MemberStatisticService memberStatisticService;
-    private final GameRankService gameRankService;
+    private final PointService pointService;
+    private final RegisterSocialMemberUseCase registerSocialMemberUseCase;
 
     public AuthResponse.TempLogin testLogin(String username) {
         Member member = memberRepository.findByUsername(username)
                 .orElseGet(() -> {
-                    Member newMember = memberRepository.save(createTemporary(username));
-                    memberStatisticService.initializeStatistic(newMember);
-                    gameRankService.initGameRank(newMember);
+                    Member newMember = registerSocialMemberUseCase.execute(username, "kospot@email");
+                    pointService.addPoint(newMember, 100000);
                     return newMember;
                 });
 
@@ -51,16 +52,6 @@ public class TestTempLoginUseCase {
         JwtToken jwtToken = tokenService.generateToken(auth);
 
         return AuthResponse.TempLogin.from(jwtToken, member.getId());
-    }
-
-    private Member createTemporary(String username){
-        return Member.builder()
-                .username(username)
-                .nickname(username)
-                .role(Role.USER)
-                .firstVisited(true)
-                .point(100000)
-                .build();
     }
 
 }
