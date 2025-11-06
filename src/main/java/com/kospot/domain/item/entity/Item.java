@@ -43,7 +43,7 @@ public class Item extends BaseTimeEntity {
     private Image image;
 
     //business
-    public static Item create(String name, String description, ItemType itemType, int price, int stock) {
+    public static Item create(String name, String description, ItemType itemType, int price, int stock, Image image) {
         return Item.builder()
                 .name(name)
                 .description(description)
@@ -51,6 +51,7 @@ public class Item extends BaseTimeEntity {
                 .price(price)
                 .stock(stock)
                 .isAvailable(true)
+                .image(image)
                 .build();
     }
 
