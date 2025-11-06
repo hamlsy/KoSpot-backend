@@ -5,6 +5,7 @@ import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.vo.ImageType;
 import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.item.entity.Item;
+import com.kospot.domain.item.vo.ItemType;
 import com.kospot.infrastructure.service.AwsS3Service;
 import com.kospot.presentation.image.dto.request.ImageRequest;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +32,13 @@ public class ImageService {
     private static final String S3_ITEM_PATH = S3_IMAGE_PATH + "item/";
     private static final String S3_BANNER_PATH = S3_IMAGE_PATH + "banner/";
 
-    public void uploadItemImage(MultipartFile file, Item item) {
+    public Image uploadItemImage(MultipartFile file, ItemType itemType) {
         if(isValidImage(file)){
-            String uploadFilePath = S3_ITEM_PATH + item.getItemType().name().toLowerCase() + "/";
+            String uploadFilePath = S3_ITEM_PATH + itemType.name().toLowerCase() + "/";
             Image image = uploadImage(file, uploadFilePath, ImageType.ITEM);
-            imageRepository.save(image);
+            return imageRepository.save(image);
         }
+        return null;
     }
 
     //todo refactoring bulk insert

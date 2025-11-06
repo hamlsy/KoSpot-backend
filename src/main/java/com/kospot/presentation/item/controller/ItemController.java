@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -41,12 +42,12 @@ public class ItemController {
      * TEST
      */
 
-    @PostMapping("/imageTest")
-    public ApiResponseDto<?> imageUploadTest(@ModelAttribute ItemRequest.Create request) {
-        Item item =  itemService.registerItem(request);
-        imageService.uploadItemImage(request.getImage(), item);
-        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
-    }
+//    @PostMapping("/imageTest")
+//    public ApiResponseDto<?> imageUploadTest(@ModelAttribute ItemRequest.Create request) {
+//        Item item =  itemService.registerItem(request);
+//        imageService.uploadItemImage(request.getImage(), item);
+//        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+//    }
 
     /**
      * ----------------------------
@@ -60,8 +61,10 @@ public class ItemController {
 
     @Operation(summary = "아이템 등록", description = "아이템을 등록합니다.")
     @PostMapping("/")
-    public ApiResponseDto<?> registerItem(@CurrentMember Member member, @ModelAttribute ItemRequest.Create request) {
-        registerItemUseCase.execute(member, request);
+    public ApiResponseDto<?> registerItem(@CurrentMember Member member,
+                                          @ModelAttribute ItemRequest.Create request,
+                                          @RequestParam("file") MultipartFile file) {
+        registerItemUseCase.execute(member, request, file);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
@@ -74,15 +77,18 @@ public class ItemController {
 
     @Operation(summary = "아이템 상점 재등록", description = "아이템을 상점에 재등록합니다.")
     @PutMapping("/{id}/restoreShop")
-    public ApiResponseDto<?> restoreItemToShop(@CurrentMember Member member, @PathVariable("id") Long id) {
+    public ApiResponseDto<?> restoreItemToShop(@CurrentMember Member member,
+                                               @PathVariable("id") Long id) {
         restoreItemToShopUseCase.execute(member, id);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     //todo update item
+    //todo 사진도 업데이트
     @Operation(summary = "아이템 정보 업데이트", description = "아이템 정보를 업데이트 합니다.")
     @PutMapping("/info")
-    public ApiResponseDto<?> updateItemInfo(@CurrentMember Member member, @RequestBody ItemRequest.UpdateInfo request) {
+    public ApiResponseDto<?> updateItemInfo(@CurrentMember Member member,
+                                            @RequestBody ItemRequest.UpdateInfo request) {
         updateItemInfoUseCase.execute(member, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
