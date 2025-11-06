@@ -36,7 +36,7 @@ public class AdminCoordinateController {
     private final DeleteCoordinateUseCase deleteCoordinateUseCase;
 
     @Operation(summary = "좌표 생성", description = "관리자가 폼을 통해 새로운 좌표를 생성합니다.")
-    @PostMapping
+    @PostMapping("/")
     public ApiResponseDto<Long> createCoordinate(
             @CurrentMember Member admin,
             @Valid @RequestBody AdminCoordinateRequest.Create request
@@ -56,7 +56,7 @@ public class AdminCoordinateController {
     }
 
     @Operation(summary = "좌표 목록 조회", description = "관리자가 전체 좌표 목록을 페이징 조회합니다.")
-    @GetMapping
+    @GetMapping("/")
     public ApiResponseDto<Page<AdminCoordinateResponse.CoordinateInfo>> findAllCoordinates(
             @CurrentMember Member admin,
             @PageableDefault(size = 20, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable
