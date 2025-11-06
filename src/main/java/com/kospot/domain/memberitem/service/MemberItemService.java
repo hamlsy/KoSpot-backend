@@ -55,7 +55,7 @@ public class MemberItemService {
 
     public MemberItem purchaseItem(Member member, Item item) {
         MemberItem memberItem = MemberItem.create(member, item);
-        memberItemRepository.save(memberItem);
+        return memberItemRepository.save(memberItem);
     }
 
 
