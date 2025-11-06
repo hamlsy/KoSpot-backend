@@ -1,5 +1,6 @@
 package com.kospot.presentation.game.controller;
 
+import com.kospot.application.game.roadview.ReIssueRoadViewCoordinateUseCase;
 import com.kospot.application.game.roadview.history.usecase.GetAllRoadViewGamesUseCase;
 import com.kospot.application.game.roadview.history.usecase.GetRecentThreeRoadViewGamesUseCase;
 import com.kospot.application.game.roadview.practice.usecase.EndRoadViewPracticeUseCase;
@@ -38,6 +39,7 @@ public class RoadViewGameController {
     private final EndRoadViewPracticeUseCase endRoadViewPracticeUseCase;
     private final GetRecentThreeRoadViewGamesUseCase getRecentThreeRoadViewGamesUseCase;
     private final GetAllRoadViewGamesUseCase getAllRoadViewGamesUseCase;
+    private final ReIssueRoadViewCoordinateUseCase reIssueRoadViewCoordinateUseCase;
 
     private final AESService aesService;
 
@@ -93,6 +95,13 @@ public class RoadViewGameController {
     /**
      *  ------------------------------------------
      */
+
+    @Operation(summary = "로드뷰 좌표 재발급", description = "로드뷰 연습 게임에서 좌표를 재발급합니다.")
+    @PostMapping("/{gameId}/reissue-coordinate")
+    public ApiResponseDto<StartGameResponse.RoadView> reissuePracticeCoordinate(@CurrentMember Member member, @PathVariable("gameId") Long gameId) {
+        return ApiResponseDto.onSuccess(reIssueRoadViewCoordinateUseCase.execute(member, gameId));
+    }
+
 
     /**
      * -----------------HISTORY------------------

@@ -32,6 +32,11 @@ public class RoadViewGameService {
         return game;
     }
 
+    public RoadViewGame updateCoordinate(RoadViewGame game, Coordinate coordinate) {
+        game.setCoordinate(coordinate);
+        return game;
+    }
+
     public RoadViewGame finishGame(Member member, RoadViewGame game, EndGameRequest.RoadView request) {
         endGameUpdate(member, game, request);
 

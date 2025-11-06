@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
@@ -18,6 +19,7 @@ import lombok.experimental.SuperBuilder;
 indexes = {
         @Index(name = "idx_coordinate_sido", columnList = "sido")
 })
+@SQLRestriction("is_valid = true")
 public class Coordinate extends BaseTimeEntity {
 
     @Id
@@ -36,4 +38,10 @@ public class Coordinate extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private LocationType locationType;
 
+    @Column(name = "is_valid", nullable = false)
+    private boolean isValid = true;
+
+    public void invalidate() {
+        this.isValid = false;
+    }
 }

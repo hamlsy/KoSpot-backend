@@ -37,7 +37,7 @@ public class GameRoomController {
     private final KickPlayerUseCase kickPlayerUseCase;
 
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
-    @GetMapping("/")
+    @GetMapping
     public ApiResponseDto<List<FindGameRoomResponse>> findAllRooms(@RequestParam("page") int page) {
         return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(page));
     }
