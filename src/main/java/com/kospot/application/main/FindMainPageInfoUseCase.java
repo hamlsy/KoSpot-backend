@@ -31,18 +31,9 @@ public class FindMainPageInfoUseCase {
 
     public MainPageResponse.MainPageInfo execute(Member member) {
         // 관리자 여부 확인
-
-        Boolean isAdmin = false;
-        Boolean isFirstVisited = false;
-        String nickname = null;
-        String email = null;
-        String equippedMarkerImageUrl = null;
+        MainPageResponse.MyInfo myInfo = null;
         if(member != null) {
-            isAdmin = member.isAdmin();
-            isFirstVisited = member.isFirstVisited();
-            nickname = member.getNickname();
-            email = member.getEmail();
-            equippedMarkerImageUrl = member.getEquippedMarkerImage().getImageUrl();
+            myInfo = MainPageResponse.MyInfo.of(member);
         }
 
 
@@ -90,9 +81,7 @@ public class FindMainPageInfoUseCase {
                 .collect(Collectors.toList());
 
         return MainPageResponse.MainPageInfo.of(
-                nickname, email, equippedMarkerImageUrl,
-                isAdmin, isFirstVisited,
-                gameModeStatus, noticeSummaries, banners);
+                myInfo, gameModeStatus, noticeSummaries, banners);
     }
 }
 
