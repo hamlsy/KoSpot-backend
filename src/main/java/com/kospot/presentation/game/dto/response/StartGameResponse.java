@@ -15,4 +15,11 @@ public class StartGameResponse {
         private String markerImageUrl;
     }
 
+    @Getter
+    @Builder
+    public static class ReIssue {
+        private String targetLat;
+        private String targetLng;
+    }
+
 }

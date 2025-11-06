@@ -27,7 +27,7 @@ public class ReIssueRoadViewCoordinateUseCase {
     private final CoordinateAdaptor coordinateAdaptor;
     private final AESService aesService;
 
-    public StartGameResponse.RoadView execute(Member member, Long gameId){
+    public StartGameResponse.ReIssue execute(Member member, Long gameId){
         RoadViewGame game = roadViewGameAdaptor.queryByIdFetchCoordinate(gameId);
         Coordinate coordinate = game.getCoordinate();
         coordinateService.invalidateCoordinate(coordinate);
@@ -38,12 +38,10 @@ public class ReIssueRoadViewCoordinateUseCase {
     }
 
     //encrypt -> response
-    private StartGameResponse.RoadView getEncryptedRoadViewGameResponse(Member member, RoadViewGame game) {
-        return StartGameResponse.RoadView.builder()
-                .gameId(aesService.toEncryptString(game.getId()))
+    private StartGameResponse.ReIssue getEncryptedRoadViewGameResponse(Member member, RoadViewGame game) {
+        return StartGameResponse.ReIssue.builder()
                 .targetLat(aesService.toEncryptString(game.getCoordinate().getLat()))
                 .targetLng(aesService.toEncryptString(game.getCoordinate().getLng()))
-                .markerImageUrl(member.getEquippedMarkerImage().getImageUrl())
                 .build();
     }
 

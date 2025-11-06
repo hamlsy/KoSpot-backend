@@ -20,9 +20,9 @@ public interface CoordinateRepository extends JpaRepository<Coordinate, Long> {
     @Query("SELECT c FROM Coordinate c WHERE c.address.sido = :sido")
     Page<Coordinate> findBySidoWithOffset(@Param("sido") Sido sido, Pageable pageable);
 
-    // 전체 랜덤 - nativeQuery
-    @Query(value = "SELECT COUNT(*) FROM coordinate", nativeQuery = true)
-    long countAllNative();
+    // 전체 랜덤
+    @Query("SELECT COUNT(c) FROM Coordinate c")
+    long countAll();
 
     @Query("SELECT c FROM Coordinate c")
     Page<Coordinate> findAllCoordinates(Pageable pageable);
