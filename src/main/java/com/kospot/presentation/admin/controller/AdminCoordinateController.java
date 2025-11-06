@@ -59,7 +59,7 @@ public class AdminCoordinateController {
     @GetMapping
     public ApiResponseDto<Page<AdminCoordinateResponse.CoordinateInfo>> findAllCoordinates(
             @CurrentMember Member admin,
-            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(size = 20, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<AdminCoordinateResponse.CoordinateInfo> coordinates = findAllCoordinatesUseCase.execute(admin, pageable);
         return ApiResponseDto.onSuccess(coordinates);
