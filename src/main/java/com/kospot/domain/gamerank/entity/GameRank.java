@@ -55,7 +55,7 @@ public class GameRank extends BaseTimeEntity {
     }
 
     public void applyPenaltyForAbandon() {
-       ratingScore -= 100;
+       this.ratingScore =  Math.max(0, this.ratingScore - 100);
        changeRank();
     }
 
