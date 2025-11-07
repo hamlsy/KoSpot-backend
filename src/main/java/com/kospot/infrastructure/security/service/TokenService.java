@@ -63,8 +63,8 @@ public class TokenService {
 
         // 새로운 Authentication 객체 생성
         Claims claims = parseClaims(refreshToken);
-        String username = claims.getSubject();
-        CustomUserDetails customUserDetails = CustomUserDetails.from(memberAdaptor.queryByUsername(username));
+        String memberId = claims.getSubject(); // 실제로는 memberId임
+        CustomUserDetails customUserDetails = CustomUserDetails.from(memberAdaptor.queryById(Long.parseLong(memberId)));
 //        Member member = memberAdaptor.queryById(Long.parseLong(memberId));
 //        CustomOAuthUser customUserDetails = CustomOAuthUser.from(member);
         Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, "",
@@ -107,7 +107,7 @@ public class TokenService {
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRATION_TIME);   // 30분
         log.info("date = {}", accessTokenExpiresIn);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName()) // = customUserDetails.getUsername()
+                .setSubject(authentication.getName()) // = customUserDetails.getUsername() // 실제로는 memberId
                 .claim("auth", authorities)
                 .claim("memberId", memberId)
                 .claim("nickname", nickname)
@@ -123,9 +123,10 @@ public class TokenService {
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRATION_TIME))    // 7일
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
+        log.info("AUthentication Name = {}", authentication.getName());
         // 새 리프레시 토큰을 Redis에 저장
         redisService.setToken(refreshToken, authentication.getName());
+
 
         return JwtToken.builder()
                 .grantType("Bearer")
@@ -157,8 +158,8 @@ public class TokenService {
                 .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication return
-        String username = claims.getSubject();
-        UserDetails principal = userDetailsService.loadUserByUsername(username);
+        String memberId = claims.getSubject(); //실제로는 memberId
+        UserDetails principal = userDetailsService.loadUserByUsername(memberId);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

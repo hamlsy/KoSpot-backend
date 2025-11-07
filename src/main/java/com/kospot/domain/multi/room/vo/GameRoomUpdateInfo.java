@@ -9,6 +9,7 @@ public class GameRoomUpdateInfo {
 
     private final String roomId;
     private final String title;
+    private final int timeLimit;
     private final String gameModeKey;
     private final String playerMatchTypeKey;
     private final String password;

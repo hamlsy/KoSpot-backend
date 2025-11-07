@@ -25,6 +25,7 @@ public class GameRoomRequest {
     public static class Create {
 
         private String title;
+        private int timeLimit;
         private String password;
         private String gameModeKey;
         private String playerMatchTypeKey; //individual or team
@@ -35,6 +36,7 @@ public class GameRoomRequest {
             return GameRoom.builder()
                     .title(title)
                     .password(password)
+                    .timeLimit(timeLimit)
                     .maxPlayers(maxPlayers)
                     .gameMode(GameMode.fromKey(gameModeKey))
                     .playerMatchType(PlayerMatchType.fromKey(playerMatchTypeKey))
@@ -52,6 +54,7 @@ public class GameRoomRequest {
     public static class Update {
 
         private String title;
+        private int timeLimit;
         private String password;
         private String gameModeKey;
         private String playerMatchTypeKey;

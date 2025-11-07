@@ -34,12 +34,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns(ALLOWED_ORIGINS.toArray(new String[0]))
                 .withSockJS();
-        log.info("WebSocket STOMP endpoint registered at /ws");
 
         // 전역 알림 - 시스템 공지사항
         registry.addEndpoint("/ws/notification")
                 .setAllowedOriginPatterns(ALLOWED_ORIGINS.toArray(new String[0]))
                 .withSockJS();
+
     }
 
 

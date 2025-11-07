@@ -32,12 +32,12 @@ public class GameRoomWebSocketController {
      * 구독: /topic/room/123/chat
      */
     @MessageMapping("/room.{roomId}.chat")
-    public void sendRoomMessage(@DestinationVariable String roomId, @Valid @Payload ChatMessageDto.GameRoom dto, SimpMessageHeaderAccessor headerAccessor){
+    public void sendRoomMessage(@DestinationVariable("roomId")  String roomId, @Valid @Payload ChatMessageDto.GameRoom dto, SimpMessageHeaderAccessor headerAccessor){
         sendGameRoomMessageUseCase.execute(roomId, dto, headerAccessor);
     }
 
     @SubscribeMapping("/room/{roomId}/playerList")
-    public void subscribeGameRoomPlayerList(@DestinationVariable String roomId, SimpMessageHeaderAccessor headerAccessor) {
+    public void subscribeGameRoomPlayerList(@DestinationVariable("roomId")  String roomId, SimpMessageHeaderAccessor headerAccessor) {
         setGameRoomIdAttrUseCase.execute(roomId, headerAccessor);
     }
 
@@ -45,7 +45,7 @@ public class GameRoomWebSocketController {
     // 2. 팀 ENUM 최적화
     // 3. redis 내부 팀 직접 변경 서비스
     @MessageMapping("/room.{roomId}.switchTeam")
-    public void switchTeam(@DestinationVariable String roomId,
+    public void switchTeam(@DestinationVariable("roomId")  String roomId,
                            @Valid @Payload GameRoomRequest.SwitchTeam request,
                            SimpMessageHeaderAccessor headerAccessor) {
         switchTeamUseCase.execute(roomId, request, headerAccessor);

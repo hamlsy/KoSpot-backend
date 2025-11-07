@@ -31,6 +31,7 @@ public class MultiRoadViewGame extends MultiGame {
                 .matchType(matchType)
                 .gameMode(GameMode.ROADVIEW)  // 로드뷰 모드로 고정
                 .totalRounds(roundCount)
+                .timeLimit(gameRoom.getTimeLimit())
                 .currentRound(0) // 시작 전에는 0
                 .timeLimit(timeLimit)
                 .isFinished(false)

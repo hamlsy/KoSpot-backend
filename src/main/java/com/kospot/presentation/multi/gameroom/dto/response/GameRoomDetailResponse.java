@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 @ToString
 public class GameRoomDetailResponse {
 
+    private Long roomId;
     private String title;
+    private int timeLimit;
     private String gameMode;
     private String gameType;
     private boolean privateRoom;
@@ -25,7 +27,9 @@ public class GameRoomDetailResponse {
     public static GameRoomDetailResponse from(GameRoom gameRoom,
                                               List<GameRoomPlayerInfo> playerInfos) {
         return GameRoomDetailResponse.builder()
+                .roomId(gameRoom.getId())
                 .title(gameRoom.getTitle())
+                .timeLimit(gameRoom.getTimeLimit())
                 .gameMode(gameRoom.getGameMode().name())
                 .gameType(gameRoom.getPlayerMatchType().name())
                 .maxPlayers(gameRoom.getMaxPlayers())

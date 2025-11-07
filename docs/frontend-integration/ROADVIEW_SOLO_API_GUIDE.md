@@ -139,6 +139,7 @@ GET /rooms/{roomId}
   "result": {
     "roomId": 1,
     "title": "방 제목",
+     "timeLimit": 60, // 초단위
     "hostId": 123,
     "currentPlayers": 3,
     "maxPlayers": 8,

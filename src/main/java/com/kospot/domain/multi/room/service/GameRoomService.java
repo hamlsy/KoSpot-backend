@@ -31,13 +31,14 @@ public class GameRoomService {
     }
 
     public GameRoom updateGameRoom(GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {
-        gameRoom.update(updateInfo.getTitle(), GameMode.fromKey(updateInfo.getGameModeKey()), PlayerMatchType.fromKey(updateInfo.getPlayerMatchTypeKey()),
+        gameRoom.update(updateInfo.getTitle(),updateInfo.getTimeLimit(),
+                GameMode.fromKey(updateInfo.getGameModeKey()), PlayerMatchType.fromKey(updateInfo.getPlayerMatchTypeKey()),
                 updateInfo.isPrivateRoom(), updateInfo.getPassword(), updateInfo.getTeamCount());
         return gameRoom;
     }
 
     public void joinGameRoom(Member player, GameRoom gameRoom, GameRoomRequest.Join request) {
-        gameRoom.join(player, request.getPassword());
+        gameRoom.join(player, request.getPassword(), gameRoom.getId());
     }
 
     public void leaveGameRoom(Member player, GameRoom gameRoom) {

@@ -12,6 +12,7 @@ public class FindGameRoomResponse {
 
     private Long gameRoomId;
     private String title;
+    private int timeLimit;
     private String gameMode;
     private String gameType;
     private int maxPlayers;
@@ -24,6 +25,7 @@ public class FindGameRoomResponse {
         return FindGameRoomResponse.builder()
                 .gameRoomId(gameRoom.getId())
                 .title(gameRoom.getTitle())
+                .timeLimit(gameRoom.getTimeLimit())
                 .gameMode(gameRoom.getGameMode().name())
                 .gameType(gameRoom.getPlayerMatchType().name())
                 .maxPlayers(gameRoom.getMaxPlayers())
