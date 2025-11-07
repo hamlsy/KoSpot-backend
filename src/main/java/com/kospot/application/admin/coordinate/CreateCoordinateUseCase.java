@@ -22,11 +22,13 @@ public class CreateCoordinateUseCase {
         admin.validateAdmin();
 
         Sido sido = Sido.fromKey(request.getSidoKey());
-        
+        String fullAddress = sido.getName() + " " + request.getSigungu() + " " + request.getDetailAddress();
+
         Address address = Address.builder()
                 .sido(sido)
                 .sigungu(request.getSigungu())
                 .detailAddress(request.getDetailAddress())
+                .fullAddress(fullAddress)
                 .build();
 
         Coordinate coordinate = Coordinate.builder()

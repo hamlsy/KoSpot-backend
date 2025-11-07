@@ -19,5 +19,7 @@ public class Address {
 
     private String sigungu;  // 시군구 (강남구, 수원시 등)
 
+    private String fullAddress;
+
     private String detailAddress;
 }

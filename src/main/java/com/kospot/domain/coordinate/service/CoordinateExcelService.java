@@ -111,6 +111,7 @@ public class CoordinateExcelService {
         String cLine = getCellString(row, 2); //C
         String dLine = getCellString(row, 3);//D
         String detailAddress = cLine + " " + dLine;
+        String fullAddress = sido.getName() + " " + sigungu + " " + detailAddress;
 
         double lng = row.getCell(4).getNumericCellValue(); //E
         double lat = row.getCell(5).getNumericCellValue(); //F
@@ -123,6 +124,7 @@ public class CoordinateExcelService {
                 .sido(sido)
                 .sigungu(sigungu)
                 .detailAddress(detailAddress)
+                .fullAddress(fullAddress)
                 .build();
 
         return Coordinate.builder()
