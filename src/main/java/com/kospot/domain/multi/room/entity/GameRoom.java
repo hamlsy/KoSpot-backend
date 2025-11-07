@@ -35,6 +35,8 @@ public class GameRoom extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private PlayerMatchType playerMatchType;
 
+    private int timeLimit; // 시간 제한
+
     private boolean privateRoom;
 
     @Min(2)
@@ -66,9 +68,10 @@ public class GameRoom extends BaseTimeEntity {
         this.host = host;
     }
 
-    public void update(String title, GameMode gameMode, PlayerMatchType playerMatchType,
+    public void update(String title, int timeLimit, GameMode gameMode, PlayerMatchType playerMatchType,
                        boolean privateRoom, String password, int teamCount) {
         this.title = title;
+        this.timeLimit = timeLimit;
         this.gameMode = gameMode;
         this.playerMatchType = playerMatchType;
         this.privateRoom = privateRoom;
@@ -76,8 +79,8 @@ public class GameRoom extends BaseTimeEntity {
         this.teamCount = teamCount;
     }
 
-    public void join(Member player, String inputPassword) {
-        validateJoinRoom(player, inputPassword);
+    public void join(Member player, String inputPassword, Long gameRoomId) {
+        validateJoinRoom(player, inputPassword, gameRoomId);
         player.joinGameRoom(this.id);
     }
 
@@ -98,16 +101,16 @@ public class GameRoom extends BaseTimeEntity {
     //--- todo websocket
 
     //validate
-    public void validateJoinRoom(Member player, String inputPassword) {
+    public void validateJoinRoom(Member player, String inputPassword, Long joinGameRoomId) {
         if (privateRoom) {
             validatePassword(inputPassword);
         }
         validateRoomStatus();
-        validatePlayerNotInOtherRoom(player);
+        validatePlayerNotInOtherRoom(player, joinGameRoomId);
     }
 
-    private void validatePlayerNotInOtherRoom(Member player) {
-        if (player.isAlreadyInGameRoom()) {
+    private void validatePlayerNotInOtherRoom(Member player, Long joinGameRoomId) {
+        if (player.isAlreadyInOtherGameRoom(joinGameRoomId)) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_MEMBER_ALREADY_IN_ROOM);
         }
     }

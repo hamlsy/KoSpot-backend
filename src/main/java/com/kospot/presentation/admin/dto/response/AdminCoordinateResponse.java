@@ -19,6 +19,7 @@ public class AdminCoordinateResponse {
         private String sido;
         private String sigungu;
         private String detailAddress;
+        private String fullAddress;
         private LocationType locationType;
 
         public static CoordinateInfo from(Coordinate coordinate) {
@@ -30,6 +31,7 @@ public class AdminCoordinateResponse {
                     .sido(coordinate.getAddress().getSido().getName())
                     .sigungu(coordinate.getAddress().getSigungu())
                     .detailAddress(coordinate.getAddress().getDetailAddress())
+                    .fullAddress(coordinate.getAddress().getFullAddress())
                     .locationType(coordinate.getLocationType())
                     .build();
         }

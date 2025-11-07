@@ -98,8 +98,8 @@ public class Member extends BaseTimeEntity {
     }
 
     //validate
-    public boolean isAlreadyInGameRoom() {
-        return this.gameRoomId != null;
+    public boolean isAlreadyInOtherGameRoom(Long joinGameRoomId) {
+        return this.gameRoomId != null || !this.gameRoomId.equals(joinGameRoomId);
     }
 
     public void validateAdmin() {

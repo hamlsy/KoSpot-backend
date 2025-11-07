@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 게임방 플레이어 통계 정보 VO
+ * 게임방 플레이어 통계 정보 VO //todo api로 대체
  */
 @Getter
 @Builder
