@@ -2,10 +2,12 @@ package com.kospot.presentation.game.dto.response;
 
 import com.kospot.domain.coordinate.entity.Sido;
 import com.kospot.domain.game.entity.RoadViewGame;
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankLevel;
 import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.domain.statistic.entity.GameModeStatistic;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,16 +65,29 @@ public class RoadViewGameHistoryResponse {
     @Getter
     @Builder
     public static class StatisticInfo {
-        private long totalPlayCount;
-        private double bestScore;
+        private long practicePlayCount;
+        private long rankPlayCount;
+        private double practiceAvgScore;
+        private double rankAvgScore;
 
         public static StatisticInfo from(MemberStatistic statistic) {
-            long totalPlayCount = statistic.getRoadviewRankGames() + statistic.getRoadviewPracticeGames();
+            GameModeStatistic roadViewStatistic = findRoadViewStatistic(statistic);
+            
             return StatisticInfo.builder()
-                    .totalPlayCount(totalPlayCount)
-                    .bestScore(statistic.getBestScore())
+                    .practicePlayCount(roadViewStatistic.getPractice().getGames())
+                    .rankPlayCount(roadViewStatistic.getRank().getGames())
+                    .practiceAvgScore(roadViewStatistic.getPractice().getAvgScore())
+                    .practiceAvgScore(roadViewStatistic.getRank().getAvgScore())
                     .build();
         }
+
+        private static GameModeStatistic findRoadViewStatistic(MemberStatistic statistic) {
+            return statistic.getModeStatistics().stream()
+                    .filter(stat -> stat.getGameMode() == GameMode.ROADVIEW)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("RoadView GameModeStatistic not found"));
+        }
+
     }
 
     @Getter

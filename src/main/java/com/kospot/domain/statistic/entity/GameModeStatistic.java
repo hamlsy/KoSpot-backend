@@ -3,6 +3,8 @@ package com.kospot.domain.statistic.entity;
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.statistic.entity.MemberStatistic;
+import com.kospot.domain.statistic.vo.GameTypeStatistic;
+import com.kospot.domain.statistic.vo.MultiGameStatistic;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -118,59 +120,7 @@ public class GameModeStatistic extends BaseTimeEntity {
         return Objects.hash(id);
     }
 
-    @Embeddable
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor
-    public static class GameTypeStatistic {
-        private long games;
-        private double avgScore;
-        private double totalScore;
 
-        public static GameTypeStatistic initialize() {
-            return new GameTypeStatistic(0L, 0.0, 0.0);
-        }
 
-        public void update(double score) {
-            this.games++;
-            this.totalScore += score;
-            this.avgScore = this.totalScore / this.games;
-        }
-    }
-
-    @Embeddable
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor
-    public static class MultiGameStatistic {
-        private long games;
-        private double avgScore;
-        private double totalScore;
-        private long firstPlace;
-        private long secondPlace;
-        private long thirdPlace;
-
-        public static MultiGameStatistic initialize() {
-            return new MultiGameStatistic(0L, 0.0, 0.0, 0L, 0L, 0L);
-        }
-
-        public void update(double score, Integer rank) {
-            this.games++;
-            this.totalScore += score;
-            this.avgScore = this.totalScore / this.games;
-
-            if (rank != null) {
-                switch (rank) {
-                    case 1 -> this.firstPlace++;
-                    case 2 -> this.secondPlace++;
-                    case 3 -> this.thirdPlace++;
-                }
-            }
-        }
-
-        public double getWinRate() {
-            return games > 0 ? (double) firstPlace / games * 100 : 0.0;
-        }
-    }
 }
 

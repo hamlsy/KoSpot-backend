@@ -44,7 +44,7 @@ public class GetRecentThreeRoadViewGamesUseCase {
         double rankPercentage = gameRankService.calculateRankPercentage(higherRankCount, totalRankCount);
 
         // 통계 정보 조회
-        MemberStatistic statistic = memberStatisticAdaptor.queryByMember(member);
+        MemberStatistic statistic = memberStatisticAdaptor.queryByMemberFetchModeStatistics(member);
 
         return RoadViewGameHistoryResponse.RecentThree.from(gameRank, rankPercentage, statistic, games);
     }

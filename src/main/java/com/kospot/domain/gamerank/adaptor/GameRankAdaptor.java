@@ -16,7 +16,7 @@ public class GameRankAdaptor {
     private final GameRankRepository repository;
 
     public List<GameRank> queryAllByMember(Member member){
-        return repository.findAllByMember();
+        return repository.findAllByMember(member);
     }
 
     public GameRank queryByMemberAndGameMode(Member member, GameMode gameMode) {
