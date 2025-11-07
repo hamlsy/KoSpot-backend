@@ -1,12 +1,11 @@
-package com.kospot.domain.member.adaptor;
+package com.kospot.domain.statistic.adaptor;
 
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.entity.MemberStatistic;
+import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.domain.member.exception.MemberErrorStatus;
-import com.kospot.domain.member.repository.MemberStatisticRepository;
+import com.kospot.domain.statistic.repository.MemberStatisticRepository;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import com.kospot.domain.member.exception.MemberHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 

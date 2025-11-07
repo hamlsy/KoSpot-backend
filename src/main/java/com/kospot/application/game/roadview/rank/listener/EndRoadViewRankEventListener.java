@@ -3,10 +3,11 @@ package com.kospot.application.game.roadview.rank.listener;
 import com.kospot.application.game.roadview.rank.event.UpdatePointAndRankEvent;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.event.RoadViewRankEvent;
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.service.MemberStatisticService;
+import com.kospot.domain.statistic.service.MemberStatisticService;
 import com.kospot.infrastructure.exception.object.domain.EventHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class EndRoadViewRankEventListener {
             GameRank gameRank = event.getGameRank();
 
             updatePointAndRankEvent.updatePointAndRank(member, game, gameRank.getRankTier());
-            memberStatisticService.updateSingleGameStatistic(member, GameType.RANK, game.getScore(), game.getEndedAt());
+            memberStatisticService.updateSingleGameStatistic(member, GameMode.ROADVIEW, GameType.RANK, game.getScore(), game.getEndedAt());
         }catch (Exception e){
             throw new EventHandler(ErrorStatus.EVENT_GAME_END_ERROR);
         }

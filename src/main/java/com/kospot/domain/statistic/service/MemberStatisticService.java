@@ -1,10 +1,11 @@
-package com.kospot.domain.member.service;
+package com.kospot.domain.statistic.service;
 
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameType;
-import com.kospot.domain.member.adaptor.MemberStatisticAdaptor;
+import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.entity.MemberStatistic;
-import com.kospot.domain.member.repository.MemberStatisticRepository;
+import com.kospot.domain.statistic.entity.MemberStatistic;
+import com.kospot.domain.statistic.repository.MemberStatisticRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,22 +27,20 @@ public class MemberStatisticService {
     }
 
     @Transactional
-    public void updateSingleGameStatistic(Member member, GameType gameType, double score, LocalDateTime playTime) {
+    public void updateSingleGameStatistic(Member member, GameMode gameMode, GameType gameType, 
+                                          double score, LocalDateTime playTime) {
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(member);
         LocalDate playDate = playTime.toLocalDate();
-
-        if (gameType == GameType.PRACTICE) {
-            statistic.updateSinglePracticeGame(score, playDate, playTime);
-        } else if (gameType == GameType.RANK) {
-            statistic.updateSingleRankGame(score, playDate, playTime);
-        }
+        statistic.updateGameStatistic(gameMode, gameType, score, playDate, playTime);
     }
 
     @Transactional
-    public void updateMultiGameStatistic(Member member, double score, Integer finalRank, LocalDateTime playTime) {
+    public void updateMultiGameStatistic(Member member, GameMode gameMode, double score, 
+                                          Integer finalRank, LocalDateTime playTime) {
         MemberStatistic statistic = memberStatisticAdaptor.queryByMember(member);
         LocalDate playDate = playTime.toLocalDate();
-        statistic.updateMultiGame(score, finalRank, playDate, playTime);
+        statistic.updateMultiGameStatistic(gameMode, score, finalRank, playDate, playTime);
     }
+
 }
 

@@ -1,7 +1,7 @@
 package com.kospot.presentation.admin.dto.response;
 
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.entity.MemberStatistic;
+import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.domain.member.vo.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

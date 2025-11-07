@@ -1,7 +1,8 @@
 package com.kospot.application.multi.round.roadview;
 
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.service.MemberStatisticService;
+import com.kospot.domain.statistic.service.MemberStatisticService;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
@@ -61,7 +62,7 @@ public class FinishMultiRoadViewGameUseCase {
         
         pointService.addPoint(member, earnedPoint);
         pointHistoryService.savePointHistory(member, earnedPoint, PointHistoryType.MULTI_GAME);
-        memberStatisticService.updateMultiGameStatistic(member, player.getTotalScore(), player.getRoundRank(), LocalDateTime.now());
+        memberStatisticService.updateMultiGameStatistic(member, GameMode.ROADVIEW, player.getTotalScore(), player.getRoundRank(), LocalDateTime.now());
         
         log.info("💰 Point distributed - memberId: {}, rank: {}, score: {}, point: {}", 
                 member.getId(), finalRank, player.getTotalScore(), earnedPoint);

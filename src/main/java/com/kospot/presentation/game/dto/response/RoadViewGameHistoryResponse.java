@@ -6,7 +6,7 @@ import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankLevel;
 import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.member.entity.MemberStatistic;
+import com.kospot.domain.statistic.entity.MemberStatistic;
 import lombok.Builder;
 import lombok.Getter;
 

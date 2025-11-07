@@ -3,9 +3,10 @@ package com.kospot.application.game.roadview.practice.listner;
 import com.kospot.application.game.roadview.practice.event.UpdatePointEvent;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.event.RoadViewPracticeEvent;
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.service.MemberStatisticService;
+import com.kospot.domain.statistic.service.MemberStatisticService;
 import com.kospot.infrastructure.exception.object.domain.EventHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class EndRoadViewPracticeEventListener {
             RoadViewGame game = event.getRoadViewGame();
 
             updatePointEvent.updatePoint(member, game);
-            memberStatisticService.updateSingleGameStatistic(member, GameType.PRACTICE, game.getScore(), game.getEndedAt());
+            memberStatisticService.updateSingleGameStatistic(member, GameMode.ROADVIEW, GameType.PRACTICE, game.getScore(), game.getEndedAt());
         }catch (Exception e){
             throw new EventHandler(ErrorStatus.EVENT_GAME_END_ERROR);
         }
