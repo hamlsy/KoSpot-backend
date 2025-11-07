@@ -107,7 +107,7 @@ public class TokenService {
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRATION_TIME);   // 30분
         log.info("date = {}", accessTokenExpiresIn);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName()) // = customUserDetails.getUsername() // 실제로는 memberId
+                .setSubject(String.valueOf(memberId)) // = customUserDetails.getUsername() // 실제로는 memberId
                 .claim("auth", authorities)
                 .claim("memberId", memberId)
                 .claim("nickname", nickname)
@@ -119,7 +119,7 @@ public class TokenService {
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(String.valueOf(memberId))
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRATION_TIME))    // 7일
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
