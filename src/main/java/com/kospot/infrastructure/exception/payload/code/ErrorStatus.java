@@ -104,6 +104,9 @@ public enum ErrorStatus implements BaseCode {
     // GameConfig Error (4371 ~ 4380)
     GAME_CONFIG_NOT_FOUND(NOT_FOUND, 4371, "게임 설정을 찾을 수 없습니다."),
 
+    // Statistic Error (4381 ~ 4390)
+    STATISTIC_NOT_FOUND(NOT_FOUND, 4381, "해당 통계를 찾을 수 없습니다."),
+
 
     ;
 

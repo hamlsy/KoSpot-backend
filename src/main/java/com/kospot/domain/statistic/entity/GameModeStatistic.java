@@ -2,6 +2,7 @@ package com.kospot.domain.statistic.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.vo.GameMode;
+import com.kospot.domain.statistic.entity.MemberStatistic;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,18 +15,18 @@ import java.util.Objects;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-    name = "game_mode_statistic",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uk_game_mode_statistic", columnNames = {"member_statistic_id", "game_mode"})
-    },
-    indexes = {
-        @Index(name = "idx_game_mode", columnList = "game_mode"),
-        @Index(name = "idx_game_mode_created", columnList = "game_mode, created_date"),
-        @Index(name = "idx_member_statistic_id", columnList = "member_statistic_id"),
-        @Index(name = "idx_practice_avg_score", columnList = "practice_avg_score DESC"),
-        @Index(name = "idx_rank_avg_score", columnList = "rank_avg_score DESC"),
-        @Index(name = "idx_multi_avg_score", columnList = "multi_avg_score DESC")
-    }
+        name = "game_mode_statistic",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_game_mode_statistic", columnNames = {"member_statistic_id", "game_mode"})
+        },
+        indexes = {
+                @Index(name = "idx_game_mode", columnList = "game_mode"),
+                @Index(name = "idx_game_mode_created", columnList = "game_mode, created_date"),
+                @Index(name = "idx_member_statistic_id", columnList = "member_statistic_id"),
+                @Index(name = "idx_practice_avg_score", columnList = "practice_avg_score DESC"),
+                @Index(name = "idx_rank_avg_score", columnList = "rank_avg_score DESC"),
+                @Index(name = "idx_multi_avg_score", columnList = "multi_avg_score DESC")
+        }
 )
 public class GameModeStatistic extends BaseTimeEntity {
 
@@ -44,28 +45,28 @@ public class GameModeStatistic extends BaseTimeEntity {
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "games", column = @Column(name = "practice_games")),
-        @AttributeOverride(name = "avgScore", column = @Column(name = "practice_avg_score")),
-        @AttributeOverride(name = "totalScore", column = @Column(name = "practice_total_score"))
+            @AttributeOverride(name = "games", column = @Column(name = "practice_games")),
+            @AttributeOverride(name = "avgScore", column = @Column(name = "practice_avg_score")),
+            @AttributeOverride(name = "totalScore", column = @Column(name = "practice_total_score"))
     })
     private GameTypeStatistic practice;
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "games", column = @Column(name = "rank_games")),
-        @AttributeOverride(name = "avgScore", column = @Column(name = "rank_avg_score")),
-        @AttributeOverride(name = "totalScore", column = @Column(name = "rank_total_score"))
+            @AttributeOverride(name = "games", column = @Column(name = "rank_games")),
+            @AttributeOverride(name = "avgScore", column = @Column(name = "rank_avg_score")),
+            @AttributeOverride(name = "totalScore", column = @Column(name = "rank_total_score"))
     })
     private GameTypeStatistic rank;
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "games", column = @Column(name = "multi_games")),
-        @AttributeOverride(name = "avgScore", column = @Column(name = "multi_avg_score")),
-        @AttributeOverride(name = "totalScore", column = @Column(name = "multi_total_score")),
-        @AttributeOverride(name = "firstPlace", column = @Column(name = "multi_first_place")),
-        @AttributeOverride(name = "secondPlace", column = @Column(name = "multi_second_place")),
-        @AttributeOverride(name = "thirdPlace", column = @Column(name = "multi_third_place"))
+            @AttributeOverride(name = "games", column = @Column(name = "multi_games")),
+            @AttributeOverride(name = "avgScore", column = @Column(name = "multi_avg_score")),
+            @AttributeOverride(name = "totalScore", column = @Column(name = "multi_total_score")),
+            @AttributeOverride(name = "firstPlace", column = @Column(name = "multi_first_place")),
+            @AttributeOverride(name = "secondPlace", column = @Column(name = "multi_second_place")),
+            @AttributeOverride(name = "thirdPlace", column = @Column(name = "multi_third_place"))
     })
     private MultiGameStatistic multi;
 
@@ -157,7 +158,7 @@ public class GameModeStatistic extends BaseTimeEntity {
             this.games++;
             this.totalScore += score;
             this.avgScore = this.totalScore / this.games;
-            
+
             if (rank != null) {
                 switch (rank) {
                     case 1 -> this.firstPlace++;

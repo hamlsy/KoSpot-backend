@@ -15,5 +15,11 @@ public interface MemberStatisticRepository extends JpaRepository<MemberStatistic
 
     @Query("select ms from MemberStatistic ms where ms.member.id = :memberId")
     Optional<MemberStatistic> findByMemberId(@Param("memberId") Long memberId);
+
+    @Query("select ms from MemberStatistic ms join fetch ms.modeStatistics where ms.member = :member")
+    Optional<MemberStatistic> findByMemberFetchModeStatistics(@Param("member") Member member);
+
+    @Query("select ms from MemberStatistic ms join fetch ms.modeStatistics where ms.member.id = :memberId")
+    Optional<MemberStatistic> findByMemberIdFetchModeStatistics(@Param("memberId") Long memberId);
 }
 

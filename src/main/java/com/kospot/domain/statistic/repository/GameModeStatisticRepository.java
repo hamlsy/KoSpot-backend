@@ -1,6 +1,7 @@
 package com.kospot.domain.statistic.repository;
 
 import com.kospot.domain.game.vo.GameMode;
+
 import com.kospot.domain.statistic.entity.GameModeStatistic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

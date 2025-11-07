@@ -1,7 +1,7 @@
 package com.kospot.application.admin.statistics;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.statistic.repository.GameModeStatisticRepository;
+import com.kospot.domain.statistic.adaptor.GameModeStatisticAdaptor;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.admin.dto.response.GameModeStatisticSummary;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class GetStatisticsByPeriodUseCase {
 
-    private final GameModeStatisticRepository gameModeStatisticRepository;
+    private final GameModeStatisticAdaptor gameModeStatisticAdaptor;
 
     public List<GameModeStatisticSummary> execute(String period) {
         LocalDateTime now = LocalDateTime.now();
@@ -27,7 +27,7 @@ public class GetStatisticsByPeriodUseCase {
             default -> throw new IllegalArgumentException("Invalid period: " + period);
         };
 
-        List<Object[]> results = gameModeStatisticRepository.getStatisticsByModeBetween(startDate, now);
+        List<Object[]> results = gameModeStatisticAdaptor.queryStatisticsByModeBetween(startDate, now);
         
         return results.stream()
                 .map(this::mapToSummary)

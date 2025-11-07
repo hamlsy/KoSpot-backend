@@ -1,7 +1,7 @@
 package com.kospot.application.admin.statistics;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.statistic.repository.GameModeStatisticRepository;
+import com.kospot.domain.statistic.adaptor.GameModeStatisticAdaptor;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.admin.dto.response.GameModeStatisticSummary;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class GetOverallStatisticsUseCase {
 
-    private final GameModeStatisticRepository gameModeStatisticRepository;
+    private final GameModeStatisticAdaptor gameModeStatisticAdaptor;
 
     public List<GameModeStatisticSummary> execute() {
-        List<Object[]> results = gameModeStatisticRepository.getOverallStatisticsByMode();
+        List<Object[]> results = gameModeStatisticAdaptor.queryOverallStatisticsByMode();
         
         return results.stream()
                 .map(this::mapToSummary)
