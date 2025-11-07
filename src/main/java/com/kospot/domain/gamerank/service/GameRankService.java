@@ -11,6 +11,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -20,10 +23,12 @@ public class GameRankService {
     private final GameRankRepository gameRankRepository;
 
     public void initGameRank(Member member) {
-        GameRank roadViewGameRank = GameRank.create(member, GameMode.ROADVIEW);
-        GameRank photoGameRank = GameRank.create(member, GameMode.PHOTO);
-        gameRankRepository.save(roadViewGameRank);
-        gameRankRepository.save(photoGameRank);
+        List<GameRank> gameRanks = new ArrayList<>();
+        for(GameMode gameMode : GameMode.values()) {
+            GameRank gameRank = GameRank.create(member, gameMode);
+            gameRanks.add(gameRank);
+        }
+        gameRankRepository.saveAll(gameRanks);
     }
 
     public void applyPenaltyForAbandon(GameRank gameRank) {

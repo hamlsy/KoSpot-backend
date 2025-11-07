@@ -7,11 +7,17 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Adaptor
 @RequiredArgsConstructor
 public class GameRankAdaptor {
 
     private final GameRankRepository repository;
+
+    public List<GameRank> queryAllByMember(Member member){
+        return repository.findAllByMember();
+    }
 
     public GameRank queryByMemberAndGameMode(Member member, GameMode gameMode) {
         return repository.findByMemberAndGameMode(member, gameMode);
