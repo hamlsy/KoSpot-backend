@@ -275,6 +275,7 @@ sudo apt install -y certbot python3-certbot-nginx
 
 # 인증서 발급 (도메인 소유 확인 필요)
 sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+sudo certbot --nginx -d api.kospot.kr # api 전용 , 가비아 DNS 설정에서 추가 A 레코드 필요
 
 # 대화형 프롬프트에서:
 # - 이메일 입력

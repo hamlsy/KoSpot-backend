@@ -1,12 +1,14 @@
 package com.kospot.presentation.main.dto.response;
 
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.presentation.banner.dto.response.BannerResponse;
 import com.kospot.presentation.notice.dto.response.NoticeResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MainPageResponse {
@@ -44,8 +46,11 @@ public class MainPageResponse {
         private String equippedMarkerImageUrl;
         private Boolean isAdmin;
         private Boolean isFirstVisited;
+        private LocalDateTime lastPlayedAt;
+        private int currentPoint;
+
         public static MyInfo of(
-                Member member
+                Member member, MemberStatistic statistic
         ) {
             return MyInfo.builder()
                     .nickname(member.getNickname())
@@ -53,6 +58,8 @@ public class MainPageResponse {
                     .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
                     .isAdmin(member.isAdmin())
                     .isFirstVisited(member.isFirstVisited())
+                    .lastPlayedAt(statistic.getLastPlayedAt())
+                    .currentPoint(member.getPoint())
                     .build();
         }
     }

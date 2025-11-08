@@ -1,11 +1,11 @@
 package com.kospot.member.service;
 
 import com.kospot.domain.game.vo.GameType;
-import com.kospot.domain.member.adaptor.MemberStatisticAdaptor;
+import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.entity.MemberStatistic;
+import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.domain.member.repository.MemberRepository;
-import com.kospot.domain.member.service.MemberStatisticService;
+import com.kospot.domain.statistic.service.MemberStatisticService;
 import com.kospot.domain.member.vo.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

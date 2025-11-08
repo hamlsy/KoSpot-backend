@@ -11,6 +11,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -18,12 +19,15 @@ import java.util.List;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final List<String> ALLOWED_ORIGINS;
+    private final String[] allowedOrigins;
     private final WebSocketChannelInterceptor webSocketChannelInterceptor;
 
-    public WebSocketConfig(@Value("${websocket.allowed-origins}") List<String> ALLOWED_ORIGINS,
+    public WebSocketConfig(@Value("${websocket.allowed-origins}") String allowedOrigins,
                            WebSocketChannelInterceptor webSocketChannelInterceptor) {
-        this.ALLOWED_ORIGINS = ALLOWED_ORIGINS;
+        this.allowedOrigins = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toArray(String[]::new);
         this.webSocketChannelInterceptor = webSocketChannelInterceptor;
     }
 
@@ -32,12 +36,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 로비 및 개임 내 통신
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns(ALLOWED_ORIGINS.toArray(new String[0]))
+                .setAllowedOriginPatterns(allowedOrigins)
                 .withSockJS();
 
         // 전역 알림 - 시스템 공지사항
         registry.addEndpoint("/ws/notification")
-                .setAllowedOriginPatterns(ALLOWED_ORIGINS.toArray(new String[0]))
+                .setAllowedOriginPatterns(allowedOrigins)
                 .withSockJS();
 
     }

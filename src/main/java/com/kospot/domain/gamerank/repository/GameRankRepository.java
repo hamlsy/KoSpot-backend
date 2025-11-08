@@ -7,7 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface GameRankRepository extends JpaRepository<GameRank, Long> {
+
+    @Query("select r from GameRank r join fetch r.member where r.member = :member")
+    List<GameRank> findAllByMember(Member member);
 
     @Query("select r from GameRank r join fetch r.member where r.member = :member " +
             "and r.gameMode = :gameMode")

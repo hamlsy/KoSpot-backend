@@ -7,16 +7,21 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private final String CORS_FRONT_PATH;
+    private final String[] corsFrontPaths;
     private final CustomAuthenticationPrincipalArgumentResolver customAuthenticationPrincipalArgumentResolver;
 
-    public WebMvcConfig(@Value("${app.cors.front-path}") String CORS_FRONT_PATH, CustomAuthenticationPrincipalArgumentResolver customAuthenticationPrincipalArgumentResolver) {
-        this.CORS_FRONT_PATH = CORS_FRONT_PATH;
+    public WebMvcConfig(@Value("${app.cors.front-path}")  String corsFrontPath, CustomAuthenticationPrincipalArgumentResolver customAuthenticationPrincipalArgumentResolver) {
+        // "https://kospot.kr,https://www.kospot.kr,https://d3..." 이런 식으로 들어오면 split
+        this.corsFrontPaths = Arrays.stream(corsFrontPath.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toArray(String[]::new);
         this.customAuthenticationPrincipalArgumentResolver = customAuthenticationPrincipalArgumentResolver;
     }
 
@@ -31,7 +36,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 .addMapping("/**")
-                .allowedOriginPatterns(CORS_FRONT_PATH)
+                .allowedOriginPatterns(corsFrontPaths)
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

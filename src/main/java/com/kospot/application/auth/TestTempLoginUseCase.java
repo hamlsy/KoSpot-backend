@@ -1,10 +1,7 @@
 package com.kospot.application.auth;
 
 import com.kospot.application.member.RegisterSocialMemberUseCase;
-import com.kospot.domain.gamerank.service.GameRankService;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.service.MemberStatisticService;
-import com.kospot.domain.member.vo.Role;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.point.service.PointService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;

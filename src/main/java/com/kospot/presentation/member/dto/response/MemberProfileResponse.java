@@ -5,6 +5,7 @@ import com.kospot.domain.gamerank.vo.RankTier;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,6 +18,7 @@ public class MemberProfileResponse {
     private LocalDateTime joinedAt;
     private LocalDateTime lastPlayedAt;
     private int currentStreak;
+    private int longestStreak;
     
     private GameStatistics statistics;
     private RankInfo rankInfo;
@@ -26,7 +28,6 @@ public class MemberProfileResponse {
     public static class GameStatistics {
         private RoadViewGameStats roadView;
         private PhotoGameStats photo;
-        private double bestScore;
         
         @Getter
         @Builder

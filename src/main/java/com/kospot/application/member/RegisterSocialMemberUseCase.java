@@ -1,13 +1,12 @@
 package com.kospot.application.member;
 
 import com.kospot.domain.gamerank.service.GameRankService;
-import com.kospot.domain.image.service.ImageService;
 import com.kospot.domain.item.adaptor.ItemAdaptor;
 import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.item.vo.ItemType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.service.MemberService;
-import com.kospot.domain.member.service.MemberStatisticService;
+import com.kospot.domain.statistic.service.MemberStatisticService;
 import com.kospot.domain.memberitem.entity.MemberItem;
 import com.kospot.domain.memberitem.service.MemberItemService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;

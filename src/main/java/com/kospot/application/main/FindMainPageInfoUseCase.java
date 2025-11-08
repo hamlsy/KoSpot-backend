@@ -9,6 +9,8 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.service.MemberService;
 import com.kospot.domain.notice.adaptor.NoticeAdaptor;
 import com.kospot.domain.notice.entity.Notice;
+import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
+import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.banner.dto.response.BannerResponse;
 import com.kospot.presentation.main.dto.response.MainPageResponse;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class FindMainPageInfoUseCase {
 
     private final MemberService memberService;
+    private final MemberStatisticAdaptor memberStatisticAdaptor;
     private final GameConfigAdaptor gameConfigAdaptor;
     private final NoticeAdaptor noticeAdaptor;
     private final BannerAdaptor bannerAdaptor;
@@ -33,7 +36,8 @@ public class FindMainPageInfoUseCase {
         // 관리자 여부 확인
         MainPageResponse.MyInfo myInfo = null;
         if(member != null) {
-            myInfo = MainPageResponse.MyInfo.of(member);
+            MemberStatistic statistic = memberStatisticAdaptor.queryByMember(member);
+            myInfo = MainPageResponse.MyInfo.of(member, statistic);
         }
 
 
