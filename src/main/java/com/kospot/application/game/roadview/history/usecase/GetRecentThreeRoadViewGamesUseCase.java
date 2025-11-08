@@ -8,6 +8,7 @@ import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.service.GameRankService;
 import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.statistic.entity.GameModeStatistic;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.game.dto.response.RoadViewGameHistoryResponse;
@@ -33,8 +34,14 @@ public class GetRecentThreeRoadViewGamesUseCase {
         // 랭크 정보 조회
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.ROADVIEW);
 
+        // 통계 정보 조회
+        MemberStatistic statistic = memberStatisticAdaptor.queryByMemberFetchModeStatistics(member);
+
+        GameModeStatistic roadViewStatistic = statistic.findModeStatistic(GameMode.ROADVIEW);
+
         // 전체 랭킹 통계 조회
-        long totalRankCount = gameRankAdaptor.queryTotalRankCountByGameMode(GameMode.ROADVIEW);
+//        long totalRankCount = gameRankAdaptor.queryTotalRankCountByGameMode(GameMode.ROADVIEW);
+        long totalRankCount = roadViewStatistic.getRank().getGames();
         long higherRankCount = gameRankAdaptor.queryHigherRankCountByGameModeAndRatingScore(
                 GameMode.ROADVIEW,
                 gameRank.getRatingScore()
@@ -42,9 +49,6 @@ public class GetRecentThreeRoadViewGamesUseCase {
 
         // 상위 퍼센트 계산
         double rankPercentage = gameRankService.calculateRankPercentage(higherRankCount, totalRankCount);
-
-        // 통계 정보 조회
-        MemberStatistic statistic = memberStatisticAdaptor.queryByMemberFetchModeStatistics(member);
 
         return RoadViewGameHistoryResponse.RecentThree.from(gameRank, rankPercentage, statistic, games);
     }

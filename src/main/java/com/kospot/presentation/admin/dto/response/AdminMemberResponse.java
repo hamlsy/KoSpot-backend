@@ -1,13 +1,17 @@
 package com.kospot.presentation.admin.dto.response;
 
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.domain.member.vo.Role;
+import com.kospot.domain.statistic.entity.GameModeStatistic;
+import com.kospot.domain.statistic.entity.MemberStatistic;
+import com.kospot.domain.statistic.vo.PlayStreak;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AdminMemberResponse {
 
@@ -61,7 +65,7 @@ public class AdminMemberResponse {
         private Long roadviewMultiFirstPlace;
         private Long roadviewMultiSecondPlace;
         private Long roadviewMultiThirdPlace;
-        
+
         // 통계 정보 (포토 모드)
         private Long photoPracticeGames;
         private Double photoPracticeAvgScore;
@@ -72,13 +76,17 @@ public class AdminMemberResponse {
         private Long photoMultiFirstPlace;
         private Long photoMultiSecondPlace;
         private Long photoMultiThirdPlace;
-        
+
         // 공통 통계
         private Double bestScore;
         private Integer currentStreak;
         private Integer longestStreak;
 
         public static MemberDetail of(Member member, MemberStatistic statistic) {
+            GameModeStatistic roadViewStatistic = findModeStatistic(statistic, GameMode.ROADVIEW);
+            GameModeStatistic photoStatistic = findModeStatistic(statistic, GameMode.PHOTO);
+            PlayStreak playStreak = statistic.getPlayStreak();
+
             return MemberDetail.builder()
                     .memberId(member.getId())
                     .username(member.getUsername())
@@ -88,29 +96,50 @@ public class AdminMemberResponse {
                     .point(member.getPoint())
                     .createdAt(member.getCreatedDate())
                     .updatedAt(member.getLastModifiedDate())
-                    .roadviewPracticeGames(statistic.getRoadviewPracticeGames())
-                    .roadviewPracticeAvgScore(statistic.getRoadviewPracticeAvgScore())
-                    .roadviewRankGames(statistic.getRoadviewRankGames())
-                    .roadviewRankAvgScore(statistic.getRoadviewRankAvgScore())
-                    .roadviewMultiGames(statistic.getRoadviewMultiGames())
-                    .roadviewMultiAvgScore(statistic.getRoadviewMultiAvgScore())
-                    .roadviewMultiFirstPlace(statistic.getRoadviewMultiFirstPlace())
-                    .roadviewMultiSecondPlace(statistic.getRoadviewMultiSecondPlace())
-                    .roadviewMultiThirdPlace(statistic.getRoadviewMultiThirdPlace())
-                    .photoPracticeGames(statistic.getPhotoPracticeGames())
-                    .photoPracticeAvgScore(statistic.getPhotoPracticeAvgScore())
-                    .photoRankGames(statistic.getPhotoRankGames())
-                    .photoRankAvgScore(statistic.getPhotoRankAvgScore())
-                    .photoMultiGames(statistic.getPhotoMultiGames())
-                    .photoMultiAvgScore(statistic.getPhotoMultiAvgScore())
-                    .photoMultiFirstPlace(statistic.getPhotoMultiFirstPlace())
-                    .photoMultiSecondPlace(statistic.getPhotoMultiSecondPlace())
-                    .photoMultiThirdPlace(statistic.getPhotoMultiThirdPlace())
-                    .bestScore(statistic.getBestScore())
-                    .currentStreak(statistic.getCurrentStreak())
-                    .longestStreak(statistic.getLongestStreak())
+                    // 로드뷰
+                    .roadviewPracticeGames(roadViewStatistic.getPractice().getGames())
+                    .roadviewPracticeAvgScore(roadViewStatistic.getPractice().getAvgScore())
+                    .roadviewRankGames(roadViewStatistic.getRank().getGames())
+                    .roadviewRankAvgScore(roadViewStatistic.getRank().getAvgScore())
+                    .roadviewMultiGames(roadViewStatistic.getMulti().getGames())
+                    .roadviewMultiAvgScore(roadViewStatistic.getMulti().getAvgScore())
+                    .roadviewMultiFirstPlace(roadViewStatistic.getMulti().getFirstPlace())
+                    .roadviewMultiSecondPlace(roadViewStatistic.getMulti().getSecondPlace())
+                    .roadviewMultiThirdPlace(roadViewStatistic.getMulti().getThirdPlace())
+                    // 포토
+                    .photoPracticeGames(photoStatistic.getPractice().getGames())
+                    .photoPracticeAvgScore(photoStatistic.getPractice().getAvgScore())
+                    .photoRankGames(photoStatistic.getRank().getGames())
+                    .photoRankAvgScore(photoStatistic.getRank().getAvgScore())
+                    .photoMultiGames(photoStatistic.getMulti().getGames())
+                    .photoMultiAvgScore(photoStatistic.getMulti().getAvgScore())
+                    .photoMultiFirstPlace(photoStatistic.getMulti().getFirstPlace())
+                    .photoMultiSecondPlace(photoStatistic.getMulti().getSecondPlace())
+                    .photoMultiThirdPlace(photoStatistic.getMulti().getThirdPlace())
+                    // 공통
+                    .bestScore(calculateBestScore(statistic.getModeStatistics()))
+                    .currentStreak(playStreak != null ? playStreak.getCurrentStreak() : 0)
+                    .longestStreak(playStreak != null ? playStreak.getLongestStreak() : 0)
                     .build();
+        }
+
+        private static GameModeStatistic findModeStatistic(MemberStatistic statistic, GameMode gameMode) {
+            return statistic.getModeStatistics().stream()
+                    .filter(modeStatistic -> modeStatistic.getGameMode() == gameMode)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("GameModeStatistic not found: " + gameMode));
+        }
+
+        private static double calculateBestScore(List<GameModeStatistic> modeStatistics) {
+            return modeStatistics.stream()
+                    .flatMap(stat -> java.util.stream.Stream.of(
+                            stat.getPractice().getAvgScore(),
+                            stat.getRank().getAvgScore(),
+                            stat.getMulti().getAvgScore()
+                    ))
+                    .filter(score -> score > 0)
+                    .max(Double::compareTo)
+                    .orElse(0.0);
         }
     }
 }
-

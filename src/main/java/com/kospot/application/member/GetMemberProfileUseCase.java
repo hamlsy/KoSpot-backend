@@ -47,6 +47,7 @@ public class GetMemberProfileUseCase {
                 .joinedAt(member.getCreatedDate())
                 .lastPlayedAt(statistic.getLastPlayedAt())
                 .currentStreak(statistic.getPlayStreak().getCurrentStreak())
+                .longestStreak(statistic.getPlayStreak().getLongestStreak())
                 .statistics(buildGameStatistics(statistic))
                 .rankInfo(buildRankInfo(member))
                 .build();
@@ -93,7 +94,6 @@ public class GetMemberProfileUseCase {
                                 .thirdPlaceCount(photoStatistic.getMulti().getThirdPlace())
                                 .build())
                         .build())
-                .bestScore(calculateBestScore(modeStatistics))
                 .build();
     }
 
@@ -102,18 +102,6 @@ public class GetMemberProfileUseCase {
                 .filter(stat -> stat.getGameMode() == gameMode)
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("GameModeStatistic not found: " + gameMode));
-    }
-
-    private double calculateBestScore(List<GameModeStatistic> modeStatistics) {
-        return modeStatistics.stream()
-                .flatMap(stat -> java.util.stream.Stream.of(
-                        stat.getPractice().getAvgScore(),
-                        stat.getRank().getAvgScore(),
-                        stat.getMulti().getAvgScore()
-                ))
-                .filter(score -> score > 0)
-                .max(Double::compareTo)
-                .orElse(0.0);
     }
 
     private RankInfo buildRankInfo(Member member) {

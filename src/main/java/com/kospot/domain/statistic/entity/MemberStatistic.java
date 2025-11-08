@@ -73,7 +73,7 @@ public class MemberStatistic extends BaseTimeEntity {
         updateCommonStatistics(playDate, playTime);
     }
 
-    private GameModeStatistic findModeStatistic(GameMode gameMode) {
+    public GameModeStatistic findModeStatistic(GameMode gameMode) {
         return modeStatistics.stream()
                 .filter(stat -> stat.getGameMode() == gameMode)
                 .findFirst()
@@ -90,7 +90,6 @@ public class MemberStatistic extends BaseTimeEntity {
             this.lastPlayedAt = playTime;
         }
     }
-
 
 }
 
