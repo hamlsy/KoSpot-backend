@@ -1,6 +1,7 @@
 package com.kospot.infrastructure.config.webMvc;
 
 import com.kospot.infrastructure.security.resolver.CustomAuthenticationPrincipalArgumentResolver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
@@ -23,6 +25,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .filter(s -> !s.isEmpty())
                 .toArray(String[]::new);
         this.customAuthenticationPrincipalArgumentResolver = customAuthenticationPrincipalArgumentResolver;
+        log.info("CORS origins from env = {}", Arrays.toString(this.corsFrontPaths));
+
     }
 
     //resolver
