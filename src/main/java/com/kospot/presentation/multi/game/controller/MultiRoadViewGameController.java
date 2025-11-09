@@ -23,13 +23,14 @@ public class MultiRoadViewGameController {
     private final StartRoadViewSoloGameUseCase startRoadViewSoloGameUseCase;
     private final NextRoadViewRoundUseCase nextRoadViewRoundUseCase;
 
-    @Operation(summary = "멀티 로드뷰 개인전 게임 시작", description = "멀티 로드뷰 개인전 게임을 시작합니다.")
-    @PostMapping("/{gameId}/solo")
-    public ApiResponseDto<MultiRoadViewGameResponse.StartPlayerGame> startSoloGame(
-            @PathVariable("roomId") Long roomId,
-            @PathVariable("gameId") Long gameId) {
-        return ApiResponseDto.onSuccess(startRoadViewSoloGameUseCase.execute(roomId, gameId));
-    }
+    // 자동 시작
+//    @Operation(summary = "멀티 로드뷰 개인전 게임 시작", description = "멀티 로드뷰 개인전 게임을 시작합니다.")
+//    @PostMapping("/{gameId}/solo")
+//    public ApiResponseDto<MultiRoadViewGameResponse.StartPlayerGame> startSoloGame(
+//            @PathVariable("roomId") Long roomId,
+//            @PathVariable("gameId") Long gameId) {
+//        return ApiResponseDto.onSuccess(startRoadViewSoloGameUseCase.execute(roomId, gameId));
+//    }
 
 //    @Operation(summary = "멀티 로드뷰 팀 게임 시작", description = "멀티 로드뷰 팀 게임을 시작합니다.")
 //    @PostMapping("/team")
@@ -44,11 +45,12 @@ public class MultiRoadViewGameController {
 //        return ApiResponseDto.onSuccess(notifyStartGameUseCase.execute(member, request));
 //    }
 
-    @Operation(summary = "멀티 로드뷰 다음 라운드", description = "멀티 로드뷰 게임의 다음 라운드를 시작합니다.")
-    @PostMapping("/{gameId}/rounds")
-    public ApiResponseDto<MultiRoadViewGameResponse.NextRound> createNextRound(
-            @PathVariable("roomId") String roomId,
-            @PathVariable("gameId") Long gameId) {
-        return ApiResponseDto.onSuccess(nextRoadViewRoundUseCase.execute(Long.parseLong(roomId), gameId));
-    }
+    // 자동 시작
+//    @Operation(summary = "멀티 로드뷰 다음 라운드", description = "멀티 로드뷰 게임의 다음 라운드를 시작합니다.")
+//    @PostMapping("/{gameId}/rounds")
+//    public ApiResponseDto<MultiRoadViewGameResponse.NextRound> createNextRound(
+//            @PathVariable("roomId") String roomId,
+//            @PathVariable("gameId") Long gameId) {
+//        return ApiResponseDto.onSuccess(nextRoadViewRoundUseCase.execute(Long.parseLong(roomId), gameId));
+//    }
 }

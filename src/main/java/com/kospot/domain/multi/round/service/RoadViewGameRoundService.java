@@ -5,6 +5,8 @@ import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.repository.RoadViewGameRoundRepository;
+import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,6 @@ public class RoadViewGameRoundService {
         RoadViewGameRound gameRound = RoadViewGameRound.createRound(game.getCurrentRound(), coordinate,
                 game.getTimeLimit(), playerIds);
         gameRound.setMultiRoadViewGame(game);
-        gameRound.startRound();
         return roundRepository.save(gameRound);
     }
 
@@ -35,6 +36,11 @@ public class RoadViewGameRoundService {
         if (!finished) {
             log.warn("Round already finished - RoundId: {}", round.getId());
         }
+    }
+
+    public RoadViewGameRound getRound(Long roundId) {
+        return roundRepository.findById(roundId)
+                .orElseThrow(() -> new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND));
     }
 
 }

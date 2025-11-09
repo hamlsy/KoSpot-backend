@@ -17,7 +17,7 @@ public class MultiGameWebSocketController {
 
     private final PlayerTransitionService playerTransitionService;
 
-    @MessageMapping("/room/{roomId}/loading/ack")
+    @MessageMapping("/room.{roomId}.loading.ack")
     public void handleLoadingAck(@DestinationVariable String roomId,
                                  @Payload LoadingAckMessage message,
                                  SimpMessageHeaderAccessor headerAccessor) {
