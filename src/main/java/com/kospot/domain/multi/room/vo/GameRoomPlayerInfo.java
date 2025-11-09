@@ -35,12 +35,13 @@ public class GameRoomPlayerInfo {
      * @param member 멤버 엔티티
      * @return GameRoomPlayerInfo 객체
      */
-    public static GameRoomPlayerInfo from(Member member) {
+    @Deprecated // 메서드 내부에서 사용될 때만
+    public static GameRoomPlayerInfo from(Member member, boolean isHost) {
         return GameRoomPlayerInfo.builder()
                 .memberId(member.getId())
                 .nickname(member.getNickname())
-                .markerImageUrl(member.getEquippedMarkerImage().getImageUrl())
-                .isHost(false) // 호스트 여부는 별도로 설정 필요
+                .markerImageUrl(member.getEquippedMarkerImage().getImageUrl()) // 직렬화 주의!
+                .isHost(isHost) // 호스트 여부는 별도로 설정 필요
                 .joinedAt(System.currentTimeMillis())
                 .build();
     }

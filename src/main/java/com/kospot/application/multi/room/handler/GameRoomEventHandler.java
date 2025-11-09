@@ -30,9 +30,15 @@ public class GameRoomEventHandler {
 
     @EventListener
     public void handleJoin(GameRoomJoinEvent event) {
-        GameRoom gameRoom = event.getGameRoom();
-        String roomId = gameRoom.getId().toString();
-        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(event.getPlayer());
+        String roomId = event.getRoomId().toString();
+        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.builder()
+                .memberId(event.getMemberId())
+                .markerImageUrl(event.getMarkerImageUrl())
+                .isHost(event.isHost())
+                .nickname(event.getNickname())
+                .team(event.getTeam())
+                .joinedAt(System.currentTimeMillis())
+                .build();
 
         gameRoomRedisService.addPlayerToRoom(roomId, playerInfo);
 
