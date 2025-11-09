@@ -41,8 +41,13 @@ public class GameRoomService {
         gameRoom.join(player, request.getPassword(), gameRoom.getId());
     }
 
+    //todo refactoring
+    // 지금은 방장이 나가면 게임 방 삭제
     public void leaveGameRoom(Member player, GameRoom gameRoom) {
-        gameRoom.leaveRoom(player);
+        if(gameRoom.isHost(player)){
+            deleteRoom(gameRoom);
+        }
+//        gameRoom.leaveRoom(player);
     }
 
     public void deleteRoom(GameRoom gameRoom) {

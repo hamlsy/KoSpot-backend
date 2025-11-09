@@ -112,17 +112,17 @@ class NextRoadViewRoundUseCaseTest {
 
         long beforeRunRemaining = round.getRemainingTimeMs();
 
-        MultiRoadViewGameResponse.RoundPreview response = nextRoadViewRoundUseCase.executeInitial(ROOM_ID, GAME_ID);
+        MultiRoadViewGameResponse.StartPlayerGame response = nextRoadViewRoundUseCase.executeInitial(ROOM_ID, GAME_ID);
 
         assertThat(response).isNotNull();
         assertThat(response.getGameId()).isEqualTo(GAME_ID);
-        assertThat(game.isInProgress()).isTrue();
-        assertThat(game.getCurrentRound()).isEqualTo(1);
-        verify(roadViewGameRoundService).createGameRound(eq(game), eq(playerIds));
+        assertThat(response.getRoundInfo().getRoundNumber()).isEqualTo(1);
+        assertThat(response.getRoundInfo().getTargetLat()).isEqualTo(37.0);
+        assertThat(response.getRoundInfo().getTargetLng()).isEqualTo(127.0);
         assertThat(response.getRoundVersion()).isEqualTo(1L);
+        verify(roadViewGameRoundService).createGameRound(eq(game), eq(playerIds));
         verify(multiGameRedisService).incrementRoundVersion(String.valueOf(ROOM_ID), ROUND_ID);
         verify(gamePlayerService).findPlayersByGameId(GAME_ID);
-        verify(multiGameRedisService).incrementRoundVersion(String.valueOf(ROOM_ID), ROUND_ID);
 
         verify(gameRoundNotificationService).broadcastRoundStart(eq(String.valueOf(ROOM_ID)), previewCaptor.capture());
         assertThat(previewCaptor.getValue()).isEqualTo(response);
@@ -156,7 +156,7 @@ class NextRoadViewRoundUseCaseTest {
         MultiRoadViewGame game = createInProgressGame();
         when(multiRoadViewGameAdaptor.queryById(GAME_ID)).thenReturn(game);
 
-        MultiRoadViewGameResponse.RoundPreview response = nextRoadViewRoundUseCase.executeInitial(ROOM_ID, GAME_ID);
+        MultiRoadViewGameResponse.StartPlayerGame response = nextRoadViewRoundUseCase.executeInitial(ROOM_ID, GAME_ID);
 
         assertNull(response);
         verifyNoInteractions(gamePlayerService);
@@ -176,11 +176,13 @@ class NextRoadViewRoundUseCaseTest {
         when(multiGameRedisService.incrementRoundVersion(String.valueOf(ROOM_ID), ROUND_ID)).thenReturn(1L);
         when(roadViewGameRoundService.getRound(ROUND_ID)).thenReturn(round);
 
-        MultiRoadViewGameResponse.RoundPreview response = nextRoadViewRoundUseCase.execute(ROOM_ID, GAME_ID);
+        MultiRoadViewGameResponse.NextRound response = nextRoadViewRoundUseCase.execute(ROOM_ID, GAME_ID);
 
         assertThat(response).isNotNull();
         assertThat(response.getGameId()).isEqualTo(GAME_ID);
-        assertThat(game.getCurrentRound()).isEqualTo(2);
+        assertThat(response.getCurrentRound()).isEqualTo(2);
+        assertThat(response.getRoundInfo().getTargetLat()).isEqualTo(36.0);
+        assertThat(response.getRoundInfo().getTargetLng()).isEqualTo(128.0);
         assertThat(response.getRoundVersion()).isEqualTo(1L);
         verify(multiGameRedisService).incrementRoundVersion(String.valueOf(ROOM_ID), ROUND_ID);
         verifyNoInteractions(gamePlayerService);
@@ -216,7 +218,6 @@ class NextRoadViewRoundUseCaseTest {
 
         when(roadViewGameRoundService.getRound(ROUND_ID)).thenReturn(round);
         when(multiGameRedisService.acquireRoundReissueLock(String.valueOf(ROOM_ID), ROUND_ID)).thenReturn(true);
-        when(gamePlayerService.findPlayersByGameId(GAME_ID)).thenReturn(players);
         when(roadViewGameRoundService.reissueRound(eq(round), eq(playerIds)))
                 .thenAnswer(invocation -> {
                     round.reassignCoordinate(createCoordinate(38.0, 128.5));
@@ -224,7 +225,7 @@ class NextRoadViewRoundUseCaseTest {
                 });
         when(multiGameRedisService.incrementRoundVersion(String.valueOf(ROOM_ID), ROUND_ID)).thenReturn(2L);
 
-        MultiRoadViewGameResponse.RoundPreview response =
+        MultiRoadViewGameResponse.RoundProblem response =
                 nextRoadViewRoundUseCase.reissueInitial(ROOM_ID, ROUND_ID);
 
         assertThat(response).isNotNull();
@@ -234,11 +235,11 @@ class NextRoadViewRoundUseCaseTest {
         assertThat(response.getRoundVersion()).isEqualTo(2L);
 
         verify(multiGameRedisService).acquireRoundReissueLock(String.valueOf(ROOM_ID), ROUND_ID);
-        verify(gamePlayerService).findPlayersByGameId(GAME_ID);
         verify(roadViewGameRoundService).reissueRound(eq(round), eq(playerIds));
         verify(gameRoundNotificationService).broadcastRoundStart(eq(String.valueOf(ROOM_ID)),
                 previewCaptor.capture());
         assertThat(previewCaptor.getValue()).isEqualTo(response);
+        verifyNoInteractions(gamePlayerService);
 
         verify(multiGameFlowScheduler).schedule(
                 eq(String.valueOf(ROOM_ID)),
@@ -271,11 +272,10 @@ class NextRoadViewRoundUseCaseTest {
                 });
         when(multiGameRedisService.incrementRoundVersion(String.valueOf(ROOM_ID), ROUND_ID)).thenReturn(4L);
 
-        MultiRoadViewGameResponse.RoundPreview response =
+        MultiRoadViewGameResponse.RoundProblem response =
                 nextRoadViewRoundUseCase.reissue(ROOM_ID, ROUND_ID);
 
         assertThat(response).isNotNull();
-        assertThat(response.getRoundInfo().getRoundNumber()).isEqualTo(2);
         assertThat(round.getTargetCoordinate()).isNotEqualTo(originalCoordinate);
         assertThat(round.getTargetCoordinate().getLat()).isEqualTo(36.8);
         assertThat(round.getTargetCoordinate().getLng()).isEqualTo(129.1);
@@ -324,16 +324,15 @@ class NextRoadViewRoundUseCaseTest {
         when(roadViewGameRoundService.getRound(ROUND_ID)).thenReturn(round);
         when(multiGameRedisService.acquireRoundReissueLock(String.valueOf(ROOM_ID), ROUND_ID)).thenReturn(false);
         when(multiGameRedisService.getRoundVersion(String.valueOf(ROOM_ID), ROUND_ID)).thenReturn(5L);
-        when(gamePlayerService.findPlayersByGameId(GAME_ID)).thenReturn(players);
 
-        Object response = nextRoadViewRoundUseCase.reissueRound(ROOM_ID, GAME_ID, ROUND_ID);
+        MultiRoadViewGameResponse.RoundProblem response =
+                nextRoadViewRoundUseCase.reissueRound(ROOM_ID, GAME_ID, ROUND_ID);
 
-        assertThat(response).isInstanceOf(MultiRoadViewGameResponse.StartPlayerGame.class);
-        MultiRoadViewGameResponse.StartPlayerGame startPreview =
-                (MultiRoadViewGameResponse.StartPlayerGame) response;
-        assertThat(startPreview.getRoundVersion()).isEqualTo(5L);
+        assertThat(response.getRoundVersion()).isEqualTo(5L);
         verify(multiGameRedisService).acquireRoundReissueLock(String.valueOf(ROOM_ID), ROUND_ID);
+        verifyNoInteractions(gamePlayerService);
         verify(multiGameFlowScheduler, never()).schedule(anyString(), any(), any(), any());
+        verifyNoInteractions(gameTimerService);
         verify(multiGameRedisService, never()).releaseRoundReissueLock(anyString(), anyLong());
     }
 
@@ -348,14 +347,13 @@ class NextRoadViewRoundUseCaseTest {
         when(multiGameRedisService.acquireRoundReissueLock(String.valueOf(ROOM_ID), ROUND_ID)).thenReturn(false);
         when(multiGameRedisService.getRoundVersion(String.valueOf(ROOM_ID), ROUND_ID)).thenReturn(7L);
 
-        Object response = nextRoadViewRoundUseCase.reissueRound(ROOM_ID, GAME_ID, ROUND_ID);
+        MultiRoadViewGameResponse.RoundProblem response =
+                nextRoadViewRoundUseCase.reissueRound(ROOM_ID, GAME_ID, ROUND_ID);
 
-        assertThat(response).isInstanceOf(MultiRoadViewGameResponse.NextRound.class);
-        MultiRoadViewGameResponse.NextRound nextPreview =
-                (MultiRoadViewGameResponse.NextRound) response;
-        assertThat(nextPreview.getRoundVersion()).isEqualTo(7L);
+        assertThat(response.getRoundVersion()).isEqualTo(7L);
         verify(multiGameRedisService).acquireRoundReissueLock(String.valueOf(ROOM_ID), ROUND_ID);
         verify(multiGameFlowScheduler, never()).schedule(anyString(), any(), any(), any());
+        verifyNoInteractions(gameTimerService);
         verify(multiGameRedisService, never()).releaseRoundReissueLock(anyString(), anyLong());
     }
 

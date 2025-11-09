@@ -124,22 +124,21 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         String sessionId = accessor.getSessionId();
         WebSocketMemberPrincipal principal = getPrincipal(accessor);
 
-
         if (sessionId != null) {
             Long memberId = principal.getMemberId();
             Member member = memberAdaptor.queryById(memberId);
             Long gameRoomId = member.getGameRoomId();
-            GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
+            if(gameRoomId != null) {
+                GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
+                //게임 방 나가기
+                gameRoomService.leaveGameRoom(member, gameRoom);
+                log.info("Member left game room - MemberId: {}", memberId);
+                gameRoomRedisService.removePlayerFromRoom(gameRoomId.toString(), memberId);
+            }
 
             //세션 제거
             webSocketSessionService.cleanupSession(sessionId);
-            //게임 방 나가기
-            gameRoomService.leaveGameRoom(member, gameRoom);
-            log.info("Member left game room - MemberId: {}", memberId);
-            gameRoomRedisService.removePlayerFromRoom(gameRoomId.toString(), memberId);
             log.info("Removed member from game room in Redis - GameRoomId: {}, MemberId: {}", gameRoomId, memberId);
-
-
             log.info("WebSocket disconnected - SessionId: {}", sessionId);
         }
     }

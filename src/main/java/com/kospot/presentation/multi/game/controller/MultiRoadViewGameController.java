@@ -59,7 +59,6 @@ public class MultiRoadViewGameController {
     public ApiResponseDto<?> reissueRound(@PathVariable("roomId") Long roomId,
                                           @PathVariable("gameId") Long gameId,
                                           @PathVariable("roundId") Long roundId) {
-        Object preview = nextRoadViewRoundUseCase.reissueRound(roomId, gameId, roundId);
-        return ApiResponseDto.onSuccess(preview);
+        return ApiResponseDto.onSuccess(nextRoadViewRoundUseCase.reissueRound(roomId, gameId, roundId));
     }
 }

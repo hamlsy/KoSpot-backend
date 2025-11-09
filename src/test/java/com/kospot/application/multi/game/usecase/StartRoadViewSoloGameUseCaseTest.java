@@ -26,19 +26,15 @@ class StartRoadViewSoloGameUseCaseTest {
 
     @Test
     void execute_shouldDelegateToNextRoundUseCase() {
-        MultiRoadViewGameResponse.RoundPreview preview = MultiRoadViewGameResponse.RoundPreview.builder()
+        MultiRoadViewGameResponse.StartPlayerGame preview = MultiRoadViewGameResponse.StartPlayerGame.builder()
                 .gameId(GAME_ID)
-                .roundId(1L)
                 .currentRound(1)
                 .totalRounds(5)
                 .roundVersion(1L)
-                .targetLat(37.0)
-                .targetLng(127.0)
-                .timeLimitSeconds(60)
                 .build();
         when(nextRoadViewRoundUseCase.executeInitial(ROOM_ID, GAME_ID)).thenReturn(preview);
 
-        MultiRoadViewGameResponse.RoundPreview result =
+        MultiRoadViewGameResponse.StartPlayerGame result =
                 startRoadViewSoloGameUseCase.execute(ROOM_ID, GAME_ID);
 
         assertThat(result).isEqualTo(preview);
@@ -49,7 +45,7 @@ class StartRoadViewSoloGameUseCaseTest {
     void execute_shouldReturnNullWhenInitialRoundAlreadyPrepared() {
         when(nextRoadViewRoundUseCase.executeInitial(ROOM_ID, GAME_ID)).thenReturn(null);
 
-        MultiRoadViewGameResponse.RoundPreview result =
+        MultiRoadViewGameResponse.StartPlayerGame result =
                 startRoadViewSoloGameUseCase.execute(ROOM_ID, GAME_ID);
 
         assertNull(result);
