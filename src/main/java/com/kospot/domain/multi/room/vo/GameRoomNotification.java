@@ -20,6 +20,7 @@ public class GameRoomNotification {
 
     private String roomId;
 
+    // 이벤트 대상 플레이어 정보
     private GameRoomPlayerInfo playerInfo;
 
     private List<GameRoomPlayerInfo> players;

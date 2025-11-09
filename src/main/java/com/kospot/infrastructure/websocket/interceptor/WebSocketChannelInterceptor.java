@@ -69,7 +69,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         String token = extractToken(accessor);
         WebSocketMemberPrincipal principal = createPrincipalFromToken(token);
         accessor.setUser(principal);
-        
+
         var sessionAttributes = accessor.getSessionAttributes();
         if (sessionAttributes != null) {
             sessionAttributes.put("user", principal);
@@ -110,7 +110,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
 //        validateSubscriptionAccess(principal, destination); // 나중에 확장 적용
         
         // 세션 정보 저장 (연결 해제 시 정리용)
-        webSocketSessionService.saveSessionInfo(accessor.getSessionId(), destination, principal);
+//        webSocketSessionService.saveSessionInfo(accessor.getSessionId(), destination, principal);
         
         log.info("Subscription registered - MemberId: {}, Destination: {}, SessionId: {}", 
                 principal.getMemberId(), destination, accessor.getSessionId());
@@ -134,11 +134,11 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
                 gameRoomService.leaveGameRoom(member, gameRoom);
                 log.info("Member left game room - MemberId: {}", memberId);
                 gameRoomRedisService.removePlayerFromRoom(gameRoomId.toString(), memberId);
+                log.info("Removed member from game room in Redis - GameRoomId: {}, MemberId: {}", gameRoomId, memberId);
             }
 
             //세션 제거
             webSocketSessionService.cleanupSession(sessionId);
-            log.info("Removed member from game room in Redis - GameRoomId: {}, MemberId: {}", gameRoomId, memberId);
             log.info("WebSocket disconnected - SessionId: {}", sessionId);
         }
     }

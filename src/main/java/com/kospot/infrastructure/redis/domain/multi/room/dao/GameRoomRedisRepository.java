@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class GameRoomRedisRepository {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public void savePlayer(String roomKey, String memberId, String playerJson, long expireHours) {
         redisTemplate.opsForHash().put(roomKey, memberId, playerJson);

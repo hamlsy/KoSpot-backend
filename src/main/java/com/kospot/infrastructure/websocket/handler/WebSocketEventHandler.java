@@ -5,6 +5,8 @@ import com.kospot.application.multi.room.http.usecase.LeaveGameRoomUseCase;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
+import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
+import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -25,6 +27,7 @@ public class WebSocketEventHandler {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final SessionContextRedisService sessionContextRedisService;
+    private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
 
     //usecase
     private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
@@ -37,9 +40,11 @@ public class WebSocketEventHandler {
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
+        WebSocketMemberPrincipal principal = (WebSocketMemberPrincipal) headerAccessor.getUser();
 
         // 세션 정보를 Redis에 저장 (다중 서버 환경 대응)
         String sessionKey = "websocket:session:" + sessionId;
+        sessionContextRedisService.setAttr(sessionId, "memberId", principal.getMemberId());
         redisTemplate.opsForValue().set(sessionKey, System.currentTimeMillis(), Duration.ofHours(2));
 
         log.info("WebSocket 연결 성공 - SessionId: {}", sessionId);
@@ -50,17 +55,19 @@ public class WebSocketEventHandler {
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
-        String gameRoomId = sessionContextRedisService.getAttr(sessionId, "roomId", String.class);
         String memberId = sessionContextRedisService.getAttr(sessionId, "memberId", String.class);
         Member member = memberAdaptor.queryById(Long.parseLong(memberId));
-
+        Long gameRoomId = member.getGameRoomId();
         // 비즈니스 로직 처리
         List<Runnable> cleanUpTasks = Arrays.asList(
                 () -> leaveGlobalLobbyUseCase.execute(headerAccessor)
         );
         if (gameRoomId != null) {
             cleanUpTasks.add(
-                    () -> leaveGameRoomUseCase.execute(member, Long.parseLong(gameRoomId))
+                    () -> {
+                        leaveGameRoomUseCase.execute(member, gameRoomId);
+
+                    }
             );
         }
         cleanUpTasks.parallelStream().forEach(Runnable::run);
