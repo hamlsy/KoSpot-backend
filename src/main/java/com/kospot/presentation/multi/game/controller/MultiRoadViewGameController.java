@@ -3,7 +3,6 @@ package com.kospot.presentation.multi.game.controller;
 import com.kospot.application.multi.game.usecase.StartRoadViewSoloGameUseCase;
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
-import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/rooms/{roomId}/roadview/games")
 public class MultiRoadViewGameController {
 
+    @SuppressWarnings("unused")
     private final StartRoadViewSoloGameUseCase startRoadViewSoloGameUseCase;
     private final NextRoadViewRoundUseCase nextRoadViewRoundUseCase;
 
@@ -53,4 +53,13 @@ public class MultiRoadViewGameController {
 //            @PathVariable("gameId") Long gameId) {
 //        return ApiResponseDto.onSuccess(nextRoadViewRoundUseCase.execute(Long.parseLong(roomId), gameId));
 //    }
+
+    @Operation(summary = "로드뷰 라운드 재발행", description = "좌표 로딩 실패 시 새 문제를 재발행합니다.")
+    @PostMapping("/{gameId}/rounds/{roundId}/reIssue")
+    public ApiResponseDto<?> reissueRound(@PathVariable("roomId") Long roomId,
+                                          @PathVariable("gameId") Long gameId,
+                                          @PathVariable("roundId") Long roundId) {
+        Object preview = nextRoadViewRoundUseCase.reissueRound(roomId, gameId, roundId);
+        return ApiResponseDto.onSuccess(preview);
+    }
 }

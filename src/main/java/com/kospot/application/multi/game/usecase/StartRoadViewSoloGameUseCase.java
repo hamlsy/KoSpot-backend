@@ -18,8 +18,8 @@ public class StartRoadViewSoloGameUseCase {
     /**
      * 모든 플레이어 로딩 ACK 이후 호출되어 1라운드 준비를 NextRoadViewRoundUseCase에 위임한다.
      */
-    public MultiRoadViewGameResponse.StartPlayerGame execute(Long roomId, Long gameId) {
-        MultiRoadViewGameResponse.StartPlayerGame response = nextRoadViewRoundUseCase.executeInitial(roomId, gameId);
+    public MultiRoadViewGameResponse.RoundPreview execute(Long roomId, Long gameId) {
+        MultiRoadViewGameResponse.RoundPreview response = nextRoadViewRoundUseCase.executeInitial(roomId, gameId);
         if (response == null) {
             log.info("Initial round already prepared - RoomId: {}, GameId: {}", roomId, gameId);
         }

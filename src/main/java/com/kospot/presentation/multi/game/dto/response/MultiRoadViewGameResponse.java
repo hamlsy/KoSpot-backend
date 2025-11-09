@@ -1,14 +1,12 @@
 package com.kospot.presentation.multi.game.dto.response;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.presentation.multi.gamePlayer.dto.response.GamePlayerResponse;
-import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 public class MultiRoadViewGameResponse {
 
@@ -17,50 +15,30 @@ public class MultiRoadViewGameResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class StartPlayerGame {
+    public static class RoundPreview {
 
         private Long gameId;
-        private int totalRounds;
+        private Long roundId;
         private int currentRound;
+        private int totalRounds;
+        private long roundVersion;
+        private double targetLat;
+        private double targetLng;
+        private int timeLimitSeconds;
 
-        private RoadViewRoundResponse.Info roundInfo;
-        private List<GamePlayerResponse> gamePlayers;
-
-        public static StartPlayerGame from(MultiRoadViewGame game, RoadViewGameRound round, List<GamePlayer> players) {
-            return StartPlayerGame.builder()
+        public static RoundPreview from(MultiRoadViewGame game, RoadViewGameRound round, long roundVersion) {
+            return RoundPreview.builder()
                     .gameId(game.getId())
-                    .totalRounds(game.getTotalRounds())
+                    .roundId(round.getId())
                     .currentRound(game.getCurrentRound())
-                    .roundInfo(RoadViewRoundResponse.Info.from(round))
-                    .gamePlayers(
-                            players.stream().map(GamePlayerResponse::from).collect(Collectors.toList())
+                    .totalRounds(game.getTotalRounds())
+                    .roundVersion(roundVersion)
+                    .targetLat(round.getTargetCoordinate().getLat())
+                    .targetLng(round.getTargetCoordinate().getLng())
+                    .timeLimitSeconds(
+                            round.getTimeLimit() != null ? round.getTimeLimit() : game.getTimeLimit()
                     )
                     .build();
         }
-
     }
-
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @ToString
-    public static class NextRound {
-
-        private Long gameId;
-        private int currentRound;
-
-        private RoadViewRoundResponse.Info roundInfo;
-
-        public static NextRound from(MultiRoadViewGame game, RoadViewGameRound round) {
-            return NextRound.builder()
-                    .gameId(game.getId())
-                    .currentRound(game.getCurrentRound())
-                    .roundInfo(RoadViewRoundResponse.Info.from(round))
-                    .build();
-        }
-
-    }
-
-
 }

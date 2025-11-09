@@ -78,5 +78,18 @@ public abstract class BaseGameRound extends BaseTimeEntity {
         }
     }
 
+    protected void resetRoundState() {
+        this.isFinished = false;
+        this.serverStartTime = null;
+    }
+
+    protected void replacePlayerIds(List<Long> playerIds) {
+        if (playerIds == null) {
+            this.playerIds = new ArrayList<>();
+            return;
+        }
+        this.playerIds = new ArrayList<>(playerIds);
+    }
+
 
 }

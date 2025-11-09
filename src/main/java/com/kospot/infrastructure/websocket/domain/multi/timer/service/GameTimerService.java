@@ -59,7 +59,7 @@ public class GameTimerService {
         BaseGameRound round = command.getRound();
         TimerStartMessage startMessage = TimerStartMessage.builder()
                 .roundId(round.getId().toString())
-                .gameMode(round.getGameMode())
+                .gameMode(round.getGameMode().name())
                 .serverStartTimeMs(serverStartTime.toEpochMilli())
                 .durationMs(round.getDuration().toMillis())
                 .serverTimestamp(System.currentTimeMillis())

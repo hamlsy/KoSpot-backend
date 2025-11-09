@@ -29,4 +29,10 @@ public class RoadViewGameRoundAdaptor {
         );
     }
 
+    public RoadViewGameRound queryByIdFetchGame(Long id) {
+        return repository.findByIdFetchGame(id).orElseThrow(
+                () -> new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND)
+        );
+    }
+
 }
