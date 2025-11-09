@@ -9,7 +9,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public class GameRoomJoinEvent {
 
-    private final GameRoom gameRoom;
-    private final Member player;
+    private Long roomId;
+
+    private Long memberId;
+    private String nickname;
+    private String markerImageUrl;
+    private String team;
+    private boolean isHost;
 
 }

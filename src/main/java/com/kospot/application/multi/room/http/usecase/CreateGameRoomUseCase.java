@@ -25,7 +25,7 @@ public class CreateGameRoomUseCase {
     public GameRoomResponse execute(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = gameRoomService.createGameRoom(host, request);
         // redis 설정
-        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(host);
+        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(host, true);
         gameRoomRedisService.addPlayerToRoom(gameRoom.getId().toString(), playerInfo);
         
         return GameRoomResponse.from(gameRoom);
