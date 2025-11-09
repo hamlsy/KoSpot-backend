@@ -51,8 +51,9 @@ public class GameRoomService {
     }
 
     public void deleteRoom(GameRoom gameRoom) {
-        gameRoom.deleteRoom();
+//        gameRoom.deleteRoom();
         memberAdaptor.queryAllByGameRoomId(gameRoom.getId()).forEach(Member::leaveGameRoom);
+        gameRoomRepository.delete(gameRoom);
     }
 
     public void kickPlayer(Member host, Member targetPlayer, GameRoom gameRoom) {

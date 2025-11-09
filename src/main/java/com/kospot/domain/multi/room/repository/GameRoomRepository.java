@@ -22,7 +22,7 @@ public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
     @Query("select gr from GameRoom gr join fetch gr.host h where gr.title like CONCAT('%', :keyword, '%') ")
     List<GameRoom> findAllByKeywordPaging(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("select gr from GameRoom gr join fetch gr.host h where gr.deleted = false")
+    @Query("select gr from GameRoom gr join fetch gr.host h")
     List<GameRoom> findAllPaging(Pageable pageable);
 
     @EntityGraph(attributePaths = {"host"})
