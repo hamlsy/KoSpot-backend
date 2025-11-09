@@ -2,6 +2,7 @@ package com.kospot.presentation.multi.game.dto.response;
 
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.point.util.PointCalculator;
+import com.kospot.presentation.multi.gamePlayer.dto.response.GamePlayerResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,6 +10,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MultiGameResponse {
+
+    @Getter
+    @Builder
+    public static class StartGame {
+        private Long gameId;
+        private String gameMode;
+        private String matchType;
+        private int totalRounds;
+        private long roundTimeLimit;
+        private List<GamePlayerResponse> players;
+        private Object payload;
+    }
 
     /**
      * 게임 최종 결과 (WebSocket으로 전송)

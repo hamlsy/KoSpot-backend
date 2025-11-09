@@ -35,6 +35,14 @@ public class GameRoomChannelConstants {
     }
 
     /**
+     * 게임방 게임 시작 채널 생성
+     */
+    public static String getRoomGameStartChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME_ROOM + roomId + "/game-start";
+    }
+
+    /**
      * 게임방 상태 채널 생성
      */
     public static String getGameRoomStatusChannel(String roomId) {

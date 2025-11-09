@@ -10,6 +10,11 @@ public class MultiGameChannelConstants {
     public static final String PREFIX_GAME = PREFIX_TOPIC + "game/"; // /topic/game/{roomId}/
 
     // ==================== 공용 게임 내 채널 ====================
+    public static String getStartGameChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/start";
+    }
+
     public static String getTimerChannel(String roomId) {
         validateId(roomId, "roomId");
         return PREFIX_GAME + roomId + "/timer";

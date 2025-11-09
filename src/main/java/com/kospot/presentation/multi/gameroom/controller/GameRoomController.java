@@ -1,6 +1,7 @@
 package com.kospot.presentation.multi.gameroom.controller;
 
 
+import com.kospot.application.multi.game.usecase.NotifyStartGameUseCase;
 import com.kospot.application.multi.room.http.usecase.*;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
@@ -10,6 +11,8 @@ import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
 import com.kospot.presentation.multi.gameroom.dto.response.FindGameRoomResponse;
 import com.kospot.presentation.multi.gameroom.dto.response.GameRoomDetailResponse;
 import com.kospot.presentation.multi.gameroom.dto.response.GameRoomResponse;
+import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
+import com.kospot.presentation.multi.game.dto.response.MultiGameResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,6 +38,9 @@ public class GameRoomController {
     private final JoinGameRoomUseCase joinGameRoomUseCase;
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
     private final KickPlayerUseCase kickPlayerUseCase;
+
+    //broadcast
+    private final NotifyStartGameUseCase notifyStartGameUseCase;
 
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
     @GetMapping
@@ -85,6 +91,15 @@ public class GameRoomController {
                                        @RequestBody GameRoomRequest.Kick request) {
         kickPlayerUseCase.execute(member, request, roomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
+
+    @Operation(summary = "게임 시작 알림", description = "게임 시작을 알립니다.")
+    @PostMapping("/{roomId}/start")
+    public ApiResponseDto<MultiGameResponse.StartGame> notifyStartGame(@CurrentMember Member member,
+                                                                       @PathVariable("roomId") Long roomId,
+                                                                       @RequestBody MultiGameRequest.Start request) {
+        request.setGameRoomId(roomId);
+        return ApiResponseDto.onSuccess(notifyStartGameUseCase.execute(member, request));
     }
 
 }

@@ -1,7 +1,13 @@
 package com.kospot.infrastructure.websocket.interceptor;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
+import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
+import com.kospot.domain.multi.room.entity.GameRoom;
+import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.session.service.WebSocketSessionService;
@@ -30,6 +36,12 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     private final TokenService tokenService;
     private final SubscriptionValidationManager subscriptionValidationManager;
     private final WebSocketSessionService webSocketSessionService;
+
+    //domain
+    private final GameRoomService gameRoomService;
+    private final GameRoomRedisService gameRoomRedisService;
+    private final MemberAdaptor memberAdaptor;
+    private final GameRoomAdaptor gameRoomAdaptor;
 
     @Override
     public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
@@ -107,10 +119,27 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     /**
      * 연결 해제 시 세션 정리
      */
+    //todo refactoring
     private void handleDisconnect(StompHeaderAccessor accessor) {
         String sessionId = accessor.getSessionId();
+        WebSocketMemberPrincipal principal = getPrincipal(accessor);
+
+
         if (sessionId != null) {
+            Long memberId = principal.getMemberId();
+            Member member = memberAdaptor.queryById(memberId);
+            Long gameRoomId = member.getGameRoomId();
+            GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
+
+            //세션 제거
             webSocketSessionService.cleanupSession(sessionId);
+            //게임 방 나가기
+            gameRoomService.leaveGameRoom(member, gameRoom);
+            log.info("Member left game room - MemberId: {}", memberId);
+            gameRoomRedisService.removePlayerFromRoom(gameRoomId.toString(), memberId);
+            log.info("Removed member from game room in Redis - GameRoomId: {}, MemberId: {}", gameRoomId, memberId);
+
+
             log.info("WebSocket disconnected - SessionId: {}", sessionId);
         }
     }

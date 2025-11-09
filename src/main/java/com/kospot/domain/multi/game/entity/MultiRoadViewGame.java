@@ -7,8 +7,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Duration;
-
 @Getter
 @Entity
 @SuperBuilder
@@ -27,7 +25,7 @@ public class MultiRoadViewGame extends MultiGame {
     // 생성 메서드
     public static MultiRoadViewGame createGame(GameRoom gameRoom, PlayerMatchType matchType,
                                                Integer roundCount, Integer timeLimit) {
-        return MultiRoadViewGame.builder()
+        MultiRoadViewGame game = MultiRoadViewGame.builder()
                 .matchType(matchType)
                 .gameMode(GameMode.ROADVIEW)  // 로드뷰 모드로 고정
                 .totalRounds(roundCount)
@@ -37,6 +35,8 @@ public class MultiRoadViewGame extends MultiGame {
                 .isFinished(false)
                 .gameRoom(gameRoom)
                 .build();
+        game.markPending();
+        return game;
     }
 
     @Override
