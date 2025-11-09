@@ -18,6 +18,8 @@ public class MultiGameResponse {
         private String gameMode;
         private String matchType;
         private int totalRounds;
+        private Long roundId;
+        private int currentRound;
         private long roundTimeLimit;
         private List<GamePlayerResponse> players;
         private Object payload;

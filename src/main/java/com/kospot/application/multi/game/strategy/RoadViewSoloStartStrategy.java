@@ -7,7 +7,6 @@ import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.domain.multi.round.service.RoadViewGameRoundService;
 import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multi.game.dto.response.MultiGameResponse;
 import com.kospot.presentation.multi.gamePlayer.dto.response.GamePlayerResponse;
@@ -26,7 +25,6 @@ public class RoadViewSoloStartStrategy implements MultiGameStartStrategy {
 
     private final MultiRoadViewGameService multiRoadViewGameService;
     private final GamePlayerService gamePlayerService;
-    private final RoadViewGameRoundService roadViewGameRoundService;
 
     @Override
     public boolean supports(GameMode gameMode, PlayerMatchType matchType) {
@@ -34,6 +32,9 @@ public class RoadViewSoloStartStrategy implements MultiGameStartStrategy {
     }
 
     @Override
+    /**
+     * 로드뷰 개인전 시작 컨텍스트를 구성해 게임, 플레이어 정보를 준비한다.
+     */
     public StartGamePreparation prepare(GameRoom gameRoom,
                                         MultiGameRequest.Start request,
                                         GameMode gameMode,
@@ -53,8 +54,11 @@ public class RoadViewSoloStartStrategy implements MultiGameStartStrategy {
                 .gameMode(gameMode.name())
                 .matchType(matchType.name())
                 .totalRounds(game.getTotalRounds())
+                .roundId(0L)
+                .currentRound(game.getCurrentRound())
                 .roundTimeLimit(game.getTimeLimit())
                 .players(players)
+                .payload(null)
                 .build();
 
         return new StartGamePreparation(startGame, TARGET_ROUTE, null);

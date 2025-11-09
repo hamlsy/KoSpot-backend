@@ -7,7 +7,6 @@ import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multi.room.vo.GameRoomUpdateInfo;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.room.constants.*;
-import com.kospot.presentation.multi.flow.dto.message.RoomGameStartMessage;
 import com.kospot.presentation.multi.gameroom.dto.message.GameRoomUpdateMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,16 +38,6 @@ public class GameRoomNotificationService {
         }
     }
 
-
-    public void broadcastGameStart(String roomId, RoomGameStartMessage message) {
-        try {
-            String destination = GameRoomChannelConstants.getRoomGameStartChannel(roomId);
-            messagingTemplate.convertAndSend(destination, message);
-            log.info("Broadcast game start - RoomId: {}, GameId: {}, RoundId: {}", roomId, message.getGameId(), message.getRoundId());
-        } catch (Exception e) {
-            log.error("Failed to broadcast game start - RoomId: {}", roomId, e);
-        }
-    }
 
     /** ---------------- 개별 이벤트 ---------------- **/
 

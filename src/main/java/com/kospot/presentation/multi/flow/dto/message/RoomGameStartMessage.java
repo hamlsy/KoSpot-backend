@@ -13,9 +13,12 @@ public class RoomGameStartMessage {
     private final String gameMode;
     private final String matchType;
     private final Long gameId;
-    private final Long roundId;
     private final int totalRounds;
+    private final int currentRound;
     private final long roundTimeLimit;
+    private final Long roundId;
+    private final long countdownMs;
+    private final long deadlineTs;
     private final long issuedAt;
     private final List<GamePlayerResponse> players;
     private final Object payload;

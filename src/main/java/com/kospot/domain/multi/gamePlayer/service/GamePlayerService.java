@@ -22,11 +22,21 @@ public class GamePlayerService {
     private final MemberAdaptor memberAdaptor;
     private final GamePlayerRepository gamePlayerRepository;
 
+    /**
+     * 게임 시작 시 방의 모든 멤버를 게임 플레이어로 생성한다.
+     */
     public List<GamePlayer> createRoadViewGamePlayers(GameRoom gameRoom, MultiRoadViewGame game) {
         List<Member> members = memberAdaptor.queryAllByGameRoomId(gameRoom.getId());
         List<GamePlayer> players = members.stream().map(
                 m -> GamePlayer.createRoadViewGamePlayer(m, game)).toList();
         return gamePlayerRepository.saveAll(players);
+    }
+
+    /**
+     * 특정 게임에 속한 플레이어 목록을 조회한다.
+     */
+    public List<GamePlayer> findPlayersByGameId(Long gameId) {
+        return gamePlayerRepository.findAllByMultiRoadViewGameId(gameId);
     }
 
     //todo implement bulk update

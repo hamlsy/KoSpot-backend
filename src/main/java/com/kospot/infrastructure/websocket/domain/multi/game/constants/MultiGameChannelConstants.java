@@ -25,6 +25,11 @@ public class MultiGameChannelConstants {
         return PREFIX_GAME + roomId + "/player";
     }
 
+    public static String getLoadingStatusChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/loading/status";
+    }
+
     // ==================== 로드뷰 게임 채널 ====================
 
     /**
