@@ -98,8 +98,7 @@ public class GameRoomController {
     public ApiResponseDto<MultiGameResponse.StartGame> notifyStartGame(@CurrentMember Member member,
                                                                        @PathVariable("roomId") Long roomId,
                                                                        @RequestBody MultiGameRequest.Start request) {
-        request.setGameRoomId(roomId);
-        return ApiResponseDto.onSuccess(notifyStartGameUseCase.execute(member, request));
+        return ApiResponseDto.onSuccess(notifyStartGameUseCase.execute(member, roomId, request));
     }
 
 }

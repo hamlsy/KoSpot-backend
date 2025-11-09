@@ -36,8 +36,7 @@ public class NotifyStartGameUseCase {
     /**
      * 방장이 게임 시작을 요청하면 모드별 전략으로 컨텍스트를 만들고 로딩 단계를 연다.
      */
-    public MultiGameResponse.StartGame execute(Member host, MultiGameRequest.Start request) {
-        Long gameRoomId = request.getGameRoomId();
+    public MultiGameResponse.StartGame execute(Member host, Long gameRoomId, MultiGameRequest.Start request) {
         if (gameRoomId == null) {
             throw new GameHandler(ErrorStatus.GAME_ROOM_NOT_FOUND);
         }
