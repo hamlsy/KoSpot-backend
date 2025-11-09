@@ -31,8 +31,7 @@ public class GameRoomNotificationService {
 
     private void sendNotification(String roomId, Object notification, String channel) {
         try {
-            String destination = GameRoomChannelConstants.PREFIX_GAME_ROOM + roomId + "/" + channel;
-            messagingTemplate.convertAndSend(destination, notification);
+            messagingTemplate.convertAndSend(channel, notification);
         } catch (Exception e) {
             log.error("Failed to send notification - RoomId: {}, Channel: {}", roomId, channel, e);
         }
