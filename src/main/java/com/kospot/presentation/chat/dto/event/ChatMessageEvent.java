@@ -62,4 +62,29 @@ public class ChatMessageEvent {
         }
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MultiGameGlobal {
+
+        private Long senderId;
+        private String messageId;
+        private String nickname;
+        private String content;
+        private String messageType;
+        private LocalDateTime timestamp;
+
+        public static MultiGameGlobal from(ChatMessage chatMessage) {
+            return MultiGameGlobal.builder()
+                    .senderId(chatMessage.getMemberId())
+                    .messageId(chatMessage.getMessageId())
+                    .nickname(chatMessage.getNickname())
+                    .content(chatMessage.getContent())
+                    .messageType(chatMessage.getMessageType().name())
+                    .timestamp(chatMessage.getCreatedDate())
+                    .build();
+        }
+    }
+
 }

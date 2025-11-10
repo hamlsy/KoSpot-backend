@@ -28,4 +28,13 @@ public class ChatMessageDto {
         private String team;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GlobalGame {
+        @NotEmpty
+        private String content;
+    }
+
 }

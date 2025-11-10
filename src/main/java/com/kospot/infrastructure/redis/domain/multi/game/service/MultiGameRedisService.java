@@ -28,6 +28,8 @@ public class MultiGameRedisService {
         try {
             redisTemplate.opsForHash().put(key, memberId.toString(), acknowledgedAt.toString());
             redisTemplate.expire(key, GAME_DATA_EXPIRY_HOURS, TimeUnit.HOURS);
+            log.info("Marked player loading ready - RoomId: {}, RoundId: {}, MemberId: {}, AcknowledgedAt: {}",
+                    roomId, roundId, memberId, acknowledgedAt);
         } catch (Exception e) {
             log.error("Failed to mark player loading ready - RoomId: {}, RoundId: {}, MemberId: {}", roomId, roundId, memberId, e);
         }

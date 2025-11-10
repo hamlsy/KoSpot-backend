@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class StartRoadViewSoloGameUseCaseTest {
+class StartRoadViewGlobalGameUseCaseTest {
 
     private static final long ROOM_ID = 11L;
     private static final long GAME_ID = 99L;
