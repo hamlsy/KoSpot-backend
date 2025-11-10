@@ -3,6 +3,7 @@ package com.kospot.application.multi.round.roadview;
 import com.kospot.application.multi.flow.MultiGameFlowScheduler;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
@@ -36,6 +37,7 @@ public class NextRoadViewRoundUseCase {
     private final RoadViewGameRoundAdaptor roadViewGameRoundAdaptor;
     private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
     private final RoadViewGameRoundService roadViewGameRoundService;
+    private final GamePlayerAdaptor gamePlayerAdaptor;
     private final GamePlayerService gamePlayerService;
     private final GameRoundNotificationService gameRoundNotificationService;
     private final GameTimerService gameTimerService;
@@ -54,7 +56,7 @@ public class NextRoadViewRoundUseCase {
         }
         game.startGame();
 
-        List<GamePlayer> players = gamePlayerService.findPlayersByGameId(gameId);
+        List<GamePlayer> players = gamePlayerAdaptor.queryByMultiRoadViewGameIdWithMember(gameId);
         List<Long> playerIds = players.stream()
                 .map(GamePlayer::getId)
                 .toList();
@@ -65,6 +67,7 @@ public class NextRoadViewRoundUseCase {
         MultiRoadViewGameResponse.StartPlayerGame preview =
                 MultiRoadViewGameResponse.StartPlayerGame.from(game, round, players, version);
 
+        // 플레이어 정보를 브로드캐스팅
         scheduleRound(roomKey, round, preview);
         return preview;
     }

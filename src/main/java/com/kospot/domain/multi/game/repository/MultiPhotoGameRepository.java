@@ -8,8 +8,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface MultiPhotoGameRepository extends JpaRepository<MultiPhotoGame, Long> {
-    
-    @Query("SELECT g FROM MultiPhotoGame g WHERE g.gameRoom.id = :gameRoomId")
-    Optional<MultiPhotoGame> findByGameRoomId(@Param("gameRoomId") Long gameRoomId);
 
 } 

@@ -27,7 +27,7 @@ public class SendSoloGameMessageUseCase {
         SendSoloGameMessageCommand command = SendSoloGameMessageCommand.from(roomId, dto, webSocketMemberPrincipal);
         validateCommand(command);
         ChatMessage chatMessage = createGlobalChatMessage(command);
-        chatService.sendGameRoomMessage(chatMessage);
+        chatService.sendSoloGameMessage(chatMessage);
     }
     public void execute() {
 

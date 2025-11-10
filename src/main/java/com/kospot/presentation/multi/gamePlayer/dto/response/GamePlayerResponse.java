@@ -10,6 +10,7 @@ import lombok.*;
 @ToString
 public class GamePlayerResponse {
 
+    private Long memberId;
     private Long playerId;
     private String nickname;
     private String markerImageUrl;
@@ -18,6 +19,7 @@ public class GamePlayerResponse {
 
     public static GamePlayerResponse from(GamePlayer gamePlayer) {
         return GamePlayerResponse.builder()
+                .memberId(gamePlayer.getMember().getId())
                 .playerId(gamePlayer.getId())
                 .nickname(gamePlayer.getNickname())
                 .markerImageUrl(gamePlayer.getEquippedMarkerImageUrl())
