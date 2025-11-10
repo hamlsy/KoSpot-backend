@@ -1,6 +1,7 @@
 package com.kospot.infrastructure.websocket.interceptor;
 
 import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
+import com.kospot.application.multi.room.http.usecase.LeaveGameRoomUseCase;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
@@ -49,6 +50,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
 
     //usecase
     private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
+    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
 
     private static final long PENDING_LEAVE_GRACE_MILLIS = 4000L;
 
@@ -200,6 +202,20 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         if (destination != null && destination.startsWith("/topic/chat/lobby")) {
             leaveGlobalLobbyUseCase.execute(accessor);
         }
+
+        if (destination != null && destination.startsWith("/topic/room/")) {
+            try {
+                Member member = memberAdaptor.queryById(principal.getMemberId());
+                Long gameRoomId = member.getGameRoomId();
+                if (gameRoomId != null) {
+                    leaveGameRoomUseCase.execute(member, gameRoomId);
+                }
+                log.info("Member left game room on unsubscribe - MemberId: {}", principal.getMemberId());
+            } catch (Exception e) {
+                log.warn("Failed to leave game room on unsubscribe - MemberId: {}", principal.getMemberId(), e);
+            }
+        }
+
         webSocketSessionService.removeSubscription(sessionId, subscriptionId);
         log.info("Unsubscribed - MemberId:{}, Destination:{}, SessionId:{}, SubId:{}",
                 principal.getMemberId(), destination, sessionId, subscriptionId);

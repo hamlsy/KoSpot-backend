@@ -27,8 +27,9 @@ public class GameRoomService {
     public GameRoom createGameRoom(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = request.toEntity();
         gameRoom.setHost(host);
-        host.joinGameRoom(gameRoom.getId());
-        return gameRoomRepository.save(gameRoom);
+        GameRoom savedRoom = gameRoomRepository.save(gameRoom);
+        host.joinGameRoom(savedRoom.getId());
+        return savedRoom;
     }
 
     public GameRoom updateGameRoom(GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {

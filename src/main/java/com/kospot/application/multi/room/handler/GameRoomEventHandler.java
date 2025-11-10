@@ -68,7 +68,7 @@ public class GameRoomEventHandler {
         if (gameRoom.isHost(player) || gameRoomRedisService.isRoomEmpty(roomId)) {
             gameRoomService.deleteRoom(gameRoom);
         } else {
-            changeHostIfNeeded(gameRoom);
+//            changeHostIfNeeded(gameRoom);
         }
 
         gameRoomNotificationService.notifyPlayerListUpdated(roomId);

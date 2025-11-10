@@ -4,6 +4,8 @@ import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.application.multi.room.http.usecase.LeaveGameRoomUseCase;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
@@ -17,6 +19,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -51,6 +54,17 @@ public class WebSocketEventHandler {
             log.info("WebSocket 연결 성공 - SessionId: {}", sessionId);
         }
     }
+
+//    @EventListener
+//    public void handleWebSocketUnSubscribeListener(SessionUnsubscribeEvent event) {
+//        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+//        WebSocketMemberPrincipal principal = getPrincipal(accessor);
+//        String sessionId = accessor.getSessionId();
+//        String subscriptionId = accessor.getSubscriptionId();
+//        String destination = webSocketSessionService.getSubscription(sessionId, subscriptionId);
+//
+//
+//    }
 
 
     // 클라이언트 연결 해제 시 처리
@@ -138,6 +152,19 @@ public class WebSocketEventHandler {
         } catch (Exception e) {
             log.debug(errorMessage, e);
         }
+    }
+
+    private WebSocketMemberPrincipal getPrincipal(StompHeaderAccessor accessor) {
+        var sessionAttributes = accessor.getSessionAttributes();
+        if (sessionAttributes == null) {
+            throw new WebSocketHandler(ErrorStatus._UNAUTHORIZED);
+        }
+
+        WebSocketMemberPrincipal principal = (WebSocketMemberPrincipal) sessionAttributes.get("user");
+        if (principal == null) {
+            throw new WebSocketHandler(ErrorStatus._UNAUTHORIZED);
+        }
+        return principal;
     }
 
 }
