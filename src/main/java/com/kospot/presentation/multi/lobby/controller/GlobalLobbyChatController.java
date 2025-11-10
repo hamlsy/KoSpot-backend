@@ -13,6 +13,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
@@ -24,21 +25,15 @@ public class GlobalLobbyChatController {
 
     private final JoinGlobalLobbyUseCase joinGlobalLobbyUseCase;
     private final SendGlobalLobbyMessageUseCase sendGlobalLobbyMessageUseCase;
-    private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
 
     @MessageMapping("/chat.message.lobby")
-//    @SendTo("/topic/lobby")
     public void sendGlobalMessage(@Valid @Payload ChatMessageDto.Lobby dto, SimpMessageHeaderAccessor headerAccessor) {
         sendGlobalLobbyMessageUseCase.execute(dto, headerAccessor);
     }
 
-    @MessageMapping("/chat.join.lobby")
+    @SubscribeMapping("/chat/lobby")
     public void joinGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
         joinGlobalLobbyUseCase.execute(headerAccessor);
     }
 
-    @MessageMapping("/chat.leave.lobby")
-    public void leaveGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
-        leaveGlobalLobbyUseCase.execute(headerAccessor);
-    }
 }
