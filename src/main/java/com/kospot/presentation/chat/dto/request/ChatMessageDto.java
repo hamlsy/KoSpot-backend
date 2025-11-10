@@ -34,6 +34,8 @@ public class ChatMessageDto {
     @NoArgsConstructor
     public static class GlobalGame {
         @NotEmpty
+        private Long playerId;
+        @NotEmpty
         private String content;
     }
 

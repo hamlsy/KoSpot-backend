@@ -38,6 +38,8 @@ public class RoadViewRoundResponse {
     @NoArgsConstructor
     @ToString
     public static class PlayerResult {
+        private String poiName;
+        private String fullAddress;
         private int roundNumber;
         private double targetLat;
         private double targetLng;
@@ -48,6 +50,8 @@ public class RoadViewRoundResponse {
                                         List<RoadViewSubmission> submissions,
                                         List<GamePlayer> players) {
             return PlayerResult.builder()
+                    .poiName(round.getTargetCoordinate().getPoiName())
+                    .fullAddress(round.getTargetCoordinate().getAddress().getFullAddress())
                     .roundNumber(round.getRoundNumber())
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())

@@ -10,6 +10,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class SendSoloGameMessageCommand {
+    private Long playerId;
     private Long gameRoomId;
     private Long memberId;
     private String nickname;
@@ -17,6 +18,7 @@ public class SendSoloGameMessageCommand {
 
     public static SendSoloGameMessageCommand from(String roomId, ChatMessageDto.GlobalGame dto, WebSocketMemberPrincipal principal) {
         return SendSoloGameMessageCommand.builder()
+                .playerId(dto.getPlayerId())
                 .memberId(principal.getMemberId())
                 .nickname(principal.getNickname())
                 .gameRoomId(Long.parseLong(roomId))

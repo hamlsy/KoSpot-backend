@@ -29,12 +29,10 @@ public class SendSoloGameMessageUseCase {
         ChatMessage chatMessage = createGlobalChatMessage(command);
         chatService.sendSoloGameMessage(chatMessage);
     }
-    public void execute() {
-
-    }
 
     private ChatMessage createGlobalChatMessage(SendSoloGameMessageCommand command) {
         return ChatMessage.builder()
+                .gamePlayerId(command.getPlayerId())
                 .memberId(command.getMemberId())
                 .nickname(command.getNickname())
                 .messageType(MessageType.GAME_CHAT)
