@@ -7,8 +7,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Duration;
-
 @Getter
 @Entity
 @SuperBuilder
@@ -20,23 +18,24 @@ public class MultiRoadViewGame extends MultiGame {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_room_id")
-    private GameRoom gameRoom;
+    @Column(name = "game_room_id", insertable = false, updatable = false)
+    private Long gameRoomId;
     
     // 생성 메서드
-    public static MultiRoadViewGame createGame(GameRoom gameRoom, PlayerMatchType matchType,
+    public static MultiRoadViewGame createGame(Long gameRoomId, PlayerMatchType matchType,
                                                Integer roundCount, Integer timeLimit) {
-        return MultiRoadViewGame.builder()
+        MultiRoadViewGame game = MultiRoadViewGame.builder()
                 .matchType(matchType)
                 .gameMode(GameMode.ROADVIEW)  // 로드뷰 모드로 고정
                 .totalRounds(roundCount)
-                .timeLimit(gameRoom.getTimeLimit())
+                .timeLimit(timeLimit)
                 .currentRound(0) // 시작 전에는 0
                 .timeLimit(timeLimit)
                 .isFinished(false)
-                .gameRoom(gameRoom)
+                .gameRoomId(gameRoomId)
                 .build();
+        game.markPending();
+        return game;
     }
 
     @Override

@@ -50,7 +50,9 @@ public class FinishMultiRoadViewGameUseCase {
         // 3. WebSocket 최종 결과 전송
         MultiGameResponse.GameFinalResult finalResult = MultiGameResponse.GameFinalResult.from(gameId, players);
         gameRoundNotificationService.notifyGameFinishedWithResults(gameRoomId, finalResult);
-        
+
+        // 관련 redis 데이터 정리
+
         log.info("✅ Game completed with point distribution - gameId: {}", gameId);
     }
 

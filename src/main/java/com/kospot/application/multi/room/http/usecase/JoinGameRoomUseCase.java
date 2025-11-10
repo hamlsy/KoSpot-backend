@@ -31,7 +31,9 @@ public class JoinGameRoomUseCase {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
         validateGameCapacityV1(gameRoom);
         gameRoomService.joinGameRoom(player, gameRoom, request);
-        eventPublisher.publishEvent(new GameRoomJoinEvent(gameRoom, player));
+        eventPublisher.publishEvent(new GameRoomJoinEvent(
+                gameRoomId, player.getId(), player.getNickname(), player.getEquippedMarkerImage().getImageUrl(), null, false
+        ));
     }
 
     // Read - then - check - V1 todo refactor

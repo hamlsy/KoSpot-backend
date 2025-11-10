@@ -23,10 +23,5 @@ public class MultiRoadViewGameAdaptor {
         );
     }
 
-    public MultiRoadViewGame queryByIdFetchGameRoom(Long gameId) {
-        return repository.findById(gameId).orElseThrow(
-                () -> new GameHandler(ErrorStatus.GAME_NOT_FOUND)
-        );
-    }
 
 }

@@ -4,6 +4,7 @@ import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import javax.swing.text.html.Option;
 import java.util.List;
@@ -20,4 +21,9 @@ public interface RoadViewGameRoundRepository extends JpaRepository<RoadViewGameR
            "JOIN FETCH rvr.targetCoordinate " +
            "WHERE rvr.id = :id")
     Optional<RoadViewGameRound> findByIdFetchCoordinate(@Param("id") Long id);
+
+    @Query("SELECT rvr FROM RoadViewGameRound rvr " +
+           "JOIN FETCH rvr.multiRoadViewGame " +
+           "WHERE rvr.id = :id")
+    Optional<RoadViewGameRound> findByIdFetchGame(@Param("id") Long id);
 }

@@ -14,9 +14,10 @@ public class JoinGlobalLobbyUseCase {
 
     private final LobbyPresenceService lobbyPresenceService;
 
-    public void execute(SimpMessageHeaderAccessor headerAccessor) {
+    public long execute(SimpMessageHeaderAccessor headerAccessor) {
         WebSocketMemberPrincipal webSocketMemberPrincipal = WebSocketMemberPrincipal.getPrincipal(headerAccessor);
         lobbyPresenceService.joinGlobalLobby(webSocketMemberPrincipal.getMemberId(), headerAccessor.getSessionId());
+        return lobbyPresenceService.getLobbyUserCount();
     }
 
 }

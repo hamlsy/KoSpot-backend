@@ -2,6 +2,7 @@ package com.kospot.domain.chat.service;
 
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.repository.ChatMessageRepository;
+import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants;
 import com.kospot.presentation.chat.dto.event.ChatMessageEvent;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,13 @@ public class ChatService {
         processAndSend(chatMessage,
                 ChatMessageEvent.GameRoom::from,
                 GameRoomChannelConstants.getGameRoomChatChannel(chatMessage.getGameRoomId().toString())
+        );
+    }
+
+    public void sendSoloGameMessage(ChatMessage chatMessage) {
+        processAndSend(chatMessage,
+                ChatMessageEvent.MultiGameGlobal::from,
+                MultiGameChannelConstants.getGlobalChatChannel(chatMessage.getGameRoomId().toString())
         );
     }
 

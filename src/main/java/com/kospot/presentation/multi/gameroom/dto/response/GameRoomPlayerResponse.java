@@ -14,11 +14,4 @@ public class GameRoomPlayerResponse {
     private boolean isHost;
     private String markerImageUrl;
 
-    //todo rank Embeddable
-    private String rankTier;
-    private int rankLevel;
-    private int ratingScore;
-
-    //todo add statistic
-
 }

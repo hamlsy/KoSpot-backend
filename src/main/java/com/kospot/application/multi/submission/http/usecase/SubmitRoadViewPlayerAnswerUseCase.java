@@ -34,7 +34,7 @@ public class SubmitRoadViewPlayerAnswerUseCase {
     public void execute(Member member, String roomId, Long gameId,
                         Long roundId, SubmitRoadViewRequest.Player request) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchCoordinate(roundId);
-        GamePlayer player = gamePlayerAdaptor.queryByMemberId(member.getId());
+        GamePlayer player = gamePlayerAdaptor.queryByMemberIdAndMultiGameId(member.getId(), gameId);
 
         RoadViewSubmission submission = request.toEntity();
         roadViewSubmissionService.createPlayerSubmission(round, player, submission);

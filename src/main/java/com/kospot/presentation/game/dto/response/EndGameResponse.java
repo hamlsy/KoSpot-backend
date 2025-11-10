@@ -5,6 +5,7 @@ import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankLevel;
 import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,6 +14,7 @@ public class EndGameResponse {
     @Getter
     @Builder
     public static class RoadViewPractice {
+        private double answerDistance;
         private String fullAddress;
         private String poiName;
         private double score;
@@ -20,6 +22,7 @@ public class EndGameResponse {
         public static RoadViewPractice from(RoadViewGame game, Coordinate coordinate){
             return RoadViewPractice.builder()
                     .score(game.getScore())
+                    .answerDistance(game.getAnswerDistance())
                     .fullAddress(coordinate.getAddress().getFullAddress())
                     .poiName(coordinate.getPoiName())
                     .build();
@@ -29,6 +32,8 @@ public class EndGameResponse {
     @Getter
     @Builder
     public static class RoadViewRank {
+        private String nickname;
+        private double answerDistance;
         private String fullAddress;
         private String poiName;
         private double score;
@@ -40,7 +45,7 @@ public class EndGameResponse {
         private RankTier currentRankTier;
         private RankLevel currentRankLevel;
 
-        public static RoadViewRank from(RoadViewGame game,  Coordinate coordinate, int previousRatingScore, GameRank currentGameRank){
+        public static RoadViewRank from(Member member, RoadViewGame game, Coordinate coordinate, int previousRatingScore, GameRank currentGameRank){
             int currentRatingScore = currentGameRank.getRatingScore();
             int ratingScoreChange = currentRatingScore - previousRatingScore;
 
@@ -48,9 +53,11 @@ public class EndGameResponse {
             RankLevel previousRankLevel = RankLevel.getLevelByRating(previousRatingScore);
 
             return RoadViewRank.builder()
+                    .nickname(member.getNickname())
                     .score(game.getScore())
                     .fullAddress(coordinate.getAddress().getFullAddress())
                     .poiName(coordinate.getPoiName())
+                    .answerDistance(game.getAnswerDistance())
                     .previousRatingScore(previousRatingScore)
                     .currentRatingScore(currentRatingScore)
                     .ratingScoreChange(ratingScoreChange)

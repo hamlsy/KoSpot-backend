@@ -3,6 +3,7 @@ package com.kospot.application.multi.room.http.usecase;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
 import com.kospot.presentation.multi.gameroom.dto.response.FindGameRoomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class FindAllGameRoomUseCase {
 
     private final GameRoomAdaptor gameRoomAdaptor;
+    private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
 
     private static final String SORT_PROPERTIES = "createdDate";
     private static final int SIZE = 10;
@@ -29,7 +31,8 @@ public class FindAllGameRoomUseCase {
         Pageable pageable = PageRequest.of(page, SIZE, Sort.Direction.DESC, SORT_PROPERTIES);
         List<GameRoom> gameRooms = gameRoomAdaptor.queryAllWithWaitingFirst(pageable);
 
-        return gameRooms.stream().map(FindGameRoomResponse::from)
+        return gameRooms.stream().map(
+                r -> FindGameRoomResponse.from(r, gameRoomRedisAdaptor.getCurrentPlayers(r.getId().toString())))
                 .collect(Collectors.toList());
     }
 

@@ -10,7 +10,7 @@ import lombok.*;
 public class TimerStartMessage {
 
     private String roundId;
-    private GameMode gameMode;
+    private String gameMode;
     private Long serverStartTimeMs;
     private Long durationMs;
     private Long serverTimestamp;

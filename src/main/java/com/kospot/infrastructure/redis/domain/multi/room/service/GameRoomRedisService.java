@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.domain.multi.gamePlayer.exception.GameTeamErrorStatus;
 import com.kospot.domain.multi.gamePlayer.exception.GameTeamHandler;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
+import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
 import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

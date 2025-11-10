@@ -27,7 +27,9 @@ public class GameRoomService {
     public GameRoom createGameRoom(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = request.toEntity();
         gameRoom.setHost(host);
-        return gameRoomRepository.save(gameRoom);
+        GameRoom savedRoom = gameRoomRepository.save(gameRoom);
+        host.joinGameRoom(savedRoom.getId());
+        return savedRoom;
     }
 
     public GameRoom updateGameRoom(GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {
@@ -41,13 +43,19 @@ public class GameRoomService {
         gameRoom.join(player, request.getPassword(), gameRoom.getId());
     }
 
+    //todo refactoring
+    // 지금은 방장이 나가면 게임 방 삭제
     public void leaveGameRoom(Member player, GameRoom gameRoom) {
-        gameRoom.leaveRoom(player);
+        if(gameRoom.isHost(player)){
+            deleteRoom(gameRoom);
+        }
+//        gameRoom.leaveRoom(player);
     }
 
     public void deleteRoom(GameRoom gameRoom) {
-        gameRoom.deleteRoom();
+//        gameRoom.deleteRoom();
         memberAdaptor.queryAllByGameRoomId(gameRoom.getId()).forEach(Member::leaveGameRoom);
+        gameRoomRepository.delete(gameRoom);
     }
 
     public void kickPlayer(Member host, Member targetPlayer, GameRoom gameRoom) {

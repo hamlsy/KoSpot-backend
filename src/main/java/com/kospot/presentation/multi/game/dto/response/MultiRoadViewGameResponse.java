@@ -8,7 +8,11 @@ import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.presentation.multi.gamePlayer.dto.response.GamePlayerResponse;
 import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 public class MultiRoadViewGameResponse {
 
@@ -24,20 +28,22 @@ public class MultiRoadViewGameResponse {
         private int currentRound;
 
         private RoadViewRoundResponse.Info roundInfo;
+        private long roundVersion;
         private List<GamePlayerResponse> gamePlayers;
 
-        public static StartPlayerGame from(MultiRoadViewGame game, RoadViewGameRound round, List<GamePlayer> players) {
+        public static StartPlayerGame from(MultiRoadViewGame game, RoadViewGameRound round,
+                                           List<GamePlayer> players, long roundVersion) {
             return StartPlayerGame.builder()
                     .gameId(game.getId())
                     .totalRounds(game.getTotalRounds())
                     .currentRound(game.getCurrentRound())
+                    .roundVersion(roundVersion)
                     .roundInfo(RoadViewRoundResponse.Info.from(round))
                     .gamePlayers(
                             players.stream().map(GamePlayerResponse::from).collect(Collectors.toList())
                     )
                     .build();
         }
-
     }
 
     @Data
@@ -48,19 +54,41 @@ public class MultiRoadViewGameResponse {
     public static class NextRound {
 
         private Long gameId;
-        private int currentRound;
-
         private RoadViewRoundResponse.Info roundInfo;
+        private int currentRound;
+        private long roundVersion;
 
-        public static NextRound from(MultiRoadViewGame game, RoadViewGameRound round) {
+        public static NextRound from(MultiRoadViewGame game, RoadViewGameRound round, long roundVersion) {
             return NextRound.builder()
                     .gameId(game.getId())
                     .currentRound(game.getCurrentRound())
                     .roundInfo(RoadViewRoundResponse.Info.from(round))
+                    .roundVersion(roundVersion)
                     .build();
         }
-
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class RoundProblem {
 
+        private Long gameId;
+        private Long roundId;
+        private long roundVersion;
+        private double targetLat;
+        private double targetLng;
+
+        public static RoundProblem from(MultiRoadViewGame game, RoadViewGameRound round, long roundVersion) {
+            return RoundProblem.builder()
+                    .gameId(game.getId())
+                    .roundId(round.getId())
+                    .roundVersion(roundVersion)
+                    .targetLat(round.getTargetCoordinate().getLat())
+                    .targetLng(round.getTargetCoordinate().getLng())
+                    .build();
+        }
+    }
 }

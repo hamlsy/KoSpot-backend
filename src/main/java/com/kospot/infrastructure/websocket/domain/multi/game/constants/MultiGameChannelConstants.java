@@ -10,6 +10,11 @@ public class MultiGameChannelConstants {
     public static final String PREFIX_GAME = PREFIX_TOPIC + "game/"; // /topic/game/{roomId}/
 
     // ==================== 공용 게임 내 채널 ====================
+    public static String getStartGameChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/start";
+    }
+
     public static String getTimerChannel(String roomId) {
         validateId(roomId, "roomId");
         return PREFIX_GAME + roomId + "/timer";
@@ -18,6 +23,16 @@ public class MultiGameChannelConstants {
     public static String getPlayerStateChannel(String roomId) {
         validateId(roomId, "roomId");
         return PREFIX_GAME + roomId + "/player";
+    }
+
+    public static String getIntroChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/intro";
+    }
+
+    public static String getLoadingStatusChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/loading/status";
     }
 
     // ==================== 로드뷰 게임 채널 ====================
@@ -98,7 +113,19 @@ public class MultiGameChannelConstants {
         validateId(roomId, "roomId");
         return PREFIX_GAME + roomId + "/game/finished";
     }
+    
+    // ==================== 채팅 채널 ===============
+    public static String getGlobalChatChannel(String roomId) {
+        validateId(roomId, "roomId");
+        return PREFIX_GAME + roomId + "/chat/global";
+    }
 
+    public static String getTeamChatChannel(String roomId, String teamId) {
+        validateId(roomId, "roomId");
+        validateId(teamId, "teamId");
+        return PREFIX_GAME + roomId + "/chat/team/" + teamId;
+    }
+    
     // ==================== 유틸 ====================
     private static void validateId(String id, String name) {
         if (id == null || id.isBlank()) {

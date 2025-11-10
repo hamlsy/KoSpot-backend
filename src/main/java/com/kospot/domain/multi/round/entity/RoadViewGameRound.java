@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,5 +69,14 @@ public class RoadViewGameRound extends BaseGameRound {
                 .playerIds(playerIds) //redis
                 .isFinished(false)
                 .build();
+    }
+
+    public void reassignCoordinate(Coordinate newCoordinate) {
+        this.targetCoordinate = newCoordinate;
+        resetRoundState();
+    }
+
+    public void reassignPlayerIds(List<Long> playerIds) {
+        replacePlayerIds(playerIds);
     }
 } 

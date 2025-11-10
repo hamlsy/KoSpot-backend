@@ -141,6 +141,8 @@ public class RoadViewSubmissionService {
     public boolean hasAllParticipantsSubmitted(Long gameId, Long roundId, PlayerMatchType matchType) {
         long submissionCount = repository.countByRoundIdAndMatchType(roundId, matchType);
         int expectedCount = getExpectedSubmissionCount(gameId, matchType);
+        log.info("📝 Submission count check - RoundId: {}, MatchType: {}, Submitted: {}, Expected: {}",
+                roundId, matchType, submissionCount, expectedCount);
         return submissionCount >= expectedCount;
     }
 

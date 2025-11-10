@@ -38,7 +38,7 @@ public class KickPlayerUseCase {
         
         gameRoomRedisService.removePlayerFromRoom(gameRoomId.toString(), targetPlayerId);
         
-        GameRoomPlayerInfo targetPlayerInfo = GameRoomPlayerInfo.from(targetPlayer);
+        GameRoomPlayerInfo targetPlayerInfo = GameRoomPlayerInfo.from(targetPlayer, false);
         notificationService.notifyPlayerKicked(gameRoomId.toString(), targetPlayerInfo);
         
         log.info("Player kicked - HostId: {}, TargetId: {}, RoomId: {}", 

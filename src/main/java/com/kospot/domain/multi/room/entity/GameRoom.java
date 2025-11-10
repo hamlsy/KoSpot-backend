@@ -19,7 +19,7 @@ import org.hibernate.annotations.SQLRestriction;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLRestriction("deleted = false")
+//@SQLRestriction("deleted = false")
 public class GameRoom extends BaseTimeEntity {
 
     @Id
@@ -50,9 +50,9 @@ public class GameRoom extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private GameRoomStatus status;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private Boolean deleted = false;
+//    @Builder.Default
+//    @Column(nullable = false)
+//    private Boolean deleted = false;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
@@ -94,9 +94,9 @@ public class GameRoom extends BaseTimeEntity {
         leaveRoom(player);
     }
 
-    public void deleteRoom() {
-        this.deleted = true;
-    }
+//    public void deleteRoom() {
+//        this.deleted = true;
+//    }
 
     //--- todo websocket
 
