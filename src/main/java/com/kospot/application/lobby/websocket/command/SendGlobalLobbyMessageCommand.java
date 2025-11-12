@@ -1,5 +1,6 @@
 package com.kospot.application.lobby.websocket.command;
 
+import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.Builder;
@@ -13,10 +14,10 @@ public class SendGlobalLobbyMessageCommand {
     private String nickname;
     private String content;
 
-    public static SendGlobalLobbyMessageCommand from(ChatMessageDto.Lobby dto, WebSocketMemberPrincipal principal) {
+    public static SendGlobalLobbyMessageCommand from(ChatMessageDto.Lobby dto, MemberProfileRedisAdaptor.MemberProfileView profileView) {
         return SendGlobalLobbyMessageCommand.builder()
-                .memberId(principal.getMemberId())
-                .nickname(principal.getNickname())
+                .memberId(profileView.memberId())
+                .nickname(profileView.nickname())
                 .content(dto.getContent())
                 .build();
     }
