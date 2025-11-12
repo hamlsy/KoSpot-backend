@@ -53,7 +53,7 @@ public class GameAccessService {
         // 게임방 상태 확인 todo refactor, 일단 재접속 로직은 나중에 구현
         GameRoom room = gameRoomAdaptor.queryById(Long.parseLong(roomId));
         if(room.getStatus() != GameRoomStatus.WAITING) {
-            return GameAccessResponse.notAllowed("참여할 수 없는 상태입니다.");
+            return GameAccessResponse.notAllowed("잘못된 접근입니다.");
         }
 
         // 게임 방 참여자인 경우 게임 정보 반환
