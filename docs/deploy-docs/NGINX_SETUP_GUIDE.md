@@ -240,6 +240,7 @@ location /api/ {
 
 ```nginx
 location /ws/ {
+
     proxy_pass http://kospot_backend;
     proxy_http_version 1.1;
     
@@ -263,6 +264,49 @@ location /ws/ {
 }
 ```
 
+```
+
+수정본!!!!!!!!!STOMP CORS 문제 해결!!!
+# WebSocket 프록시
+    location /ws {
+
+         # 백엔드의 CORS 헤더 숨기기 (충돌 방지)
+#        proxy_hide_header Access-Control-Allow-Origin;
+ #       proxy_hide_header Access-Control-Allow-Methods;
+  #      proxy_hide_header Access-Control-Allow-Headers;
+   #     proxy_hide_header Access-Control-Allow-Credentials;
+
+        # OPTIONS 요청 직접 처리
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin' https://kospot.kr always;
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PATCH' always;
+            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Max-Age' 1728000;
+            add_header 'Content-Type' 'text/plain charset=UTF-8';
+            add_header 'Content-Length' 0;
+            return 204;
+        }
+
+        proxy_pass http://kospot_backend;
+        proxy_http_version 1.1;
+
+        proxy_set_header Origin "";
+        add_header 'Access-Control-Allow-Origin' https://kospot.kr;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        proxy_connect_timeout 7d;
+        proxy_send_timeout 7d;
+        proxy_read_timeout 7d;
+
+        proxy_buffering off;
+    }
+`````
 ---
 
 ## 🔐 SSL/TLS 인증서 설정
