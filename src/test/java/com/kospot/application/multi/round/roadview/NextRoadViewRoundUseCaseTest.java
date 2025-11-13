@@ -7,6 +7,7 @@ import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.game.vo.MultiGameStatus;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
+import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.gamePlayer.vo.GamePlayerStatus;
@@ -56,6 +57,8 @@ class NextRoadViewRoundUseCaseTest {
     @Mock
     private GamePlayerService gamePlayerService;
     @Mock
+    private GamePlayerAdaptor gamePlayerAdaptor;
+    @Mock
     private GameRoundNotificationService gameRoundNotificationService;
     @Mock
     private GameTimerService gameTimerService;
@@ -85,6 +88,7 @@ class NextRoadViewRoundUseCaseTest {
                 roadViewGameRoundAdaptor,
                 multiRoadViewGameAdaptor,
                 roadViewGameRoundService,
+                gamePlayerAdaptor,
                 gamePlayerService,
                 gameRoundNotificationService,
                 gameTimerService,
