@@ -16,6 +16,7 @@ public class GamePlayerResponse {
     private String markerImageUrl;
     private double totalScore;
     private double roundRank;
+    private String gamePlayerStatus;
 
     public static GamePlayerResponse from(GamePlayer gamePlayer) {
         return GamePlayerResponse.builder()
@@ -25,6 +26,7 @@ public class GamePlayerResponse {
                 .markerImageUrl(gamePlayer.getEquippedMarkerImageUrl())
                 .totalScore(gamePlayer.getTotalScore())
                 .roundRank(gamePlayer.getRoundRank() != null ? gamePlayer.getRoundRank() : 0)
+                .gamePlayerStatus(gamePlayer.getStatus().name())
                 .build();
     }
 

@@ -1,8 +1,9 @@
 package com.kospot.multi.game;
 
 import com.kospot.application.coordinate.ImportCoordinateUseCase;
+import com.kospot.application.multi.game.usecase.NotifyStartGameUseCase;
 import com.kospot.application.multi.round.roadview.FinishMultiRoadViewGameUseCase;
-import com.kospot.application.multi.round.roadview.solo.StartRoadViewSoloRoundUseCase;
+import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
 import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.image.entity.Image;
@@ -66,7 +67,10 @@ import static org.mockito.Mockito.*;
 class MultiGameFinishedAndPointDistributionTest {
 
     @Autowired
-    private StartRoadViewSoloRoundUseCase startRoadViewSoloRoundUseCase;
+    private NotifyStartGameUseCase notifyStartGameUseCase;
+
+    @Autowired
+    private NextRoadViewRoundUseCase nextRoadViewRoundUseCase;
 
     @Autowired
     private SubmitRoadViewPlayerAnswerUseCase submitRoadViewPlayerAnswerUseCase;
@@ -150,11 +154,17 @@ class MultiGameFinishedAndPointDistributionTest {
     @DisplayName("[통합] 게임 종료 시 최종 결과가 WebSocket으로 전송된다")
     void whenGameFinishes_thenFinalResultIsSentViaWebSocket() {
         // Given: 게임 시작 (1라운드만)
-        MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60, 1);
+        MultiGameRequest.Start startRequest = createStartRequest(60, 1);
+        
+        // 1단계: 게임 생성
+        com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+        Long gameId = startGameResponse.getGameId();
+        
+        // 2단계: 1라운드 준비
         MultiRoadViewGameResponse.StartPlayerGame startResponse = 
-                startRoadViewSoloRoundUseCase.execute(hostMember, startRequest);
+                nextRoadViewRoundUseCase.executeInitial(gameRoom.getId(), gameId);
 
-        Long gameId = startResponse.getGameId();
         Long roundId = startResponse.getRoundInfo().getRoundId();
         String roomId = gameRoom.getId().toString();
 
@@ -198,11 +208,17 @@ class MultiGameFinishedAndPointDistributionTest {
     @DisplayName("[통합] 게임 종료 후 순위별로 포인트가 지급된다")
     void whenGameFinishes_thenPointsAreDistributedByRank() {
         // Given: 게임 시작
-        MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60, 1);
+        MultiGameRequest.Start startRequest = createStartRequest(60, 1);
+        
+        // 1단계: 게임 생성
+        com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+        Long gameId = startGameResponse.getGameId();
+        
+        // 2단계: 1라운드 준비
         MultiRoadViewGameResponse.StartPlayerGame startResponse = 
-                startRoadViewSoloRoundUseCase.execute(hostMember, startRequest);
+                nextRoadViewRoundUseCase.executeInitial(gameRoom.getId(), gameId);
 
-        Long gameId = startResponse.getGameId();
         Long roundId = startResponse.getRoundInfo().getRoundId();
         String roomId = gameRoom.getId().toString();
 
@@ -252,11 +268,17 @@ class MultiGameFinishedAndPointDistributionTest {
     @DisplayName("[통합] 포인트 지급 시 히스토리가 MULTI_GAME 타입으로 저장된다")
     void whenPointsAreDistributed_thenHistoriesAreSavedAsMultiGameType() {
         // Given: 게임 진행 및 종료
-        MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60, 1);
+        MultiGameRequest.Start startRequest = createStartRequest(60, 1);
+        
+        // 1단계: 게임 생성
+        com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+        Long gameId = startGameResponse.getGameId();
+        
+        // 2단계: 1라운드 준비
         MultiRoadViewGameResponse.StartPlayerGame startResponse = 
-                startRoadViewSoloRoundUseCase.execute(hostMember, startRequest);
+                nextRoadViewRoundUseCase.executeInitial(gameRoom.getId(), gameId);
 
-        Long gameId = startResponse.getGameId();
         Long roundId = startResponse.getRoundInfo().getRoundId();
         String roomId = gameRoom.getId().toString();
 
@@ -326,11 +348,17 @@ class MultiGameFinishedAndPointDistributionTest {
     @DisplayName("[통합] 동점자는 동일 순위를 받고 같은 포인트를 받는다")
     void whenPlayersHaveSameScore_thenTheyReceiveSameRankAndPoints() {
         // Given: 게임 시작
-        MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60, 1);
+        MultiGameRequest.Start startRequest = createStartRequest(60, 1);
+        
+        // 1단계: 게임 생성
+        com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+        Long gameId = startGameResponse.getGameId();
+        
+        // 2단계: 1라운드 준비
         MultiRoadViewGameResponse.StartPlayerGame startResponse = 
-                startRoadViewSoloRoundUseCase.execute(hostMember, startRequest);
+                nextRoadViewRoundUseCase.executeInitial(gameRoom.getId(), gameId);
 
-        Long gameId = startResponse.getGameId();
         Long roundId = startResponse.getRoundInfo().getRoundId();
         String roomId = gameRoom.getId().toString();
 
@@ -395,12 +423,12 @@ class MultiGameFinishedAndPointDistributionTest {
                 .build());
     }
 
-    private MultiGameRequest.Start createStartRequest(Long gameRoomId, int timeLimit, int totalRounds) {
+    private MultiGameRequest.Start createStartRequest(int timeLimit, int totalRounds) {
         return MultiGameRequest.Start.builder()
-                .gameRoomId(gameRoomId)
                 .playerMatchTypeKey("SOLO")
+                .gameModeKey("ROADVIEW")
                 .totalRounds(totalRounds)
-                .timeLimit(timeLimit * 1000)
+                .timeLimit(timeLimit)
                 .build();
     }
 
