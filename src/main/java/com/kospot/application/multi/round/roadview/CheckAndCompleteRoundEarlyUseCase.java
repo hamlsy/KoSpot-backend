@@ -38,7 +38,8 @@ public class CheckAndCompleteRoundEarlyUseCase {
         }
 
         // 4. DB 기반 최종 검증 및 조기 종료 실행
-        return completeRoundEarly(gameRoomId, gameId, roundId, mode, matchType);
+//        return completeRoundEarly(gameRoomId, gameId, roundId, mode, matchType);
+        return true;
     }
 
     private boolean completeRoundEarly(String gameRoomId, Long gameId, Long roundId,
