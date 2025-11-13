@@ -1,6 +1,7 @@
 package com.kospot.domain.multi.gamePlayer.repository;
 
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
+import com.kospot.domain.multi.gamePlayer.vo.GamePlayerStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,11 +14,29 @@ public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
     @Query("select count(gr) from GamePlayer gr where gr.multiRoadViewGame.id = :gameId")
     int countByMultiRoadViewGameId(@Param("gameId") Long id);
 
+    @Query("select count(gp) from GamePlayer gp where gp.multiRoadViewGame.id = :gameId and gp.status = :status")
+    int countByRoadViewGameIdAndStatus(@Param("gameId") Long gameId, @Param("status") GamePlayerStatus status);
+
     @Query("select gp from GamePlayer gp where gp.member.id = :memberId and gp.multiRoadViewGame.id = :gameId")
     Optional<GamePlayer> findByMemberIdAndMultiGameId(@Param("memberId") Long memberId, @Param("gameId") Long gameId);
 
     @Query("SELECT gp FROM GamePlayer gp WHERE gp.multiRoadViewGame.id = :gameId")
     List<GamePlayer> findAllByMultiRoadViewGameId(@Param("gameId") Long gameId);
+
+    @Query("SELECT gp FROM GamePlayer gp " +
+           "WHERE gp.member.id = :memberId " +
+           "AND gp.multiRoadViewGame.id = :gameId " +
+           "AND gp.status = :status")
+    Optional<GamePlayer> findByMemberIdAndRoadViewGameIdAndStatus(@Param("memberId") Long memberId,
+                                                          @Param("gameId") Long gameId,
+                                                          @Param("status") GamePlayerStatus status);
+    @Query("SELECT gp FROM GamePlayer gp " +
+           "JOIN FETCH gp.member m " +
+           "JOIN FETCH m.equippedMarkerImage " +
+           "WHERE gp.multiRoadViewGame.id = :gameId " +
+           "AND gp.status = :status")
+    List<GamePlayer> findAllByRoadViewGameIdAndStatusFetchMember(@Param("gameId") Long gameId,
+                                                         @Param("status") GamePlayerStatus status);
 
     @Query("SELECT gp FROM GamePlayer gp " +
            "JOIN FETCH gp.member m " +
