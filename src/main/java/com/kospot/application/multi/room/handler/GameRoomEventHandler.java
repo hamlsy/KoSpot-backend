@@ -40,6 +40,7 @@ public class GameRoomEventHandler {
                 .joinedAt(System.currentTimeMillis())
                 .build();
 
+
         gameRoomRedisService.addPlayerToRoom(roomId, playerInfo);
 
         gameRoomNotificationService.notifyPlayerJoined(roomId, playerInfo);

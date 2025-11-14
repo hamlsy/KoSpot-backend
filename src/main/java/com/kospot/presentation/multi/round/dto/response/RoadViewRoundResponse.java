@@ -52,7 +52,7 @@ public class RoadViewRoundResponse {
             return PlayerResult.builder()
                     .poiName(round.getTargetCoordinate().getPoiName())
                     .fullAddress(round.getTargetCoordinate().getAddress().getFullAddress())
-                    .roundNumber(round.getRoundNumber())
+                    .roundNumber(round.getRoundNumber()-1) // 이미 add된 라운드 -1
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())
                     .playerSubmissionResults(
