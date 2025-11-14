@@ -208,7 +208,7 @@ public class GameRoomUseCaseTest {
         //gameRoom, host
         GameRoom gameRoom = gameRoomRepository.save(getTestGameRoom());
         players.forEach(
-                p -> gameRoom.join(p, null)
+                p -> gameRoom.join(p, null, gameRoom.getId())
         );
 
         //when

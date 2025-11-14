@@ -327,7 +327,6 @@ class JoinGameRoomConcurrencyTest {
                 .teamCount(1)
                 .status(GameRoomStatus.WAITING)
                 .host(host)
-                .deleted(false)
                 .build();
         return gameRoomRepository.save(gameRoom);
     }

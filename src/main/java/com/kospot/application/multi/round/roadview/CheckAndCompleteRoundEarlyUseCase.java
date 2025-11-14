@@ -38,7 +38,18 @@ public class CheckAndCompleteRoundEarlyUseCase {
         }
 
         // 4. DB 기반 최종 검증 및 조기 종료 실행
-        return completeRoundEarly(gameRoomId, gameId, roundId, mode, matchType);
+//        return completeRoundEarly(gameRoomId, gameId, roundId, mode, matchType);
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
+        round.validateRoundNotFinished();
+        gameTimerService.stopRoundTimer(gameRoomId, round);
+
+        log.info("✅ Round completed early - RoundId: {}, MatchType: {}", roundId, matchType);
+
+        EarlyRoundCompletionEvent event = new EarlyRoundCompletionEvent(
+                gameRoomId, gameId, roundId, mode, matchType
+        );
+        eventPublisher.publishEvent(event);
+        return true;
     }
 
     private boolean completeRoundEarly(String gameRoomId, Long gameId, Long roundId,

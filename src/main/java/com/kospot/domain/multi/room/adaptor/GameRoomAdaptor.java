@@ -26,6 +26,10 @@ public class GameRoomAdaptor {
         );
     }
 
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
     public GameRoom queryByIdFetchHost(Long id) {
         return repository.findByIdFetchHost(id).orElseThrow(
                 () -> new GameRoomHandler(ErrorStatus.GAME_ROOM_NOT_FOUND)

@@ -20,8 +20,8 @@ spring:
 
   jpa:
     hibernate:
-#      ddl-auto: update
-      ddl-auto: create-drop # 임시로, 배포시 다시 update로 변경 필요
+      ddl-auto: update
+#      ddl-auto: create-drop # 임시로, 배포시 다시 update로 변경 필요
     defer-datasource-initialization: true
     properties:
       hibernate:

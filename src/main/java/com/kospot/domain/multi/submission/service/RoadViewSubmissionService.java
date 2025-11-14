@@ -3,6 +3,7 @@ package com.kospot.domain.multi.submission.service;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
+import com.kospot.domain.multi.gamePlayer.vo.GamePlayerStatus;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
 import com.kospot.domain.multi.submission.repository.RoadViewSubmissionRepository;
@@ -148,7 +149,7 @@ public class RoadViewSubmissionService {
 
     public boolean hasAllPlayersSubmitted(Long gameId, Long roundId) {
         long submissionCount = repository.countByRoundIdAndMatchType(roundId, PlayerMatchType.SOLO);
-        int totalPlayers = gamePlayerAdaptor.countPlayersByGameId(gameId);
+        int totalPlayers = gamePlayerAdaptor.countPlayersByRoadViewGameId(gameId);
         return submissionCount >= totalPlayers;
     }
 
@@ -160,8 +161,8 @@ public class RoadViewSubmissionService {
 
     private int getExpectedSubmissionCount(Long gameId, PlayerMatchType matchType) {
         return switch (matchType) {
-            case SOLO -> gamePlayerAdaptor.countPlayersByGameId(gameId);
-            case TEAM -> gamePlayerAdaptor.countTeamsByGameId(gameId);
+            case SOLO -> gamePlayerAdaptor.countPlayersByRoadViewGameIdAndStatus(gameId, GamePlayerStatus.PLAYING);
+            case TEAM -> gamePlayerAdaptor.countTeamsByGameId(gameId); //todo refactoring
         };
     }
 

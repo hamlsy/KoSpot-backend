@@ -41,7 +41,8 @@ public class GameRoom extends BaseTimeEntity {
 
     @Min(2)
     @Max(8)
-    private int maxPlayers;
+    @Builder.Default
+    private int maxPlayers = 2;
 
     private int teamCount;
 

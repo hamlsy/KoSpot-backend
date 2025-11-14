@@ -77,7 +77,7 @@ public class RoadViewGameHistoryResponse {
                     .practicePlayCount(roadViewStatistic.getPractice().getGames())
                     .rankPlayCount(roadViewStatistic.getRank().getGames())
                     .practiceAvgScore(roadViewStatistic.getPractice().getAvgScore())
-                    .practiceAvgScore(roadViewStatistic.getRank().getAvgScore())
+                    .rankAvgScore(roadViewStatistic.getRank().getAvgScore())
                     .build();
         }
 

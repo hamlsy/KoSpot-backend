@@ -8,6 +8,8 @@ import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,8 @@ public class JoinGameRoomUseCase {
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
     private final GameRoomRedisService gameRoomRedisService;
+    private final MemberProfileRedisService memberProfileRedisService;
+    private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -31,6 +35,14 @@ public class JoinGameRoomUseCase {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
         validateGameCapacityV1(gameRoom);
         gameRoomService.joinGameRoom(player, gameRoom, request);
+        // member profile view 설정
+        if(memberProfileRedisAdaptor.findProfile(player.getId()) == null) {
+            memberProfileRedisService.saveProfile(
+                    player.getId(),
+                    player.getNickname(),
+                    player.getEquippedMarkerImage().getImageUrl()
+            );
+        }
         eventPublisher.publishEvent(new GameRoomJoinEvent(
                 gameRoomId, player.getId(), player.getNickname(), player.getEquippedMarkerImage().getImageUrl(), null, false
         ));
