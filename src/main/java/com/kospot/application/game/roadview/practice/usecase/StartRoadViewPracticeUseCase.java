@@ -25,6 +25,7 @@ public class StartRoadViewPracticeUseCase {
     //encrypt -> response
     private StartGameResponse.RoadView getEncryptedRoadViewGameResponse(Member member, RoadViewGame game) {
         return StartGameResponse.RoadView.builder()
+                .poiName(game.getCoordinate().getPoiName())
                 .gameId(game.getId())
                 .targetLat(aesService.toEncryptString(game.getCoordinate().getLat()))
                 .targetLng(aesService.toEncryptString(game.getCoordinate().getLng()))

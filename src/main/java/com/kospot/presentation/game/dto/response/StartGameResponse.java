@@ -10,6 +10,7 @@ public class StartGameResponse {
     public static class RoadView {
 
         private Long gameId;
+        private String poiName;
         private String targetLat;
         private String targetLng;
         private String markerImageUrl;
