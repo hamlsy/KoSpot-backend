@@ -11,6 +11,7 @@ public class SubmissionResponse {
     @NoArgsConstructor
     @ToString
     public static class RoadViewPlayer {
+        private String nickname;
         private Double lat;
         private Double lng;
         private Double distance;
@@ -18,7 +19,8 @@ public class SubmissionResponse {
         private double earnedScore;
 
         public static RoadViewPlayer from(RoadViewSubmission submission) {
-            return RoadViewPlayer.builder()
+            return RoadViewPlayer.builder() // fetch
+                    .nickname(submission.getGamePlayer().getNickname())
                     .lat(submission.getLat())
                     .lng(submission.getLng())
                     .distance(submission.getDistance())
