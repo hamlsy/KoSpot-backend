@@ -1,5 +1,8 @@
 package com.kospot.domain.game.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class ScoreCalculator {
 
     public static final double ZERO_SCORE = 0.0;
@@ -26,6 +29,9 @@ public class ScoreCalculator {
     private static final double S6 = 400.0;     // 100km
     private static final double S7 = 200.0;     // 200km
     private static final double S8 = 0.0;       // 400km
+
+    private static final BigDecimal ZERO_SCORE_BD = BigDecimal.ZERO;
+    private static final BigDecimal MAX_SCORE_BD = BigDecimal.valueOf(10000.0);
 
     private static final double MULTI_GAME_SCALE = 0.08; // 멀티게임 환산 배수
 
@@ -69,16 +75,28 @@ public class ScoreCalculator {
         }
 
         // 소수 둘째 자리까지
-        double rounded = Math.round(score * 100) / 100.0;
-        return Math.max(ZERO_SCORE, Math.min(MAX_SCORE, rounded));
+        BigDecimal rounded = BigDecimal
+                .valueOf(score)
+                .setScale(2, RoundingMode.HALF_UP);
+        if (rounded.compareTo(ZERO_SCORE_BD) < 0) {
+            rounded = ZERO_SCORE_BD;
+        } else if (rounded.compareTo(MAX_SCORE_BD) > 0) {
+            rounded = MAX_SCORE_BD;
+        }
+
+        return rounded.doubleValue();
     }
 
     /**
      * 멀티 게임 점수 환산 (싱글 대비 8%)
      */
     public static double calculateMultiGameScore(double distance) {
-        double score = calculateScore(distance) * MULTI_GAME_SCALE;
-        return Math.round(score * 100) / 100.0;
+        BigDecimal score = BigDecimal
+                .valueOf(calculateScore(distance))
+                .multiply(BigDecimal.valueOf(MULTI_GAME_SCALE))
+                .setScale(2, RoundingMode.HALF_UP);
+
+        return score.doubleValue();
     }
 
     /**
