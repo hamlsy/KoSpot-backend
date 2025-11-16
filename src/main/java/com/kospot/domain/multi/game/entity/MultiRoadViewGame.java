@@ -20,7 +20,7 @@ public class MultiRoadViewGame extends MultiGame {
 
     @Column(name = "game_room_id", insertable = false, updatable = false)
     private Long gameRoomId;
-    
+
     // 생성 메서드
     public static MultiRoadViewGame createGame(Long gameRoomId, PlayerMatchType matchType,
                                                Integer roundCount, Integer timeLimit) {

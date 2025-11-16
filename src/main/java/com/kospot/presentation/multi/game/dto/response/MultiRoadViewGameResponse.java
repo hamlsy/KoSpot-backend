@@ -38,7 +38,7 @@ public class MultiRoadViewGameResponse {
                     .totalRounds(game.getTotalRounds())
                     .currentRound(game.getCurrentRound())
                     .roundVersion(roundVersion)
-                    .roundInfo(RoadViewRoundResponse.Info.from(round))
+                    .roundInfo(RoadViewRoundResponse.Info.from(round, game))
                     .gamePlayers(
                             players.stream().map(GamePlayerResponse::from).collect(Collectors.toList())
                     )
@@ -62,7 +62,7 @@ public class MultiRoadViewGameResponse {
             return NextRound.builder()
                     .gameId(game.getId())
                     .currentRound(game.getCurrentRound())
-                    .roundInfo(RoadViewRoundResponse.Info.from(round))
+                    .roundInfo(RoadViewRoundResponse.Info.from(round, game))
                     .roundVersion(roundVersion)
                     .build();
         }

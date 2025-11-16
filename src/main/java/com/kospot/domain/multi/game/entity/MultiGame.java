@@ -9,10 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -44,6 +41,9 @@ public abstract class MultiGame extends BaseTimeEntity {
     private Integer currentRound;
 
     private Boolean isFinished;
+
+    @Builder.Default
+    private boolean isPoiNameVisible = true;
 
     @Enumerated(EnumType.STRING)
     private MultiGameStatus status;

@@ -1,5 +1,6 @@
 package com.kospot.presentation.multi.round.dto.response;
 
+import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
@@ -19,13 +20,17 @@ public class RoadViewRoundResponse {
     public static class Info {
         private Long roundId;
         private int roundNumber;
+        private String poiName;
         private double targetLat;
         private double targetLng;
 
-        public static Info from(RoadViewGameRound round) {
+        public static Info from(RoadViewGameRound round, MultiRoadViewGame game) {
             return Info.builder()
                     .roundId(round.getId())
                     .roundNumber(round.getRoundNumber())
+                    .poiName(
+                            game.isPoiNameVisible() ? round.getTargetCoordinate().getPoiName() : null
+                    )
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())
                     .build();

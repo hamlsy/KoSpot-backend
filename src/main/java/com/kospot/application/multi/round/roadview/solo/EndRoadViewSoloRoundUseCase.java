@@ -1,5 +1,6 @@
 package com.kospot.application.multi.round.roadview.solo;
 
+import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
@@ -10,6 +11,7 @@ import com.kospot.domain.multi.submission.adaptor.roadview.RoadViewSubmissionAda
 import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
 import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
 import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ public class EndRoadViewSoloRoundUseCase {
     private final GamePlayerService gamePlayerService;
     private final RoadViewSubmissionService roadViewSubmissionService;
     private final RoadViewSubmissionAdaptor roadViewSubmissionAdaptor;
+    private final SubmissionRedisService submissionRedisService;
 
     public RoadViewRoundResponse.PlayerResult execute(Long gameId, Long roundId) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
@@ -42,6 +45,9 @@ public class EndRoadViewSoloRoundUseCase {
 
         List<GamePlayer> players = gamePlayerAdaptor.queryByMultiRoadViewGameId(gameId);
         List<GamePlayer> updatedPlayers = gamePlayerService.updateTotalRank(players);
+
+        // redis  정리
+        submissionRedisService.cleanupRound(GameMode.ROADVIEW, roundId);
 
         return RoadViewRoundResponse.PlayerResult.from(
                 round,

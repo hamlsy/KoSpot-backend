@@ -48,6 +48,9 @@ public class GameRoom extends BaseTimeEntity {
 
     private String password;
 
+    @Builder.Default
+    private boolean isPoiNameVisible = true;
+
     @Enumerated(EnumType.STRING)
     private GameRoomStatus status;
 
