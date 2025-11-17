@@ -78,6 +78,7 @@ public class MultiRoadViewGameResponse {
         private Long gameId;
         private Long roundId;
         private long roundVersion;
+        private String poiName;
         private double targetLat;
         private double targetLng;
 
@@ -86,6 +87,7 @@ public class MultiRoadViewGameResponse {
                     .gameId(game.getId())
                     .roundId(round.getId())
                     .roundVersion(roundVersion)
+                    .poiName(game.isPoiNameVisible() ? round.getTargetCoordinate().getPoiName() : "")
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())
                     .build();
