@@ -38,7 +38,7 @@ public class MultiRoadViewGameResponse {
                     .totalRounds(game.getTotalRounds())
                     .currentRound(game.getCurrentRound())
                     .roundVersion(roundVersion)
-                    .roundInfo(RoadViewRoundResponse.Info.from(round))
+                    .roundInfo(RoadViewRoundResponse.Info.from(round, game))
                     .gamePlayers(
                             players.stream().map(GamePlayerResponse::from).collect(Collectors.toList())
                     )
@@ -62,7 +62,7 @@ public class MultiRoadViewGameResponse {
             return NextRound.builder()
                     .gameId(game.getId())
                     .currentRound(game.getCurrentRound())
-                    .roundInfo(RoadViewRoundResponse.Info.from(round))
+                    .roundInfo(RoadViewRoundResponse.Info.from(round, game))
                     .roundVersion(roundVersion)
                     .build();
         }
@@ -78,6 +78,7 @@ public class MultiRoadViewGameResponse {
         private Long gameId;
         private Long roundId;
         private long roundVersion;
+        private String poiName;
         private double targetLat;
         private double targetLng;
 
@@ -86,6 +87,7 @@ public class MultiRoadViewGameResponse {
                     .gameId(game.getId())
                     .roundId(round.getId())
                     .roundVersion(roundVersion)
+                    .poiName(game.isPoiNameVisible() ? round.getTargetCoordinate().getPoiName() : "")
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())
                     .build();

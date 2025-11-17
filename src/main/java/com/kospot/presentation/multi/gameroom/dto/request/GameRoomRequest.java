@@ -30,6 +30,7 @@ public class GameRoomRequest {
         private String gameModeKey;
         private String playerMatchTypeKey; //individual or team
         private int maxPlayers;
+        private boolean isPoiNameVisible;
         private boolean privateRoom;
 
         public GameRoom toEntity() {
@@ -40,6 +41,7 @@ public class GameRoomRequest {
                     .maxPlayers(maxPlayers)
                     .gameMode(GameMode.fromKey(gameModeKey))
                     .playerMatchType(PlayerMatchType.fromKey(playerMatchTypeKey))
+                    .isPoiNameVisible(isPoiNameVisible)
                     .status(GameRoomStatus.WAITING)
                     .privateRoom(privateRoom)
                     .build();
@@ -59,6 +61,7 @@ public class GameRoomRequest {
         private String gameModeKey;
         private String playerMatchTypeKey;
         private boolean privateRoom;
+        private boolean isPoiNameVisible;
         private int teamCount;
 
     }

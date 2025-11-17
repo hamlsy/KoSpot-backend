@@ -12,6 +12,10 @@ import com.kospot.domain.point.service.PointService;
 import com.kospot.domain.point.util.PointCalculator;
 import com.kospot.domain.point.vo.PointHistoryType;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.redis.domain.multi.game.service.MultiGameRedisService;
+import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.infrastructure.redis.domain.multi.round.dao.GameRoundRedisRepository;
+import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;
 import com.kospot.presentation.multi.game.dto.response.MultiGameResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +38,8 @@ public class FinishMultiRoadViewGameUseCase {
     private final PointHistoryService pointHistoryService;
     private final MemberStatisticService memberStatisticService;
 
+    private final SubmissionRedisService submissionRedisService;
+
     public void execute(String gameRoomId, Long gameId) {
         // 1. 게임 종료 처리
         MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
@@ -51,8 +57,7 @@ public class FinishMultiRoadViewGameUseCase {
         MultiGameResponse.GameFinalResult finalResult = MultiGameResponse.GameFinalResult.from(gameId, players);
         gameRoundNotificationService.notifyGameFinishedWithResults(gameRoomId, finalResult);
 
-        // 관련 redis 데이터 정리
-
+        // todo 관련 redis 데이터 정리
         log.info("✅ Game completed with point distribution - gameId: {}", gameId);
     }
 
