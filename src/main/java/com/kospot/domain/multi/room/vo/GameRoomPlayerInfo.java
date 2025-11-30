@@ -28,13 +28,6 @@ public class GameRoomPlayerInfo {
 
     private Long joinedAt;
 
-    //todo add player statistic
-    
-    /**
-     * Member 엔티티로부터 GameRoomPlayerInfo 생성
-     * @param member 멤버 엔티티
-     * @return GameRoomPlayerInfo 객체
-     */
     @Deprecated // 메서드 내부에서 사용될 때만
     public static GameRoomPlayerInfo from(Member member, boolean isHost) {
         return GameRoomPlayerInfo.builder()

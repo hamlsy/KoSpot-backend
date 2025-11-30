@@ -66,6 +66,7 @@ public class GameRoomEventHandler {
 
         gameRoomRedisService.cleanupPlayerSession(playerId);
 
+        // 추후 삭제, 나가는 것만 처리하기
         if (gameRoom.isHost(player) || gameRoomRedisService.isRoomEmpty(roomId)) {
             gameRoomService.deleteRoom(gameRoom);
         } else {

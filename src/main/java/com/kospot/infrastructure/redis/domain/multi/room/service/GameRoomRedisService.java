@@ -210,50 +210,6 @@ public class GameRoomRedisService {
         return !canJoin;
     }
 
-
-    /**
-     * 세션 정보 저장
-     */
-    public void saveSessionInfo(String sessionId, String roomId, String destination, Long memberId) {
-        // 세션의 구독 정보 저장
-        String sessionKey = String.format(SESSION_SUBSCRIPTIONS_KEY, sessionId);
-        redisTemplate.opsForSet().add(sessionKey, destination);
-        redisTemplate.expire(sessionKey, SESSION_EXPIRY_HOURS, TimeUnit.HOURS);
-
-        // 플레이어 세션 매핑
-        String playerSessionKey = String.format(PLAYER_SESSION_KEY, memberId);
-        redisTemplate.opsForValue().set(playerSessionKey, sessionId, SESSION_EXPIRY_HOURS, TimeUnit.HOURS);
-
-        // 세션-룸 매핑
-        String sessionRoomKey = String.format(SESSION_ROOM_KEY, sessionId);
-        redisTemplate.opsForValue().set(sessionRoomKey, roomId, SESSION_EXPIRY_HOURS, TimeUnit.HOURS);
-    }
-
-    public String getRoomIdFromSession(String sessionId) {
-        String sessionRoomKey = String.format(SESSION_ROOM_KEY, sessionId);
-        return redisTemplate.opsForValue().get(sessionRoomKey);
-    }
-
-    public Long getMemberIdFromSession(String sessionId) {
-        try {
-            Set<String> playerKeys = redisTemplate.keys(String.format(PLAYER_SESSION_KEY, "*"));
-            if (playerKeys != null) {
-                for (String playerKey : playerKeys) {
-                    String storedSessionId = redisTemplate.opsForValue().get(playerKey);
-                    if (sessionId.equals(storedSessionId)) {
-                        // 키에서 멤버 ID 추출: game:player:{memberId}:session
-                        String[] parts = playerKey.split(":");
-                        return Long.parseLong(parts[2]);
-                    }
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            log.error("Failed to get member ID from session: {}", sessionId, e);
-            return null;
-        }
-    }
-
     public void cleanupPlayerSession(Long memberId) {
         try {
             String playerSessionKey = String.format(PLAYER_SESSION_KEY, memberId);

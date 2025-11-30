@@ -155,7 +155,7 @@ class ConcurrentSubmissionTest {
         memberRepository.saveAll(players);
 
         // Redis Mock 설정
-        when(gameRoomRedisAdaptor.getCurrentPlayers(anyString())).thenReturn(5L);
+        when(gameRoomRedisAdaptor.getCurrentPlayersCount(anyString())).thenReturn(5L);
 
         log.info("✅ 동시성 테스트 환경 설정 완료 - 플레이어 수: {}, 방 ID: {}", 
                 players.size(), gameRoom.getId());

@@ -19,6 +19,7 @@ public class StartGameResponse {
     @Getter
     @Builder
     public static class ReIssue {
+        private String poiName;
         private String targetLat;
         private String targetLng;
     }

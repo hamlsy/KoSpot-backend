@@ -32,7 +32,7 @@ public class FindAllGameRoomUseCase {
         List<GameRoom> gameRooms = gameRoomAdaptor.queryAllWithWaitingFirst(pageable);
 
         return gameRooms.stream().map(
-                r -> FindGameRoomResponse.from(r, gameRoomRedisAdaptor.getCurrentPlayers(r.getId().toString())))
+                r -> FindGameRoomResponse.from(r, gameRoomRedisAdaptor.getCurrentPlayersCount(r.getId().toString())))
                 .collect(Collectors.toList());
     }
 
