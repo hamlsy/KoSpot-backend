@@ -39,7 +39,6 @@ public class LeaveGameRoomUseCase {
 
 
         // redis 방장 교체
-        // todo 방장 교체 이벤트 발행
 
         // db 방장 교체
 
