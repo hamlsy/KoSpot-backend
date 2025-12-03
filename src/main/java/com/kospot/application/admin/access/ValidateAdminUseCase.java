@@ -3,6 +3,7 @@ package com.kospot.application.admin.access;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.exception.MemberErrorStatus;
 import com.kospot.domain.member.exception.MemberHandler;
+import com.kospot.domain.member.service.MemberService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ValidateAdminUseCase {
 
+    private final MemberService memberService;
+
     public void execute(Member member) {
-        if (member.isNotAdmin()) {
-            throw new MemberHandler(ErrorStatus.AUTH_ADMIN_PRIVILEGES_REQUIRED);
-        }
+        memberService.validateAdmin(member);
     }
 
 }
