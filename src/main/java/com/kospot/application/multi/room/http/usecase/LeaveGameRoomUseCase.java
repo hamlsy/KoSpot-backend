@@ -1,6 +1,7 @@
 package com.kospot.application.multi.room.http.usecase;
 
 import com.kospot.application.multi.room.vo.LeaveDecision;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Transactional
 public class LeaveGameRoomUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
     private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
@@ -31,13 +33,10 @@ public class LeaveGameRoomUseCase {
 
     public void execute(Member member, Long gameRoomId) {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
-
         LeaveDecision decision = makeLeaveDecision(gameRoom, member);
 
-        // todo db 상태 변경
-
-
-
+        applyLeaveToDatabase(member, gameRoom, decision);
+        // redis 상태 변경 및 todo after commit 반영, redis 방 단위 lock
         eventPublisher.publishEvent(new GameRoomLeaveEvent(gameRoom,
                 member, decision));
 
@@ -66,6 +65,19 @@ public class LeaveGameRoomUseCase {
                 nextHostCandidate.get()
         );
 
+    }
+
+    private void applyLeaveToDatabase(Member member, GameRoom gameRoom, LeaveDecision decision){
+        gameRoomService.leaveGameRoom(member, gameRoom);
+        switch(decision.getAction()) {
+            case DELETE_ROOM:
+                gameRoomService.deleteRoom(gameRoom);
+                break;
+            case CHANGE_HOST:
+                Member newHost = memberAdaptor.queryById(decision.getNewHostInfo().getMemberId());
+                gameRoomService.changeHostToMember(gameRoom, newHost);
+                break;
+        }
     }
 
 }
