@@ -1,5 +1,6 @@
 package com.kospot.application.multi.room.http.usecase;
 
+import com.kospot.application.multi.room.vo.LeaveDecision;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
@@ -8,6 +9,7 @@ import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
+import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,21 +31,40 @@ public class LeaveGameRoomUseCase {
 
     public void execute(Member member, Long gameRoomId) {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
-        member.leaveGameRoom();
 
-        // 나가는 사람이 방장일 경우 방장 교체 & 나 말고 플레이어가 있을 때
-        // 나 제외 가장 최근에 들어온 사람
-        Optional<GameRoomPlayerInfo> nextHostInfo =
-                gameRoomRedisAdaptor.pickNextHostByJoinedAt(
-                        gameRoomId.toString(), member.getId());
+        LeaveDecision decision = makeLeaveDecision(gameRoom, member);
+
+        // todo db 상태 변경
 
 
-        // redis 방장 교체
 
-        // db 방장 교체
+        eventPublisher.publishEvent(new GameRoomLeaveEvent(gameRoom,
+                member, decision));
 
-        // redis 퇴장 처리
-        eventPublisher.publishEvent(new GameRoomLeaveEvent(gameRoom, member));
+    }
+
+    private LeaveDecision makeLeaveDecision(GameRoom gameRoom, Member member) {
+        String roomId = gameRoom.getId().toString();
+        if(gameRoom.isNotHost(member)){
+            return LeaveDecision.normalLeave(member);
+        }
+
+        // 방장 퇴장
+        // 다음 방장 찾기
+        Optional<GameRoomPlayerInfo> nextHostCandidate = gameRoomRedisAdaptor.pickNextHostByJoinedAt(
+                roomId, member.getId());
+
+        // 다음 방장이 없으면 방 삭제
+        if (nextHostCandidate.isEmpty()) {
+            return LeaveDecision.deleteRoom(gameRoom, member);
+        }
+
+        // 방장 교체
+        return LeaveDecision.changeHost(
+                gameRoom,
+                member,
+                nextHostCandidate.get()
+        );
 
     }
 

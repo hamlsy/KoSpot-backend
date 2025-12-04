@@ -161,7 +161,7 @@ public class GameRoom extends BaseTimeEntity {
         return this.host.getId().equals(gamePlayer.getId());
     }
 
-    private boolean isNotHost(Member gamePlayer) {
+    public boolean isNotHost(Member gamePlayer) {
         return !this.host.getId().equals(gamePlayer.getId());
     }
 

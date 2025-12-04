@@ -42,8 +42,6 @@ public class GameRoomRedisService {
         try {
             String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
             String playerJson = objectMapper.writeValueAsString(playerInfo);
-
-            //todo implement member detail statistic info in http methods -> 그냥 http 요청으로 처리, redis에 너무 많은 데이터
             gameRoomRedisRepository.savePlayer(roomKey, playerInfo.getMemberId().toString(), playerJson, ROOM_DATA_EXPIRY_HOURS);
 
             log.debug("Added player to room Redis - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
@@ -75,6 +73,10 @@ public class GameRoomRedisService {
                     roomId, memberId, e);
             return null;
         }
+    }
+
+    public void changeHost() {
+
     }
 
     public List<GameRoomPlayerInfo> getRoomPlayers(String roomId) {
