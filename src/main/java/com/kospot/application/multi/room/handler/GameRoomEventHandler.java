@@ -1,5 +1,6 @@
 package com.kospot.application.multi.room.handler;
 
+import com.kospot.application.multi.room.vo.LeaveDecision;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.entity.GameRoom;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +30,6 @@ public class GameRoomEventHandler {
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService gameRoomNotificationService;
     private final GameRoomService gameRoomService;
-    private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
     private final MemberAdaptor memberAdaptor;
 
     @EventListener
@@ -50,36 +52,44 @@ public class GameRoomEventHandler {
         gameRoomNotificationService.notifyPlayerListUpdated(roomId);
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleLeave(GameRoomLeaveEvent event) {
+        LeaveDecision decision = event.getDecision();
         GameRoom gameRoom = event.getGameRoom();
         String roomId = gameRoom.getId().toString();
+
         Member player = event.getLeavingMember();
         Long playerId = player.getId();
 
         GameRoomPlayerInfo playerInfo = gameRoomRedisService.removePlayerFromRoom(roomId, playerId);
+        gameRoomRedisService.cleanupPlayerSession(playerId);
 
         if (playerInfo != null) {
-            gameRoomService.updateMemberLeaveStatus(player);
             gameRoomNotificationService.notifyPlayerLeft(roomId, playerInfo);
             log.info("Player left - MemberId: {}, RoomId: {}, Nickname: {}",
                     playerId, roomId, playerInfo.getNickname());
         }
 
-        gameRoomRedisService.cleanupPlayerSession(playerId);
-
-        // 추후 삭제, 나가는 것만 처리하기
-        if (gameRoom.isHost(player) || gameRoomRedisService.isRoomEmpty(roomId)) {
-            gameRoomService.deleteRoom(gameRoom);
-        } else {
-//            changeHostIfNeeded(gameRoom);
+        switch (decision.getAction()) {
+            case DELETE_ROOM -> {
+                gameRoomRedisService.deleteRoomData(roomId);
+                log.info("Game room deleted - RoomId: {}", roomId);
+            }
+            case CHANGE_HOST -> {
+                changeHost(gameRoom, decision.getNewHostInfo());
+            }
+            case NORMAL_LEAVE -> {
+                // 별도 처리 없음
+            }
         }
 
         gameRoomNotificationService.notifyPlayerListUpdated(roomId);
     }
 
+    // todo redis lock
+    //
     @Async("taskExecutor")
-    public void changeHost(GameRoom gameRoom) {
+    public void changeHost(GameRoom gameRoom, GameRoomPlayerInfo newHostInfo) {
         Long roomId = gameRoom.getId();
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(roomId.toString());
 
@@ -87,15 +97,10 @@ public class GameRoomEventHandler {
             return;
         }
 
-        Optional<GameRoomPlayerInfo> newHostInfo = gameRoomRedisAdaptor.pickNextHostByJoinedAt(
-                gameRoom.getId().toString(), gameRoom.getHost().getId()).orElse(
-                //
-                //이때 방 제거?
-        );
         Member newHost = memberAdaptor.queryById(newHostInfo.getMemberId());
-        gameRoomService.changeHostToMember(gameRoom, newHost);
+        gameRoomService.changeHostToMember(gameRoom, newHost); // usecase에서 처리할 것이므로 여기서는 생략 가능
 
-        newHostInfo.setHost(true);
+        newHostInfo.setHost(true); // 값만 변경?
 
         gameRoomRedisService.addPlayerToRoom(roomId.toString(), newHostInfo);
 

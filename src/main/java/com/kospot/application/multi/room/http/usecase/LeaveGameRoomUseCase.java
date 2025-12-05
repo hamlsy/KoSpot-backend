@@ -36,7 +36,7 @@ public class LeaveGameRoomUseCase {
         LeaveDecision decision = makeLeaveDecision(gameRoom, member);
 
         applyLeaveToDatabase(member, gameRoom, decision);
-        // redis 상태 변경 및 todo after commit 반영, redis 방 단위 lock
+        // redis 상태 변경 및 todo redis 방 단위 lock
         eventPublisher.publishEvent(new GameRoomLeaveEvent(gameRoom,
                 member, decision));
 

@@ -19,7 +19,6 @@ public class LeaveDecision {
     private final Action action;
     private final GameRoom gameRoom;
     private final Member leavingMember;
-    private final Member newHost;
     private final GameRoomPlayerInfo newHostInfo;
 
     public static LeaveDecision normalLeave(Member member) {

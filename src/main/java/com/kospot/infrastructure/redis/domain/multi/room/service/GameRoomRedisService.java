@@ -53,6 +53,11 @@ public class GameRoomRedisService {
         }
     }
 
+    public void deleteRoomData(String roomId) {
+        String roomKey = getRoomKey(roomId);
+        redisTemplate.delete(roomKey);
+    }
+
     public GameRoomPlayerInfo removePlayerFromRoom(String roomId, Long memberId) {
         try {
             String roomKey = getRoomKey(roomId);
