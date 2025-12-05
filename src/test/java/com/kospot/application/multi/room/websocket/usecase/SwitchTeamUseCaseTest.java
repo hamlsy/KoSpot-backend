@@ -54,7 +54,7 @@ class SwitchTeamUseCaseTest {
                 .nickname("member-" + memberId)
                 .team("RED")
                 .build();
-        gameRoomRedisService.addPlayerToRoom(roomId, player);
+        gameRoomRedisService.savePlayerToRoom(roomId, player);
     }
 
     private SimpMessageHeaderAccessor buildHeaderAccessor(Long memberId) {
@@ -94,7 +94,7 @@ class SwitchTeamUseCaseTest {
                     .nickname("p" + i)
                     .team("BLUE")
                     .build();
-            gameRoomRedisService.addPlayerToRoom(roomId, p);
+            gameRoomRedisService.savePlayerToRoom(roomId, p);
         }
 
         var headerAccessor = buildHeaderAccessor(memberId);

@@ -8,7 +8,6 @@ import com.kospot.domain.multi.room.event.GameRoomJoinEvent;
 import com.kospot.domain.multi.room.event.GameRoomLeaveEvent;
 import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
-import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
 import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -32,6 +30,7 @@ public class GameRoomEventHandler {
     private final GameRoomService gameRoomService;
     private final MemberAdaptor memberAdaptor;
 
+    @Async
     @EventListener
     public void handleJoin(GameRoomJoinEvent event) {
         String roomId = event.getRoomId().toString();
@@ -45,10 +44,8 @@ public class GameRoomEventHandler {
                 .build();
 
 
-        gameRoomRedisService.addPlayerToRoom(roomId, playerInfo);
-
+        gameRoomRedisService.savePlayerToRoom(roomId, playerInfo);
         gameRoomNotificationService.notifyPlayerJoined(roomId, playerInfo);
-
         gameRoomNotificationService.notifyPlayerListUpdated(roomId);
     }
 
@@ -87,7 +84,6 @@ public class GameRoomEventHandler {
     }
 
     // todo redis lock
-    //
     @Async("taskExecutor")
     public void changeHost(GameRoom gameRoom, GameRoomPlayerInfo newHostInfo) {
         Long roomId = gameRoom.getId();
@@ -97,12 +93,8 @@ public class GameRoomEventHandler {
             return;
         }
 
-        Member newHost = memberAdaptor.queryById(newHostInfo.getMemberId());
-        gameRoomService.changeHostToMember(gameRoom, newHost); // usecase에서 처리할 것이므로 여기서는 생략 가능
-
-        newHostInfo.setHost(true); // 값만 변경?
-
-        gameRoomRedisService.addPlayerToRoom(roomId.toString(), newHostInfo);
+        newHostInfo.setHost(true);
+        gameRoomRedisService.savePlayerToRoom(roomId.toString(), newHostInfo);
 
         log.info("Host changed - RoomId: {}, NewHostId: {}, NewHostName: {}",
                 roomId, newHostInfo.getMemberId(), newHostInfo.getNickname());

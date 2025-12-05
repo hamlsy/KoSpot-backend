@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.domain.multi.gamePlayer.exception.GameTeamErrorStatus;
 import com.kospot.domain.multi.gamePlayer.exception.GameTeamHandler;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
-import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
 import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,7 +36,7 @@ public class GameRoomRedisService {
     /**
      * 게임방에 플레이어 정보 저장
      */
-    public void addPlayerToRoom(String roomId, GameRoomPlayerInfo playerInfo) {
+    public void savePlayerToRoom(String roomId, GameRoomPlayerInfo playerInfo) {
         try {
             String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
             String playerJson = objectMapper.writeValueAsString(playerInfo);

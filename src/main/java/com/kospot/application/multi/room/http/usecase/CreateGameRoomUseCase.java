@@ -31,7 +31,7 @@ public class CreateGameRoomUseCase {
         GameRoom gameRoom = gameRoomService.createGameRoom(host, request);
         // redis 설정
         GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(host, true);
-        gameRoomRedisService.addPlayerToRoom(gameRoom.getId().toString(), playerInfo);
+        gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
 
         // member profile view 설정
         if(memberProfileRedisAdaptor.findProfile(host.getId()) == null) {

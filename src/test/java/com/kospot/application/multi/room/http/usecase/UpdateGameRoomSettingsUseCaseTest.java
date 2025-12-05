@@ -116,7 +116,7 @@ public class UpdateGameRoomSettingsUseCaseTest {
                     .joinedAt(System.currentTimeMillis())
                     .build();
 
-            gameRoomRedisService.addPlayerToRoom(roomId, playerInfo);
+            gameRoomRedisService.savePlayerToRoom(roomId, playerInfo);
         }
 
         log.info("테스트 설정 완료 - 게임방 ID: {}, 플레이어 수: {}", roomId, players.size());
