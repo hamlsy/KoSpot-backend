@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class GameNotificationService {
 
     private final SimpMessagingTemplate messagingTemplate;
-
+    
     public void broadcastGameStart(String roomId, RoomGameStartMessage message) {
         try {
             String destination = MultiGameChannelConstants.getStartGameChannel(roomId);

@@ -38,7 +38,7 @@ public class SendGlobalLobbyMessageUseCase {
 
         // redis 조회
         if(memberProfileRedisAdaptor.findProfile(webSocketMemberPrincipal.getMemberId()) == null) {
-            Member member = memberAdaptor.queryById(memberId);
+            Member member = memberAdaptor.queryByIdFetchMarkerImage(memberId);
             memberProfileRedisService.saveProfile(memberId, member.getNickname(), member.getEquippedMarkerImage().getImageUrl());
         }
 

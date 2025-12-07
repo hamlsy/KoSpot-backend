@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -59,6 +60,11 @@ public class SessionContextRedisService {
     public void removeAttr(String sessionId, String attrKey) {
         String redisKey = String.format(KEY_PATTERN, sessionId);
         redisTemplate.opsForHash().delete(redisKey, attrKey);
+    }
+
+    public void removeAllAttr(String sessionId) {
+        String key = String.format(KEY_PATTERN, sessionId);
+        redisTemplate.delete(key);
     }
 
     // 전체 컨텍스트 한번에 모두 조회(Hash 전체)

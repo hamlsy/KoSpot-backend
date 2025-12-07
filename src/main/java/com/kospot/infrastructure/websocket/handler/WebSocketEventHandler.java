@@ -1,5 +1,6 @@
 package com.kospot.infrastructure.websocket.handler;
 
+import com.kospot.application.lobby.http.usecase.JoinGlobalLobbyUseCase;
 import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.application.multi.room.http.usecase.LeaveGameRoomUseCase;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
@@ -19,6 +20,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 import java.time.Duration;
@@ -40,6 +42,7 @@ public class WebSocketEventHandler {
     //usecase
     private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
+    private final JoinGlobalLobbyUseCase joinGlobalLobbyUseCase;
 
     //adaptor
     private final MemberAdaptor memberAdaptor;
@@ -52,6 +55,15 @@ public class WebSocketEventHandler {
         if (sessionId != null) {
             sessionContextRedisService.setAttr(sessionId, "connectedAt", System.currentTimeMillis());
             log.info("WebSocket 연결 성공 - SessionId: {}", sessionId);
+        }
+    }
+
+    @EventListener
+    public void handleWebSocketSubscribeLisnter(SessionSubscribeEvent event) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        String dest = headerAccessor.getDestination();
+        if ("/topic/chat/lobby".equals(dest)) {
+            joinGlobalLobbyUseCase.execute(headerAccessor); // join 처리
         }
     }
 
@@ -78,7 +90,7 @@ public class WebSocketEventHandler {
 
         Long memberId = sessionContextRedisService.getAttr(sessionId, "memberId", Long.class);
         if (memberId == null) {
-            cleanupSessionContext(sessionId);
+            sessionContextRedisService.removeAllAttr(sessionId);
             log.info("WebSocket 연결 해제 - SessionId: {} (memberId 없음)", sessionId);
             return;
         }
@@ -86,16 +98,12 @@ public class WebSocketEventHandler {
         Member member = memberAdaptor.queryById(memberId);
         Long gameRoomId = member.getGameRoomId();
 
-        String headerReason = headerAccessor.getFirstNativeHeader("reason");
-        String storedReason = sessionContextRedisService.getAttr(sessionId, "disconnectReason", String.class);
-        String reason = Optional.ofNullable(headerReason)
-                .filter(r -> !r.isBlank())
-                .orElse(Optional.ofNullable(storedReason).orElse("unknown"));
+        String reason = headerAccessor.getFirstNativeHeader("reason");
+        if (reason == null || reason.isBlank()) {
+            reason = "unknown";
+        }
 
-        PendingLeaveContext pending = sessionContextRedisService.getAttr(sessionId, "pendingRoomLeave", PendingLeaveContext.class);
-        String sessionVersion = sessionContextRedisService.getAttr(sessionId, "sessionVersion", String.class);
-
-        boolean skipRoomLeave = shouldSkipRoomLeave(reason, pending, sessionVersion);
+        boolean skipRoomLeave = shouldSkipRoomLeave(reason);
 
         try {
             leaveGlobalLobbyUseCase.execute(headerAccessor);
@@ -115,36 +123,16 @@ public class WebSocketEventHandler {
         }
 
         webSocketSessionService.cleanupSession(sessionId);
-        cleanupSessionContext(sessionId);
+        sessionContextRedisService.removeAllAttr(sessionId);
 
         log.info("WebSocket 연결 해제 - SessionId: {}, Reason: {}", sessionId, reason);
     }
 
 
-    private boolean shouldSkipRoomLeave(String reason,
-                                        PendingLeaveContext pending,
-                                        String sessionVersion) {
-        if (pending == null) {
-            return false;
-        }
-        boolean versionMatches = pending.getSessionVersion() == null
-                || Objects.equals(pending.getSessionVersion(), sessionVersion);
-        if (!versionMatches) {
-            return false;
-        }
-        boolean isNavigation = "navigate-room".equalsIgnoreCase(reason)
-                || "navigate-room".equalsIgnoreCase(pending.getReason());
-        boolean stillValid = pending.getExpiresAt() > System.currentTimeMillis();
-        return isNavigation && stillValid;
+    private boolean shouldSkipRoomLeave(String reason) {
+        return "navigate-room".equalsIgnoreCase(reason);
     }
 
-    private void cleanupSessionContext(String sessionId) {
-        sessionContextRedisService.removeAttr(sessionId, "pendingRoomLeave");
-        sessionContextRedisService.removeAttr(sessionId, "disconnectReason");
-        sessionContextRedisService.removeAttr(sessionId, "sessionVersion");
-        sessionContextRedisService.removeAttr(sessionId, "memberId");
-        sessionContextRedisService.removeAttr(sessionId, "connectedAt");
-    }
 
     private void safeCleanup(Runnable cleanup, String errorMessage) {
         try {

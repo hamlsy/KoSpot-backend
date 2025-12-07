@@ -27,6 +27,12 @@ public class MemberAdaptor {
         );
     }
 
+    public Member queryByIdFetchMarkerImage(Long memberId) {
+        return repository.findByIdFetchEquippedMarkerImage(memberId).orElseThrow(
+                () -> new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND)
+        );
+    }
+
     public List<Member> queryAllByGameRoomId(Long gameRoomId) {
         return repository.findAllByGameRoomId(gameRoomId);
     }

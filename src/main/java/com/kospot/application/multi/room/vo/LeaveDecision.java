@@ -23,6 +23,7 @@ public class LeaveDecision {
 
     public static LeaveDecision normalLeave(Member member) {
         return LeaveDecision.builder()
+                .action(Action.NORMAL_LEAVE)
                 .leavingMember(member)
                 .build();
     }

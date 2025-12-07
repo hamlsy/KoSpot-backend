@@ -150,47 +150,6 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         if (sessionId == null) {
             return;
         }
-        WebSocketMemberPrincipal principal = getPrincipal(accessor);
-        String reason = accessor.getFirstNativeHeader("reason");
-        if (reason == null || reason.isBlank()) {
-            reason = "unknown";
-        }
-        sessionContextRedisService.setAttr(sessionId, "disconnectionReason", reason);
-
-        String sessionVersion = null;
-        if(accessor.getSessionAttributes() != null) {
-            Object version = accessor.getSessionAttributes().get("sessionVersion");
-            if (version instanceof String) {
-                sessionVersion = (String) version;
-            }
-        }
-        if (sessionVersion == null) {
-            sessionVersion = sessionContextRedisService.getAttr(sessionId, "sessionVersion", String.class);
-        }
-        if (sessionVersion == null) {
-            sessionVersion = UUID.randomUUID().toString();
-            sessionContextRedisService.setAttr(sessionId, "sessionVersion", sessionVersion);
-        }
-        try {
-            Member member = memberAdaptor.queryById(principal.getMemberId());
-            Long gameRoomId = member.getGameRoomId();
-
-            if (gameRoomId != null) {
-                PendingLeaveContext pending =
-                        new PendingLeaveContext(
-                                gameRoomId,
-                                reason,
-                                System.currentTimeMillis() + PENDING_LEAVE_GRACE_MILLIS,
-                                sessionVersion
-                        );
-                sessionContextRedisService.setAttr(sessionId, "pendingRoomLeave", pending);
-            }
-        } catch (Exception e) {
-            log.warn("Failed to prepare pending leave - MemberId: {}", principal.getMemberId(), e);
-        }
-
-        log.info("WebSocket disconnect initiated - MemberId: {}, SessionId: {}, Reason: {}",
-                principal.getMemberId(), sessionId, reason);
     }
 
     private void handleUnsubscribe(StompHeaderAccessor accessor) {
