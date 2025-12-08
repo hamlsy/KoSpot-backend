@@ -2,6 +2,7 @@ package com.kospot.domain.chat.service;
 
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.repository.ChatMessageRepository;
+import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants;
 import com.kospot.presentation.chat.dto.event.ChatMessageEvent;
@@ -27,6 +28,12 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
+    @WebSocketDoc(
+            payloadType = ChatMessage.class,
+            trigger = "글로벌 로비 채팅 메시지 전송",
+            description = "글로벌 로비에 채팅 메시지를 전송합니다.",
+            destination = GLOBAL_LOBBY_CHANNEL
+    )
     public void sendGlobalLobbyMessage(ChatMessage chatMessage) {
         processAndSend(
                 chatMessage,
@@ -65,6 +72,12 @@ public class ChatService {
         }
     }
 
+    @WebSocketDoc(
+            payloadType = ChatMessage.class,
+            trigger = "게임방 채팅 메시지 전송",
+            description = "특정 게임방에 채팅 메시지를 전송합니다.",
+            destination = GameRoomChannelConstants.PREFIX_GAME_ROOM + "/{roomId}/chat"
+    )
     public void sendGameRoomMessage(ChatMessage chatMessage) {
         processAndSend(chatMessage,
                 ChatMessageEvent.GameRoom::from,
@@ -72,6 +85,12 @@ public class ChatService {
         );
     }
 
+    @WebSocketDoc(
+            payloadType = ChatMessage.class,
+            trigger = "솔로게임 채팅 메시지 전송",
+            description = "특정 솔로게임에 채팅 메시지를 전송합니다.",
+            destination = MultiGameChannelConstants.PREFIX_GAME + "/{roomId}/chat/global"
+    )
     public void sendSoloGameMessage(ChatMessage chatMessage) {
         processAndSend(chatMessage,
                 ChatMessageEvent.MultiGameGlobal::from,
