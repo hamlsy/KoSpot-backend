@@ -75,7 +75,7 @@ public class RoundCompletionEventListener {
         switch (matchType) {
             case SOLO -> {
                 RoadViewRoundResponse.PlayerResult result = endRoadViewSoloRoundUseCase.execute(gameId, roundId);
-                gameRoundNotificationService.broadcastRoundResults(gameRoomId, result);
+                gameRoundNotificationService.broadcastRoadViewSoloRoundResults(gameRoomId, result);
 
                 MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
                 startTransitionTimer(gameRoomId, game);
@@ -125,7 +125,7 @@ public class RoundCompletionEventListener {
                 );
 
                 // 다음 라운드 시작 알림 브로드캐스트
-                gameRoundNotificationService.broadcastRoundStart(gameRoomId, nextRound);
+                gameRoundNotificationService.broadcastRoadViewRoundStart(gameRoomId, nextRound);
             }
             case PHOTO -> {
             }

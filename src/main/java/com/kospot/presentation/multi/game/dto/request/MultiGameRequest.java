@@ -13,7 +13,6 @@ public class MultiGameRequest {
 
         private String gameModeKey;
         private String playerMatchTypeKey;
-        private int totalRounds;
         private Integer timeLimit;
 
     }

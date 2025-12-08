@@ -5,7 +5,7 @@ import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;

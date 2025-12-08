@@ -1,4 +1,4 @@
-package com.kospot.presentation.multi.gameroom.controller;
+package com.kospot.presentation.multi.room.controller;
 
 
 import com.kospot.application.multi.game.usecase.NotifyStartGameUseCase;
@@ -7,10 +7,10 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
-import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
-import com.kospot.presentation.multi.gameroom.dto.response.FindGameRoomResponse;
-import com.kospot.presentation.multi.gameroom.dto.response.GameRoomDetailResponse;
-import com.kospot.presentation.multi.gameroom.dto.response.GameRoomResponse;
+import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
+import com.kospot.presentation.multi.room.dto.response.FindGameRoomResponse;
+import com.kospot.presentation.multi.room.dto.response.GameRoomDetailResponse;
+import com.kospot.presentation.multi.room.dto.response.GameRoomResponse;
 import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multi.game.dto.response.MultiGameResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -96,9 +96,8 @@ public class GameRoomController {
     @Operation(summary = "게임 시작 알림", description = "게임 시작을 알립니다.")
     @PostMapping("/{roomId}/start")
     public ApiResponseDto<MultiGameResponse.StartGame> notifyStartGame(@CurrentMember Member member,
-                                                                       @PathVariable("roomId") Long roomId,
-                                                                       @RequestBody MultiGameRequest.Start request) {
-        return ApiResponseDto.onSuccess(notifyStartGameUseCase.execute(member, roomId, request));
+                                                                       @PathVariable("roomId") Long roomId) {
+        return ApiResponseDto.onSuccess(notifyStartGameUseCase.execute(member, roomId));
     }
 
 }

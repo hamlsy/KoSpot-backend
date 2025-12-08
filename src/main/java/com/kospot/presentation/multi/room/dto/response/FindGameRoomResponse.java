@@ -1,4 +1,4 @@
-package com.kospot.presentation.multi.gameroom.dto.response;
+package com.kospot.presentation.multi.room.dto.response;
 
 import com.kospot.domain.multi.room.entity.GameRoom;
 import lombok.*;

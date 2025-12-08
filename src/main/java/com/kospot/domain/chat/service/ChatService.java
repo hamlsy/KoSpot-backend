@@ -29,7 +29,7 @@ public class ChatService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     @WebSocketDoc(
-            payloadType = ChatMessage.class,
+            payloadType = ChatMessageEvent.GlobalLobby.class,
             trigger = "글로벌 로비 채팅 메시지 전송",
             description = "글로벌 로비에 채팅 메시지를 전송합니다.",
             destination = GLOBAL_LOBBY_CHANNEL
@@ -73,7 +73,7 @@ public class ChatService {
     }
 
     @WebSocketDoc(
-            payloadType = ChatMessage.class,
+            payloadType = ChatMessageEvent.GameRoom.class,
             trigger = "게임방 채팅 메시지 전송",
             description = "특정 게임방에 채팅 메시지를 전송합니다.",
             destination = GameRoomChannelConstants.PREFIX_GAME_ROOM + "/{roomId}/chat"
@@ -86,10 +86,10 @@ public class ChatService {
     }
 
     @WebSocketDoc(
-            payloadType = ChatMessage.class,
+            payloadType = ChatMessageEvent.MultiGameGlobal.class,
             trigger = "솔로게임 채팅 메시지 전송",
             description = "특정 솔로게임에 채팅 메시지를 전송합니다.",
-            destination = MultiGameChannelConstants.PREFIX_GAME + "/{roomId}/chat/global"
+            destination = MultiGameChannelConstants.PREFIX_GAME + "{roomId}/chat/global"
     )
     public void sendSoloGameMessage(ChatMessage chatMessage) {
         processAndSend(chatMessage,

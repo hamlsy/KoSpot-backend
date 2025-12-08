@@ -1,6 +1,9 @@
 package com.kospot.infrastructure.redis.domain.member.adaptor;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
+import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.redis.domain.member.dao.MemberProfileRedisRepository;
+import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +15,18 @@ public class MemberProfileRedisAdaptor {
 
     private static final String MEMBER_PROFILE_KEY = "member:%s:profile";
 
+    private final MemberAdaptor memberAdaptor;
+    private final MemberProfileRedisService memberProfileRedisService;
     private final MemberProfileRedisRepository memberProfileRedisRepository;
 
     public MemberProfileView findProfile(Long memberId) {
         String key = buildKey(memberId);
         Map<Object, Object> data = memberProfileRedisRepository.findProfile(key);
         if (data == null || data.isEmpty()) {
-            return null;
+            Member member = memberAdaptor.queryByIdFetchMarkerImage(memberId);
+            MemberProfileView profileView = new MemberProfileView(memberId, member.getNickname(), member.getEquippedMarkerImage().getImageUrl());
+            memberProfileRedisService.saveProfile(memberId, profileView.nickname, profileView.markerImageUrl);
+            return profileView;
         }
         String nickname = (String) data.get("nickname");
         String markerImageUrl = (String) data.get("markerImageUrl");

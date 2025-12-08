@@ -35,6 +35,8 @@ public class GameRoom extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private PlayerMatchType playerMatchType;
 
+    private int totalRounds;
+
     private int timeLimit; // 시간 제한
 
     private boolean privateRoom;
@@ -73,7 +75,7 @@ public class GameRoom extends BaseTimeEntity {
     }
 
     public void update(String title, int timeLimit, GameMode gameMode, PlayerMatchType playerMatchType,
-                       boolean privateRoom, String password, int teamCount) {
+                       boolean privateRoom, String password, int teamCount, int totalRounds) {
         this.title = title;
         this.timeLimit = timeLimit;
         this.gameMode = gameMode;
@@ -81,6 +83,7 @@ public class GameRoom extends BaseTimeEntity {
         this.privateRoom = privateRoom;
         this.password = password;
         this.teamCount = teamCount;
+        this.totalRounds = totalRounds;
     }
 
     public void join(Member player, String inputPassword, Long gameRoomId) {

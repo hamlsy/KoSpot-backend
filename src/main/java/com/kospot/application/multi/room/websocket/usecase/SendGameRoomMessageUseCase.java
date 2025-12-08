@@ -7,6 +7,7 @@ import com.kospot.domain.chat.vo.MessageType;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,15 @@ import org.springframework.scheduling.annotation.Async;
 public class SendGameRoomMessageUseCase {
 
     private final ChatService chatService;
+    private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
     @Async("chatRoomExecutor")
     public void execute(String roomId, ChatMessageDto.GameRoom dto, SimpMessageHeaderAccessor headerAccessor) {
         WebSocketMemberPrincipal webSocketMemberPrincipal = WebSocketMemberPrincipal.getPrincipal(headerAccessor);
-        SendGameRoomMessageCommand command = SendGameRoomMessageCommand.from(roomId, dto, webSocketMemberPrincipal);
+        MemberProfileRedisAdaptor.MemberProfileView memberProfileView =
+                memberProfileRedisAdaptor.findProfile(webSocketMemberPrincipal.getMemberId());
+
+        SendGameRoomMessageCommand command = SendGameRoomMessageCommand.from(roomId, dto, memberProfileView);
         validateCommand(command);
         ChatMessage chatMessage = createGameRoomChatMessage(command);
         chatService.sendGameRoomMessage(chatMessage);

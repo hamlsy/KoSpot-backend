@@ -1,6 +1,6 @@
 package com.kospot.presentation.multi.access.dto.response;
 
-import com.kospot.presentation.multi.gameroom.dto.response.GameRoomDetailResponse;
+import com.kospot.presentation.multi.room.dto.response.GameRoomDetailResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

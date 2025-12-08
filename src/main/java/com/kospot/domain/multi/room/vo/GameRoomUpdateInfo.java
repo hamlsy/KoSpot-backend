@@ -15,5 +15,6 @@ public class GameRoomUpdateInfo {
     private final String password;
     private final boolean privateRoom;
     private final int teamCount;
+    private final int totalRounds;
 
 }

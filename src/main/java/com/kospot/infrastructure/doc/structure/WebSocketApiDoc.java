@@ -23,21 +23,21 @@ public class WebSocketApiDoc {
 
     @Data
     @Builder
-    class ServerInfo {
+    static class ServerInfo {
         private String url;
         private String protocol;
     }
 
     @Data
     @Builder
-    class ChannelInfo {
+    static class ChannelInfo {
         private OperationInfo subscribe;
         private OperationInfo publish;
     }
 
     @Data
     @Builder
-    class OperationInfo {
+    static class OperationInfo {
         private String description;
         private String trigger;
         private MessageInfo message;
@@ -45,7 +45,7 @@ public class WebSocketApiDoc {
 
     @Data
     @Builder
-    class MessageInfo {
+    static class MessageInfo {
         private Object payload;
     }
 

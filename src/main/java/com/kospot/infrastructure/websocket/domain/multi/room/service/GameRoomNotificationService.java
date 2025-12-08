@@ -8,7 +8,7 @@ import com.kospot.domain.multi.room.vo.GameRoomUpdateInfo;
 import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.room.constants.*;
-import com.kospot.presentation.multi.gameroom.dto.message.GameRoomUpdateMessage;
+import com.kospot.presentation.multi.room.dto.message.GameRoomUpdateMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
