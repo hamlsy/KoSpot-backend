@@ -12,6 +12,8 @@ import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNot
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -29,6 +31,9 @@ public class GameRoomEventHandler {
     private final GameRoomNotificationService gameRoomNotificationService;
     private final GameRoomService gameRoomService;
     private final MemberAdaptor memberAdaptor;
+
+    //redis
+    private final RedissonClient redissonClient;
 
     @Async
     @EventListener
@@ -49,11 +54,14 @@ public class GameRoomEventHandler {
         gameRoomNotificationService.notifyPlayerListUpdated(roomId);
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+//    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT) // 구현 안되었다고 가정
     public void handleLeave(GameRoomLeaveEvent event) {
         LeaveDecision decision = event.getDecision();
         GameRoom gameRoom = event.getGameRoom();
         String roomId = gameRoom.getId().toString();
+        // lock
+//        String lockKey = "lock:game:room:leave:" + roomId;
+//        RLock lock = redissonClient.getLock(lockKey);
 
         Member player = event.getLeavingMember();
         Long playerId = player.getId();
@@ -83,8 +91,6 @@ public class GameRoomEventHandler {
         gameRoomNotificationService.notifyPlayerListUpdated(roomId);
     }
 
-    // todo redis lock
-    @Async("taskExecutor")
     public void changeHost(GameRoom gameRoom, GameRoomPlayerInfo newHostInfo) {
         Long roomId = gameRoom.getId();
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(roomId.toString());
