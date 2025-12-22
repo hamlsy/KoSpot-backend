@@ -2,6 +2,9 @@ package com.kospot.infrastructure.redis.common.config;
 
 import com.kospot.infrastructure.redis.domain.multi.timer.lisnter.GameTimerKeyExpirationListener;
 import lombok.RequiredArgsConstructor;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -77,6 +80,20 @@ public class RedisConfig {
         container.addMessageListener(listener, new PatternTopic("__keyevent@*__:expired"));
 
         return container;
+    }
+
+    @Bean
+    public RedissonClient redissonClient() {
+        Config config = new Config();
+        String redisUrl = "redis://" + redisHost + ":" + redisPort;
+        config.useSingleServer()
+                .setAddress(redisUrl);
+        
+        if (redisPassword != null && !redisPassword.isBlank()) {
+            config.useSingleServer().setPassword(redisPassword);
+        }
+        
+        return Redisson.create(config);
     }
 
 }

@@ -66,6 +66,13 @@ public class GameRoomNotification {
     }
 
     /**
+     * 방장 변경 알림
+     */
+    public static GameRoomNotification hostChanged(String roomId, GameRoomPlayerInfo newHostInfo) {
+        return of(GameRoomNotificationType.HOST_CHANGED, roomId, newHostInfo, null);
+    }
+
+    /**
      * 방 설정 변경 알림 (추후 확장)
      */
 //    public static GameRoomNotification settingChanged(String roomId, Object settingPayload) {

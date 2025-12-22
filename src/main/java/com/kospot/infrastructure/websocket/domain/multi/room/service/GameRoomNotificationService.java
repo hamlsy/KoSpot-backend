@@ -59,6 +59,16 @@ public class GameRoomNotificationService {
         log.info("Player kicked - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 
+    /**
+     * 방장 변경 알림
+     */
+    public void notifyHostChanged(String roomId, GameRoomPlayerInfo newHostInfo) {
+        GameRoomNotification notification = GameRoomNotification.hostChanged(roomId, newHostInfo);
+        sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+        log.info("Host changed - RoomId: {}, NewHostId: {}, NewHostName: {}",
+                roomId, newHostInfo.getMemberId(), newHostInfo.getNickname());
+    }
+
     @WebSocketDoc(
         description = "게임방 플레이어 리스트 갱신 알림",
         destination = PREFIX_GAME_ROOM + "{roomId}/playerList",

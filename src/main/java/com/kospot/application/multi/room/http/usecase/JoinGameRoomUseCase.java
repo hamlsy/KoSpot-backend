@@ -5,6 +5,7 @@ import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.event.GameRoomJoinEvent;
 import com.kospot.domain.multi.room.service.GameRoomService;
+import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
@@ -35,6 +36,7 @@ public class JoinGameRoomUseCase {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
         validateGameCapacityV1(gameRoom);
         gameRoomService.joinGameRoom(player, gameRoom, request);
+        
         // member profile view 설정
         if(memberProfileRedisAdaptor.findProfile(player.getId()) == null) {
             memberProfileRedisService.saveProfile(
@@ -43,8 +45,23 @@ public class JoinGameRoomUseCase {
                     player.getEquippedMarkerImage().getImageUrl()
             );
         }
+        
+        // GameRoom Redis 저장
+        boolean isHost = gameRoom.isHost(player);
+        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.builder()
+                .memberId(player.getId())
+                .markerImageUrl(player.getEquippedMarkerImage().getImageUrl())
+                .isHost(isHost)
+                .nickname(player.getNickname())
+//                .team(request.getTeam())
+                .joinedAt(System.currentTimeMillis())
+                .build();
+        gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
+        
+        // 알림용 이벤트 발행 (Redis 작업 완료 후)
+        //todo team 랜덤 배정
         eventPublisher.publishEvent(new GameRoomJoinEvent(
-                gameRoomId, player.getId(), player.getNickname(), player.getEquippedMarkerImage().getImageUrl(), null, false
+                gameRoomId, player.getId(), player.getNickname(), player.getEquippedMarkerImage().getImageUrl(), null, isHost
         ));
     }
 
