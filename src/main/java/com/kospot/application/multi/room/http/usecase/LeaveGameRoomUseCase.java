@@ -11,6 +11,7 @@ import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class LeaveGameRoomUseCase {
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
     private final GameRoomRedisService gameRoomRedisService;
+    private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
     private final ApplicationEventPublisher eventPublisher;
     private final RedissonClient redissonClient;
 
@@ -174,6 +176,96 @@ public class LeaveGameRoomUseCase {
                 // 별도 처리 없음
                 break;
         }
+    }
+
+    /**
+     * 테스트용: 분산 락 없이 실행하는 메서드
+     * 기존 로직을 재현하여 Race Condition 문제를 검증하기 위해 사용
+     * 
+     * 기존 로직의 문제점:
+     * 1. pickNextHostByJoinedAt으로 다음 방장 후보 선택
+     * 2. removePlayerFromRoom으로 퇴장 플레이어 제거
+     * 3. 재검증 없이 savePlayerToRoom으로 방장 지정
+     * 
+     * 이로 인해 이미 퇴장한 플레이어가 방장으로 지정될 수 있음
+     */
+    public void executeWithoutLock(Member member, Long gameRoomId) {
+        GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
+        String roomId = gameRoom.getId().toString();
+        
+        // 기존 로직 재현: 분산 락 없이 실행
+        LeaveDecision decision = makeLeaveDecisionWithoutLock(gameRoom, member, roomId);
+        GameRoomPlayerInfo playerInfo = applyLeaveToRedisWithoutLock(gameRoom, member, decision, roomId);
+        
+        applyLeaveToDatabase(member, gameRoom, decision);
+        gameRoomRedisService.cleanupPlayerSession(member.getId());
+        
+        // 이벤트 발행
+        eventPublisher.publishEvent(new GameRoomLeaveEvent(gameRoom, member, decision, playerInfo));
+    }
+
+    /**
+     * 분산 락 없이 다음 방장 결정 (기존 로직 재현)
+     */
+    private LeaveDecision makeLeaveDecisionWithoutLock(
+            GameRoom gameRoom,
+            Member member,
+            String roomId
+    ) {
+        if (gameRoom.isNotHost(member)) {
+            return LeaveDecision.normalLeave(member);
+        }
+        
+        // 기존 로직: pickNextHostByJoinedAt 사용
+        Optional<GameRoomPlayerInfo> nextHostCandidate = 
+                gameRoomRedisAdaptor.pickNextHostByJoinedAt(roomId, member.getId());
+        
+        if (nextHostCandidate.isEmpty()) {
+            return LeaveDecision.deleteRoom(gameRoom, member);
+        }
+        
+        return LeaveDecision.changeHost(
+                gameRoom,
+                member,
+                nextHostCandidate.get()
+        );
+    }
+
+    /**
+     * 분산 락 없이 Redis에 적용 (기존 로직 재현 - 재검증 없이)
+     */
+    private GameRoomPlayerInfo applyLeaveToRedisWithoutLock(
+            GameRoom gameRoom,
+            Member member,
+            LeaveDecision decision,
+            String roomId
+    ) {
+        Long playerId = member.getId();
+        
+        // 1. 플레이어 제거
+        GameRoomPlayerInfo playerInfo = gameRoomRedisService.removePlayerFromRoom(roomId, playerId);
+        
+        // 2. LeaveDecision에 따른 추가 Redis 작업
+        switch (decision.getAction()) {
+            case DELETE_ROOM:
+                gameRoomRedisService.deleteRoomData(roomId);
+                log.info("Game room deleted - RoomId: {}", roomId);
+                break;
+            case CHANGE_HOST:
+                // 기존 로직: 재검증 없이 바로 방장 지정 (문제 발생 지점)
+                GameRoomPlayerInfo newHostInfo = decision.getNewHostInfo();
+                newHostInfo.setHost(true);
+                gameRoomRedisService.savePlayerToRoom(roomId, newHostInfo);
+                log.info("Host changed (without lock) - RoomId: {}, NewHostId: {}, NewHostName: {}",
+                        gameRoom.getId(), newHostInfo.getMemberId(), newHostInfo.getNickname());
+                log.warn("⚠️ 재검증 없이 방장 지정 - 이미 퇴장한 플레이어가 방장으로 지정될 수 있음");
+                break;
+            case NORMAL_LEAVE:
+                // 별도 처리 없음
+                break;
+        }
+        
+        return playerInfo;
     }
 
 }

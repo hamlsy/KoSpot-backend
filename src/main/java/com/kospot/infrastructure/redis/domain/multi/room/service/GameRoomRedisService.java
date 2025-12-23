@@ -212,6 +212,14 @@ public class GameRoomRedisService {
         log.debug("Room capacity check - RoomId: {}, Current: {}, Max: {}, CanJoin: {}",
                 roomId, currentCount, maxPlayers, canJoin);
 
+        // #region agent log
+        try {
+            java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
+                    (java.time.Instant.now().toEpochMilli() + "|cannotJoinRoom|check|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"GameRoomRedisService.java:207\",\"message\":\"방 정원 확인\",\"data\":{\"roomId\":\"" + roomId + "\",\"currentCount\":" + currentCount + ",\"maxPlayers\":" + maxPlayers + ",\"canJoin\":" + canJoin + "}}\n").getBytes(),
+                    java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+        } catch (Exception e) {}
+        // #endregion
+
         return !canJoin;
     }
 

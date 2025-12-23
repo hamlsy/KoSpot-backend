@@ -169,7 +169,7 @@ class ConcurrentSubmissionTest {
         
         // 1단계: 게임 생성
         com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
         // 2단계: 1라운드 준비
@@ -314,7 +314,7 @@ class ConcurrentSubmissionTest {
         
         // 1단계: 게임 생성
         com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
         // 2단계: 1라운드 준비
@@ -417,7 +417,7 @@ class ConcurrentSubmissionTest {
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);
 
         com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse =
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
 
         MultiRoadViewGameResponse.StartPlayerGame startResponse =
@@ -595,7 +595,6 @@ class ConcurrentSubmissionTest {
 
     private MultiGameRequest.Start createStartRequest(Long gameRoomId, Integer timeLimit) {
         return MultiGameRequest.Start.builder()
-                .totalRounds(5)
                 .timeLimit(timeLimit)
                 .playerMatchTypeKey("SOLO")
                 .gameModeKey("ROADVIEW")
