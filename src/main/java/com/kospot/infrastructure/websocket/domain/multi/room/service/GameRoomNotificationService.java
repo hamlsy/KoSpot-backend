@@ -62,6 +62,12 @@ public class GameRoomNotificationService {
     /**
      * 방장 변경 알림
      */
+    @WebSocketDoc(
+        description = "게임방 방장 변경 알림",
+        destination = PREFIX_GAME_ROOM + "{roomId}/playerList",
+        payloadType = GameRoomNotification.class,
+        trigger = "방장이 변경될 때마다"
+    )
     public void notifyHostChanged(String roomId, GameRoomPlayerInfo newHostInfo) {
         GameRoomNotification notification = GameRoomNotification.hostChanged(roomId, newHostInfo);
         sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
