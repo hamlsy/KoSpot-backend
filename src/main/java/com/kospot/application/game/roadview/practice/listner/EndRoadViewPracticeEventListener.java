@@ -1,6 +1,5 @@
 package com.kospot.application.game.roadview.practice.listner;
 
-import com.kospot.application.game.roadview.practice.event.UpdatePointEvent;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.event.RoadViewPracticeEvent;
 import com.kospot.domain.game.vo.GameMode;
@@ -19,7 +18,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class EndRoadViewPracticeEventListener {
 
-    private final UpdatePointEvent updatePointEvent;
     private final MemberStatisticService memberStatisticService;
 
     @Async
@@ -29,7 +27,7 @@ public class EndRoadViewPracticeEventListener {
             Member member = event.getMember();
             RoadViewGame game = event.getRoadViewGame();
 
-            updatePointEvent.updatePoint(member, game);
+//            updatePointEvent.updatePoint(member, game); // 연습모드 포인트 미지급 처리
             memberStatisticService.updateSingleGameStatistic(member, GameMode.ROADVIEW, GameType.PRACTICE, game.getScore(), game.getEndedAt());
         }catch (Exception e){
             throw new EventHandler(ErrorStatus.EVENT_GAME_END_ERROR);
