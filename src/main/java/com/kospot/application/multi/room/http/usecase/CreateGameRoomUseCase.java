@@ -9,8 +9,8 @@ import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
-import com.kospot.presentation.multi.gameroom.dto.response.GameRoomResponse;
+import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
+import com.kospot.presentation.multi.room.dto.response.GameRoomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ public class CreateGameRoomUseCase {
         GameRoom gameRoom = gameRoomService.createGameRoom(host, request);
         // redis 설정
         GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(host, true);
-        gameRoomRedisService.addPlayerToRoom(gameRoom.getId().toString(), playerInfo);
+        gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
 
         // member profile view 설정
         if(memberProfileRedisAdaptor.findProfile(host.getId()) == null) {

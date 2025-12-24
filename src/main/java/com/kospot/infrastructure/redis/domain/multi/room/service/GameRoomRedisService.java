@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.domain.multi.gamePlayer.exception.GameTeamErrorStatus;
 import com.kospot.domain.multi.gamePlayer.exception.GameTeamHandler;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
-import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
 import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,12 +36,10 @@ public class GameRoomRedisService {
     /**
      * 게임방에 플레이어 정보 저장
      */
-    public void addPlayerToRoom(String roomId, GameRoomPlayerInfo playerInfo) {
+    public void savePlayerToRoom(String roomId, GameRoomPlayerInfo playerInfo) {
         try {
             String roomKey = String.format(ROOM_PLAYERS_KEY, roomId);
             String playerJson = objectMapper.writeValueAsString(playerInfo);
-
-            //todo implement member detail statistic info in http methods -> 그냥 http 요청으로 처리, redis에 너무 많은 데이터
             gameRoomRedisRepository.savePlayer(roomKey, playerInfo.getMemberId().toString(), playerJson, ROOM_DATA_EXPIRY_HOURS);
 
             log.debug("Added player to room Redis - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
@@ -53,6 +49,11 @@ public class GameRoomRedisService {
                     roomId, playerInfo.getMemberId(), e);
             throw new RuntimeException("플레이어 정보 저장 실패", e);
         }
+    }
+
+    public void deleteRoomData(String roomId) {
+        String roomKey = getRoomKey(roomId);
+        redisTemplate.delete(roomKey);
     }
 
     public GameRoomPlayerInfo removePlayerFromRoom(String roomId, Long memberId) {
@@ -75,6 +76,10 @@ public class GameRoomRedisService {
                     roomId, memberId, e);
             return null;
         }
+    }
+
+    public void changeHost() {
+
     }
 
     public List<GameRoomPlayerInfo> getRoomPlayers(String roomId) {
@@ -207,51 +212,15 @@ public class GameRoomRedisService {
         log.debug("Room capacity check - RoomId: {}, Current: {}, Max: {}, CanJoin: {}",
                 roomId, currentCount, maxPlayers, canJoin);
 
-        return !canJoin;
-    }
-
-
-    /**
-     * 세션 정보 저장
-     */
-    public void saveSessionInfo(String sessionId, String roomId, String destination, Long memberId) {
-        // 세션의 구독 정보 저장
-        String sessionKey = String.format(SESSION_SUBSCRIPTIONS_KEY, sessionId);
-        redisTemplate.opsForSet().add(sessionKey, destination);
-        redisTemplate.expire(sessionKey, SESSION_EXPIRY_HOURS, TimeUnit.HOURS);
-
-        // 플레이어 세션 매핑
-        String playerSessionKey = String.format(PLAYER_SESSION_KEY, memberId);
-        redisTemplate.opsForValue().set(playerSessionKey, sessionId, SESSION_EXPIRY_HOURS, TimeUnit.HOURS);
-
-        // 세션-룸 매핑
-        String sessionRoomKey = String.format(SESSION_ROOM_KEY, sessionId);
-        redisTemplate.opsForValue().set(sessionRoomKey, roomId, SESSION_EXPIRY_HOURS, TimeUnit.HOURS);
-    }
-
-    public String getRoomIdFromSession(String sessionId) {
-        String sessionRoomKey = String.format(SESSION_ROOM_KEY, sessionId);
-        return redisTemplate.opsForValue().get(sessionRoomKey);
-    }
-
-    public Long getMemberIdFromSession(String sessionId) {
+        // #region agent log
         try {
-            Set<String> playerKeys = redisTemplate.keys(String.format(PLAYER_SESSION_KEY, "*"));
-            if (playerKeys != null) {
-                for (String playerKey : playerKeys) {
-                    String storedSessionId = redisTemplate.opsForValue().get(playerKey);
-                    if (sessionId.equals(storedSessionId)) {
-                        // 키에서 멤버 ID 추출: game:player:{memberId}:session
-                        String[] parts = playerKey.split(":");
-                        return Long.parseLong(parts[2]);
-                    }
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            log.error("Failed to get member ID from session: {}", sessionId, e);
-            return null;
-        }
+            java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
+                    (java.time.Instant.now().toEpochMilli() + "|cannotJoinRoom|check|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"GameRoomRedisService.java:207\",\"message\":\"방 정원 확인\",\"data\":{\"roomId\":\"" + roomId + "\",\"currentCount\":" + currentCount + ",\"maxPlayers\":" + maxPlayers + ",\"canJoin\":" + canJoin + "}}\n").getBytes(),
+                    java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+        } catch (Exception e) {}
+        // #endregion
+
+        return !canJoin;
     }
 
     public void cleanupPlayerSession(Long memberId) {

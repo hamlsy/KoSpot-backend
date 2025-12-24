@@ -78,6 +78,7 @@ public enum ErrorStatus implements BaseCode {
     GAME_ROOM_IS_NOT_ENOUGH_PLAYER(BAD_REQUEST, 4307, "게임 방에 참여할 플레이어가 부족합니다."),
     GAME_ROOM_CANNOT_JOIN_NOW(BAD_REQUEST, 4308, "현재 게임 방에 참여할 수 없습니다."),
     GAME_ROOM_PLAYER_NOT_FOUND(NOT_FOUND, 4309, "해당 게임 방 플레이어를 찾을 수 없습니다."),
+    GAME_ROOM_OPERATION_IN_PROGRESS(BAD_REQUEST, 4310, "방 작업이 진행 중입니다."),
 
     // MultiGame Error(4311 ~ 4320)
     PLAYER_MATCH_TYPE_NOT_FOUND(NOT_FOUND, 4311, "해당 플레이어 매치 타입을 찾을 수 없습니다."),

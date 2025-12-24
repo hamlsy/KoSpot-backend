@@ -5,9 +5,10 @@ import com.kospot.domain.multi.room.vo.GameRoomNotification;
 import com.kospot.domain.multi.room.vo.GameRoomNotificationType;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multi.room.vo.GameRoomUpdateInfo;
+import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.room.constants.*;
-import com.kospot.presentation.multi.gameroom.dto.message.GameRoomUpdateMessage;
+import com.kospot.presentation.multi.room.dto.message.GameRoomUpdateMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -58,8 +59,22 @@ public class GameRoomNotificationService {
         log.info("Player kicked - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 
-    /** ---------------- 전체 리스트 갱신 이벤트 ---------------- **/
+    /**
+     * 방장 변경 알림
+     */
+    public void notifyHostChanged(String roomId, GameRoomPlayerInfo newHostInfo) {
+        GameRoomNotification notification = GameRoomNotification.hostChanged(roomId, newHostInfo);
+        sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+        log.info("Host changed - RoomId: {}, NewHostId: {}, NewHostName: {}",
+                roomId, newHostInfo.getMemberId(), newHostInfo.getNickname());
+    }
 
+    @WebSocketDoc(
+        description = "게임방 플레이어 리스트 갱신 알림",
+        destination = PREFIX_GAME_ROOM + "{roomId}/playerList",
+        payloadType = GameRoomNotification.class,
+        trigger = "플레이어 입장/퇴장 시"
+    )
     public void notifyPlayerListUpdated(String roomId) {
         try {
             List<GameRoomPlayerInfo> allPlayers = gameRoomRedisService.getRoomPlayers(roomId);
@@ -73,6 +88,12 @@ public class GameRoomNotificationService {
     /**
      * 방 설정 변경 알림
      */
+    @WebSocketDoc(
+        description = "게임방 설정 변경 알림",
+        destination = PREFIX_GAME_ROOM + "{roomId}/settings",
+        payloadType = GameRoomUpdateMessage.class,
+        trigger = "게임방 설정이 변경될 때마다"
+    )
     public void notifyRoomSettingsChanged(String roomId, GameRoomUpdateInfo updateInfo) {
         try {
 

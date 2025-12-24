@@ -158,7 +158,7 @@ class MultiGameFinishedAndPointDistributionTest {
         
         // 1단계: 게임 생성
         com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
         // 2단계: 1라운드 준비
@@ -212,7 +212,7 @@ class MultiGameFinishedAndPointDistributionTest {
         
         // 1단계: 게임 생성
         com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
         // 2단계: 1라운드 준비
@@ -272,7 +272,7 @@ class MultiGameFinishedAndPointDistributionTest {
         
         // 1단계: 게임 생성
         com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
         // 2단계: 1라운드 준비
@@ -352,7 +352,7 @@ class MultiGameFinishedAndPointDistributionTest {
         
         // 1단계: 게임 생성
         com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId(), startRequest);
+                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
         // 2단계: 1라운드 준비
@@ -427,7 +427,6 @@ class MultiGameFinishedAndPointDistributionTest {
         return MultiGameRequest.Start.builder()
                 .playerMatchTypeKey("SOLO")
                 .gameModeKey("ROADVIEW")
-                .totalRounds(totalRounds)
                 .timeLimit(timeLimit)
                 .build();
     }

@@ -11,7 +11,6 @@ public interface MultiGameStartStrategy { // 게임 시작 컨텍스트를 모�
     boolean supports(GameMode gameMode, PlayerMatchType matchType);
 
     StartGamePreparation prepare(GameRoom gameRoom,
-                                 MultiGameRequest.Start request,
                                  GameMode gameMode,
                                  PlayerMatchType matchType);
 

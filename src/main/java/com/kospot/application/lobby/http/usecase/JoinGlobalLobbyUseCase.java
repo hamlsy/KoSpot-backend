@@ -15,8 +15,6 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 @RequiredArgsConstructor
 public class JoinGlobalLobbyUseCase {
 
-    private final MemberProfileRedisService memberProfileRedisService;
-    private final MemberAdaptor memberAdaptor;
     private final LobbyPresenceService lobbyPresenceService;
 
     public long execute(SimpMessageHeaderAccessor headerAccessor) {

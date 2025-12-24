@@ -5,7 +5,7 @@ import com.kospot.domain.multi.gamePlayer.exception.GameTeamHandler;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,7 +54,7 @@ class SwitchTeamUseCaseTest {
                 .nickname("member-" + memberId)
                 .team("RED")
                 .build();
-        gameRoomRedisService.addPlayerToRoom(roomId, player);
+        gameRoomRedisService.savePlayerToRoom(roomId, player);
     }
 
     private SimpMessageHeaderAccessor buildHeaderAccessor(Long memberId) {
@@ -94,7 +94,7 @@ class SwitchTeamUseCaseTest {
                     .nickname("p" + i)
                     .team("BLUE")
                     .build();
-            gameRoomRedisService.addPlayerToRoom(roomId, p);
+            gameRoomRedisService.savePlayerToRoom(roomId, p);
         }
 
         var headerAccessor = buildHeaderAccessor(memberId);

@@ -8,7 +8,6 @@ import com.kospot.domain.multi.submission.event.EarlyRoundCompletionEvent;
 import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
-import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;
 import lombok.RequiredArgsConstructor;
@@ -86,11 +85,11 @@ public class CheckAndCompleteRoundEarlyUseCase {
      */
     private long getExpectedSubmissionCount(PlayerMatchType matchType, String gameRoomId) {
         return switch (matchType) {
-            case SOLO -> gameRoomRedisAdaptor.getCurrentPlayers(gameRoomId);
+            case SOLO -> gameRoomRedisAdaptor.getCurrentPlayersCount(gameRoomId);
             case TEAM -> {
                 // TODO: Redis에서 팀 수 조회 로직 구현
                 log.warn("⚠️ Team mode expected count not implemented yet");
-                yield gameRoomRedisAdaptor.getCurrentPlayers(gameRoomId);
+                yield gameRoomRedisAdaptor.getCurrentPlayersCount(gameRoomId);
             }
         };
     }

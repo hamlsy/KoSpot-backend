@@ -1,10 +1,11 @@
-package com.kospot.presentation.multi.gameroom.controller;
+package com.kospot.presentation.multi.room.controller;
 
 import com.kospot.application.multi.room.websocket.usecase.SendGameRoomMessageUseCase;
 import com.kospot.application.multi.room.websocket.usecase.SetGameRoomIdAttrUseCase;
 import com.kospot.application.multi.room.websocket.usecase.SwitchTeamUseCase;
+import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
-import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,12 @@ public class GameRoomWebSocketController {
      * 클라이언트: /app/room.123.chat
      * 구독: /topic/room/123/chat
      */
+    @WebSocketDoc(
+            description = "게임방 채팅 메시지 전송",
+            destination = "/app/room.{roomId}.chat",
+            payloadType = ChatMessageDto.GameRoom.class,
+            trigger = "게임 방 메시지"
+    )
     @MessageMapping("/room.{roomId}.chat")
     public void sendRoomMessage(@DestinationVariable("roomId")  String roomId, @Valid @Payload ChatMessageDto.GameRoom dto, SimpMessageHeaderAccessor headerAccessor){
         sendGameRoomMessageUseCase.execute(roomId, dto, headerAccessor);

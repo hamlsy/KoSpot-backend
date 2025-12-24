@@ -1,8 +1,10 @@
 package com.kospot.domain.member.service;
 
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.member.exception.MemberHandler;
 import com.kospot.domain.member.repository.MemberRepository;
 import com.kospot.domain.member.vo.Role;
+import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,12 @@ public class MemberService {
 
     public void updateNickname(Member member, String nickname) {
         member.setNickname(nickname);
+    }
+
+    public void validateAdmin(Member member) {
+        if (member.isNotAdmin()) {
+            throw new MemberHandler(ErrorStatus.AUTH_ADMIN_PRIVILEGES_REQUIRED);
+        }
     }
 
 }

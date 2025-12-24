@@ -1,5 +1,6 @@
 package com.kospot.infrastructure.websocket.domain.multi.game.service;
 
+import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import com.kospot.application.multi.game.message.LoadingStatusMessage;
 import com.kospot.presentation.multi.flow.dto.message.RoomGameStartMessage;
@@ -15,6 +16,12 @@ public class GameNotificationService {
 
     private final SimpMessagingTemplate messagingTemplate;
 
+    @WebSocketDoc(
+        trigger = "게임 시작할 때",
+        description = "특정 게임 방에 게임 시작 알림 메시지를 방송합니다.",
+        destination = MultiGameChannelConstants.PREFIX_GAME + "{roomId}/start",
+        payloadType = RoomGameStartMessage.class
+    )
     public void broadcastGameStart(String roomId, RoomGameStartMessage message) {
         try {
             String destination = MultiGameChannelConstants.getStartGameChannel(roomId);
@@ -25,6 +32,12 @@ public class GameNotificationService {
         }
     }
 
+    @WebSocketDoc(
+        trigger = "게임 창으로 넘어갈 때",
+        description = "로딩 상태 알림 메시지를 방송합니다.",
+        destination = MultiGameChannelConstants.PREFIX_GAME + "{roomId}/loading/status",
+        payloadType = LoadingStatusMessage.class
+    )
     public void broadcastLoadingStatus(String roomId, LoadingStatusMessage message) {
         try {
             String destination = MultiGameChannelConstants.getLoadingStatusChannel(roomId);

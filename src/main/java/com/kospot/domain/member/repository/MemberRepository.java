@@ -18,6 +18,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m left join fetch m.equippedMarkerImage where m.username = :username")
     Optional<Member> findByUsernameFetchEquippedMarkerImage(@Param("username") String username);
 
+    @Query("select m from Member m left join fetch m.equippedMarkerImage where m.id = :memberId")
+    Optional<Member> findByIdFetchEquippedMarkerImage(@Param("memberId") Long memberId);
+
     Optional<Member> findByUsername(String username);
 
     Page<Member> findAllByOrderByCreatedDateDesc(Pageable pageable);

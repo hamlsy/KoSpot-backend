@@ -10,7 +10,7 @@ import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,7 +103,7 @@ public class DebugTeamTest {
                     .joinedAt(System.currentTimeMillis())
                     .build();
 
-            gameRoomRedisService.addPlayerToRoom(roomId, playerInfo);
+            gameRoomRedisService.savePlayerToRoom(roomId, playerInfo);
         }
 
         log.info("디버그 테스트 설정 완료 - 게임방 ID: {}, 플레이어 수: {}", roomId, players.size());

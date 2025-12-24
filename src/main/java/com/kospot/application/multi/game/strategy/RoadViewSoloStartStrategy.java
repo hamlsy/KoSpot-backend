@@ -36,11 +36,10 @@ public class RoadViewSoloStartStrategy implements MultiGameStartStrategy {
      * 로드뷰 개인전 시작 컨텍스트를 구성해 게임, 플레이어 정보를 준비한다.
      */
     public StartGamePreparation prepare(GameRoom gameRoom,
-                                        MultiGameRequest.Start request,
                                         GameMode gameMode,
                                         PlayerMatchType matchType) {
         // 게임 생성
-        MultiRoadViewGame game = multiRoadViewGameService.createGame(gameRoom, request);
+        MultiRoadViewGame game = multiRoadViewGameService.createGame(gameRoom);
 
         // 게임 플레이어 생성
         List<GamePlayer> gamePlayers = gamePlayerService.createRoadViewGamePlayers(gameRoom, game);

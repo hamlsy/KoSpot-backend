@@ -9,7 +9,7 @@ import com.kospot.domain.multi.room.repository.GameRoomRepository;
 import com.kospot.domain.multi.room.vo.GameRoomUpdateInfo;
 import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.presentation.multi.gameroom.dto.request.GameRoomRequest;
+import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +24,7 @@ public class GameRoomService {
     private final MemberAdaptor memberAdaptor;
     private final GameRoomRepository gameRoomRepository;
 
+    // join까지 한번에 처리
     public GameRoom createGameRoom(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = request.toEntity();
         gameRoom.setHost(host);
@@ -35,7 +36,7 @@ public class GameRoomService {
     public GameRoom updateGameRoom(GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {
         gameRoom.update(updateInfo.getTitle(),updateInfo.getTimeLimit(),
                 GameMode.fromKey(updateInfo.getGameModeKey()), PlayerMatchType.fromKey(updateInfo.getPlayerMatchTypeKey()),
-                updateInfo.isPrivateRoom(), updateInfo.getPassword(), updateInfo.getTeamCount());
+                updateInfo.isPrivateRoom(), updateInfo.getPassword(), updateInfo.getTeamCount(), updateInfo.getTotalRounds());
         return gameRoom;
     }
 
@@ -43,13 +44,8 @@ public class GameRoomService {
         gameRoom.join(player, request.getPassword(), gameRoom.getId());
     }
 
-    //todo refactoring
-    // 지금은 방장이 나가면 게임 방 삭제
     public void leaveGameRoom(Member player, GameRoom gameRoom) {
-        if(gameRoom.isHost(player)){
-            deleteRoom(gameRoom);
-        }
-//        gameRoom.leaveRoom(player);
+        gameRoom.leaveRoom(player);
     }
 
     public void deleteRoom(GameRoom gameRoom) {

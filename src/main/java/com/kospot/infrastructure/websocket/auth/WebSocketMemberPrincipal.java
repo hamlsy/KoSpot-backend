@@ -22,4 +22,5 @@ public class WebSocketMemberPrincipal implements Principal {
     public static WebSocketMemberPrincipal getPrincipal(SimpMessageHeaderAccessor headerAccessor) {
         return (WebSocketMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
     }
+
 }

@@ -1,4 +1,4 @@
-package com.kospot.presentation.multi.gameroom.dto.response;
+package com.kospot.presentation.multi.room.dto.response;
 
 import com.kospot.domain.multi.room.entity.GameRoom;
 import lombok.*;
@@ -16,6 +16,7 @@ public class GameRoomResponse {
     private String gameModeKey;
     private String playerMatchTypeKey;
     private int maxPlayers;
+    private int totalRounds;
 
     public static GameRoomResponse from(GameRoom gameRoom) {
         return GameRoomResponse.builder()
@@ -25,6 +26,7 @@ public class GameRoomResponse {
                 .maxPlayers(gameRoom.getMaxPlayers())
                 .gameModeKey(gameRoom.getGameMode().name())
                 .playerMatchTypeKey(gameRoom.getPlayerMatchType().name())
+                .totalRounds(gameRoom.getTotalRounds())
                 .build();
     }
 

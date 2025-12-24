@@ -51,7 +51,7 @@ public class GameRoomRedisServiceTeamTest {
 
         // Redis에 플레이어들 추가
         for (GameRoomPlayerInfo player : testPlayers) {
-            gameRoomRedisService.addPlayerToRoom(TEST_ROOM_ID, player);
+            gameRoomRedisService.savePlayerToRoom(TEST_ROOM_ID, player);
         }
 
         log.info("테스트 설정 완료 - RoomId: {}, 플레이어 수: {}", TEST_ROOM_ID, testPlayers.size());
@@ -180,8 +180,8 @@ public class GameRoomRedisServiceTeamTest {
         
         // 동일한 플레이어들을 두 방에 추가
         for (GameRoomPlayerInfo player : testPlayers) {
-            gameRoomRedisService.addPlayerToRoom(roomId1, player);
-            gameRoomRedisService.addPlayerToRoom(roomId2, player);
+            gameRoomRedisService.savePlayerToRoom(roomId1, player);
+            gameRoomRedisService.savePlayerToRoom(roomId2, player);
         }
 
         // When - 두 방 모두에 팀 할당
@@ -219,7 +219,7 @@ public class GameRoomRedisServiceTeamTest {
         GameRoomPlayerInfo testPlayer = createPlayerInfo(999L, "테스트플레이어", false);
         
         // When - 플레이어 추가
-        gameRoomRedisService.addPlayerToRoom(testRoomId, testPlayer);
+        gameRoomRedisService.savePlayerToRoom(testRoomId, testPlayer);
         
         // Then - 데이터가 저장되었는지 확인
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(testRoomId);

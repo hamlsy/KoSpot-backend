@@ -1,4 +1,4 @@
-package com.kospot.presentation.multi.gameroom.dto.response;
+package com.kospot.presentation.multi.room.dto.response;
 
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
@@ -21,6 +21,7 @@ public class GameRoomDetailResponse {
     private String gameType;
     private boolean privateRoom;
     private int maxPlayers;
+    private int totalRounds;
 
     private List<GameRoomPlayerResponse> connectedPlayers;
 
@@ -39,6 +40,7 @@ public class GameRoomDetailResponse {
                                 p -> p.toResponse(p))
                                 .collect(Collectors.toList())
                 )
+                .totalRounds(gameRoom.getTotalRounds())
                 .build();
     }
 

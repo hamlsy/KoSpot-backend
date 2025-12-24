@@ -1,4 +1,4 @@
-package com.kospot.presentation.multi.gameroom.dto.message;
+package com.kospot.presentation.multi.room.dto.message;
 
 import com.kospot.domain.multi.room.vo.GameRoomUpdateInfo;
 import lombok.Builder;

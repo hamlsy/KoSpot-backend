@@ -1,4 +1,4 @@
-package com.kospot.presentation.multi.gameroom.dto.request;
+package com.kospot.presentation.multi.room.dto.request;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
@@ -25,6 +25,7 @@ public class GameRoomRequest {
     public static class Create {
 
         private String title;
+        private int totalRounds;
         private int timeLimit;
         private String password;
         private String gameModeKey;
@@ -44,6 +45,7 @@ public class GameRoomRequest {
                     .isPoiNameVisible(isPoiNameVisible)
                     .status(GameRoomStatus.WAITING)
                     .privateRoom(privateRoom)
+                    .totalRounds(totalRounds)
                     .build();
         }
     }
@@ -63,6 +65,7 @@ public class GameRoomRequest {
         private boolean privateRoom;
         private boolean isPoiNameVisible;
         private int teamCount;
+        private int totalRounds;
 
     }
 

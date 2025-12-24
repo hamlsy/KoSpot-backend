@@ -50,8 +50,8 @@ public class SimpleTeamTest {
                 .build();
 
         // Redis에 플레이어 추가
-        gameRoomRedisService.addPlayerToRoom(testRoomId, player1);
-        gameRoomRedisService.addPlayerToRoom(testRoomId, player2);
+        gameRoomRedisService.savePlayerToRoom(testRoomId, player1);
+        gameRoomRedisService.savePlayerToRoom(testRoomId, player2);
 
         // When - 팀 할당
         gameRoomRedisService.assignAllPlayersTeam(testRoomId);

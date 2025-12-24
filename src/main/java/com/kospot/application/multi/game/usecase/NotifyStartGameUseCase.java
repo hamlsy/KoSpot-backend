@@ -36,19 +36,15 @@ public class NotifyStartGameUseCase {
     /**
      * 방장이 게임 시작을 요청하면 모드별 전략으로 컨텍스트를 만들고 로딩 단계를 연다.
      */
-    public MultiGameResponse.StartGame execute(Member host, Long gameRoomId, MultiGameRequest.Start request) {
+    public MultiGameResponse.StartGame execute(Member host, Long gameRoomId) {
         if (gameRoomId == null) {
             throw new GameHandler(ErrorStatus.GAME_ROOM_NOT_FOUND);
         }
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
         gameRoom.start(host);
 
-        GameMode gameMode = resolveGameMode(gameRoom, request);
-        PlayerMatchType matchType = resolveMatchType(gameRoom, request);
-
-        if (request.getTimeLimit() == null) {
-            request.setTimeLimit(gameRoom.getTimeLimit());
-        }
+        GameMode gameMode = gameRoom.getGameMode();
+        PlayerMatchType matchType = gameRoom.getPlayerMatchType();
 
         MultiGameStartStrategy strategy = startStrategies.stream()
                 .filter(it -> it.supports(gameMode, matchType))
@@ -56,7 +52,7 @@ public class NotifyStartGameUseCase {
                 .orElseThrow(() -> new GameHandler(ErrorStatus.GAME_TYPE_NOT_FOUND));
 
         MultiGameStartStrategy.StartGamePreparation preparation =
-                strategy.prepare(gameRoom, request, gameMode, matchType);
+                strategy.prepare(gameRoom, gameMode, matchType);
 
         MultiGameResponse.StartGame response = preparation.startGame();
         String roomKey = gameRoom.getId().toString();

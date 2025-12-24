@@ -8,6 +8,7 @@ import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.service.AESService;
 import com.kospot.domain.game.service.RoadViewGameService;
+import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.game.dto.response.StartGameResponse;
@@ -34,12 +35,13 @@ public class ReIssueRoadViewCoordinateUseCase {
         Coordinate newCoordinate = getNewCoordinate(game.getPracticeSido());
         roadViewGameService.updateCoordinate(game, newCoordinate);
 
-        return getEncryptedRoadViewGameResponse(member, game);
+        return getEncryptedRoadViewGameResponse(game);
     }
 
     //encrypt -> response
-    private StartGameResponse.ReIssue getEncryptedRoadViewGameResponse(Member member, RoadViewGame game) {
+    private StartGameResponse.ReIssue getEncryptedRoadViewGameResponse(RoadViewGame game) {
         return StartGameResponse.ReIssue.builder()
+                .poiName(game.getGameType().equals(GameType.PRACTICE) ? game.getCoordinate().getPoiName() : "")
                 .targetLat(aesService.toEncryptString(game.getCoordinate().getLat()))
                 .targetLng(aesService.toEncryptString(game.getCoordinate().getLng()))
                 .build();
