@@ -2,32 +2,54 @@
 
 ## 프로젝트 소개
 
-KoSpot은 대한민국 내 랜드마크 및 관광지를 기반으로 한 위치 추론 게임 서비스입니다. 유저는 다양한 게임 모드를 통해 랜드마크를 맞히고, 랭크 시스템을 통해 경쟁할 수 있습니다.
-
-이 백엔드는 Spring Boot를 기반으로 구현되었으며, 게임 데이터 관리, 랭킹 시스템, 사용자 기록 저장 및 조회 등의 기능을 제공합니다.
+KoSpot은 대한민국 내 랜드마크와 관광지를 기반으로 한 위치 추론 게임 서비스입니다. 
+사용자들이 스트리트뷰나 사진을 보고 정확한 위치를 맞추는 게임을 플레이할 수 있으며, 
+싱글 플레이와 멀티플레이 모드를 지원합니다.
 
 ## 기술 스택
 
-- 🚀 **Backend Framework**:  Spring Boot
-- 🗄️ **Database**:  MySQL 8, Spring Data JPA
-- ☁️ **Cloud & Deployment**: 
-- ⚡ **Caching**: Redis
-- 🔐 **Authentication**: 
-- 🛠 **Build & CI/CD**: 
+- **Backend Framework**: Spring Boot 3.4.1
+- **Language**: Java 17
+- **Database**: MySQL 8, Spring Data JPA
+- **Caching**: Redis, Redisson (분산 락)
+- **WebSocket**: Spring WebSocket (STOMP)
+- **Authentication**: Spring Security OAuth2 (Google, Naver, Kakao), JWT
+- **File Storage**: AWS S3
+- **Build Tool**: Gradle
+- **API Documentation**: Springdoc OpenAPI (Swagger)
 
 ## 주요 기능
 
-### 메인
+### 게임
+- **싱글 플레이**
+  - 로드뷰 연습 모드: 지역별 연습 플레이
+  - 로드뷰 랭크 모드: 랭크 점수 변동
+  - 게임 기록 저장 및 통계 제공
+- **멀티 플레이**
+  - 실시간 게임 방 생성 및 참가
+  - 개인전/팀전 모드 지원
+  - WebSocket 기반 실시간 통신
+  - 라운드별 정답 제출 및 점수 계산
+- **랭킹 시스템**
+  - 8단계 티어 시스템 (BRONZE ~ CHALLENGER)
+  - 게임 점수 기반 레이팅 계산
+  - 티어별 포인트 배수 적용
 
 ### 상점
+- 마커, 프로필, 이펙트, 테마 아이템 판매
+- 포인트 기반 아이템 구매
+- 인벤토리 관리 및 아이템 장착
 
-### 게임
-- 게임 기록 저장 및 통계 제공
-- 랭킹 시스템 (포인트 기반 랭크 계산)
+### 포인트 시스템
+- 게임 결과에 따른 포인트 획득
+- 티어별 포인트 배수 차등 적용
+- 포인트 사용 내역 기록
 
-### 관리
-- 관광지 좌표 데이터 저장 및 조회
-
+### 관리 기능
+- 관광지 좌표 데이터 관리 (엑셀 일괄 등록 지원)
+- 게임 모드 활성화/비활성화 설정
+- 공지사항 및 배너 관리
+- 회원 관리 및 통계 조회
 
 ## 성능 개선 및 버그 해결
 
@@ -61,23 +83,30 @@ KoSpot은 대한민국 내 랜드마크 및 관광지를 기반으로 한 위치
 
 ## 프로젝트 구조
 
-```bash
+```
 kospot-backend/
-├── src/main/java/com/kospot/kospot/
-│   ├── application/        # UseCase 계층
-│   ├── domain/    # entity, dto, service 계층
-│   ├── exception/       # exception 계층
-│   ├── global/    # aop, config 클래스
-│   ├── presentation/        # Controller 계층
+├── src/main/java/com/kospot/
+│   ├── application/           # UseCase 계층 (비즈니스 로직 오케스트레이션)
+│   ├── domain/                # 도메인 계층 (Entity, Service, Repository)
+│   ├── infrastructure/        # 인프라 계층 (Config, Security, Exception)
+│   ├── presentation/          # Controller 계층 (REST API, WebSocket)
 │
 ├── src/main/resources/
-│   ├── application.yml # 환경설정 파일
-│   └── data/excel/ # 좌표 데이터 파일
-└── Dockerfile         # Docker 빌드 파일 
+│   ├── application.yml        # 환경설정 파일
+│   └── data/excel/            # 좌표 데이터 파일
+│
+├── docs/                      # API 문서 및 설계 문서
+└── Dockerfile                 # Docker 빌드 파일
 ```
 
+## 아키텍처
+
+- **Domain-Driven Design (DDD)** 기반 계층 구조
+- UseCase 레이어를 통한 비즈니스 로직 분리
+- Redis를 활용한 실시간 데이터 관리 및 캐싱
+- WebSocket(STOMP) 기반 실시간 멀티플레이 지원
 
 ---
 
-[이메일](dltmddud1122@naver.com)
+문의: dltmddud1122@naver.com
 
