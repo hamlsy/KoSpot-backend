@@ -5,6 +5,10 @@ on:
     branches:
       - main
       - master
+    paths-ignore:
+        - "**/*.md"
+        - "README.md"
+        - "docs/**"
   workflow_dispatch:
 
 env:
