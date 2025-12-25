@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class MemberItemResponse {
 
     private Long memberItemId;
+    private String itemType;
     private String name;
     private String description;
     private boolean isEquipped;
