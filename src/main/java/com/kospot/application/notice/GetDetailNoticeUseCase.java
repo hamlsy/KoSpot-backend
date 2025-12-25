@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class FindDetailNoticeUseCase {
+public class GetDetailNoticeUseCase {
 
     private final NoticeAdaptor noticeAdaptor;
 

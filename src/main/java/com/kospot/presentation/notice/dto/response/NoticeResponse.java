@@ -1,5 +1,6 @@
 package com.kospot.presentation.notice.dto.response;
 
+import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.notice.entity.Notice;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,14 +35,29 @@ public class NoticeResponse {
     public static class Detail {
         private Long noticeId;
         private String title;
-        private String content;
+        private String contentHtml;
         private LocalDateTime createdDate;
         public static Detail from(Notice notice) {
             return Detail.builder()
                     .noticeId(notice.getId())
                     .title(notice.getTitle())
-                    .content(notice.getContent())
+                    .contentHtml(notice.getContentHtml())
                     .createdDate(notice.getCreatedDate())
+                    .build();
+        }
+
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class NoticeImage {
+        private Long imageId;   // DB Image PK
+        private String url;     // 예: https://cdn.../notice-images/{imageId}/{uuid}.png
+        public static NoticeImage from(Image image) {
+            return NoticeImage.builder()
+                    .imageId(image.getId())
+                    .url(image.getImageUrl())
                     .build();
         }
 

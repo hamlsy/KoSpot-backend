@@ -4,9 +4,8 @@ import com.kospot.domain.image.adaptor.ImageAdaptor;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.vo.ImageType;
 import com.kospot.domain.image.repository.ImageRepository;
-import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.item.vo.ItemType;
-import com.kospot.infrastructure.service.AwsS3Service;
+import com.kospot.infrastructure.s3.service.AwsS3Service;
 import com.kospot.presentation.image.dto.request.ImageRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +48,17 @@ public class ImageService {
         List<Image> images = files.stream().map(f -> uploadImage(f, S3_NOTICE_PATH, ImageType.NOTICE)).collect(Collectors.toList());
         imageRepository.saveAll(images);
         return images;
+    }
+
+    public Image uploadNoticeImage(MultipartFile file) {
+        if(isNotValidImage(file)) {
+            return null;
+        }
+        Image image = uploadImage(file, S3_NOTICE_PATH, ImageType.NOTICE);
+        assert image != null;
+        image.updateStatusToTemp();
+        imageRepository.save(image);
+        return image;
     }
 
     private Image uploadImage(MultipartFile file, String uploadFilePath, ImageType imageType) {

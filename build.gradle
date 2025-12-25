@@ -57,6 +57,10 @@ dependencies {
 	//thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+	// markdown
+	implementation "com.vladsch.flexmark:flexmark-all:0.64.8"
+	implementation "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1"
+
 	//flyway
 //	implementation 'org.flywaydb:flyway-core'
 //	runtimeOnly 'mysql:mysql-connector-j'

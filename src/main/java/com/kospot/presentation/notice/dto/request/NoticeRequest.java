@@ -15,8 +15,7 @@ public class NoticeRequest {
     public static class Create {
 
         private String title;
-        private String content;
-        private List<MultipartFile> images;
+        private String contentMd;   // markdown
     }
 
     @Data
@@ -27,8 +26,10 @@ public class NoticeRequest {
     public static class Update {
 
         private String title;
-        private String content;
+        private String contentMd;   // markdown
 
     }
+
+
 
 }

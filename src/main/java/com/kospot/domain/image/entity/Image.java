@@ -2,6 +2,7 @@ package com.kospot.domain.image.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.image.vo.ImageType;
+import com.kospot.domain.item.vo.ImageStatus;
 import com.kospot.domain.notice.entity.Notice;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,9 @@ public class Image extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
+    @Enumerated(EnumType.STRING)
+    private ImageStatus imageStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
     private Notice notice;
@@ -36,10 +40,20 @@ public class Image extends BaseTimeEntity {
         return Image.builder()
                 .imagePath(imagePath)
                 .s3Key(s3Key)
+                .imageStatus(ImageStatus.ATTACHED)
                 .imageName(imageName)
                 .imageUrl(imageUrl)
                 .imageType(imageType)
                 .build();
+    }
+
+    public void updateStatusToTemp() {
+        this.imageStatus = ImageStatus.TEMP;
+    }
+
+    public void attachToNotice(Notice notice) {
+        this.imageStatus = ImageStatus.ATTACHED;
+        this.notice = notice;
     }
 
     //business
