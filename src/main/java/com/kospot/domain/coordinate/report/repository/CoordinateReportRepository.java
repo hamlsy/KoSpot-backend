@@ -12,7 +12,7 @@ public interface CoordinateReportRepository extends JpaRepository<CoordinateRepo
 
     List<CoordinateReport> findByCoordinateId(Long coordinateId);
 
-    @Query("SELECT cr FROM CoordinateReport cr WHERE cr.reporterMemberId = :memberId ORDER BY cr.createdAt DESC")
+    @Query("SELECT cr FROM CoordinateReport cr WHERE cr.reporterMemberId = :memberId ORDER BY cr.createdDate DESC")
     List<CoordinateReport> findAllByMemberId(@Param("memberId") Long memberId);
 
     boolean existsByReporterMemberIdAndCoordinateId(Long reporterMemberId, Long coordinateId);

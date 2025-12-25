@@ -1,5 +1,6 @@
 package com.kospot.presentation.memberitem.dto.response;
 
+import com.kospot.domain.item.vo.ItemType;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class MemberItemResponse {
 
     private Long memberItemId;
-    private String itemType;
+    private ItemType itemType;
     private String name;
     private String description;
     private boolean isEquipped;

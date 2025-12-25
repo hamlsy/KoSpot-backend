@@ -2,12 +2,14 @@ package com.kospot.application.coordinate.report;
 
 import com.kospot.domain.coordinate.report.service.CoordinateReportService;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.coordinate.report.dto.request.CoordinateReportRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
+@UseCase
 @Transactional
 @RequiredArgsConstructor
 public class ReportCoordinateUseCase {
