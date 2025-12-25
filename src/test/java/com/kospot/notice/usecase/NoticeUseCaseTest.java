@@ -33,7 +33,7 @@ public class NoticeUseCaseTest {
     private FindAllNoticePagingUseCase findAllNoticePagingUseCase;
 
     @Autowired
-    private FindDetailNoticeUseCase findDetailNoticeUseCase;
+    private GetDetailNoticeUseCase getDetailNoticeUseCase;
 
     @Autowired
     private DeleteNoticeUseCase deleteNoticeUseCase;
@@ -118,7 +118,7 @@ public class NoticeUseCaseTest {
         Notice notice = createTempNotice();
 
         //when
-        NoticeResponse.Detail response = findDetailNoticeUseCase.execute(notice.getId());
+        NoticeResponse.Detail response = getDetailNoticeUseCase.execute(notice.getId());
 
         //then
         assertEquals(notice.getTitle(), response.getTitle());

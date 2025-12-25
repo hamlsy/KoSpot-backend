@@ -19,23 +19,20 @@ import java.util.List;
 @Transactional
 public class NoticeService {
 
-    private final NoticeAdaptor noticeAdaptor;
-    private final ImageService imageService;
     private final NoticeRepository noticeRepository;
+    private final NoticeContentRenderer noticeContentRenderer;
 
-    public void createNotice(NoticeRequest.Create request, List<Image> images) {
+    public Notice createNotice(NoticeRequest.Create request) {
+        String safeHtml = noticeContentRenderer.renderToSafeHtml(request.getContentMd());
         Notice notice = Notice.create(
-                request.getTitle(), request.getContent()
+                request.getTitle(), request.getContentMd(), safeHtml
         );
-        if(images != null) {
-            notice.addImages(images);
-        }
-        noticeRepository.save(notice);
+        return noticeRepository.save(notice);
     }
 
-    //todo refactor image, content order
     public void updateNotice(Notice notice, NoticeRequest.Update request) {
-        notice.update(request.getTitle(), request.getContent());
+        String safeHtml = noticeContentRenderer.renderToSafeHtml(request.getContentMd());
+        notice.update(request.getTitle(), request.getContentMd(), safeHtml);
     }
 
     //todo delete

@@ -25,27 +25,33 @@ public class Notice extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
+    @Column(length = 200, nullable = false)
     private String title;
 
     @Lob
+    @Column(columnDefinition = "LONGTEXT", nullable = false)
+    private String contentMd;     // 마크다운 원문
+
+    @Lob
     @Column(columnDefinition = "LONGTEXT")
-    private String content;
+    private String contentHtml;   // (선택) 렌더 결과 캐시
 
     @OneToMany(mappedBy = "notice", fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
     //business
-    public static Notice create(String title, String content) {
+    public static Notice create(String title, String contentMd, String contentHtml) {
         return Notice.builder()
                 .title(title)
-                .content(content)
+                .contentMd(contentMd)
+                .contentHtml(contentHtml)
                 .build();
     }
 
-    public void update(String title, String content) {
+    public void update(String title, String contentMd, String contentHtml) {
         this.title = title;
-        this.content = content;
+        this.contentMd = contentMd;
+        this.contentHtml = contentHtml;
     }
 
     public void addImages(List<Image> images) {
@@ -53,7 +59,7 @@ public class Notice extends BaseTimeEntity {
     }
 
     private void addImage(Image image) {
-        images.add(image);
+        this.images.add(image);
         image.setNoticeFk(this);
     }
 

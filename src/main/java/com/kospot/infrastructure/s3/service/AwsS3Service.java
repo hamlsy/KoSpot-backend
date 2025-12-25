@@ -1,4 +1,4 @@
-package com.kospot.infrastructure.service;
+package com.kospot.infrastructure.s3.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;

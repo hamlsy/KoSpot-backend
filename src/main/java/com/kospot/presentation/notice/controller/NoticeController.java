@@ -12,7 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,10 +28,12 @@ import java.util.List;
 public class NoticeController {
 
     private final FindAllNoticePagingUseCase findAllNoticePagingUseCase;
-    private final FindDetailNoticeUseCase findDetailNoticeUseCase;
+    private final GetDetailNoticeUseCase getDetailNoticeUseCase;
     private final CreateNoticeUseCase createNoticeUseCase;
     private final DeleteNoticeUseCase deleteNoticeUseCase;
     private final UpdateNoticeUseCase updateNoticeUseCase;
+
+    private final UploadNoticeImageUseCase uploadNoticeImageUseCase;
 
     @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 리스트를 조회합니다.")
     @GetMapping("/")
@@ -42,18 +46,16 @@ public class NoticeController {
     @GetMapping("/{id}")
     public ApiResponseDto<NoticeResponse.Detail> findDetailNotice(
             @PathVariable("id") Long noticeId) {
-        return ApiResponseDto.onSuccess(findDetailNoticeUseCase.execute(noticeId));
+        return ApiResponseDto.onSuccess(getDetailNoticeUseCase.execute(noticeId));
     }
 
-    //todo html notice create(insert image) - admin
     @Operation(summary = "공지사항 생성", description = "공지사항을 생성합니다.")
-    @PostMapping("/")
-    public ApiResponseDto<?> createNotice(@CurrentMember Member member, @ModelAttribute NoticeRequest.Create request) {
+    @PostMapping
+    public ApiResponseDto<?> createNotice(@CurrentMember Member member, @RequestBody NoticeRequest.Create request) {
         createNoticeUseCase.execute(member, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
-    //todo html notice update - admin
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
     @PutMapping("/{id}")
     public ApiResponseDto<?> updateNotice(@CurrentMember Member member, @PathVariable("id") Long noticeId, @ModelAttribute NoticeRequest.Update request) {
@@ -68,5 +70,13 @@ public class NoticeController {
         deleteNoticeUseCase.execute(member, noticeId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
+
+    @Operation(summary = "공지사항 이미지 첨부", description = "공지사항 작성 시 이미지를 첨부합니다.")
+    @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponseDto<NoticeResponse.NoticeImage> uploadNoticeImage(@CurrentMember Member member, @RequestParam("file") MultipartFile file) {
+        NoticeResponse.NoticeImage noticeImage = uploadNoticeImageUseCase.execute(file, member);
+        return ApiResponseDto.onSuccess(noticeImage);
+    }
+
 
 }
