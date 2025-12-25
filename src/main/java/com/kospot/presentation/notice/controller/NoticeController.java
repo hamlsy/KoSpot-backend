@@ -36,7 +36,7 @@ public class NoticeController {
     private final UploadNoticeImageUseCase uploadNoticeImageUseCase;
 
     @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 리스트를 조회합니다.")
-    @GetMapping("/")
+    @GetMapping
     public ApiResponseDto<List<NoticeResponse.Summary>> findAllPaging(
             @RequestParam(value = "page", defaultValue = "0") int page) {
         return ApiResponseDto.onSuccess(findAllNoticePagingUseCase.execute(page));

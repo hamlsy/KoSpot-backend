@@ -39,8 +39,8 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
 
 
     @Query("select new com.kospot.presentation.memberitem.dto.response.MemberItemResponse(" +
-            "mi.id, mi.item.itemType, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
-            "from MemberItem mi join mi.item " +
+            "mi.id, mi.item.itemType, mi.item.image.imageUrl, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
+            "from MemberItem mi join mi.item join mi.item.image " +
             "where mi.member = :member and mi.item.itemType = :itemType")
     List<MemberItemResponse> findAllByMemberAndItemTypeFetch(@Param("member") Member member,
                                                              @Param("itemType") ItemType itemType);
@@ -52,8 +52,8 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
     long countEquippedByMember(@Param("member") Member member);
 
     @Query("select new com.kospot.presentation.memberitem.dto.response.MemberItemResponse(" +
-            "mi.id, mi.item.itemType, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
-            "from MemberItem mi join mi.item " +
+            "mi.id, mi.item.itemType, mi.item.image.imageUrl, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
+            "from MemberItem mi join mi.item join mi.item.image " +
             "where mi.member = :member")
     List<MemberItemResponse> findAllByMemberFetch(@Param("member") Member member);
 

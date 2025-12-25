@@ -15,6 +15,7 @@ public class MemberItemResponse {
 
     private Long memberItemId;
     private ItemType itemType;
+    private String itemImageUrl;
     private String name;
     private String description;
     private boolean isEquipped;
