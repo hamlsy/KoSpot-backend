@@ -66,8 +66,11 @@ public class MemberAdaptor {
     }
 
     public Member queryFirstBotMember() {
-        return repository.findFirstBot().orElseThrow(
-                () -> new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND)
-        );
+        Member member = repository.findAllBot().get(0);
+        if(member == null) {
+            throw new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND);
+        }
+        return member;
+
     }
 }

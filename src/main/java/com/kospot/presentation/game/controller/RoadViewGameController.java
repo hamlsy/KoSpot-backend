@@ -7,6 +7,7 @@ import com.kospot.application.game.roadview.practice.usecase.EndRoadViewPractice
 import com.kospot.application.game.roadview.practice.usecase.StartRoadViewPracticeUseCase;
 import com.kospot.application.game.roadview.rank.usecase.EndRoadViewRankUseCase;
 import com.kospot.application.game.roadview.rank.usecase.StartRoadViewRankUseCase;
+import com.kospot.infrastructure.annotation.adsense.BotSuccess;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.presentation.game.dto.response.EndGameResponse;
@@ -62,6 +63,7 @@ public class RoadViewGameController {
      */
 
     @Operation(summary = "로드뷰 연습 게임 시작", description = "로드뷰 연습 게임을 시작합니다.")
+    @BotSuccess
     @PostMapping("/practice/start")
     public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@CurrentMember Member member, @RequestParam("sido") String sidoKey) {
         return ApiResponseDto.onSuccess(startRoadViewPracticeUseCase.execute(member, sidoKey));
@@ -81,6 +83,7 @@ public class RoadViewGameController {
      * -----------------RANK------------------
      */
     @Operation(summary = "로드뷰 랭크 게임 시작", description = "로드뷰 랭크 게임을 시작합니다.")
+    @BotSuccess
     @PostMapping("/rank/start")
     public ApiResponseDto<StartGameResponse.RoadView> startRankGame(@CurrentMember Member member) {
         return ApiResponseDto.onSuccess(startRoadViewRankUseCase.execute(member));
@@ -114,6 +117,7 @@ public class RoadViewGameController {
                     "최근 3개 게임 기록을 포함합니다."
     )
     @GetMapping("/history/recent")
+    @BotSuccess
     public ApiResponseDto<RoadViewGameHistoryResponse.RecentThree> getRecentThreeGames(@CurrentMember Member member) {
         return ApiResponseDto.onSuccess(getRecentThreeRoadViewGamesUseCase.execute(member));
     }

@@ -29,7 +29,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByNickname(String nickname);
 
-    @Query("select m from Member m where m.role = 'BOT' limit 1")
-    Optional<Member> findFirstBot();
+    @Query("select m from Member m where m.role = 'BOT'")
+    List<Member> findAllBot();
 
 }

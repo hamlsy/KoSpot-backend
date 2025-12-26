@@ -4,6 +4,7 @@ package com.kospot.presentation.multi.room.controller;
 import com.kospot.application.multi.game.usecase.NotifyStartGameUseCase;
 import com.kospot.application.multi.room.http.usecase.*;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.infrastructure.annotation.adsense.BotSuccess;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -43,6 +44,7 @@ public class GameRoomController {
     private final NotifyStartGameUseCase notifyStartGameUseCase;
 
     @Operation(summary = "게임 방 전체 조회", description = "멀티 게임 방을 전체 조회합니다.")
+    @BotSuccess
     @GetMapping
     public ApiResponseDto<List<FindGameRoomResponse>> findAllRooms(@RequestParam("page") int page) {
         return ApiResponseDto.onSuccess(findAllGameRoomUseCase.execute(page));
@@ -63,6 +65,7 @@ public class GameRoomController {
     }
 
     @Operation(summary = "게임 방 상세 조회", description = "멀티 게임 방 상세 정보를 조회합니다.")
+    @BotSuccess
     @GetMapping("/{roomId}")
     public ApiResponseDto<GameRoomDetailResponse> getRoomDetail(@PathVariable("roomId") Long roomId) {
         return ApiResponseDto.onSuccess(getGameRoomDetailUseCase.execute(roomId));
