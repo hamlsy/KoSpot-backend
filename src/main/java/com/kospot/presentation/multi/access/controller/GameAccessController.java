@@ -2,6 +2,7 @@ package com.kospot.presentation.multi.access.controller;
 
 import com.kospot.application.multi.access.service.GameAccessService;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.infrastructure.annotation.adsense.BotSuccess;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.multi.access.dto.response.GameAccessResponse;
@@ -21,6 +22,7 @@ public class GameAccessController {
     private final GameAccessService gameAccessService;
 
     @GetMapping("/{roomId}/access")
+    @BotSuccess
     public ApiResponseDto<GameAccessResponse> checkGameAccess(
             @PathVariable("roomId") String roomId,
             @CurrentMember Member member

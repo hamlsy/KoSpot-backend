@@ -64,4 +64,13 @@ public class MemberAdaptor {
     public boolean existsByNickname(String nickname) {
         return repository.existsByNickname(nickname);
     }
+
+    public Member queryFirstBotMember() {
+        Member member = repository.findAllBot().get(0);
+        if(member == null) {
+            throw new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND);
+        }
+        return member;
+
+    }
 }

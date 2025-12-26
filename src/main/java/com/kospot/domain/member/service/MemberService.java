@@ -32,6 +32,18 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    public Member registerAdsenseBot(String username) {
+        String nickname = "adsense_bot_" + UUID.randomUUID().toString().substring(0, 8);
+        Member member = Member.builder()
+                .username(username)
+                .nickname(nickname)
+                .email("adsense_bot@email")
+                .firstVisited(false)
+                .role(Role.BOT)
+                .build();
+        return memberRepository.save(member);
+    }
+
     private void markVisited(Member member) {
         if(member.isFirstVisited()) {
             member.markVisited();

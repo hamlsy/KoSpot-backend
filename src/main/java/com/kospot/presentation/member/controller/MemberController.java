@@ -4,6 +4,7 @@ import com.kospot.application.member.GetMemberProfileUseCase;
 import com.kospot.application.member.SetNicknameUseCase;
 import com.kospot.application.member.UpdateNicknameUseCase;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.infrastructure.annotation.adsense.BotSuccess;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -27,6 +28,7 @@ public class MemberController {
 
     @Operation(summary = "내 정보 조회", description = "회원의 프로필과 게임 통계, 랭킹, 아이템 정보를 조회합니다.")
     @GetMapping("/profile")
+    @BotSuccess
     public ApiResponseDto<MemberProfileResponse> getMemberProfile(@CurrentMember Member member) {
         MemberProfileResponse response = getMemberProfileUseCase.execute(member);
         return ApiResponseDto.onSuccess(response);
