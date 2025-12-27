@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @UseCase
 @Transactional(readOnly = true)
@@ -30,8 +32,22 @@ public class GetRankingUseCase {
         GameMode mode = GameMode.fromKey(gameMode);
         RankTier tier = RankTier.fromKey(rankTier);
         Pageable pageable = Pageable.ofSize(DEFAULT_SIZE).withPage(page);
-//        GameRank
-//        Page<GameRankResponse.Player>
+        GameRank myRank = gameRankAdaptor.queryByMemberAndGameMode(member, mode);
+        Page<GameRank> gameRanks = gameRankAdaptor.queryPageByGameModeAndRankTierFetchMember(
+                mode,
+                tier,
+                pageable
+        );
+
+        GameRankResponse.MyRankInfo myRankInfo = GameRankResponse.MyRankInfo.from(member, myRank);
+        List<GameRankResponse.PlayerSummary> playerSummaries = gameRanks.map(
+                gr -> GameRankResponse.PlayerSummary.from(gr.getMember(), gr)
+        ).getContent();
+
+        return GameRankResponse.Ranking.builder()
+                .myRank(myRankInfo)
+                .players(playerSummaries)
+                .build();
     }
 
 }

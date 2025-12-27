@@ -2,7 +2,10 @@ package com.kospot.domain.gamerank.repository;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.gamerank.entity.GameRank;
+import com.kospot.domain.gamerank.vo.RankTier;
 import com.kospot.domain.member.entity.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,6 +31,12 @@ public interface GameRankRepository extends JpaRepository<GameRank, Long> {
             @Param("ratingScore") int ratingScore
     );
 
-
+    @Query("select r from GameRank r join fetch r.member " +
+            "where r.gameMode = :gameMode and r.rankTier = :rankTier order by r.ratingScore desc")
+    Page<GameRank> findPageByGameModeAndRankTierFetchMember(
+            @Param("gameMode") GameMode gameMode,
+            @Param("rankTier") RankTier rankTier,
+            Pageable pageable
+    );
 
 }

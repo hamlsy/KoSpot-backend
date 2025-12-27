@@ -3,6 +3,7 @@ package com.kospot.domain.gamerank.adaptor;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.repository.GameRankRepository;
+import com.kospot.domain.gamerank.vo.RankTier;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,13 @@ public class GameRankAdaptor {
         return repository.countByGameModeAndRatingScoreGreaterThan(gameMode, ratingScore);
     }
 
-    public Page<Member> queryByGameModeAndRankTierAndRankLevelPaging(GameMode gameMode, String rankTier, int rankLevel, Pageable pageable) {
-        return repository.findMembersByGameModeAndRankTierAndRankLevel(gameMode, rankTier, rankLevel);
+    public Page<GameRank> queryPageByGameModeAndRankTierFetchMember(
+            GameMode gameMode,
+            RankTier rankTier,
+            Pageable pageable
+    ) {
+        // Implementation needed
+        return repository.findPageByGameModeAndRankTierFetchMember(gameMode, rankTier, pageable);
     }
 
 }
