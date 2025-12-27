@@ -22,6 +22,7 @@ public class GameRoomDetailResponse {
     private boolean privateRoom;
     private int maxPlayers;
     private int totalRounds;
+    private boolean isPoiNameVisible;
 
     private List<GameRoomPlayerResponse> connectedPlayers;
 
@@ -41,6 +42,7 @@ public class GameRoomDetailResponse {
                                 .collect(Collectors.toList())
                 )
                 .totalRounds(gameRoom.getTotalRounds())
+                .isPoiNameVisible(gameRoom.isPoiNameVisible())
                 .build();
     }
 

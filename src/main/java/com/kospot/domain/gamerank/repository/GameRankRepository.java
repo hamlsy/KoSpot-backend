@@ -28,4 +28,6 @@ public interface GameRankRepository extends JpaRepository<GameRank, Long> {
             @Param("ratingScore") int ratingScore
     );
 
+
+
 }

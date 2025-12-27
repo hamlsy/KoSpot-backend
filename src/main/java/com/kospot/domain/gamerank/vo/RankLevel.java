@@ -17,4 +17,20 @@ public enum RankLevel {
         }
         return FIVE; // Default level
     }
+
+    public static RankLevel fromKey(String key) {
+        // 1이면 one, 2면 two..
+        if (key.equals("1")) return ONE;
+        if (key.equals("2")) return TWO;
+        if (key.equals("3")) return THREE;
+        if (key.equals("4")) return FOUR;
+        if (key.equals("5")) return FIVE;
+
+        for (RankLevel level : values()) {
+            if (level.name().equalsIgnoreCase(key)) {
+                return level;
+            }
+        }
+        throw new IllegalArgumentException("Invalid RankLevel key: " + key);
+    }
 }

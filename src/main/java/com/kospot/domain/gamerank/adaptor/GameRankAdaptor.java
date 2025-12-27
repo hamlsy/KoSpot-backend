@@ -6,6 +6,8 @@ import com.kospot.domain.gamerank.repository.GameRankRepository;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -29,6 +31,10 @@ public class GameRankAdaptor {
 
     public long queryHigherRankCountByGameModeAndRatingScore(GameMode gameMode, int ratingScore) {
         return repository.countByGameModeAndRatingScoreGreaterThan(gameMode, ratingScore);
+    }
+
+    public Page<Member> queryByGameModeAndRankTierAndRankLevelPaging(GameMode gameMode, String rankTier, int rankLevel, Pageable pageable) {
+        return repository.findMembersByGameModeAndRankTierAndRankLevel(gameMode, rankTier, rankLevel);
     }
 
 }

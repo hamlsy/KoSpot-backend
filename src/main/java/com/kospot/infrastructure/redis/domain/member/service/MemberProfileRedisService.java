@@ -31,6 +31,7 @@ public class MemberProfileRedisService {
         // memberProfileRedisRepository.expire(key, DEFAULT_EXPIRE_HOURS); 이런 식으로 추가 메서드 만들 수도 있음
     }
 
+
     /**
      * 마커이미지만 변경
      */
