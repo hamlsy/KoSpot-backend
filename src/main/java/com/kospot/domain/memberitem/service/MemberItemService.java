@@ -24,14 +24,13 @@ public class MemberItemService {
 
     public void equipItem(Member member, MemberItem memberItem) {
 
-
         ItemType memberItemType = memberItem.getItem().getItemType();
+        // unEquip
+        unEquippedItems(member, memberItemType);
+
         if(memberItemType.equals(ItemType.MARKER)) {
             member.equippedMarkerImage(memberItem.getItem().getImage());
         }
-
-        // unEquip
-        unEquippedItems(member, memberItemType);
 
         // equip
         memberItem.equip();

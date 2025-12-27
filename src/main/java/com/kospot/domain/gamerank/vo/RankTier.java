@@ -35,4 +35,13 @@ public enum RankTier {
                 return MASTER;
         }
     }
+
+    public static RankTier fromKey(String key) {
+        for (RankTier tier : RankTier.values()) {
+            if (tier.name().equalsIgnoreCase(key)) {
+                return tier;
+            }
+        }
+        throw new IllegalArgumentException("No RankTier with key: " + key);
+    }
 }
