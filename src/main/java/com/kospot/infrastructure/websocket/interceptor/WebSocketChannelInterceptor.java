@@ -30,7 +30,8 @@ import org.springframework.lang.NonNull;
 import java.time.Duration;
 import java.util.UUID;
 
-import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
+import static com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants.PREFIX_CHAT;
+import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
 
 @Slf4j
 @Component
@@ -53,6 +54,8 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
 
     private static final long PENDING_LEAVE_GRACE_MILLIS = 4000L;
+    private static final int RATE_LIMIT = 40; // 1분에 허용되는 메시지 수
+    private static final String RATE_LIMIT_KEY = "rate_limit:chat:";
 
     @Override
     public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
@@ -158,11 +161,11 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         String subscriptionId = accessor.getSubscriptionId();
         String destination = webSocketSessionService.getSubscription(sessionId, subscriptionId);
 
-        if (destination != null && destination.startsWith("/topic/chat/lobby")) {
+        if (destination != null && destination.startsWith(PREFIX_CHAT)) {
             leaveGlobalLobbyUseCase.execute(accessor);
         }
 
-        if (destination != null && destination.startsWith("/topic/room/")) {
+        if (destination != null && destination.startsWith(PREFIX_GAME_ROOM)) {
             try {
                 Member member = memberAdaptor.queryById(principal.getMemberId());
                 Long gameRoomId = member.getGameRoomId();

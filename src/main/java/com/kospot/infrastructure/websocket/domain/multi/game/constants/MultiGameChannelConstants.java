@@ -1,12 +1,17 @@
 package com.kospot.infrastructure.websocket.domain.multi.game.constants;
 
+import static com.kospot.infrastructure.websocket.constants.CommonWebSocketChannelConstants.PREFIX_TOPIC;
+import static com.kospot.infrastructure.websocket.constants.CommonWebSocketChannelConstants.validateId;
+
+/**
+ * 멀티게임 관련 WebSocket 채널 상수
+ */
 public class MultiGameChannelConstants {
     private MultiGameChannelConstants() {
         // Prevent instantiation
     }
 
     // ==================== 공통 접두사 ====================
-    public static final String PREFIX_TOPIC = "/topic/";
     public static final String PREFIX_GAME = PREFIX_TOPIC + "game/"; // /topic/game/{roomId}/
 
     // ==================== 공용 게임 내 채널 ====================
@@ -125,11 +130,20 @@ public class MultiGameChannelConstants {
         validateId(teamId, "teamId");
         return PREFIX_GAME + roomId + "/chat/team/" + teamId;
     }
-    
-    // ==================== 유틸 ====================
-    private static void validateId(String id, String name) {
-        if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException(name + " cannot be null or blank");
+
+    // ==================== 유틸리티 메서드 ====================
+
+    /**
+     * 채널 경로에서 게임 ID 추출
+     */
+    public static String extractGameIdFromDestination(String destination) {
+        if (destination == null || !destination.startsWith(PREFIX_GAME)) {
+            return null;
         }
+
+        String remaining = destination.substring(PREFIX_GAME.length());
+        int slashIndex = remaining.indexOf('/');
+
+        return slashIndex > 0 ? remaining.substring(0, slashIndex) : null;
     }
 }

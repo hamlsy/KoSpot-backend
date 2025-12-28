@@ -48,6 +48,7 @@ public class UpdateGameRoomSettingsUseCase {
                 .gameModeKey(request.getGameModeKey())
                 .playerMatchTypeKey(request.getPlayerMatchTypeKey())
                 .privateRoom(request.isPrivateRoom())
+                .maxPlayers(request.getMaxPlayers())
                 .password(request.getPassword())
                 .build();
     }

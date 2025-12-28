@@ -2,7 +2,7 @@ package com.kospot.infrastructure.websocket.subscription.impl;
 
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants;
+import com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.websocket.subscription.SubscriptionValidator;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
 
 /**
  * 게임방 구독 검증자
@@ -55,7 +57,7 @@ public class GameRoomSubscriptionValidator implements SubscriptionValidator {
     public boolean supports(String destination) {
         if (destination == null) return false;
         
-        return destination.startsWith("/topic/room/");
+        return destination.startsWith(PREFIX_GAME_ROOM);
     }
     
     @Override
@@ -67,7 +69,7 @@ public class GameRoomSubscriptionValidator implements SubscriptionValidator {
      * destination에서 룸 ID 추출
      */
     private String extractRoomIdFromDestination(String destination) {
-        return WebSocketChannelConstants.extractRoomIdFromDestination(destination);
+        return GameRoomChannelConstants.extractRoomIdFromDestination(destination);
     }
     
     /**
