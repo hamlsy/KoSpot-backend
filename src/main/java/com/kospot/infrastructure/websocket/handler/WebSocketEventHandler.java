@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants.PREFIX_CHAT;
+import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -67,16 +70,36 @@ public class WebSocketEventHandler {
         }
     }
 
-//    @EventListener
-//    public void handleWebSocketUnSubscribeListener(SessionUnsubscribeEvent event) {
-//        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
-//        WebSocketMemberPrincipal principal = getPrincipal(accessor);
-//        String sessionId = accessor.getSessionId();
-//        String subscriptionId = accessor.getSubscriptionId();
-//        String destination = webSocketSessionService.getSubscription(sessionId, subscriptionId);
-//
-//
-//    }
+    @EventListener
+    public void handleWebSocketUnSubscribeListener(SessionUnsubscribeEvent event) {
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+        WebSocketMemberPrincipal principal = getPrincipal(accessor);
+        String sessionId = accessor.getSessionId();
+        String subscriptionId = accessor.getSubscriptionId();
+        String destination = webSocketSessionService.getSubscription(sessionId, subscriptionId);
+
+        if (destination != null && destination.startsWith(PREFIX_CHAT)) {
+            leaveGlobalLobbyUseCase.execute(accessor);
+        }
+
+        if (destination != null && destination.startsWith(PREFIX_GAME_ROOM)) {
+            try {
+                Member member = memberAdaptor.queryById(principal.getMemberId());
+                Long gameRoomId = member.getGameRoomId();
+                if (gameRoomId != null) {
+                    leaveGameRoomUseCase.execute(member, gameRoomId);
+                }
+                log.info("Member left game room on unsubscribe - MemberId: {}", principal.getMemberId());
+            } catch (Exception e) {
+                log.warn("Failed to leave game room on unsubscribe - MemberId: {}", principal.getMemberId(), e);
+            }
+        }
+
+        webSocketSessionService.removeSubscription(sessionId, subscriptionId);
+        log.info("Unsubscribed - MemberId:{}, Destination:{}, SessionId:{}, SubId:{}",
+                principal.getMemberId(), destination, sessionId, subscriptionId);
+
+    }
 
 
     // 클라이언트 연결 해제 시 처리

@@ -70,6 +70,10 @@ public class GameRoom extends BaseTimeEntity {
         this.status = GameRoomStatus.PLAYING;
     }
 
+    public void endGame() {
+        this.status = GameRoomStatus.WAITING;
+    }
+
     public void setHost(Member host) {
         this.host = host;
     }

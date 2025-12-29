@@ -40,6 +40,14 @@ public class GameRoomService {
         return gameRoom;
     }
 
+    public void markGameRoomAsInGame(GameRoom gameRoom, Member host) {
+        gameRoom.start(host);
+    }
+
+    public void markGameRoomAsWaiting(GameRoom gameRoom) {
+        gameRoom.endGame();
+    }
+
     public void joinGameRoom(Member player, GameRoom gameRoom, GameRoomRequest.Join request) {
         gameRoom.join(player, request.getPassword(), gameRoom.getId());
     }

@@ -7,6 +7,8 @@ import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.domain.multi.room.vo.GameRoomUpdateInfo;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
+import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
@@ -24,7 +26,11 @@ public class UpdateGameRoomSettingsUseCase {
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
     private final GameRoomRedisService gameRoomRedisService;
+    private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
+
+    // notify
     private final GameRoomNotificationService gameRoomNotificationService;
+    private final LobbyRoomNotificationService lobbyRoomNotificationService;
 
     // todo refactor
     public GameRoomResponse execute(Member host, GameRoomRequest.Update request, Long gameRoomId) {
@@ -38,7 +44,10 @@ public class UpdateGameRoomSettingsUseCase {
         GameRoomUpdateInfo updateInfo = mapToUpdateInfo(request);
         GameRoom updatedGameRoom = gameRoomService.updateGameRoom(updateInfo, gameRoom);
 
+        // notify
         gameRoomNotificationService.notifyRoomSettingsChanged(gameRoomId.toString(), updateInfo);
+        lobbyRoomNotificationService.notifyRoomUpdated(updatedGameRoom, gameRoomRedisAdaptor.getCurrentPlayersCount(gameRoomId.toString()));
+
         return GameRoomResponse.from(updatedGameRoom);
     }
 
