@@ -1,7 +1,11 @@
 package com.kospot.infrastructure.websocket.domain.multi.room.constants;
 
-import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.PREFIX_TOPIC;
+import static com.kospot.infrastructure.websocket.constants.CommonWebSocketChannelConstants.PREFIX_TOPIC;
+import static com.kospot.infrastructure.websocket.constants.CommonWebSocketChannelConstants.validateId;
 
+/**
+ * 게임방 관련 WebSocket 채널 상수
+ */
 public class GameRoomChannelConstants {
     private GameRoomChannelConstants() {
         // Prevent instantiation
@@ -42,14 +46,29 @@ public class GameRoomChannelConstants {
         return PREFIX_GAME_ROOM + roomId + "/status";
     }
 
-    private static void validateId(String id, String paramName) {
-        if (id == null || id.trim().isEmpty()) {
-            throw new IllegalArgumentException(paramName + " cannot be null or empty");
+    // ==================== 유틸리티 메서드 ====================
+
+    /**
+     * 채널 경로가 특정 게임방에 속하는지 확인
+     */
+    public static boolean isGameRoomChannel(String destination, String roomId) {
+        if (destination == null || roomId == null) {
+            return false;
+        }
+        return destination.startsWith(PREFIX_GAME_ROOM + roomId + "/");
+    }
+
+    /**
+     * 채널 경로에서 게임방 ID 추출
+     */
+    public static String extractRoomIdFromDestination(String destination) {
+        if (destination == null || !destination.startsWith(PREFIX_GAME_ROOM)) {
+            return null;
         }
 
-        // 특수 문자 검증 (경로에 문제가 될 수 있는 문자들)
-        if (id.contains("/") || id.contains("?") || id.contains("#")) {
-            throw new IllegalArgumentException(paramName + " contains invalid characters: " + id);
-        }
+        String remaining = destination.substring(PREFIX_GAME_ROOM.length());
+        int slashIndex = remaining.indexOf('/');
+
+        return slashIndex > 0 ? remaining.substring(0, slashIndex) : null;
     }
 }

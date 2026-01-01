@@ -6,6 +6,7 @@ import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
+import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.service.RoadViewGameRoundService;
@@ -13,6 +14,7 @@ import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.redis.domain.multi.game.service.MultiGameRedisService;
+import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;
 import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;
 import com.kospot.infrastructure.websocket.domain.multi.timer.vo.TimerCommand;
@@ -39,7 +41,11 @@ public class NextRoadViewRoundUseCase {
     private final RoadViewGameRoundService roadViewGameRoundService;
     private final GamePlayerAdaptor gamePlayerAdaptor;
     private final GamePlayerService gamePlayerService;
+
+    // notify
     private final GameRoundNotificationService gameRoundNotificationService;
+    private final LobbyRoomNotificationService lobbyRoomNotificationService;
+
     private final GameTimerService gameTimerService;
     private final MultiGameFlowScheduler multiGameFlowScheduler;
     private final MultiGameRedisService multiGameRedisService;
@@ -69,6 +75,9 @@ public class NextRoadViewRoundUseCase {
 
         // 플레이어 정보를 브로드캐스팅
         scheduleRound(roomKey, round, preview);
+
+        // 로비 브로드 캐스팅
+        lobbyRoomNotificationService.notifyRoomStatusUpdated(roomId, players.size(), GameRoomStatus.PLAYING);
         return preview;
     }
 

@@ -47,7 +47,6 @@ public class PlayerTransitionService {
         log.info("Initialized loading phase - RoomId: {}, GameId: {}", roomId, gameId);
     }
 
-    @Transactional
     /**
      * 플레이어가 준비 완료를 알리면 Redis에 기록하고 전체 로딩 상태 방송
      */

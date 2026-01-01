@@ -13,6 +13,7 @@ import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -38,6 +39,9 @@ public class LeaveGameRoomUseCase {
     private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
     private final ApplicationEventPublisher eventPublisher;
     private final RedissonClient redissonClient;
+
+    //notify
+    private final LobbyRoomNotificationService lobbyRoomNotificationService;
 
     public void execute(Member member, Long gameRoomId) {
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
@@ -167,6 +171,7 @@ public class LeaveGameRoomUseCase {
         switch(decision.getAction()) {
             case DELETE_ROOM:
                 gameRoomService.deleteRoom(gameRoom);
+                lobbyRoomNotificationService.notifyRoomDeleted(gameRoom.getId());
                 break;
             case CHANGE_HOST:
                 Member newHost = memberAdaptor.queryById(decision.getNewHostInfo().getMemberId());

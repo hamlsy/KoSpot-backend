@@ -36,8 +36,16 @@ public class GameRoomService {
     public GameRoom updateGameRoom(GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {
         gameRoom.update(updateInfo.getTitle(),updateInfo.getTimeLimit(),
                 GameMode.fromKey(updateInfo.getGameModeKey()), PlayerMatchType.fromKey(updateInfo.getPlayerMatchTypeKey()),
-                updateInfo.isPrivateRoom(), updateInfo.getPassword(), updateInfo.getTeamCount(), updateInfo.getTotalRounds());
+                updateInfo.getMaxPlayers(), updateInfo.isPrivateRoom(), updateInfo.getPassword(), updateInfo.getTeamCount(), updateInfo.getTotalRounds());
         return gameRoom;
+    }
+
+    public void markGameRoomAsInGame(GameRoom gameRoom, Member host) {
+        gameRoom.start(host);
+    }
+
+    public void markGameRoomAsWaiting(GameRoom gameRoom) {
+        gameRoom.endGame();
     }
 
     public void joinGameRoom(Member player, GameRoom gameRoom, GameRoomRequest.Join request) {

@@ -1,6 +1,6 @@
 package com.kospot.application.multi.round.listener;
 
-import com.kospot.application.multi.round.roadview.FinishMultiRoadViewGameUseCase;
+import com.kospot.application.multi.game.usecase.FinishMultiRoadViewGameUseCase;
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
 import com.kospot.application.multi.round.roadview.solo.EndRoadViewSoloRoundUseCase;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;

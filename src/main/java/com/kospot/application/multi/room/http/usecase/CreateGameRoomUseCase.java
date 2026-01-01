@@ -9,6 +9,7 @@ import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
 import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
 import com.kospot.presentation.multi.room.dto.response.GameRoomResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,8 @@ public class CreateGameRoomUseCase {
     private final MemberProfileRedisService memberProfileRedisService;
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
+    private final LobbyRoomNotificationService lobbyRoomNotificationService;
+
     public GameRoomResponse execute(Member host, GameRoomRequest.Create request) {
         GameRoom gameRoom = gameRoomService.createGameRoom(host, request);
         // redis 설정
@@ -41,6 +44,8 @@ public class CreateGameRoomUseCase {
                     host.getEquippedMarkerImage().getImageUrl()
             );
         }
+        // notify
+        lobbyRoomNotificationService.notifyRoomCreated(gameRoom);
 
         return GameRoomResponse.from(gameRoom);
     }

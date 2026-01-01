@@ -4,6 +4,7 @@ import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.repository.ChatMessageRepository;
 import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
+import com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants;
 import com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants;
 import com.kospot.presentation.chat.dto.event.ChatMessageEvent;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.function.Function;
-
-import static com.kospot.infrastructure.websocket.constants.WebSocketChannelConstants.*;
 
 @Slf4j
 @Service
@@ -32,13 +31,13 @@ public class ChatService {
             payloadType = ChatMessageEvent.GlobalLobby.class,
             trigger = "글로벌 로비 채팅 메시지 전송",
             description = "글로벌 로비에 채팅 메시지를 전송합니다.",
-            destination = GLOBAL_LOBBY_CHANNEL
+            destination = LobbyChannelConstants.GLOBAL_LOBBY_CHANNEL
     )
     public void sendGlobalLobbyMessage(ChatMessage chatMessage) {
         processAndSend(
                 chatMessage,
                 ChatMessageEvent.GlobalLobby::from,  // DTO 변환 전략
-                GLOBAL_LOBBY_CHANNEL      // 채널
+                LobbyChannelConstants.GLOBAL_LOBBY_CHANNEL      // 채널
         );
     }
 

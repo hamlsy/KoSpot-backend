@@ -2,6 +2,7 @@ package com.kospot.application.multi.game.usecase;
 
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
 import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class StartRoadViewSoloGameUseCase {
         if (response == null) {
             log.info("Initial round already prepared - RoomId: {}, GameId: {}", roomId, gameId);
         }
+
         return response;
     }
 }

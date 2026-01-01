@@ -14,7 +14,6 @@ import java.util.List;
 public class GameTimerRedisRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ObjectMapper objectMapper;
 
     private static final String ROUND_KEY = "game:room:%s:round:%s";
     private static final String ACTIVE_ROUNDS_KEY = "game:room:%s:active:rounds";

@@ -1,7 +1,11 @@
-package com.kospot.application.multi.round.roadview;
+package com.kospot.application.multi.game.usecase;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
+import com.kospot.domain.multi.room.entity.GameRoom;
+import com.kospot.domain.multi.room.service.GameRoomService;
+import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.domain.statistic.service.MemberStatisticService;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
@@ -12,10 +16,8 @@ import com.kospot.domain.point.service.PointService;
 import com.kospot.domain.point.util.PointCalculator;
 import com.kospot.domain.point.vo.PointHistoryType;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.infrastructure.redis.domain.multi.game.service.MultiGameRedisService;
-import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.infrastructure.redis.domain.multi.round.dao.GameRoundRedisRepository;
 import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
+import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;
 import com.kospot.presentation.multi.game.dto.response.MultiGameResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +37,13 @@ public class FinishMultiRoadViewGameUseCase {
     private final GamePlayerAdaptor gamePlayerAdaptor;
     private final GameRoundNotificationService gameRoundNotificationService;
     private final PointService pointService;
+    private final GameRoomAdaptor gameRoomAdaptor;
+    private final GameRoomService gameRoomService;
     private final PointHistoryService pointHistoryService;
     private final MemberStatisticService memberStatisticService;
+
+    // notify
+    private final LobbyRoomNotificationService lobbyRoomNotificationService;
 
     private final SubmissionRedisService submissionRedisService;
 
@@ -45,17 +52,22 @@ public class FinishMultiRoadViewGameUseCase {
         MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
         List<GamePlayer> players = gamePlayerAdaptor.queryByMultiRoadViewGameIdWithMember(gameId);
         game.finishGame();
-        
-        log.info("🎮 Game finished - gameId: {}, players: {}", gameId, players.size());
 
         // 2. 포인트 지급
         for (GamePlayer player : players) {
             distributePointToPlayer(player);
         }
-        
+
         // 3. WebSocket 최종 결과 전송
         MultiGameResponse.GameFinalResult finalResult = MultiGameResponse.GameFinalResult.from(gameId, players);
         gameRoundNotificationService.notifyGameFinishedWithResults(gameRoomId, finalResult);
+
+        // 4. 방 상태 변경
+        GameRoom gameRoom = gameRoomAdaptor.queryById(Long.valueOf(gameRoomId));
+        gameRoomService.markGameRoomAsWaiting(gameRoom);
+
+        // 5. 로비 알림
+        lobbyRoomNotificationService.notifyRoomStatusUpdated(gameRoom.getId(), players.size(), GameRoomStatus.WAITING);
 
         // todo 관련 redis 데이터 정리
         log.info("✅ Game completed with point distribution - gameId: {}", gameId);

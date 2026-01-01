@@ -56,6 +56,17 @@ public class GameRoomRedisService {
         redisTemplate.delete(roomKey);
     }
 
+    public void deleteAllRelatedRoomsData(String roomId, Long memberId) {
+        Set<String> roomKeys = new HashSet<>();
+        roomKeys.add(String.format(ROOM_PLAYERS_KEY, roomId));
+        roomKeys.add(String.format(SESSION_ROOM_KEY, roomId));
+
+        if (roomKeys != null && !roomKeys.isEmpty()) {
+            redisTemplate.delete(roomKeys);
+        }
+        removePlayerFromRoom(roomId, memberId);
+    }
+
     public GameRoomPlayerInfo removePlayerFromRoom(String roomId, Long memberId) {
         try {
             String roomKey = getRoomKey(roomId);
@@ -76,10 +87,6 @@ public class GameRoomRedisService {
                     roomId, memberId, e);
             return null;
         }
-    }
-
-    public void changeHost() {
-
     }
 
     public List<GameRoomPlayerInfo> getRoomPlayers(String roomId) {
