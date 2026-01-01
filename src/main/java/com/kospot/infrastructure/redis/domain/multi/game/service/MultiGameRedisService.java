@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MultiGameRedisService {
 
-    private static final String GAME_LOADING_STATUS_KEY = "game:multi:%s:loading";
+    private static final String GAME_LOADING_STATUS_KEY = "game:room:%s:loading";
     private static final String CURRENT_GAME_KEY = "game:room:%s:current";
     private static final int GAME_DATA_EXPIRY_HOURS = 1;
     private static final String ROUND_REISSUE_LOCK_KEY = "game:round:%s:%s:reissue:lock";
