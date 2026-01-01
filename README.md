@@ -74,7 +74,7 @@ KoSpot은 대한민국 내 랜드마크와 관광지를 기반으로 한 위치 
   1. DB 검증과 Redis 불일치를 DB검증 대신 Redis 원자적 연산(count) 로직으로 변경함
   2. 모든 플레이어가 정답을 동시에 제출했을 때 게임이 끝나지 않는 현상 발생을 해결함
 
-### 4. 비정상 종료시 게임 방 비즈니스 로직 정리
+### 4. 방장 재지정시 Race condition 문제 개선
 
 - **이슈**: [#128 방장 재지정 기능 구현](https://github.com/hamlsy/KoSpot-backend/issues/128)[PR](https://github.com/hamlsy/KoSpot-backend/pull/132)
 - **개선 내용**:
