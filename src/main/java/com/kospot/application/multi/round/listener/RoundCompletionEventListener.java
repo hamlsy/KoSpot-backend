@@ -20,22 +20,30 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-
+/**
+ * 라운드 완료 이벤트를 처리하는 리스너
+ * 도메인 이벤트를 수신하여 라운드 종료/다음 라운드/게임 종료를 조율한다.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class RoundCompletionEventListener {
+
     // UseCases
     private final EndRoadViewSoloRoundUseCase endRoadViewSoloRoundUseCase;
     private final NextRoadViewRoundUseCase nextRoadViewRoundUseCase;
     private final FinishMultiRoadViewGameUseCase finishMultiRoadViewGameUseCase;
 
-    // ===
+    // Domain Adaptor
     private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
+
+    // Infrastructure Services (직접 사용)
     private final GameRoundNotificationService gameRoundNotificationService;
     private final GameTimerService gameTimerService;
 
-    // 조기 종료 이벤트
+    /**
+     * 조기 종료 이벤트 처리 (모든 플레이어가 제출 완료)
+     */
     @Async
     @EventListener
     @Transactional
@@ -47,12 +55,13 @@ public class RoundCompletionEventListener {
                     event.getRoundId(),
                     event.getPlayerMatchType()
             );
-            case PHOTO -> {
-            }
+            case PHOTO -> log.debug("Photo mode early completion not yet implemented");
         }
     }
 
-    // 정상 종료 이벤트 처리 (타이머 만료)
+    /**
+     * 정상 종료 이벤트 처리 (타이머 만료)
+     */
     @Async
     @EventListener
     @Transactional
@@ -64,17 +73,16 @@ public class RoundCompletionEventListener {
                     event.getRoundId(),
                     event.getPlayerMatchType()
             );
-            case PHOTO -> {
-            }
+            case PHOTO -> log.debug("Photo mode completion not yet implemented");
         }
-
     }
 
     private void handleRoadViewRoundCompletion(String gameRoomId, Long gameId,
                                                Long roundId, PlayerMatchType matchType) {
         switch (matchType) {
             case SOLO -> {
-                RoadViewRoundResponse.PlayerResult result = endRoadViewSoloRoundUseCase.execute(gameId, roundId);
+                RoadViewRoundResponse.PlayerResult result =
+                        endRoadViewSoloRoundUseCase.execute(gameId, roundId);
                 gameRoundNotificationService.broadcastRoadViewSoloRoundResults(gameRoomId, result);
 
                 MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
@@ -103,35 +111,26 @@ public class RoundCompletionEventListener {
      */
     private void handleLastRound(String gameRoomId, MultiGame game) {
         switch (game.getGameMode()) {
-            case ROADVIEW ->
-                    finishMultiRoadViewGameUseCase.execute(gameRoomId, game.getId());
-            case PHOTO -> {
-            }
+            case ROADVIEW -> finishMultiRoadViewGameUseCase.execute(gameRoomId, game.getId());
+            case PHOTO -> log.debug("Photo mode finish not yet implemented");
         }
-
     }
 
     /**
      * 다음 라운드 처리 - 새 라운드 시작
      */
     private void handleNextRound(String gameRoomId, MultiGame game) {
-
         switch (game.getGameMode()) {
             case ROADVIEW -> {
-                // 다음 라운드 시작 (게임 상태 업데이트 + 라운드 생성 + 타이머 시작)
                 MultiRoadViewGameResponse.NextRound nextRound = nextRoadViewRoundUseCase.execute(
                         Long.parseLong(gameRoomId),
                         game.getId()
                 );
-
-                // 다음 라운드 시작 알림 브로드캐스트
-                gameRoundNotificationService.broadcastRoadViewRoundStart(gameRoomId, nextRound);
+                // NextRoadViewRoundUseCase 내부에서 이미 브로드캐스트하므로 여기서는 생략
+                log.info("Next round started - RoomId: {}, GameId: {}, Round: {}",
+                        gameRoomId, game.getId(), nextRound.getCurrentRound());
             }
-            case PHOTO -> {
-            }
+            case PHOTO -> log.debug("Photo mode next round not yet implemented");
         }
-
     }
-
-
 }

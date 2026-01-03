@@ -7,6 +7,7 @@ import com.kospot.infrastructure.exception.object.domain.ItemHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -36,6 +37,7 @@ public class Item extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
 
+    @Builder.Default
     private boolean isAvailable = true;
     // 기본 아이템 식별
     private boolean isDefault = false;

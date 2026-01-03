@@ -1,67 +1,51 @@
 package com.kospot.application.multi.game.strategy;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multi.game.service.MultiRoadViewGameService;
+import com.kospot.domain.multi.game.factory.GameCreationResult;
+import com.kospot.domain.multi.game.factory.MultiRoadViewGameFactory;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
-import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multi.game.dto.response.MultiGameResponse;
-import com.kospot.presentation.multi.gamePlayer.dto.response.GamePlayerResponse;
+import com.kospot.presentation.multi.game.mapper.MultiGameResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-@Component // NotifyStartGameUseCase가 GameMode/MATCH 조합에 맞는 전략을 선택할 때 사용
+/**
+ * 로드뷰 개인전 게임 시작 전략
+ * Factory를 통해 게임과 플레이어를 생성하고,
+ * Mapper를 통해 응답 DTO를 구성한다.
+ */
+@Component
 @Transactional
 @RequiredArgsConstructor
 public class RoadViewSoloStartStrategy implements MultiGameStartStrategy {
 
     private static final String TARGET_ROUTE = "ROADVIEW_GAME";
 
-    private final MultiRoadViewGameService multiRoadViewGameService;
-    private final GamePlayerService gamePlayerService;
+    private final MultiRoadViewGameFactory gameFactory;
+    private final MultiGameResponseMapper responseMapper;
 
     @Override
     public boolean supports(GameMode gameMode, PlayerMatchType matchType) {
         return GameMode.ROADVIEW.equals(gameMode) && PlayerMatchType.SOLO.equals(matchType);
     }
 
-    @Override
     /**
      * 로드뷰 개인전 시작 컨텍스트를 구성해 게임, 플레이어 정보를 준비한다.
+     * Factory로 게임/플레이어 생성을 위임하고, Mapper로 DTO 변환을 위임한다.
      */
+    @Override
     public StartGamePreparation prepare(GameRoom gameRoom,
                                         GameMode gameMode,
                                         PlayerMatchType matchType) {
-        // 게임 생성
-        MultiRoadViewGame game = multiRoadViewGameService.createGame(gameRoom);
+        // Factory를 통한 게임 및 플레이어 생성
+        GameCreationResult creationResult = gameFactory.createGameWithPlayers(gameRoom);
 
-        // 게임 플레이어 생성
-        List<GamePlayer> gamePlayers = gamePlayerService.createRoadViewGamePlayers(gameRoom, game);
-
-        List<GamePlayerResponse> players = gamePlayers.stream()
-                .map(GamePlayerResponse::from)
-                .toList();
-
-        MultiGameResponse.StartGame startGame = MultiGameResponse.StartGame.builder()
-                .gameId(game.getId())
-                .gameMode(gameMode.name())
-                .matchType(matchType.name())
-                .totalRounds(game.getTotalRounds())
-                .roundId(0L)
-                .isPoiNameVisible(game.isPoiNameVisible())
-                .currentRound(game.getCurrentRound())
-                .roundTimeLimit(game.getTimeLimit())
-                .players(players)
-                .payload(null)
-                .build();
+        // Mapper를 통한 응답 DTO 생성
+        MultiGameResponse.StartGame startGame = responseMapper.toStartGameResponse(
+                creationResult, gameMode, matchType);
 
         return new StartGamePreparation(startGame, TARGET_ROUTE, null);
     }
 }
-

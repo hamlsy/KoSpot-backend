@@ -42,7 +42,7 @@ public class CheckAndCompleteRoundEarlyUseCase {
         round.validateRoundNotFinished();
         gameTimerService.stopRoundTimer(gameRoomId, round);
 
-        log.info("✅ Round completed early - RoundId: {}, MatchType: {}", roundId, matchType);
+        log.info("Round completed early - RoundId: {}, MatchType: {}", roundId, matchType);
 
         EarlyRoundCompletionEvent event = new EarlyRoundCompletionEvent(
                 gameRoomId, gameId, roundId, mode, matchType
@@ -51,32 +51,6 @@ public class CheckAndCompleteRoundEarlyUseCase {
         return true;
     }
 
-    private boolean completeRoundEarly(String gameRoomId, Long gameId, Long roundId,
-                                       GameMode mode, PlayerMatchType matchType) {
-        RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
-        round.validateRoundNotFinished();
-
-        boolean allSubmitted = roadViewSubmissionService.hasAllParticipantsSubmitted(
-                gameId, roundId, matchType
-        );
-        
-        if (!allSubmitted) {
-            log.warn("⚠️ Redis-DB mismatch detected - RoundId: {}, MatchType: {}", 
-                    roundId, matchType);
-            return false;
-        }
-
-        gameTimerService.stopRoundTimer(gameRoomId, round);
-        
-        log.info("✅ Round completed early - RoundId: {}, MatchType: {}", roundId, matchType);
-
-        EarlyRoundCompletionEvent event = new EarlyRoundCompletionEvent(
-                gameRoomId, gameId, roundId, mode, matchType
-        );
-        eventPublisher.publishEvent(event);
-
-        return true;
-    }
 
     /**
      * 매치 타입에 따른 예상 제출 수 계산
