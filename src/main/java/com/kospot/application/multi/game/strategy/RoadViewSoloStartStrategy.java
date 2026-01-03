@@ -54,6 +54,7 @@ public class RoadViewSoloStartStrategy implements MultiGameStartStrategy {
                 .matchType(matchType.name())
                 .totalRounds(game.getTotalRounds())
                 .roundId(0L)
+                .isPoiNameVisible(game.isPoiNameVisible())
                 .currentRound(game.getCurrentRound())
                 .roundTimeLimit(game.getTimeLimit())
                 .players(players)

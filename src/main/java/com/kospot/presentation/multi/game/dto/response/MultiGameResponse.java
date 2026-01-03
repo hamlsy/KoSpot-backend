@@ -20,6 +20,7 @@ public class MultiGameResponse {
         private int totalRounds;
         private Long roundId;
         private int currentRound;
+        private boolean isPoiNameVisible;
         private long roundTimeLimit;
         private List<GamePlayerResponse> players;
         private Object payload;

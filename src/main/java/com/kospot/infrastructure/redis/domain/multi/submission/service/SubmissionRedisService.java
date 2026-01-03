@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -45,7 +46,7 @@ public class SubmissionRedisService {
 
             return currentCount;
         }
-        log.warn("⚠️ Duplicate submission attempt - RoundId: {}, PlayerId: {}", roundId, playerId);
+        log.warn("Duplicate submission attempt - RoundId: {}, PlayerId: {}", roundId, playerId);
         return getCurrentSubmissionCount(mode, roundId);
     }
 
@@ -67,7 +68,7 @@ public class SubmissionRedisService {
 
             return currentCount;
         }
-        log.warn("⚠️ Duplicate team submission attempt - RoundId: {}, TeamId: {}", roundId, teamId);
+        log.warn("Duplicate team submission attempt - RoundId: {}, TeamId: {}", roundId, teamId);
         return getCurrentSubmissionCount(mode, roundId);
     }
 
@@ -91,11 +92,12 @@ public class SubmissionRedisService {
     }
 
     public void cleanupRound(GameMode mode, Long roundId) {
-        String playersKey = getPlayersKey(mode, roundId);
-        String countKey = getCountKey(mode, roundId);
-
-        redisTemplate.delete(countKey);
-        redisTemplate.delete(playersKey);
+        Set<String> keysToDelete = Set.of(
+                getCountKey(mode, roundId),
+                getPlayersKey(mode, roundId),
+                getTeamsKey(mode, roundId)
+        );
+        redisTemplate.delete(keysToDelete);
     }
 
     public String getCountKey(GameMode mode,Long roundId) {

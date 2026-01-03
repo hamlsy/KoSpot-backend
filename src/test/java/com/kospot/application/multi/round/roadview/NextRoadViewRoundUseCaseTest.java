@@ -13,7 +13,7 @@ import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.gamePlayer.vo.GamePlayerStatus;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.round.service.RoadViewGameRoundService;
+import com.kospot.domain.multi.round.service.roadview.RoadViewGameRoundService;
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
 import com.kospot.infrastructure.redis.domain.multi.game.service.MultiGameRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;

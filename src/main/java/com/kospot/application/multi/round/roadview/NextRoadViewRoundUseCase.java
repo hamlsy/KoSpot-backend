@@ -9,7 +9,7 @@ import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.round.service.RoadViewGameRoundService;
+import com.kospot.domain.multi.round.service.roadview.RoadViewGameRoundService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
@@ -116,7 +116,7 @@ public class NextRoadViewRoundUseCase {
     }
 
     /**
-     * 라운드 번호에 따라 적절한 재발행 로직을 선택한다.
+     * 라운드 번호에 따라 적절한 재발행 로직을 선택
      */
     public MultiRoadViewGameResponse.RoundProblem reissueRound(Long roomId, Long gameId, Long roundId) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchGame(roundId);
@@ -140,7 +140,7 @@ public class NextRoadViewRoundUseCase {
     private void scheduleRound(String roomKey,
                                RoadViewGameRound round,
                                Object preview) {
-        // 프리뷰를 즉시 브로드캐스트 해서 프론트가 8초간 오버레이를 재생할 수 있도록 한다.
+        // 프리뷰를 즉시 브로드캐스트 해서 프론트가 8초간 오버레이를 재생
         gameRoundNotificationService.broadcastRoundStart(roomKey, preview);
 
         multiGameFlowScheduler.schedule(roomKey, MultiGameFlowScheduler.FlowTaskType.INTRO,
@@ -150,7 +150,7 @@ public class NextRoadViewRoundUseCase {
 
     private void startRound(String roomKey, Long roundId) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
-        // 8초 오버레이가 끝난 시점에 서버 기준 라운드 시작을 선언한다.
+        // 8초 오버레이가 끝난 시점에 서버 기준 라운드 시작을 선언
         round.startRound();
         gameTimerService.startRoundTimer(buildTimerCommand(roomKey, round));
     }

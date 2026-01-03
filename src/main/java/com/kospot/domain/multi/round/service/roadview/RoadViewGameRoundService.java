@@ -1,4 +1,4 @@
-package com.kospot.domain.multi.round.service;
+package com.kospot.domain.multi.round.service.roadview;
 
 import com.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
 import com.kospot.domain.coordinate.entity.Coordinate;

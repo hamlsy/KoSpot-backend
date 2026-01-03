@@ -22,13 +22,14 @@ public class MultiRoadViewGame extends MultiGame {
     private Long gameRoomId;
 
     // 생성 메서드
-    public static MultiRoadViewGame createGame(Long gameRoomId, PlayerMatchType matchType,
+    public static MultiRoadViewGame createGame(Long gameRoomId, PlayerMatchType matchType, boolean isPoiNameVisible,
                                                Integer roundCount, Integer timeLimit) {
         MultiRoadViewGame game = MultiRoadViewGame.builder()
                 .matchType(matchType)
                 .gameMode(GameMode.ROADVIEW)  // 로드뷰 모드로 고정
                 .totalRounds(roundCount)
                 .timeLimit(timeLimit)
+                .isPoiNameVisible(isPoiNameVisible)
                 .currentRound(0) // 시작 전에는 0
                 .timeLimit(timeLimit)
                 .isFinished(false)

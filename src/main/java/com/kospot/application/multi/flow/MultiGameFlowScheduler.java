@@ -38,7 +38,6 @@ public class MultiGameFlowScheduler {
 
         if (future != null) {
             scheduledTasks.put(taskKey, future);
-            log.debug("Scheduled flow task - RoomId: {}, TaskType: {}, DelayMs: {}", roomId, taskType, delay.toMillis());
         }
     }
 
@@ -47,7 +46,7 @@ public class MultiGameFlowScheduler {
         ScheduledFuture<?> future = scheduledTasks.remove(taskKey);
         if (future != null) {
             future.cancel(false);
-            log.debug("Cancelled flow task - RoomId: {}, TaskType: {}", roomId, taskType);
+
         }
     }
 
