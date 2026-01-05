@@ -16,11 +16,9 @@ public class MultiGameStatistic {
     private double avgScore;
     private double totalScore;
     private long firstPlace;
-    private long secondPlace;
-    private long thirdPlace;
 
     public static MultiGameStatistic initialize() {
-        return new MultiGameStatistic(0L, 0.0, 0.0, 0L, 0L, 0L);
+        return new MultiGameStatistic(0L, 0.0, 0.0, 0L);
     }
 
     public void update(double score, Integer rank) {
@@ -28,12 +26,8 @@ public class MultiGameStatistic {
         this.totalScore += score;
         this.avgScore = this.totalScore / this.games;
 
-        if (rank != null) {
-            switch (rank) {
-                case 1 -> this.firstPlace++;
-                case 2 -> this.secondPlace++;
-                case 3 -> this.thirdPlace++;
-            }
+        if (rank != null && rank == 1) {
+            this.firstPlace++;
         }
     }
     public double getWinRate() {

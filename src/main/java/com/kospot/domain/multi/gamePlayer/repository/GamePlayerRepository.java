@@ -54,4 +54,9 @@ public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
            "WHERE gp.multiRoadViewGame.id = :gameId " +
            "AND gp.teamNumber IS NOT NULL")
     int countDistinctTeamsByGameId(@Param("gameId") Long gameId);
+
+    @Query("SELECT COUNT(gp) FROM GamePlayer gp " +
+           "WHERE gp.multiRoadViewGame.id = :gameId " +
+           "AND gp.status = 'PLAYING'")
+    int countActivePlayersByRoadViewGameId(@Param("gameId") Long gameId);
 }

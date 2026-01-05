@@ -6,7 +6,7 @@ import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.gamePlayer.service.GamePlayerService;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.round.service.RoadViewGameRoundService;
+import com.kospot.domain.multi.round.service.roadview.RoadViewGameRoundService;
 import com.kospot.domain.multi.submission.adaptor.roadview.RoadViewSubmissionAdaptor;
 import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
 import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;

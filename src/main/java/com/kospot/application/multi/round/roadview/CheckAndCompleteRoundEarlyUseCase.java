@@ -42,7 +42,7 @@ public class CheckAndCompleteRoundEarlyUseCase {
         round.validateRoundNotFinished();
         gameTimerService.stopRoundTimer(gameRoomId, round);
 
-        log.info("✅ Round completed early - RoundId: {}, MatchType: {}", roundId, matchType);
+        log.info("Round completed early - RoundId: {}, MatchType: {}", roundId, matchType);
 
         EarlyRoundCompletionEvent event = new EarlyRoundCompletionEvent(
                 gameRoomId, gameId, roundId, mode, matchType
@@ -61,14 +61,14 @@ public class CheckAndCompleteRoundEarlyUseCase {
         );
         
         if (!allSubmitted) {
-            log.warn("⚠️ Redis-DB mismatch detected - RoundId: {}, MatchType: {}", 
+            log.warn("Redis-DB mismatch detected - RoundId: {}, MatchType: {}",
                     roundId, matchType);
             return false;
         }
 
         gameTimerService.stopRoundTimer(gameRoomId, round);
         
-        log.info("✅ Round completed early - RoundId: {}, MatchType: {}", roundId, matchType);
+        log.info("Round completed early - RoundId: {}, MatchType: {}", roundId, matchType);
 
         EarlyRoundCompletionEvent event = new EarlyRoundCompletionEvent(
                 gameRoomId, gameId, roundId, mode, matchType

@@ -63,8 +63,6 @@ public class AdminMemberResponse {
         private Long roadviewMultiGames;
         private Double roadviewMultiAvgScore;
         private Long roadviewMultiFirstPlace;
-        private Long roadviewMultiSecondPlace;
-        private Long roadviewMultiThirdPlace;
 
         // 통계 정보 (포토 모드)
         private Long photoPracticeGames;
@@ -74,8 +72,6 @@ public class AdminMemberResponse {
         private Long photoMultiGames;
         private Double photoMultiAvgScore;
         private Long photoMultiFirstPlace;
-        private Long photoMultiSecondPlace;
-        private Long photoMultiThirdPlace;
 
         // 공통 통계
         private Double bestScore;
@@ -104,8 +100,6 @@ public class AdminMemberResponse {
                     .roadviewMultiGames(roadViewStatistic.getMulti().getGames())
                     .roadviewMultiAvgScore(roadViewStatistic.getMulti().getAvgScore())
                     .roadviewMultiFirstPlace(roadViewStatistic.getMulti().getFirstPlace())
-                    .roadviewMultiSecondPlace(roadViewStatistic.getMulti().getSecondPlace())
-                    .roadviewMultiThirdPlace(roadViewStatistic.getMulti().getThirdPlace())
                     // 포토
                     .photoPracticeGames(photoStatistic.getPractice().getGames())
                     .photoPracticeAvgScore(photoStatistic.getPractice().getAvgScore())
@@ -114,8 +108,6 @@ public class AdminMemberResponse {
                     .photoMultiGames(photoStatistic.getMulti().getGames())
                     .photoMultiAvgScore(photoStatistic.getMulti().getAvgScore())
                     .photoMultiFirstPlace(photoStatistic.getMulti().getFirstPlace())
-                    .photoMultiSecondPlace(photoStatistic.getMulti().getSecondPlace())
-                    .photoMultiThirdPlace(photoStatistic.getMulti().getThirdPlace())
                     // 공통
                     .bestScore(calculateBestScore(statistic.getModeStatistics()))
                     .currentStreak(playStreak != null ? playStreak.getCurrentStreak() : 0)

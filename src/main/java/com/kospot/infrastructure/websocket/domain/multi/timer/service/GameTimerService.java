@@ -240,6 +240,25 @@ public class GameTimerService {
         cancelAllTasks(taskKey);
     }
 
+    /**
+     * 게임 전체 취소 - 모든 관련 태스크 정리
+     */
+    public void cancelAllForGame(String gameRoomId, Long gameId) {
+        String transitionTaskKey = getTransitionTaskKey(gameRoomId, gameId);
+        cancelTransitionTask(transitionTaskKey);
+        cancelTransitionSyncTask(transitionTaskKey);
+
+        // 모든 라운드 관련 태스크도 정리 (roomId로 시작하는 키)
+        syncTasks.keySet().stream()
+                .filter(key -> key.startsWith(gameRoomId + ":"))
+                .forEach(this::cancelSyncTask);
+        completionTasks.keySet().stream()
+                .filter(key -> key.startsWith(gameRoomId + ":"))
+                .forEach(this::cancelCompletionTask);
+
+        log.info("All timer tasks cancelled for game - RoomId: {}, GameId: {}", gameRoomId, gameId);
+    }
+
     // === Task 관리 ===
 
     private void cancelSyncTask(String taskKey) {

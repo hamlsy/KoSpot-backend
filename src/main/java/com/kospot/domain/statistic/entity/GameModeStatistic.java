@@ -2,12 +2,10 @@ package com.kospot.domain.statistic.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.domain.statistic.vo.GameTypeStatistic;
 import com.kospot.domain.statistic.vo.MultiGameStatistic;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -66,9 +64,7 @@ public class GameModeStatistic extends BaseTimeEntity {
             @AttributeOverride(name = "games", column = @Column(name = "multi_games")),
             @AttributeOverride(name = "avgScore", column = @Column(name = "multi_avg_score")),
             @AttributeOverride(name = "totalScore", column = @Column(name = "multi_total_score")),
-            @AttributeOverride(name = "firstPlace", column = @Column(name = "multi_first_place")),
-            @AttributeOverride(name = "secondPlace", column = @Column(name = "multi_second_place")),
-            @AttributeOverride(name = "thirdPlace", column = @Column(name = "multi_third_place"))
+            @AttributeOverride(name = "firstPlace", column = @Column(name = "multi_first_place"))
     })
     private MultiGameStatistic multi;
 

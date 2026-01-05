@@ -47,4 +47,34 @@ public class GameNotificationService {
             log.error("Failed to broadcast loading status - RoomId: {}", roomId, e);
         }
     }
+
+    @WebSocketDoc(
+        trigger = "모든 플레이어가 퇴장하여 게임이 취소될 때",
+        description = "게임 취소 알림 메시지를 방송합니다.",
+        destination = MultiGameChannelConstants.PREFIX_GAME + "{roomId}/cancelled",
+        payloadType = GameCancelledMessage.class
+    )
+    public void broadcastGameCancelled(String roomId, Long gameId, String reason) {
+        try {
+            GameCancelledMessage message = GameCancelledMessage.builder()
+                    .gameId(gameId)
+                    .reason(reason)
+                    .timestamp(System.currentTimeMillis())
+                    .build();
+            String destination = MultiGameChannelConstants.PREFIX_GAME + roomId + "/cancelled";
+            messagingTemplate.convertAndSend(destination, message);
+            log.info("Broadcast game cancelled - RoomId: {}, GameId: {}, Reason: {}", roomId, gameId, reason);
+        } catch (Exception e) {
+            log.error("Failed to broadcast game cancelled - RoomId: {}, GameId: {}", roomId, gameId, e);
+        }
+    }
+
+    @lombok.Builder
+    @lombok.Getter
+    @lombok.AllArgsConstructor
+    public static class GameCancelledMessage {
+        private Long gameId;
+        private String reason;
+        private Long timestamp;
+    }
 }

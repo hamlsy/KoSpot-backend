@@ -24,9 +24,7 @@ public interface GameModeStatisticRepository extends JpaRepository<GameModeStati
                AVG(g.practice.avgScore) as avgPracticeScore,
                AVG(g.rank.avgScore) as avgRankScore,
                AVG(g.multi.avgScore) as avgMultiScore,
-               SUM(g.multi.firstPlace) as totalFirstPlace,
-               SUM(g.multi.secondPlace) as totalSecondPlace,
-               SUM(g.multi.thirdPlace) as totalThirdPlace
+               SUM(g.multi.firstPlace) as totalFirstPlace
         FROM GameModeStatistic g
         GROUP BY g.gameMode
         """)
@@ -38,9 +36,7 @@ public interface GameModeStatisticRepository extends JpaRepository<GameModeStati
                AVG(g.practice.avgScore) as avgPracticeScore,
                AVG(g.rank.avgScore) as avgRankScore,
                AVG(g.multi.avgScore) as avgMultiScore,
-               SUM(g.multi.firstPlace) as totalFirstPlace,
-               SUM(g.multi.secondPlace) as totalSecondPlace,
-               SUM(g.multi.thirdPlace) as totalThirdPlace
+               SUM(g.multi.firstPlace) as totalFirstPlace
         FROM GameModeStatistic g
         WHERE g.createdDate BETWEEN :startDate AND :endDate
         GROUP BY g.gameMode

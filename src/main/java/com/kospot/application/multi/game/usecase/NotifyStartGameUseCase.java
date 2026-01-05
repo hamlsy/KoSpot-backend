@@ -1,6 +1,6 @@
 package com.kospot.application.multi.game.usecase;
 
-import com.kospot.application.multi.flow.PlayerTransitionService;
+import com.kospot.application.multi.flow.GameTransitionOrchestrator;
 import com.kospot.application.multi.game.strategy.MultiGameStartStrategy;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
@@ -21,6 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 게임 시작 알림 및 초기화를 처리하는 UseCase
+ * 방장이 게임 시작을 요청하면 전략을 통해 게임을 생성하고 로딩 단계를 시작한다.
+ */
 @Slf4j
 @UseCase
 @RequiredArgsConstructor
@@ -29,15 +33,19 @@ public class NotifyStartGameUseCase {
 
     private static final long DEFAULT_COUNTDOWN_MS = 3_000L;
 
+    // Domain Services
     private final GameRoomService gameRoomService;
     private final GameRoomAdaptor gameRoomAdaptor;
-    private final GameNotificationService gameNotificationService;
-    private final PlayerTransitionService playerTransitionService;
-    private final List<MultiGameStartStrategy> startStrategies; // GameMode와 MatchType별 스타트 컨텍스트를 준비하는 전략 컬렉션
 
-    /**
-     * 방장이 게임 시작을 요청하면 모드별 전략으로 컨텍스트를 만들고 로딩 단계를 연다.
-     */
+    // Strategy Collection
+    private final List<MultiGameStartStrategy> startStrategies;
+
+    // Orchestrator
+    private final GameTransitionOrchestrator gameTransitionOrchestrator;
+
+    // Infrastructure Services (직접 사용)
+    private final GameNotificationService gameNotificationService;
+
     public MultiGameResponse.StartGame execute(Member host, Long gameRoomId) {
         if (gameRoomId == null) {
             throw new GameHandler(ErrorStatus.GAME_ROOM_NOT_FOUND);
@@ -48,27 +56,23 @@ public class NotifyStartGameUseCase {
         GameMode gameMode = gameRoom.getGameMode();
         PlayerMatchType matchType = gameRoom.getPlayerMatchType();
 
-        MultiGameStartStrategy strategy = startStrategies.stream()
-                .filter(it -> it.supports(gameMode, matchType))
-                .findFirst()
-                .orElseThrow(() -> new GameHandler(ErrorStatus.GAME_TYPE_NOT_FOUND));
+        MultiGameStartStrategy strategy = findStrategy(gameMode, matchType);
 
         MultiGameStartStrategy.StartGamePreparation preparation =
                 strategy.prepare(gameRoom, gameMode, matchType);
 
         MultiGameResponse.StartGame response = preparation.startGame();
         String roomKey = gameRoom.getId().toString();
+
+        // 게임 시작 브로드캐스트
         broadcastGameStart(roomKey, preparation, response);
 
-        // 스케줄링
-        playerTransitionService.initializeLoadingPhase(roomKey, response.getGameId());
+        // 로딩 단계 시작
+        gameTransitionOrchestrator.initializeLoadingPhase(roomKey, response.getGameId());
 
         return response;
     }
 
-    /**
-     * 게임 모드를 요청 파라미터 혹은 방 설정에서 결정한다.
-     */
     private GameMode resolveGameMode(GameRoom gameRoom, MultiGameRequest.Start request) {
         String gameModeKey = request.getGameModeKey();
         if (gameModeKey == null || gameModeKey.isBlank()) {
@@ -77,9 +81,7 @@ public class NotifyStartGameUseCase {
         return GameMode.fromKey(gameModeKey);
     }
 
-    /**
-     * 매치 타입을 요청 파라미터 혹은 방 설정에서 결정한다.
-     */
+
     private PlayerMatchType resolveMatchType(GameRoom gameRoom, MultiGameRequest.Start request) {
         String matchTypeKey = request.getPlayerMatchTypeKey();
         if (matchTypeKey == null || matchTypeKey.isBlank()) {
@@ -88,9 +90,15 @@ public class NotifyStartGameUseCase {
         return PlayerMatchType.fromKey(matchTypeKey);
     }
 
-    /**
-     * 게임 시작 브로드캐스트 메시지를 구성해 프론트로 송신한다.
-     */
+    private MultiGameStartStrategy findStrategy(GameMode gameMode, PlayerMatchType matchType) {
+        return startStrategies.stream()
+                .filter(it -> it.supports(gameMode, matchType))
+                .findFirst()
+                .orElseThrow(() -> new GameHandler(ErrorStatus.GAME_TYPE_NOT_FOUND));
+
+    }
+
+
     private void broadcastGameStart(String roomId,
                                     MultiGameStartStrategy.StartGamePreparation preparation,
                                     MultiGameResponse.StartGame response) {
@@ -117,4 +125,3 @@ public class NotifyStartGameUseCase {
         gameNotificationService.broadcastGameStart(roomId, startMessage);
     }
 }
-

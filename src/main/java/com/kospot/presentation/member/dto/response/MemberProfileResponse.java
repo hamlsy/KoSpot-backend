@@ -5,7 +5,6 @@ import com.kospot.domain.gamerank.vo.RankTier;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -58,8 +57,6 @@ public class MemberProfileResponse {
             private long totalGames;
             private double averageScore;
             private long firstPlaceCount;
-            private long secondPlaceCount;
-            private long thirdPlaceCount;
         }
     }
 

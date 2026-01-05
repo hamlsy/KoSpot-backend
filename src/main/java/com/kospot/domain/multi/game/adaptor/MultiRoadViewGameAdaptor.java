@@ -23,5 +23,8 @@ public class MultiRoadViewGameAdaptor {
         );
     }
 
+    public java.util.Optional<MultiRoadViewGame> findInProgressByGameRoomId(Long gameRoomId) {
+        return repository.findInProgressByGameRoomId(gameRoomId);
+    }
 
 }

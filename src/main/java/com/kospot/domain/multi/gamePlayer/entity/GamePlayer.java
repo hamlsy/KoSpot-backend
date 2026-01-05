@@ -96,4 +96,12 @@ public class GamePlayer {
     public void addScore(double points) {
         this.totalScore += points;
     }
+
+    public void abandon() {
+        this.status = GamePlayerStatus.ABANDONED;
+    }
+
+    public boolean isActive() {
+        return GamePlayerStatus.PLAYING.equals(this.status);
+    }
 }

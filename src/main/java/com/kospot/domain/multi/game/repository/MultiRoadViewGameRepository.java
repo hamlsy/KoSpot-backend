@@ -12,5 +12,7 @@ public interface MultiRoadViewGameRepository extends JpaRepository<MultiRoadView
 
     List<MultiRoadViewGame> findAllByGameRoomId(Long id);
 
+    @Query("SELECT g FROM MultiRoadViewGame g WHERE g.gameRoomId = :gameRoomId AND g.status = 'IN_PROGRESS'")
+    Optional<MultiRoadViewGame> findInProgressByGameRoomId(@Param("gameRoomId") Long gameRoomId);
 
 }

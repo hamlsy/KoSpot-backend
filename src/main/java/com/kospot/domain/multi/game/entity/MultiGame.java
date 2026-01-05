@@ -4,6 +4,7 @@ import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.game.vo.MultiGameStatus;
+import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
@@ -31,6 +32,9 @@ public abstract class MultiGame extends BaseTimeEntity {
     // 게임 모드: 로드뷰 또는 사진
     @Enumerated(EnumType.STRING)
     private GameMode gameMode;
+
+    @Column(name = "game_room_id", updatable = false)
+    private Long gameRoomId;
 
     private Integer timeLimit;
 
@@ -101,6 +105,10 @@ public abstract class MultiGame extends BaseTimeEntity {
 
     public boolean isCancelled() {
         return MultiGameStatus.CANCELLED.equals(this.status);
+    }
+
+    public boolean isFinished() {
+        return MultiGameStatus.FINISHED.equals(this.status);
     }
 
 }
