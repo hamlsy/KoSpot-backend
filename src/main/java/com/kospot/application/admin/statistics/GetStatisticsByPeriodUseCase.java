@@ -41,8 +41,6 @@ public class GetStatisticsByPeriodUseCase {
         Double avgRankScore = row[3] != null ? ((Number) row[3]).doubleValue() : null;
         Double avgMultiScore = row[4] != null ? ((Number) row[4]).doubleValue() : null;
         Long totalFirstPlace = row[5] != null ? ((Number) row[5]).longValue() : 0L;
-        Long totalSecondPlace = row[6] != null ? ((Number) row[6]).longValue() : 0L;
-        Long totalThirdPlace = row[7] != null ? ((Number) row[7]).longValue() : 0L;
 
         return new GameModeStatisticSummary(
                 gameMode,
@@ -50,9 +48,7 @@ public class GetStatisticsByPeriodUseCase {
                 avgPracticeScore,
                 avgRankScore,
                 avgMultiScore,
-                totalFirstPlace,
-                totalSecondPlace,
-                totalThirdPlace
+                totalFirstPlace
         );
     }
 }

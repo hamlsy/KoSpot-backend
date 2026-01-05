@@ -1,6 +1,7 @@
 package com.kospot.presentation.member.controller;
 
 import com.kospot.application.member.GetMemberProfileUseCase;
+import com.kospot.application.member.GetPlayerSummaryUseCase;
 import com.kospot.application.member.SetNicknameUseCase;
 import com.kospot.application.member.UpdateNicknameUseCase;
 import com.kospot.domain.member.entity.Member;
@@ -9,6 +10,7 @@ import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse;
+import com.kospot.presentation.member.dto.response.PlayerSummaryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final GetMemberProfileUseCase getMemberProfileUseCase;
+    private final GetPlayerSummaryUseCase getPlayerSummaryUseCase;
     private final SetNicknameUseCase setNicknameUseCase;
     private final UpdateNicknameUseCase updateNicknameUseCase;
 
@@ -31,6 +34,13 @@ public class MemberController {
     @BotSuccess
     public ApiResponseDto<MemberProfileResponse> getMemberProfile(@CurrentMember Member member) {
         MemberProfileResponse response = getMemberProfileUseCase.execute(member);
+        return ApiResponseDto.onSuccess(response);
+    }
+
+    @Operation(summary = "플레이어 간략 정보 조회", description = "특정 플레이어의 간략한 정보를 조회합니다. (닉네임, 연속 플레이, 마커 이미지, 랭크 정보, 멀티플레이 통계)")
+    @GetMapping("/{memberId}/summary")
+    public ApiResponseDto<PlayerSummaryResponse> getPlayerSummary(@PathVariable("memberId") Long memberId) {
+        PlayerSummaryResponse response = getPlayerSummaryUseCase.execute(memberId);
         return ApiResponseDto.onSuccess(response);
     }
 

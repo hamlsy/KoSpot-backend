@@ -73,8 +73,6 @@ public class GetMemberProfileUseCase {
                                 .totalGames(roadViewStatistic.getMulti().getGames())
                                 .averageScore(roadViewStatistic.getMulti().getAvgScore())
                                 .firstPlaceCount(roadViewStatistic.getMulti().getFirstPlace())
-                                .secondPlaceCount(roadViewStatistic.getMulti().getSecondPlace())
-                                .thirdPlaceCount(roadViewStatistic.getMulti().getThirdPlace())
                                 .build())
                         .build())
                 .photo(PhotoGameStats.builder()
@@ -90,8 +88,6 @@ public class GetMemberProfileUseCase {
                                 .totalGames(photoStatistic.getMulti().getGames())
                                 .averageScore(photoStatistic.getMulti().getAvgScore())
                                 .firstPlaceCount(photoStatistic.getMulti().getFirstPlace())
-                                .secondPlaceCount(photoStatistic.getMulti().getSecondPlace())
-                                .thirdPlaceCount(photoStatistic.getMulti().getThirdPlace())
                                 .build())
                         .build())
                 .build();

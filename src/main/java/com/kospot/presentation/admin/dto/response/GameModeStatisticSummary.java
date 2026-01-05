@@ -13,8 +13,6 @@ public class GameModeStatisticSummary {
     private Double avgRankScore;
     private Double avgMultiScore;
     private Long totalFirstPlace;
-    private Long totalSecondPlace;
-    private Long totalThirdPlace;
 
     public Double getOverallAvgScore() {
         if (avgPracticeScore == null || avgRankScore == null || avgMultiScore == null) {
