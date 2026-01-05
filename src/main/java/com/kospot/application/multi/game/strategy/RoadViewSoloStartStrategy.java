@@ -32,12 +32,9 @@ public class RoadViewSoloStartStrategy implements MultiGameStartStrategy {
     }
 
     /**
-<<<<<<< HEAD
      * 로드뷰 개인전 시작 컨텍스트를 구성해 게임, 플레이어 정보를 준비
-=======
      * 로드뷰 개인전 시작 컨텍스트를 구성해 게임, 플레이어 정보를 준비한다.
      * Factory로 게임/플레이어 생성을 위임하고, Mapper로 DTO 변환을 위임한다.
->>>>>>> b6ea0d14dbf42f0519020a45269942e57b63af7e
      */
     @Override
     public StartGamePreparation prepare(GameRoom gameRoom,

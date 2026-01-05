@@ -1,11 +1,8 @@
 package com.kospot.application.multi.round.roadview;
 
 import com.kospot.application.multi.flow.MultiGameFlowScheduler;
-<<<<<<< HEAD
 import com.kospot.application.multi.game.service.CancelMultiGameService;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
-=======
->>>>>>> b6ea0d14dbf42f0519020a45269942e57b63af7e
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
@@ -38,6 +35,7 @@ public class NextRoadViewRoundUseCase {
 
     // Domain Service
     private final RoundPreparationService roundPreparationService;
+    private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
 
     // Infrastructure Services (직접 사용)
     private final MultiGameRedisService multiGameRedisService;
@@ -52,24 +50,17 @@ public class NextRoadViewRoundUseCase {
      * 모든 플레이어 로딩이 끝난 직후 호출되어 1라운드를 준비한다.
      */
     public MultiRoadViewGameResponse.StartPlayerGame executeInitial(Long roomId, Long gameId) {
-<<<<<<< HEAD
         // 활성 플레이어 검증 (안전장치)
         if (cancelMultiGameService.cancelIfNoActivePlayers(roomId, gameId)) {
             log.info("Game cancelled before initial round - no active players. RoomId: {}, GameId: {}", roomId, gameId);
             return null;
         }
 
-        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
-        if (game.isInProgress()) {
-            log.info("Game already started - skip initial execution. GameId: {}", gameId);
-=======
         // 도메인 서비스에 라운드 준비 위임
         RoundPreparationService.InitialRoundResult result =
                 roundPreparationService.prepareInitialRound(gameId);
-
         if (result == null) {
             log.info("Initial round already prepared - RoomId: {}, GameId: {}", roomId, gameId);
->>>>>>> b6ea0d14dbf42f0519020a45269942e57b63af7e
             return null;
         }
 
@@ -94,20 +85,14 @@ public class NextRoadViewRoundUseCase {
      * 라운드가 종료된 뒤 다음 라운드를 준비할 때 사용한다.
      */
     public MultiRoadViewGameResponse.NextRound execute(Long roomId, Long gameId) {
-<<<<<<< HEAD
         // 활성 플레이어 검증 (안전장치)
         if (cancelMultiGameService.cancelIfNoActivePlayers(roomId, gameId)) {
             log.info("Game cancelled before next round - no active players. RoomId: {}, GameId: {}", roomId, gameId);
             return null;
         }
-
-        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
-        game.moveToNextRound();
-=======
         // 도메인 서비스에 라운드 준비 위임
         RoundPreparationService.NextRoundResult result =
                 roundPreparationService.prepareNextRound(gameId);
->>>>>>> b6ea0d14dbf42f0519020a45269942e57b63af7e
 
         String roomKey = roomId.toString();
         long version = multiGameRedisService.incrementRoundVersion(roomKey, result.getRound().getId());
@@ -187,3 +172,4 @@ public class NextRoadViewRoundUseCase {
         });
     }
 }
+

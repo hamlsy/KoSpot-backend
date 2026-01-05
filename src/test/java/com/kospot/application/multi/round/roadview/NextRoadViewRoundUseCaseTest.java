@@ -94,7 +94,7 @@ class NextRoadViewRoundUseCaseTest {
                 gameTimerService,
                 multiGameFlowScheduler,
                 multiGameRedisService,
-                transactionManager
+                transactionManager,
         );
     }
 

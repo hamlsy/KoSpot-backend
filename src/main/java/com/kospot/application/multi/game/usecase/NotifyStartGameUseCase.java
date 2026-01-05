@@ -13,6 +13,7 @@ import com.kospot.infrastructure.exception.object.domain.GameHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.websocket.domain.multi.game.service.GameNotificationService;
 import com.kospot.presentation.multi.flow.dto.message.RoomGameStartMessage;
+import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
 import com.kospot.presentation.multi.game.dto.response.MultiGameResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,7 +73,6 @@ public class NotifyStartGameUseCase {
         return response;
     }
 
-<<<<<<< HEAD
     private GameMode resolveGameMode(GameRoom gameRoom, MultiGameRequest.Start request) {
         String gameModeKey = request.getGameModeKey();
         if (gameModeKey == null || gameModeKey.isBlank()) {
@@ -88,13 +88,14 @@ public class NotifyStartGameUseCase {
             return gameRoom.getPlayerMatchType();
         }
         return PlayerMatchType.fromKey(matchTypeKey);
-=======
+    }
+
     private MultiGameStartStrategy findStrategy(GameMode gameMode, PlayerMatchType matchType) {
         return startStrategies.stream()
                 .filter(it -> it.supports(gameMode, matchType))
                 .findFirst()
                 .orElseThrow(() -> new GameHandler(ErrorStatus.GAME_TYPE_NOT_FOUND));
->>>>>>> b6ea0d14dbf42f0519020a45269942e57b63af7e
+
     }
 
 

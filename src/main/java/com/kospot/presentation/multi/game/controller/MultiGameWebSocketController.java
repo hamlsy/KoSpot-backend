@@ -1,6 +1,7 @@
 package com.kospot.presentation.multi.game.controller;
 
-import com.kospot.application.multi.flow.PlayerTransitionService;
+import com.kospot.application.multi.flow.GameTransitionOrchestrator;
+import com.kospot.application.multi.flow.LoadingPhaseService;
 import com.kospot.application.multi.game.websocket.usecase.SendSoloGameMessageUseCase;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import com.kospot.presentation.multi.game.dto.message.LoadingAckMessage;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class MultiGameWebSocketController {
 
-    private final PlayerTransitionService playerTransitionService;
+    private final GameTransitionOrchestrator gameTransitionOrchestrator;
 
     private final SendSoloGameMessageUseCase sendSoloGameMessageUseCase;
 
@@ -25,7 +26,7 @@ public class MultiGameWebSocketController {
     public void handleLoadingAck(@DestinationVariable("roomId") String roomId,
                                  @Payload LoadingAckMessage message,
                                  SimpMessageHeaderAccessor headerAccessor) {
-        playerTransitionService.handleLoadingAck(roomId, message, headerAccessor);
+        gameTransitionOrchestrator.handleLoadingAck(roomId, message, headerAccessor);
     }
 
     @MessageMapping("/room.{roomId}.game.global.chat")

@@ -39,12 +39,8 @@ public class RoundCompletionEventListener {
 
     // Domain Adaptor
     private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
-<<<<<<< HEAD
-    private final GamePlayerAdaptor gamePlayerAdaptor;
-=======
 
     // Infrastructure Services (직접 사용)
->>>>>>> b6ea0d14dbf42f0519020a45269942e57b63af7e
     private final GameRoundNotificationService gameRoundNotificationService;
     private final GameTimerService gameTimerService;
 
