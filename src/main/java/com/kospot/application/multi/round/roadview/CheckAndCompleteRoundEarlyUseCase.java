@@ -51,6 +51,7 @@ public class CheckAndCompleteRoundEarlyUseCase {
         return true;
     }
 
+<<<<<<< HEAD
     private boolean completeRoundEarly(String gameRoomId, Long gameId, Long roundId,
                                        GameMode mode, PlayerMatchType matchType) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryById(roundId);
@@ -77,6 +78,8 @@ public class CheckAndCompleteRoundEarlyUseCase {
 
         return true;
     }
+=======
+>>>>>>> b6ea0d14dbf42f0519020a45269942e57b63af7e
 
     /**
      * 매치 타입에 따른 예상 제출 수 계산
