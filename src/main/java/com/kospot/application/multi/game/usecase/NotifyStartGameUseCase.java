@@ -35,9 +35,6 @@ public class NotifyStartGameUseCase {
     private final PlayerTransitionService playerTransitionService;
     private final List<MultiGameStartStrategy> startStrategies; // GameMode와 MatchType별 스타트 컨텍스트를 준비하는 전략 컬렉션
 
-    /**
-     * 방장이 게임 시작을 요청하면 모드별 전략으로 컨텍스트를 만들고 로딩 단계를 연다.
-     */
     public MultiGameResponse.StartGame execute(Member host, Long gameRoomId) {
         if (gameRoomId == null) {
             throw new GameHandler(ErrorStatus.GAME_ROOM_NOT_FOUND);
@@ -66,9 +63,6 @@ public class NotifyStartGameUseCase {
         return response;
     }
 
-    /**
-     * 게임 모드를 요청 파라미터 혹은 방 설정에서 결정한다.
-     */
     private GameMode resolveGameMode(GameRoom gameRoom, MultiGameRequest.Start request) {
         String gameModeKey = request.getGameModeKey();
         if (gameModeKey == null || gameModeKey.isBlank()) {
@@ -77,9 +71,7 @@ public class NotifyStartGameUseCase {
         return GameMode.fromKey(gameModeKey);
     }
 
-    /**
-     * 매치 타입을 요청 파라미터 혹은 방 설정에서 결정한다.
-     */
+
     private PlayerMatchType resolveMatchType(GameRoom gameRoom, MultiGameRequest.Start request) {
         String matchTypeKey = request.getPlayerMatchTypeKey();
         if (matchTypeKey == null || matchTypeKey.isBlank()) {
@@ -88,9 +80,7 @@ public class NotifyStartGameUseCase {
         return PlayerMatchType.fromKey(matchTypeKey);
     }
 
-    /**
-     * 게임 시작 브로드캐스트 메시지를 구성해 프론트로 송신한다.
-     */
+
     private void broadcastGameStart(String roomId,
                                     MultiGameStartStrategy.StartGamePreparation preparation,
                                     MultiGameResponse.StartGame response) {

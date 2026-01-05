@@ -82,18 +82,18 @@ public class WebSocketEventHandler {
             leaveGlobalLobbyUseCase.execute(accessor);
         }
 
-        if (destination != null && destination.startsWith(PREFIX_GAME_ROOM)) {
-            try {
-                Member member = memberAdaptor.queryById(principal.getMemberId());
-                Long gameRoomId = member.getGameRoomId();
-                if (gameRoomId != null) {
-                    leaveGameRoomUseCase.execute(member, gameRoomId);
-                }
-                log.info("Member left game room on unsubscribe - MemberId: {}", principal.getMemberId());
-            } catch (Exception e) {
-                log.warn("Failed to leave game room on unsubscribe - MemberId: {}", principal.getMemberId(), e);
-            }
-        }
+//        if (destination != null && destination.startsWith(PREFIX_GAME_ROOM)) {
+//            try {
+//                Member member = memberAdaptor.queryById(principal.getMemberId());
+//                Long gameRoomId = member.getGameRoomId();
+//                if (gameRoomId != null) {
+//                    leaveGameRoomUseCase.execute(member, gameRoomId);
+//                }
+//                log.info("Member left game room on unsubscribe - MemberId: {}", principal.getMemberId());
+//            } catch (Exception e) {
+//                log.warn("Failed to leave game room on unsubscribe - MemberId: {}", principal.getMemberId(), e);
+//            }
+//        }
 
         webSocketSessionService.removeSubscription(sessionId, subscriptionId);
         log.info("Unsubscribed - MemberId:{}, Destination:{}, SessionId:{}, SubId:{}",

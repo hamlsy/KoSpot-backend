@@ -65,4 +65,12 @@ public class GamePlayerAdaptor {
     public int countTeamsByGameId(Long gameId) {
         return repository.countDistinctTeamsByGameId(gameId);
     }
+
+    public int countActivePlayersByGameId(Long gameId) {
+        return repository.countActivePlayersByRoadViewGameId(gameId);
+    }
+
+    public java.util.Optional<GamePlayer> findByMemberIdAndGameId(Long memberId, Long gameId) {
+        return repository.findByMemberIdAndMultiGameId(memberId, gameId);
+    }
 }

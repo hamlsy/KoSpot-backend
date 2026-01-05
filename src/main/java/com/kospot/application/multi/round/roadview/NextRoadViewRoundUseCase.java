@@ -1,6 +1,7 @@
 package com.kospot.application.multi.round.roadview;
 
 import com.kospot.application.multi.flow.MultiGameFlowScheduler;
+import com.kospot.application.multi.game.service.CancelMultiGameService;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
@@ -50,11 +51,18 @@ public class NextRoadViewRoundUseCase {
     private final MultiGameFlowScheduler multiGameFlowScheduler;
     private final MultiGameRedisService multiGameRedisService;
     private final PlatformTransactionManager transactionManager;
+    private final CancelMultiGameService cancelMultiGameService;
 
     /**
      * 모든 플레이어 로딩이 끝난 직후 호출되어 1라운드를 준비한다.
      */
     public MultiRoadViewGameResponse.StartPlayerGame executeInitial(Long roomId, Long gameId) {
+        // 활성 플레이어 검증 (안전장치)
+        if (cancelMultiGameService.cancelIfNoActivePlayers(roomId, gameId)) {
+            log.info("Game cancelled before initial round - no active players. RoomId: {}, GameId: {}", roomId, gameId);
+            return null;
+        }
+
         MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
         if (game.isInProgress()) {
             log.info("Game already started - skip initial execution. GameId: {}", gameId);
@@ -85,6 +93,12 @@ public class NextRoadViewRoundUseCase {
      * 라운드가 종료된 뒤 다음 라운드를 준비할 때 사용한다.
      */
     public MultiRoadViewGameResponse.NextRound execute(Long roomId, Long gameId) {
+        // 활성 플레이어 검증 (안전장치)
+        if (cancelMultiGameService.cancelIfNoActivePlayers(roomId, gameId)) {
+            log.info("Game cancelled before next round - no active players. RoomId: {}, GameId: {}", roomId, gameId);
+            return null;
+        }
+
         MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
         game.moveToNextRound();
 

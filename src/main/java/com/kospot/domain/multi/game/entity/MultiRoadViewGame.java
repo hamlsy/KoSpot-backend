@@ -18,9 +18,6 @@ public class MultiRoadViewGame extends MultiGame {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "game_room_id", insertable = false, updatable = false)
-    private Long gameRoomId;
-
     // 생성 메서드
     public static MultiRoadViewGame createGame(Long gameRoomId, PlayerMatchType matchType, boolean isPoiNameVisible,
                                                Integer roundCount, Integer timeLimit) {

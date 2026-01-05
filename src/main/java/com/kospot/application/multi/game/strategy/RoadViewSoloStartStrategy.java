@@ -33,7 +33,7 @@ public class RoadViewSoloStartStrategy implements MultiGameStartStrategy {
 
     @Override
     /**
-     * 로드뷰 개인전 시작 컨텍스트를 구성해 게임, 플레이어 정보를 준비한다.
+     * 로드뷰 개인전 시작 컨텍스트를 구성해 게임, 플레이어 정보를 준비
      */
     public StartGamePreparation prepare(GameRoom gameRoom,
                                         GameMode gameMode,

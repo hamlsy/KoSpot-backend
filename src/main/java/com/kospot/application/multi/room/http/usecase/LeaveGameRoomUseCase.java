@@ -1,13 +1,20 @@
 package com.kospot.application.multi.room.http.usecase;
 
+import com.kospot.application.multi.game.service.CancelMultiGameService;
 import com.kospot.application.multi.room.vo.LeaveDecision;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
+import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
+import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
+import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.event.GameRoomLeaveEvent;
+import com.kospot.domain.multi.room.repository.GameRoomRepository;
 import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
+import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
@@ -34,17 +41,29 @@ public class LeaveGameRoomUseCase {
 
     private final MemberAdaptor memberAdaptor;
     private final GameRoomAdaptor gameRoomAdaptor;
+    private final GameRoomRepository gameRoomRepository;
     private final GameRoomService gameRoomService;
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
     private final ApplicationEventPublisher eventPublisher;
     private final RedissonClient redissonClient;
 
+    // 게임 진행 중 퇴장 처리
+    private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
+    private final GamePlayerAdaptor gamePlayerAdaptor;
+    private final CancelMultiGameService cancelMultiGameService;
+
     //notify
     private final LobbyRoomNotificationService lobbyRoomNotificationService;
 
     public void execute(Member member, Long gameRoomId) {
-        GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
+        // 게임 방이 없을 경우 member leaveGameRoom 실행
+        GameRoom gameRoom = gameRoomRepository.findById(gameRoomId).orElse(null);
+        if(gameRoom == null) {
+            member.leaveGameRoom();
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_NOT_FOUND);
+        }
+
         String roomId = gameRoom.getId().toString();
         String lockKey = "lock:game:room:" + roomId;
         RLock lock = redissonClient.getLock(lockKey);
@@ -64,6 +83,12 @@ public class LeaveGameRoomUseCase {
             
             applyLeaveToDatabase(member, gameRoom, decision);
             gameRoomRedisService.cleanupPlayerSession(member.getId());
+
+            // 게임 진행 중 퇴장 시 GamePlayer 상태 업데이트 및 활성 플레이어 검증
+            // (방 삭제 시에는 applyLeaveToDatabase에서 이미 처리됨)
+            if (decision.getAction() != LeaveDecision.Action.DELETE_ROOM) {
+                handleGamePlayerAbandonIfPlaying(gameRoom, member);
+            }
             
             // 이벤트 발행
             eventPublisher.publishEvent(new GameRoomLeaveEvent(gameRoom, member, decision, playerInfo));
@@ -170,6 +195,10 @@ public class LeaveGameRoomUseCase {
         gameRoomService.leaveGameRoom(member, gameRoom);
         switch(decision.getAction()) {
             case DELETE_ROOM:
+                // 방 삭제 전 진행 중인 게임 취소
+                if (GameRoomStatus.PLAYING.equals(gameRoom.getStatus())) {
+                    cancelMultiGameService.cancelGameOnRoomDeletion(gameRoom.getId());
+                }
                 gameRoomService.deleteRoom(gameRoom);
                 lobbyRoomNotificationService.notifyRoomDeleted(gameRoom.getId());
                 break;
@@ -180,6 +209,45 @@ public class LeaveGameRoomUseCase {
             case NORMAL_LEAVE:
                 // 별도 처리 없음
                 break;
+        }
+    }
+
+    /**
+     * 게임 진행 중 퇴장 시 GamePlayer 상태를 ABANDONED로 변경하고,
+     * 활성 플레이어가 0명이면 즉시 게임을 취소합니다.
+     */
+    private void handleGamePlayerAbandonIfPlaying(GameRoom gameRoom, Member member) {
+        if (!GameRoomStatus.PLAYING.equals(gameRoom.getStatus())) {
+            return;
+        }
+
+        Optional<MultiRoadViewGame> inProgressGame = multiRoadViewGameAdaptor.findInProgressByGameRoomId(gameRoom.getId());
+        if (inProgressGame.isEmpty()) {
+            log.debug("No in-progress game found for room - RoomId: {}", gameRoom.getId());
+            return;
+        }
+
+        MultiRoadViewGame game = inProgressGame.get();
+        Optional<GamePlayer> gamePlayerOpt = gamePlayerAdaptor.findByMemberIdAndGameId(member.getId(), game.getId());
+        if (gamePlayerOpt.isEmpty()) {
+            log.debug("GamePlayer not found for member - MemberId: {}, GameId: {}", member.getId(), game.getId());
+            return;
+        }
+
+        GamePlayer gamePlayer = gamePlayerOpt.get();
+        if (!gamePlayer.isActive()) {
+            log.debug("GamePlayer already abandoned - MemberId: {}, GameId: {}", member.getId(), game.getId());
+            return;
+        }
+
+        gamePlayer.abandon();
+        log.info("GamePlayer abandoned - MemberId: {}, GameId: {}", member.getId(), game.getId());
+
+        // 활성 플레이어가 0명이면 즉시 게임 취소
+        boolean cancelled = cancelMultiGameService.cancelIfNoActivePlayers(gameRoom.getId(), game.getId());
+        if (cancelled) {
+            log.info("Game cancelled due to no active players after abandon - RoomId: {}, GameId: {}", 
+                    gameRoom.getId(), game.getId());
         }
     }
 

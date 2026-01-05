@@ -27,10 +27,6 @@ public class MultiPhotoGame extends MultiGame {
 
     // 각 라운드별 보여줄 사진 수(사진 모드에서 사용)
     private Integer photosPerRound;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_room_id")
-    private GameRoom gameRoom;
     
     @OneToMany(mappedBy = "multiPhotoGame", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhotoGameRound> photoGameRounds = new ArrayList<>();
@@ -46,7 +42,7 @@ public class MultiPhotoGame extends MultiGame {
                 .currentRound(0) // 시작 전에는 0
                 .isFinished(false)
                 .photosPerRound(photosPerRound)
-                .gameRoom(gameRoom)
+                .gameRoomId(gameRoom.getId())
                 .build();
     }
     

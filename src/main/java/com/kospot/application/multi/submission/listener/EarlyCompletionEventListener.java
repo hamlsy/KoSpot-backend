@@ -27,7 +27,7 @@ public class EarlyCompletionEventListener {
         );
         
         if (completed) {
-            log.info("🎉 Round completed early via event - RoundId: {}", event.getRoundId());
+            log.info("Round completed early via event - RoundId: {}", event.getRoundId());
         }
     }
 

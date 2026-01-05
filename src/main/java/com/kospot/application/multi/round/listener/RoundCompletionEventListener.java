@@ -1,5 +1,6 @@
 package com.kospot.application.multi.round.listener;
 
+import com.kospot.application.multi.game.service.CancelMultiGameService;
 import com.kospot.application.multi.game.usecase.FinishMultiRoadViewGameUseCase;
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
 import com.kospot.application.multi.round.roadview.solo.EndRoadViewSoloRoundUseCase;
@@ -7,6 +8,7 @@ import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiGame;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
+import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.submission.event.EarlyRoundCompletionEvent;
 import com.kospot.domain.multi.timer.event.RoundCompletionEvent;
 import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;
@@ -29,9 +31,11 @@ public class RoundCompletionEventListener {
     private final EndRoadViewSoloRoundUseCase endRoadViewSoloRoundUseCase;
     private final NextRoadViewRoundUseCase nextRoadViewRoundUseCase;
     private final FinishMultiRoadViewGameUseCase finishMultiRoadViewGameUseCase;
+    private final CancelMultiGameService cancelMultiGameService;
 
     // ===
     private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
+    private final GamePlayerAdaptor gamePlayerAdaptor;
     private final GameRoundNotificationService gameRoundNotificationService;
     private final GameTimerService gameTimerService;
 
@@ -72,6 +76,13 @@ public class RoundCompletionEventListener {
 
     private void handleRoadViewRoundCompletion(String gameRoomId, Long gameId,
                                                Long roundId, PlayerMatchType matchType) {
+        // 활성 플레이어 검증 (안전장치)
+        Long roomId = Long.parseLong(gameRoomId);
+        if (cancelMultiGameService.cancelIfNoActivePlayers(roomId, gameId)) {
+            log.info("Game cancelled at round completion - no active players. RoomId: {}, GameId: {}", gameRoomId, gameId);
+            return;
+        }
+
         switch (matchType) {
             case SOLO -> {
                 RoadViewRoundResponse.PlayerResult result = endRoadViewSoloRoundUseCase.execute(gameId, roundId);
