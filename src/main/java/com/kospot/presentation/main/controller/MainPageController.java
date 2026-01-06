@@ -30,7 +30,7 @@ public class MainPageController {
     @Operation(
             summary = "메인 페이지 정보 조회",
             description = "메인 페이지에 필요한 모든 정보를 한 번에 조회합니다. " +
-                    "(활성화된 게임 모드, 최근 공지사항 3개, 활성화된 배너, 관리자 여부)"
+                    "(최근 공지사항 3개, 활성화된 배너, 관리자 여부)"
     )
     @GetMapping
     public ApiResponseDto<MainPageResponse.MainPageInfo> getMainPageInfo(

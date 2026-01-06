@@ -18,19 +18,16 @@ public class MainPageResponse {
     @AllArgsConstructor
     public static class MainPageInfo {
         private MyInfo myInfo;
-        private GameModeStatus gameModeStatus;
         private List<NoticeResponse.Summary> recentNotices;
         private List<BannerResponse.BannerInfo> banners;
 
         public static MainPageInfo of(
                 MyInfo myInfo,
-                GameModeStatus gameModeStatus,
                 List<NoticeResponse.Summary> recentNotices,
                 List<BannerResponse.BannerInfo> banners
         ) {
             return MainPageInfo.builder()
                     .myInfo(myInfo)
-                    .gameModeStatus(gameModeStatus)
                     .recentNotices(recentNotices)
                     .banners(banners)
                     .build();
@@ -64,25 +61,5 @@ public class MainPageResponse {
         }
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class GameModeStatus {
-        private Boolean roadviewEnabled;
-        private Boolean photoEnabled;
-        private Boolean multiplayEnabled;
-
-        public static GameModeStatus of(
-                Boolean roadviewEnabled,
-                Boolean photoEnabled,
-                Boolean multiplayEnabled
-        ) {
-            return GameModeStatus.builder()
-                    .roadviewEnabled(roadviewEnabled)
-                    .photoEnabled(photoEnabled)
-                    .multiplayEnabled(multiplayEnabled)
-                    .build();
-        }
-    }
 }
 
