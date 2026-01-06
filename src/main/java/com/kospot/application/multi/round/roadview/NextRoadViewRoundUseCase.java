@@ -35,7 +35,6 @@ public class NextRoadViewRoundUseCase {
 
     // Domain Service
     private final RoundPreparationService roundPreparationService;
-    private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
 
     // Infrastructure Services (직접 사용)
     private final MultiGameRedisService multiGameRedisService;

@@ -47,12 +47,12 @@ public class MainPageResponse {
         private int currentPoint;
 
         public static MyInfo of(
-                Member member, MemberStatistic statistic
+                Member member, MemberStatistic statistic, String equippedMarkerImageUrl
         ) {
             return MyInfo.builder()
                     .nickname(member.getNickname())
                     .email(member.getEmail())
-                    .equippedMarkerImageUrl(member.getEquippedMarkerImage().getImageUrl())
+                    .equippedMarkerImageUrl(equippedMarkerImageUrl)
                     .isAdmin(member.isAdmin())
                     .isFirstVisited(member.isFirstVisited())
                     .lastPlayedAt(statistic.getLastPlayedAt())
