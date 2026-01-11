@@ -7,6 +7,7 @@ import com.kospot.domain.notice.adaptor.NoticeAdaptor;
 import com.kospot.domain.notice.entity.Notice;
 import com.kospot.domain.notice.service.NoticeService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.redis.domain.notice.service.RecentNoticeCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,18 +23,22 @@ public class DeleteNoticeUseCase {
     private final NoticeAdaptor noticeAdaptor;
     private final NoticeService noticeService;
     private final ImageService imageService;
+    private final RecentNoticeCacheService recentNoticeCacheService;
 
     public void execute(Member member, Long noticeId) {
-        //validate
+        // validate
         member.validateAdmin();
         Notice notice = noticeAdaptor.findByIdFetchImage(noticeId);
 
-        //delete images
+        // delete images
         List<Image> images = notice.getImages();
         images.forEach(imageService::deleteImage);
 
-        //delete notice
+        // delete notice
         noticeService.deleteNotice(notice);
+
+        // 캐시 무효화
+        recentNoticeCacheService.evictCache();
     }
 
 }

@@ -1,91 +1,48 @@
 package com.kospot.application.main;
 
-import com.kospot.domain.banner.adaptor.BannerAdaptor;
-import com.kospot.domain.banner.entity.Banner;
-import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.gameconfig.adaptor.GameConfigAdaptor;
-import com.kospot.domain.gameconfig.entity.GameConfig;
 import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.service.MemberService;
-import com.kospot.domain.notice.adaptor.NoticeAdaptor;
-import com.kospot.domain.notice.entity.Notice;
 import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.redis.domain.banner.service.ActiveBannerCacheService;
+import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.infrastructure.redis.domain.member.dao.MemberProfileRedisRepository;
+import com.kospot.infrastructure.redis.domain.notice.service.RecentNoticeCacheService;
 import com.kospot.presentation.banner.dto.response.BannerResponse;
 import com.kospot.presentation.main.dto.response.MainPageResponse;
 import com.kospot.presentation.notice.dto.response.NoticeResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @UseCase
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FindMainPageInfoUseCase {
 
-    private final MemberService memberService;
     private final MemberStatisticAdaptor memberStatisticAdaptor;
-    private final GameConfigAdaptor gameConfigAdaptor;
-    private final NoticeAdaptor noticeAdaptor;
-    private final BannerAdaptor bannerAdaptor;
+    private final ActiveBannerCacheService activeBannerCacheService;
+    private final RecentNoticeCacheService recentNoticeCacheService;
 
-    private static final int RECENT_NOTICE_LIMIT = 3;
+    private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
     public MainPageResponse.MainPageInfo execute(Member member) {
-        // 관리자 여부 확인
+        // 멤버 정보 조회
         MainPageResponse.MyInfo myInfo = null;
-        if(member != null) {
+        if (member != null) {
             MemberStatistic statistic = memberStatisticAdaptor.queryByMember(member);
-            myInfo = MainPageResponse.MyInfo.of(member, statistic);
+            MemberProfileRedisAdaptor.MemberProfileView profileView = memberProfileRedisAdaptor.findProfile(member.getId());
+            String profileImageUrl = profileView.markerImageUrl();
+            myInfo = MainPageResponse.MyInfo.of(member, statistic, profileImageUrl);
         }
 
+        // 최근 공지사항 3개 조회 (Redis 캐시 우선)
+        List<NoticeResponse.Summary> noticeSummaries = recentNoticeCacheService.getRecentNotices();
 
-        // 활성화된 게임 모드 조회
-        List<GameConfig> activeGameConfigs = gameConfigAdaptor.queryAllActive();
+        // 활성화된 배너 조회 (Redis 캐시 우선)
+        List<BannerResponse.BannerInfo> banners = activeBannerCacheService.getActiveBanners();
 
-        // GameConfig가 하나도 없으면 기본값으로 모두 활성화 (true)
-        Boolean roadviewEnabled;
-        Boolean photoEnabled;
-        Boolean multiplayEnabled;
-
-        if (activeGameConfigs.isEmpty()) {
-            // 기본값: 모두 활성화
-            roadviewEnabled = true;
-            photoEnabled = true;
-            multiplayEnabled = true;
-        } else {
-            // 실제 설정 기반으로 활성화 여부 확인
-            roadviewEnabled = activeGameConfigs.stream()
-                    .anyMatch(config -> config.getGameMode() == GameMode.ROADVIEW);
-
-            photoEnabled = activeGameConfigs.stream()
-                    .anyMatch(config -> config.getGameMode() == GameMode.PHOTO);
-
-            multiplayEnabled = activeGameConfigs.stream()
-                    .anyMatch(config -> !config.getIsSingleMode());
-        }
-
-        MainPageResponse.GameModeStatus gameModeStatus = MainPageResponse.GameModeStatus.of(
-                roadviewEnabled,
-                photoEnabled,
-                multiplayEnabled
-        );
-
-        // 최근 공지사항 3개 조회
-        List<Notice> recentNotices = noticeAdaptor.queryRecentNotices(RECENT_NOTICE_LIMIT);
-        List<NoticeResponse.Summary> noticeSummaries = recentNotices.stream()
-                .map(NoticeResponse.Summary::from)
-                .collect(Collectors.toList());
-
-        // 활성화된 배너 조회
-        List<Banner> activeBanners = bannerAdaptor.queryAllActive();
-        List<BannerResponse.BannerInfo> banners = activeBanners.stream()
-                .map(BannerResponse.BannerInfo::from)
-                .collect(Collectors.toList());
-
-        return MainPageResponse.MainPageInfo.of(
-                myInfo, gameModeStatus, noticeSummaries, banners);
+        return MainPageResponse.MainPageInfo.of(myInfo, noticeSummaries, banners);
     }
 }
-
