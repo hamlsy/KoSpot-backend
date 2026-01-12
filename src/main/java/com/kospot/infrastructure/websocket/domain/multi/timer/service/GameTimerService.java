@@ -156,7 +156,7 @@ public class GameTimerService {
         cancelTransitionSyncTask(taskKey);
 
         // 1. 초기 전환 타이머 브로드캐스트
-        broadcastRoundTransitionTimer(gameRoomId, game);
+        broadcastRoundTransitionTimer(gameRoomId, game, transitionEndTime);
 
         // 2. 2초마다 동기화 브로드캐스트 스케줄링
         scheduleTransitionSync(gameRoomId, game, transitionEndTime, taskKey);
@@ -179,7 +179,7 @@ public class GameTimerService {
                         return;
                     }
 
-                    broadcastRoundTransitionTimer(gameRoomId, game);
+                    broadcastRoundTransitionTimer(gameRoomId, game, transitionEndTime);
 
                 }, Instant.now().plusMillis(TRANSITION_SYNC_INTERVAL_MS),
                 Duration.ofMillis(TRANSITION_SYNC_INTERVAL_MS));
@@ -190,21 +190,17 @@ public class GameTimerService {
                 gameRoomId, TRANSITION_SYNC_INTERVAL_MS);
     }
 
-    private void broadcastRoundTransitionTimer(String gameRoomId, MultiGame game) {
+    private void broadcastRoundTransitionTimer(String gameRoomId, MultiGame game, Instant fixedNextRoundStartTime) {
         Instant now = Instant.now();
-        Instant nextRoundStartTime = now.plusSeconds(NEXT_ROUND_DELAY_SECONDS);
 
         RoundTransitionTimerMessage message = RoundTransitionTimerMessage.builder()
-                .nextRoundStartTimeMs(nextRoundStartTime.toEpochMilli())
+                .nextRoundStartTimeMs(fixedNextRoundStartTime.toEpochMilli())
                 .serverTimestamp(System.currentTimeMillis())
                 .isLastRound(game.isLastRound())
                 .build();
 
         String destination = MultiGameChannelConstants.getRoundTransitionChannel(gameRoomId);
         messagingTemplate.convertAndSend(destination, message);
-
-        log.info("Round transition timer broadcasted - RoomId: {}, NextStartTime: {}, IsLastRound: {}",
-                gameRoomId, nextRoundStartTime, game.isLastRound());
     }
 
     /**
