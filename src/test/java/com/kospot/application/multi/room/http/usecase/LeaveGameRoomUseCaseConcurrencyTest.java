@@ -117,7 +117,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
     }
 
     @DisplayName("방장과 다음 방장 후보가 동시에 퇴장해도, 남은 인원 중 한 명이 정상적으로 방장이 된다")
-    @RepeatedTest(10)
+    @RepeatedTest(100)
     void concurrentLeaveRequest_shouldAssignHostToSurvivor() throws InterruptedException {
         // given
         String uniqueId = UUID.randomUUID().toString().substring(0, 8);
