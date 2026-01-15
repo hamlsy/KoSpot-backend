@@ -70,11 +70,14 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         // #region agent log
         try {
             java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                    (java.time.Instant.now().toEpochMilli() + "|setUp|entry|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:67\",\"message\":\"setUp 시작\"}\n").getBytes(),
+                    (java.time.Instant.now().toEpochMilli()
+                            + "|setUp|entry|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:67\",\"message\":\"setUp 시작\"}\n")
+                            .getBytes(),
                     java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         // #endregion
-        
+
         // 호스트 멤버 생성
         hostMember = createAndSaveMember("host", "호스트");
 
@@ -84,9 +87,12 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         // #region agent log
         try {
             java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                    (java.time.Instant.now().toEpochMilli() + "|setUp|beforeJoin|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:89\",\"message\":\"방 생성 완료\",\"data\":{\"roomId\":\"" + testGameRoom.getId() + "\",\"maxPlayers\":4}}\n").getBytes(),
+                    (java.time.Instant.now().toEpochMilli()
+                            + "|setUp|beforeJoin|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:89\",\"message\":\"방 생성 완료\",\"data\":{\"roomId\":\""
+                            + testGameRoom.getId() + "\",\"maxPlayers\":4}}\n").getBytes(),
                     java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         // #endregion
 
         // 이전 테스트에서 남은 Redis 데이터 정리
@@ -97,9 +103,12 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         try {
             int countAfterCleanup = gameRoomRedisService.getRoomPlayers(roomId).size();
             java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                    (java.time.Instant.now().toEpochMilli() + "|setUp|afterCleanup|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:95\",\"message\":\"Redis 데이터 정리 후\",\"data\":{\"roomId\":\"" + roomId + "\",\"currentCount\":" + countAfterCleanup + "}}\n").getBytes(),
+                    (java.time.Instant.now().toEpochMilli()
+                            + "|setUp|afterCleanup|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:95\",\"message\":\"Redis 데이터 정리 후\",\"data\":{\"roomId\":\""
+                            + roomId + "\",\"currentCount\":" + countAfterCleanup + "}}\n").getBytes(),
                     java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         // #endregion
 
         // 테스트 멤버들 생성 (5명)
@@ -122,44 +131,26 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         try {
             int currentCount = gameRoomRedisService.getRoomPlayers(roomId).size();
             java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                    (java.time.Instant.now().toEpochMilli() + "|setUp|afterHostAdd|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:115\",\"message\":\"호스트 추가 후\",\"data\":{\"roomId\":\"" + roomId + "\",\"currentCount\":" + currentCount + ",\"maxPlayers\":4}}\n").getBytes(),
+                    (java.time.Instant.now().toEpochMilli()
+                            + "|setUp|afterHostAdd|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:115\",\"message\":\"호스트 추가 후\",\"data\":{\"roomId\":\""
+                            + roomId + "\",\"currentCount\":" + currentCount + ",\"maxPlayers\":4}}\n").getBytes(),
                     java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         // #endregion
 
-        // 테스트 멤버들을 방에 참가시킴
-        for (int i = 0; i < 3; i++) {
-            Member member = testMembers.get(i);
-            
-            // #region agent log
-            try {
-                int countBefore = gameRoomRedisService.getRoomPlayers(roomId).size();
-                java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                        (java.time.Instant.now().toEpochMilli() + "|setUp|beforeJoinMember|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:125\",\"message\":\"멤버 참가 전\",\"data\":{\"roomId\":\"" + roomId + "\",\"memberId\":\"" + member.getId() + "\",\"currentCount\":" + countBefore + ",\"maxPlayers\":4}}\n").getBytes(),
-                        java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-            } catch (Exception e) {}
-            // #endregion
-            
-            joinGameRoomUseCase.executeV1(member, testGameRoom.getId(), 
-                    com.kospot.presentation.multi.room.dto.request.GameRoomRequest.Join.builder().build());
-            
-            // #region agent log
-            try {
-                int countAfter = gameRoomRedisService.getRoomPlayers(roomId).size();
-                java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                        (java.time.Instant.now().toEpochMilli() + "|setUp|afterJoinMember|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:133\",\"message\":\"멤버 참가 후\",\"data\":{\"roomId\":\"" + roomId + "\",\"memberId\":\"" + member.getId() + "\",\"currentCount\":" + countAfter + ",\"maxPlayers\":4}}\n").getBytes(),
-                        java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-            } catch (Exception e) {}
-            // #endregion
-        }
-        
+        // 테스트 멤버들은 각 테스트에서 필요에 따라 직접 참가시킴 (setUp에서 미리 참가시키지 않음)
+
         // #region agent log
         try {
             int finalCount = gameRoomRedisService.getRoomPlayers(roomId).size();
             java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                    (java.time.Instant.now().toEpochMilli() + "|setUp|exit|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:141\",\"message\":\"setUp 완료\",\"data\":{\"roomId\":\"" + roomId + "\",\"finalCount\":" + finalCount + ",\"maxPlayers\":4}}\n").getBytes(),
+                    (java.time.Instant.now().toEpochMilli()
+                            + "|setUp|exit|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:141\",\"message\":\"setUp 완료\",\"data\":{\"roomId\":\""
+                            + roomId + "\",\"finalCount\":" + finalCount + ",\"maxPlayers\":4}}\n").getBytes(),
                     java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         // #endregion
     }
 
@@ -190,7 +181,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
             // 플레이어들을 방에 참가시킴
             List<Member> roundPlayers = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                Member player = createAndSaveMember("player_round_" + round + "_" + i, 
+                Member player = createAndSaveMember("player_round_" + round + "_" + i,
                         "라운드" + round + "플레이어" + i);
                 roundPlayers.add(player);
                 joinGameRoomUseCase.executeV1(player, roundGameRoom.getId(),
@@ -273,17 +264,17 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         // then: 다음 방장이 지정되었는지 확인
         String roomId = testGameRoom.getId().toString();
         List<GameRoomPlayerInfo> remainingPlayers = gameRoomRedisService.getRoomPlayers(roomId);
-        
+
         boolean hasHost = remainingPlayers.stream().anyMatch(GameRoomPlayerInfo::isHost);
         assertThat(hasHost).isTrue();
-        
+
         GameRoomPlayerInfo newHost = remainingPlayers.stream()
                 .filter(GameRoomPlayerInfo::isHost)
                 .findFirst()
                 .orElse(null);
-        
+
         assertThat(newHost).isNotNull();
-        log.info("새 방장 지정 확인 - MemberId: {}, Nickname: {}", 
+        log.info("새 방장 지정 확인 - MemberId: {}, Nickname: {}",
                 newHost.getMemberId(), newHost.getNickname());
     }
 
@@ -350,7 +341,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
                     .mapToLong(Long::longValue)
                     .average()
                     .orElse(0.0);
-            
+
             long maxWaitTime = waitTimes.stream()
                     .mapToLong(Long::longValue)
                     .max()
@@ -382,7 +373,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         // then
         long playerCountAfter = gameRoomRedisService.getRoomPlayers(roomId).size();
         assertThat(playerCountAfter).isEqualTo(playerCountBefore - 1);
-        
+
         // 플레이어가 Redis에서 제거되었는지 확인
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(roomId);
         boolean playerExists = players.stream()
@@ -406,7 +397,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         // then: 방 데이터가 Redis에서 삭제되었는지 확인
         String roomId = testGameRoom.getId().toString();
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(roomId);
-        
+
         assertThat(players).isEmpty();
         log.info("모든 플레이어 퇴장 시 방 삭제 확인 완료");
     }
@@ -430,9 +421,12 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         // #region agent log
         try {
             java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                    (java.time.Instant.now().toEpochMilli() + "|test|newRoom|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:360\",\"message\":\"새 방 생성\",\"data\":{\"roomId\":\"" + roomId + "\",\"maxPlayers\":4}}\n").getBytes(),
+                    (java.time.Instant.now().toEpochMilli()
+                            + "|test|newRoom|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:360\",\"message\":\"새 방 생성\",\"data\":{\"roomId\":\""
+                            + roomId + "\",\"maxPlayers\":4}}\n").getBytes(),
                     java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         // #endregion
 
         // when: 여러 라운드 반복 (동일한 방에서)
@@ -440,11 +434,14 @@ class LeaveGameRoomUseCaseConcurrencyTest {
             // #region agent log
             try {
                 java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                        (java.time.Instant.now().toEpochMilli() + "|test|roundStart|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:365\",\"message\":\"라운드 시작\",\"data\":{\"round\":" + round + ",\"roomId\":\"" + roomId + "\"}}\n").getBytes(),
+                        (java.time.Instant.now().toEpochMilli()
+                                + "|test|roundStart|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:365\",\"message\":\"라운드 시작\",\"data\":{\"round\":"
+                                + round + ",\"roomId\":\"" + roomId + "\"}}\n").getBytes(),
                         java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             // #endregion
-            
+
             // 각 라운드마다 플레이어들을 다시 참가시킴 (게임 시작 전 상태 재현)
             long hostJoinedAt = System.currentTimeMillis();
             GameRoomPlayerInfo hostInfo = GameRoomPlayerInfo.builder()
@@ -459,9 +456,13 @@ class LeaveGameRoomUseCaseConcurrencyTest {
             try {
                 int countAfterHost = gameRoomRedisService.getRoomPlayers(roomId).size();
                 java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                        (java.time.Instant.now().toEpochMilli() + "|test|afterHostAdd|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:377\",\"message\":\"호스트 추가 후\",\"data\":{\"round\":" + round + ",\"roomId\":\"" + roomId + "\",\"currentCount\":" + countAfterHost + ",\"maxPlayers\":4}}\n").getBytes(),
+                        (java.time.Instant.now().toEpochMilli()
+                                + "|test|afterHostAdd|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:377\",\"message\":\"호스트 추가 후\",\"data\":{\"round\":"
+                                + round + ",\"roomId\":\"" + roomId + "\",\"currentCount\":" + countAfterHost
+                                + ",\"maxPlayers\":4}}\n").getBytes(),
                         java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             // #endregion
 
             // 플레이어들을 방에 참가시킴 (호스트보다 늦게 들어옴)
@@ -469,16 +470,20 @@ class LeaveGameRoomUseCaseConcurrencyTest {
             for (int i = 0; i < 2; i++) {
                 Member player = testMembers.get(i);
                 roundPlayers.add(player);
-                
+
                 // #region agent log
                 try {
                     int countBefore = gameRoomRedisService.getRoomPlayers(roomId).size();
                     java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                            (java.time.Instant.now().toEpochMilli() + "|test|beforePlayerAdd|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:384\",\"message\":\"플레이어 추가 전\",\"data\":{\"round\":" + round + ",\"roomId\":\"" + roomId + "\",\"memberId\":\"" + player.getId() + "\",\"currentCount\":" + countBefore + ",\"maxPlayers\":4}}\n").getBytes(),
+                            (java.time.Instant.now().toEpochMilli()
+                                    + "|test|beforePlayerAdd|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:384\",\"message\":\"플레이어 추가 전\",\"data\":{\"round\":"
+                                    + round + ",\"roomId\":\"" + roomId + "\",\"memberId\":\"" + player.getId()
+                                    + "\",\"currentCount\":" + countBefore + ",\"maxPlayers\":4}}\n").getBytes(),
                             java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
                 // #endregion
-                
+
                 long playerJoinedAt = System.currentTimeMillis() + 100 + (i * 10); // 호스트보다 늦게, 순차적으로
                 GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.builder()
                         .memberId(player.getId())
@@ -487,14 +492,18 @@ class LeaveGameRoomUseCaseConcurrencyTest {
                         .joinedAt(playerJoinedAt)
                         .build();
                 gameRoomRedisService.savePlayerToRoom(roomId, playerInfo);
-                
+
                 // #region agent log
                 try {
                     int countAfter = gameRoomRedisService.getRoomPlayers(roomId).size();
                     java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                            (java.time.Instant.now().toEpochMilli() + "|test|afterPlayerAdd|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:395\",\"message\":\"플레이어 추가 후\",\"data\":{\"round\":" + round + ",\"roomId\":\"" + roomId + "\",\"memberId\":\"" + player.getId() + "\",\"currentCount\":" + countAfter + ",\"maxPlayers\":4}}\n").getBytes(),
+                            (java.time.Instant.now().toEpochMilli()
+                                    + "|test|afterPlayerAdd|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:395\",\"message\":\"플레이어 추가 후\",\"data\":{\"round\":"
+                                    + round + ",\"roomId\":\"" + roomId + "\",\"memberId\":\"" + player.getId()
+                                    + "\",\"currentCount\":" + countAfter + ",\"maxPlayers\":4}}\n").getBytes(),
                             java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
                 // #endregion
             }
 
@@ -506,7 +515,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
             // 1. 호스트가 makeLeaveDecisionWithLock에서 nextHostCandidate를 선택 (아직 Redis에 있음)
             // 2. nextHostCandidate가 먼저 퇴장 처리 완료 → Redis에서 제거됨
             // 3. 호스트가 applyLeaveToRedis에서 nextHostCandidate를 방장으로 지정하려고 시도
-            //    → 재검증 로직(isNewHostStillInRoom)으로 인해 이미 퇴장한 플레이어는 방장이 되지 않아야 함
+            // → 재검증 로직(isNewHostStillInRoom)으로 인해 이미 퇴장한 플레이어는 방장이 되지 않아야 함
 
             ExecutorService executorService = Executors.newFixedThreadPool(2);
             CountDownLatch startLatch = new CountDownLatch(1); // 동시 시작을 위한 래치
@@ -550,31 +559,31 @@ class LeaveGameRoomUseCaseConcurrencyTest {
 
             // 검증: 이미 퇴장한 플레이어가 방장으로 지정되었는지 확인
             List<GameRoomPlayerInfo> remainingPlayers = gameRoomRedisService.getRoomPlayers(roomId);
-            
+
             if (!remainingPlayers.isEmpty()) {
                 // 방에 남은 플레이어 중 방장이 있는지 확인
                 List<GameRoomPlayerInfo> hosts = remainingPlayers.stream()
                         .filter(GameRoomPlayerInfo::isHost)
                         .toList();
-                
+
                 if (!hosts.isEmpty()) {
                     GameRoomPlayerInfo currentHost = hosts.get(0);
-                    
+
                     // 문제: 이미 퇴장한 플레이어(nextHostCandidate)가 방장으로 지정되었는지 확인
                     // 이는 분산 락이 없었을 때 발생할 수 있는 문제입니다
                     // 현재 코드는 분산 락이 적용되어 있으므로, 이 문제가 발생하지 않아야 합니다
-                    
+
                     // 하지만 타이밍에 따라 재검증 로직이 제대로 작동하지 않을 수 있으므로 확인
                     boolean isLeftPlayerHost = currentHost.getMemberId().equals(nextHostCandidate.getId());
-                    
+
                     // 실제로 방에 남아있는 플레이어인지 확인
                     boolean isHostStillInRoom = remainingPlayers.stream()
                             .anyMatch(p -> p.getMemberId().equals(currentHost.getMemberId()));
-                    
+
                     if (isLeftPlayerHost && !isHostStillInRoom) {
                         issueCount++;
                         log.error("라운드 {}: ⚠️ 이미 퇴장한 플레이어가 방장으로 지정됨! " +
-                                "HostId: {}, HostNickname: {}", 
+                                "HostId: {}, HostNickname: {}",
                                 round, currentHost.getMemberId(), currentHost.getNickname());
                     } else if (isLeftPlayerHost) {
                         // 정상 케이스: 플레이어가 실제로 방에 남아있고 방장으로 지정됨
@@ -594,21 +603,29 @@ class LeaveGameRoomUseCaseConcurrencyTest {
             try {
                 int countBeforeDelete = gameRoomRedisService.getRoomPlayers(roomId).size();
                 java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                        (java.time.Instant.now().toEpochMilli() + "|test|beforeDelete|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"C\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:485\",\"message\":\"방 삭제 전\",\"data\":{\"round\":" + round + ",\"roomId\":\"" + roomId + "\",\"currentCount\":" + countBeforeDelete + "}}\n").getBytes(),
+                        (java.time.Instant.now().toEpochMilli()
+                                + "|test|beforeDelete|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"C\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:485\",\"message\":\"방 삭제 전\",\"data\":{\"round\":"
+                                + round + ",\"roomId\":\"" + roomId + "\",\"currentCount\":" + countBeforeDelete
+                                + "}}\n").getBytes(),
                         java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             // #endregion
-            
+
             gameRoomRedisService.deleteRoomData(roomId);
             Thread.sleep(50); // 상태 정리 대기
-            
+
             // #region agent log
             try {
                 int countAfterDelete = gameRoomRedisService.getRoomPlayers(roomId).size();
                 java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                        (java.time.Instant.now().toEpochMilli() + "|test|afterDelete|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"C\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:490\",\"message\":\"방 삭제 후\",\"data\":{\"round\":" + round + ",\"roomId\":\"" + roomId + "\",\"currentCount\":" + countAfterDelete + "}}\n").getBytes(),
+                        (java.time.Instant.now().toEpochMilli()
+                                + "|test|afterDelete|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"C\",\"location\":\"LeaveGameRoomUseCaseConcurrencyTest.java:490\",\"message\":\"방 삭제 후\",\"data\":{\"round\":"
+                                + round + ",\"roomId\":\"" + roomId + "\",\"currentCount\":" + countAfterDelete
+                                + "}}\n").getBytes(),
                         java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             // #endregion
         }
 
@@ -621,7 +638,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         // 분산 락이 적용된 현재 코드에서는 이 문제가 발생하지 않아야 함
         // 하지만 타이밍에 따라 극히 드물게 발생할 수 있으므로, 0~1회 정도는 허용
         assertThat(issueCount).isLessThanOrEqualTo(1);
-        
+
         if (issueCount == 0) {
             log.info("✅ 분산 락이 적용된 현재 코드에서는 문제가 발생하지 않습니다.");
         } else {
@@ -644,7 +661,6 @@ class LeaveGameRoomUseCaseConcurrencyTest {
                 .point(1000)
                 .equippedMarkerImage(image)
                 .build();
-
 
         return memberRepository.save(member);
     }
@@ -696,7 +712,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
 
             // 1. 방 초기화: 호스트와 여러 플레이어 참가
             long baseTime = System.currentTimeMillis();
-            
+
             // 호스트 참가
             GameRoomPlayerInfo hostInfo = GameRoomPlayerInfo.builder()
                     .memberId(testHost.getId())
@@ -721,7 +737,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
 
             // 2. 현재 방 상태 확인 및 방장, 2번째, 3번째 플레이어 식별
             List<GameRoomPlayerInfo> playersBeforeCritical = gameRoomRedisService.getRoomPlayers(roomId);
-            
+
             // joinedAt 기준으로 정렬하여 방장, 2번째, 3번째 플레이어 식별
             List<GameRoomPlayerInfo> sortedPlayers = playersBeforeCritical.stream()
                     .sorted(Comparator.comparing(GameRoomPlayerInfo::getJoinedAt))
@@ -742,8 +758,8 @@ class LeaveGameRoomUseCaseConcurrencyTest {
             }
 
             // 플레이어 Member 객체 찾기
-            Member hostMember = testHost.getId().equals(hostPlayer.getMemberId()) 
-                    ? testHost 
+            Member hostMember = testHost.getId().equals(hostPlayer.getMemberId())
+                    ? testHost
                     : testPlayers.stream()
                             .filter(p -> p.getId().equals(hostPlayer.getMemberId()))
                             .findFirst()
@@ -825,35 +841,35 @@ class LeaveGameRoomUseCaseConcurrencyTest {
 
             // 5. 검증: 문제 발생 여부 확인
             List<GameRoomPlayerInfo> remainingPlayers = gameRoomRedisService.getRoomPlayers(roomId);
-            
+
             // 퇴장한 플레이어들의 ID (방장, 2번째, 3번째)
             Long hostMemberId = hostMember.getId();
             Long secondMemberId = secondMember.getId();
             Long thirdMemberId = thirdMember.getId();
-            
+
             if (!remainingPlayers.isEmpty()) {
                 // 방에 남은 플레이어 중 방장이 있는지 확인
                 List<GameRoomPlayerInfo> hosts = remainingPlayers.stream()
                         .filter(GameRoomPlayerInfo::isHost)
                         .toList();
-                
+
                 if (!hosts.isEmpty()) {
                     GameRoomPlayerInfo currentHost = hosts.get(0);
                     Long currentHostId = currentHost.getMemberId();
-                    
+
                     // 문제 1: 이미 퇴장한 플레이어(2번째 또는 3번째)가 방장으로 지정되었는지 확인
                     // 이들은 동시에 퇴장했으므로 실제로는 방에 없어야 함
                     // 하지만 savePlayerToRoom으로 Redis에 저장되었을 수 있음
-                    boolean isLeftPlayerHost = currentHostId.equals(secondMemberId) 
+                    boolean isLeftPlayerHost = currentHostId.equals(secondMemberId)
                             || currentHostId.equals(thirdMemberId);
-                    
+
                     // 실제로 방에 남아있는 플레이어인지 확인 (4번째 이후 플레이어만 남아있어야 함)
                     // 퇴장한 플레이어들(방장, 2번째, 3번째)이 방장으로 지정되었다면 문제
                     if (isLeftPlayerHost) {
                         // 이미 퇴장한 플레이어가 방장으로 지정된 경우
                         issueCount++;
                         log.error("반복 {}: ⚠️ 이미 퇴장한 플레이어가 방장으로 지정됨! " +
-                                "HostId: {}, HostNickname: {}, 퇴장한 플레이어: {} 또는 {}", 
+                                "HostId: {}, HostNickname: {}, 퇴장한 플레이어: {} 또는 {}",
                                 iteration + 1, currentHostId, currentHost.getNickname(),
                                 secondMemberId, thirdMemberId);
                     } else if (currentHostId.equals(hostMemberId)) {
@@ -866,13 +882,13 @@ class LeaveGameRoomUseCaseConcurrencyTest {
                     // 문제 2: 방장 없는 방 발생 (플레이어는 남아있지만 방장이 없음)
                     // 4번째 이후 플레이어가 남아있을 수 있음
                     boolean hasRemainingPlayers = remainingPlayers.stream()
-                            .anyMatch(p -> !p.getMemberId().equals(hostMemberId) 
+                            .anyMatch(p -> !p.getMemberId().equals(hostMemberId)
                                     && !p.getMemberId().equals(secondMemberId)
                                     && !p.getMemberId().equals(thirdMemberId));
-                    
+
                     if (hasRemainingPlayers) {
                         hostlessRoomCount++;
-                        log.warn("반복 {}: 방장 없는 방 발생! 남은 플레이어 수: {}", 
+                        log.warn("반복 {}: 방장 없는 방 발생! 남은 플레이어 수: {}",
                                 iteration + 1, remainingPlayers.size());
                     }
                 }

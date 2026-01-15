@@ -61,6 +61,7 @@ dependencies {
 	implementation "com.vladsch.flexmark:flexmark-all:0.64.8"
 	implementation "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1"
 
+
 	//flyway
 //	implementation 'org.flywaydb:flyway-core'
 //	runtimeOnly 'mysql:mysql-connector-j'
@@ -69,6 +70,7 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
