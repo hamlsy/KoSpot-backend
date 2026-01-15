@@ -4,6 +4,7 @@ import com.kospot.domain.multi.room.entity.GameRoom;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -31,4 +32,8 @@ public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
             "case when gr.status = 'WAITING' then 0 else 1 end, gr.createdDate desc")
     List<GameRoom> findAllWithWaitingFirst(Pageable pageable);
 
+
+    @Modifying(clearAutomatically = true) // 쿼리 실행 후 영속성 컨텍스트 초기화
+    @Query("UPDATE GameRoom g SET g.host.id = :newHostId WHERE g.id = :roomId")
+    void updateHost(@Param("roomId") Long roomId, @Param("newHostId") Long newHostId);
 }
