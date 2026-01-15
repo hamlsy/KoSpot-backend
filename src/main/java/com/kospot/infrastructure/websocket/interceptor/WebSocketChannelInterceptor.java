@@ -42,7 +42,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     private final TokenService tokenService;
     private final SubscriptionValidationManager subscriptionValidationManager;
 
-    //session service
+    // session service
     private final WebSocketSessionService webSocketSessionService;
     private final SessionContextRedisService sessionContextRedisService;
 
@@ -74,8 +74,17 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
      * WebSocket 연결 시 인증 처리
      */
     private void handleConnect(StompHeaderAccessor accessor) {
-        String token = extractToken(accessor);
-        WebSocketMemberPrincipal principal = createPrincipalFromToken(token);
+        String token = extractTokenOrNull(accessor);
+
+        WebSocketMemberPrincipal principal;
+        if (token != null) {
+            principal = createPrincipalFromToken(token);
+        } else {
+            // 부하테스트용 익명 Principal (프로덕션에서는 실제 인증 필요)
+            principal = new WebSocketMemberPrincipal(-1L, "load-test", "test@loadtest.com", "TEST");
+            log.debug("Anonymous WebSocket connection for load testing");
+        }
+
         accessor.setUser(principal);
 
         String sessionId = accessor.getSessionId();
@@ -86,7 +95,8 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
             sessionAttributes.put("user", principal);
             sessionAttributes.put("sessionVersion", sessionVersion);
         }
-        if (sessionId != null) {
+        if (sessionId != null && principal.getMemberId() > 0) {
+            // 익명 연결(-1)은 Redis에 저장하지 않음
             sessionContextRedisService.setAttr(sessionId, "memberId", principal.getMemberId());
             sessionContextRedisService.setAttr(sessionId, "sessionVersion", sessionVersion);
             sessionContextRedisService.setAttr(sessionId, "connectedAt", System.currentTimeMillis());
@@ -125,7 +135,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         }
 
         // 확장 가능한 구독 권한 검증
-//        validateSubscriptionAccess(principal, destination); // 나중에 확장 적용
+        // validateSubscriptionAccess(principal, destination); // 나중에 확장 적용
 
         // 세션 정보 저장 (연결 해제 시 정리용)
         webSocketSessionService.saveSessionInfo(accessor.getSessionId(), destination, principal);
@@ -140,7 +150,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     /**
      * 연결 해제 시 세션 정리
      */
-    //todo refactoring
+    // todo refactoring
     private void handleDisconnect(StompHeaderAccessor accessor) {
         String sessionId = accessor.getSessionId();
         if (sessionId == null) {
@@ -184,13 +194,31 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     }
 
     /**
-     * JWT 토큰 추출
+     * JWT 토큰 추출 (예외 발생)
      */
     private String extractToken(StompHeaderAccessor accessor) {
         String nativeToken = accessor.getFirstNativeHeader("Authorization");
         String token = removeBearerHeader(nativeToken);
         tokenService.validateToken(token);
         return token;
+    }
+
+    /**
+     * JWT 토큰 추출 (null 반환, 부하테스트용)
+     */
+    private String extractTokenOrNull(StompHeaderAccessor accessor) {
+        try {
+            String nativeToken = accessor.getFirstNativeHeader("Authorization");
+            if (nativeToken == null || nativeToken.isBlank()) {
+                return null;
+            }
+            String token = removeBearerHeader(nativeToken);
+            tokenService.validateToken(token);
+            return token;
+        } catch (Exception e) {
+            log.debug("Token extraction failed, allowing anonymous connection: {}", e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -236,5 +264,3 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     }
 
 }
-
-

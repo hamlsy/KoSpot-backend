@@ -6,6 +6,7 @@ import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.image.vo.ImageType;
 import com.kospot.domain.item.entity.Item;
+import com.kospot.domain.item.repository.ItemRepository;
 import com.kospot.domain.item.vo.ItemType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.repository.MemberRepository;
@@ -61,6 +62,9 @@ public class MainPagePerformanceTest {
     @Autowired
     private MemberStatisticRepository memberStatisticRepository;
 
+    @Autowired
+    private ItemRepository itemRepository;
+
     private Member testMember;
 
     // 성능 측정 결과 저장
@@ -82,6 +86,7 @@ public class MainPagePerformanceTest {
                 .itemType(ItemType.MARKER)
                 .isDefault(true)
                 .build();
+        itemRepository.save(markerItem);
         // 테스트용 멤버 생성
         testMember = memberRepository.save(
                 Member.builder()
@@ -272,10 +277,15 @@ public class MainPagePerformanceTest {
         log.info("   ┌──────────────────┬────────────────┐");
         log.info("   │ 구분             │ 응답 시간      │");
         log.info("   ├──────────────────┼────────────────┤");
-        log.info("   │ 첫 호출 (DB)     │ {:>8} ms    │", cacheMissTime);
-        log.info("   │ 두번째 (Redis)   │ {:>8} ms    │", cacheHitTime);
+        log.info("   │ 첫 호출 (DB)     │ {} ms    │",
+                String.format("%8.2f", (double) cacheMissTime));
+
+        log.info("   │ 두번째 (Redis)   │ {} ms    │",
+                String.format("%8.2f", (double) cacheHitTime));
+
         log.info("   ├──────────────────┼────────────────┤");
-        log.info("   │ 개선율           │ {:>7.1f}%     │", improvementPercent);
+        log.info("   │ 개선율           │ {}%     │",
+                String.format("%7.1f", improvementPercent));
         log.info("   └──────────────────┴────────────────┘");
         log.info("=================================================");
 

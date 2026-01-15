@@ -29,18 +29,39 @@ public class GameTimerService {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final ApplicationEventPublisher eventPublisher;
-
     private final TaskScheduler gameTimerTaskScheduler;
 
-    private final Map<String, ScheduledFuture<?>> syncTasks = new ConcurrentHashMap<>();
-    private final Map<String, ScheduledFuture<?>> completionTasks = new ConcurrentHashMap<>();
-    private final Map<String, ScheduledFuture<?>> transitionTasks = new ConcurrentHashMap<>();
-    private final Map<String, ScheduledFuture<?>> transitionSyncTasks = new ConcurrentHashMap<>();
+    // Outer Map Key: gameRoomId
+    // Inner Map Key: taskKey
+    private final Map<String, Map<String, ScheduledFuture<?>>> roomTaskMap = new ConcurrentHashMap<>();
 
-    private static final int SYNC_INTERVAL_MS = 5000; // 5초마다 동기화
-    private static final int FINAL_COUNTDOWN_THRESHOLD_MS = 10000; // 마지막 10초 카운트다운
-    private static final int NEXT_ROUND_DELAY_SECONDS = 10; // 라운드 전환 대기 시간
-    private static final int TRANSITION_SYNC_INTERVAL_MS = 2000; // 전환 대기 중 동기화 (2초)
+    // ==========================================
+    //  Task Key Constants
+    // ==========================================
+
+    /** 라운드 진행 시간 동기화 태스크 접두어 (예: "sync:101") */
+    private static final String KEY_PREFIX_ROUND_SYNC = "sync:";
+
+    /** 라운드 종료 처리 태스크 접두어 (예: "complete:101") */
+    private static final String KEY_PREFIX_ROUND_COMPLETE = "complete:";
+
+    /** 라운드 전환(Transition) 그룹 접두어 (예: "transition:500") */
+    private static final String KEY_PREFIX_TRANSITION = "transition:";
+
+    /** 전환: 다음 라운드로 넘어가는 메인 로직 태스크 접미어 (예: "...:main") */
+    private static final String KEY_SUFFIX_TRANSITION_MAIN = ":main";
+
+    /** 전환: 대기 시간 동안 클라이언트와 시간 동기화 태스크 접미어 (예: "...:sync") */
+    private static final String KEY_SUFFIX_TRANSITION_SYNC = ":sync";
+
+
+    // ==========================================
+    // Configuration Constants
+    // ==========================================
+    private static final int SYNC_INTERVAL_MS = 5000;
+    private static final int FINAL_COUNTDOWN_THRESHOLD_MS = 10000;
+    private static final int NEXT_ROUND_DELAY_SECONDS = 10;
+    private static final int TRANSITION_SYNC_INTERVAL_MS = 2000;
 
     public GameTimerService(SimpMessagingTemplate messagingTemplate,
                             ApplicationEventPublisher eventPublisher,
@@ -50,13 +71,11 @@ public class GameTimerService {
         this.gameTimerTaskScheduler = gameTimerTaskScheduler;
     }
 
-    /**
-     * 라운드 시작
-     */
     public void startRoundTimer(TimerCommand command) {
         Instant serverStartTime = Instant.now();
         String gameRoomId = command.getGameRoomId();
         BaseGameRound round = command.getRound();
+
         TimerStartMessage startMessage = TimerStartMessage.builder()
                 .roundId(round.getId().toString())
                 .gameMode(round.getGameMode().name())
@@ -68,24 +87,21 @@ public class GameTimerService {
         String startChannel = MultiGameChannelConstants.getTimerChannel(gameRoomId) + "/start";
         messagingTemplate.convertAndSend(startChannel, startMessage);
 
-        // 타이머 스케줄링
         scheduleTimerSync(command);
         scheduleRoundCompletion(command);
-
     }
 
-    /**
-     * 주기적 타이머 동기화 (5초마다)
-     */
     private void scheduleTimerSync(TimerCommand command) {
         String gameRoomId = command.getGameRoomId();
         BaseGameRound round = command.getRound();
-        String taskKey = getTaskKey(gameRoomId, round);
-        cancelSyncTask(taskKey);
+        String taskKey = KEY_PREFIX_ROUND_SYNC + round.getId();
+
+        cancelTask(gameRoomId, taskKey);
+
         ScheduledFuture<?> syncTask = gameTimerTaskScheduler.scheduleAtFixedRate(() -> {
             long remainingTimeMs = round.getRemainingTimeMs();
             if (remainingTimeMs <= 0) {
-                cancelSyncTask(taskKey);
+                cancelTask(gameRoomId, taskKey);
                 return;
             }
             boolean isFinalCountdown = remainingTimeMs <= FINAL_COUNTDOWN_THRESHOLD_MS;
@@ -99,200 +115,114 @@ public class GameTimerService {
             String syncChannel = MultiGameChannelConstants.getTimerChannel(gameRoomId) + "/sync";
             messagingTemplate.convertAndSend(syncChannel, syncMessage);
 
-        }, Instant.now(), Duration.ofMillis(SYNC_INTERVAL_MS)); // 현재 시각 기준으로 5초 뒤에 첫 실행, 이후 5초 간격으로 계속 반복
-        syncTasks.put(taskKey, syncTask);
+        }, Instant.now(), Duration.ofMillis(SYNC_INTERVAL_MS));
+
+        registerTask(gameRoomId, taskKey, syncTask);
     }
 
-    private static String getTaskKey(String gameRoomId, BaseGameRound round) {
-        return gameRoomId + ":" + round.getId();
-    }
-
-    /**
-     * 마지막 10초 고빈도 동기화 (1초마다)
-     */
-    private void scheduleFrequentSync() {
-        //todo implement
-    }
-
-    /**
-     * 라운드 종료 스케줄링
-     */
     private void scheduleRoundCompletion(TimerCommand command) {
         String gameRoomId = command.getGameRoomId();
         BaseGameRound round = command.getRound();
-        GameMode gameMode = command.getGameMode();
-        PlayerMatchType matchType = command.getMatchType();
         Long gameId = command.getGameId();
+        String taskKey = KEY_PREFIX_ROUND_COMPLETE + round.getId();
 
-        String taskKey = getTaskKey(gameRoomId, round);
         Instant completionTime = round.getServerStartTime().plus(round.getDuration());
+
         ScheduledFuture<?> completionTask = gameTimerTaskScheduler.schedule(() -> {
             try {
-                RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, gameId, round.getId(), gameMode, matchType);
+                RoundCompletionEvent event = new RoundCompletionEvent(gameRoomId, gameId, round.getId(), command.getGameMode(), command.getMatchType());
                 eventPublisher.publishEvent(event);
 
-                // Task 정리
-                cancelAllTasks(taskKey);
+                //라운드 종료 시 관련 태스크 정리
+                cancelTask(gameRoomId, KEY_PREFIX_ROUND_SYNC + round.getId());
+                cancelTask(gameRoomId, KEY_PREFIX_ROUND_COMPLETE + round.getId());
 
             } catch (Exception e) {
-                log.error("Round completion error - GameRoomId: {}, RoundId: {}", gameRoomId, round.getId(), e);
+                log.error("Round completion error - GameRoomId: {}", gameRoomId, e);
             }
         }, completionTime);
-        completionTasks.put(taskKey, completionTask);
+
+        registerTask(gameRoomId, taskKey, completionTask);
     }
 
-    /**
-     * 라운드 전환 대기 타이머 브로드캐스트
-     * - 라운드 결과 표시 후 다음 라운드까지 10초 대기
-     */
-    public void startRoundTransitionTimer(String gameRoomId, MultiGame game,
-                                          Runnable onTransitionComplete) {
-        String taskKey = getTransitionTaskKey(gameRoomId, game.getId());
+    public void startRoundTransitionTimer(String gameRoomId, MultiGame game, Runnable onTransitionComplete) {
+        String baseKey = KEY_PREFIX_TRANSITION + game.getId();
+        String mainTaskKey = baseKey + KEY_SUFFIX_TRANSITION_MAIN;
+        String syncTaskKey = baseKey + KEY_SUFFIX_TRANSITION_SYNC;
+
         Instant transitionStartTime = Instant.now();
         Instant transitionEndTime = transitionStartTime.plusSeconds(NEXT_ROUND_DELAY_SECONDS);
 
-        // 기존 전환 태스크 취소 (중복 방지)
-        cancelTransitionTask(taskKey);
-        cancelTransitionSyncTask(taskKey);
+        cancelTask(gameRoomId, mainTaskKey);
+        cancelTask(gameRoomId, syncTaskKey);
 
-        // 1. 초기 전환 타이머 브로드캐스트
-        broadcastRoundTransitionTimer(gameRoomId, game);
+        broadcastRoundTransitionTimer(gameRoomId, game, transitionEndTime);
 
-        // 2. 2초마다 동기화 브로드캐스트 스케줄링
-        scheduleTransitionSync(gameRoomId, game, transitionEndTime, taskKey);
-
-        // 3. 10초 후 콜백 실행 스케줄링
-        scheduleRoundTransitionCallBack(gameRoomId, game.getId(), onTransitionComplete, transitionEndTime, taskKey);
-
-    }
-
-    /**
-     * 라운드 전환 대기 중 2초마다 동기화
-     */
-    private void scheduleTransitionSync(String gameRoomId, MultiGame game,
-                                        Instant transitionEndTime, String taskKey) {
         ScheduledFuture<?> syncTask = gameTimerTaskScheduler.scheduleAtFixedRate(() -> {
-                    long remainingMs = transitionEndTime.toEpochMilli() - System.currentTimeMillis();
+            long remainingMs = transitionEndTime.toEpochMilli() - System.currentTimeMillis();
+            if (remainingMs <= 0) {
+                cancelTask(gameRoomId, syncTaskKey);
+                return;
+            }
+            broadcastRoundTransitionTimer(gameRoomId, game, transitionEndTime);
+        }, Instant.now().plusMillis(TRANSITION_SYNC_INTERVAL_MS), Duration.ofMillis(TRANSITION_SYNC_INTERVAL_MS));
 
-                    if (remainingMs <= 0) {
-                        cancelTransitionSyncTask(taskKey);
-                        return;
-                    }
+        registerTask(gameRoomId, syncTaskKey, syncTask);
 
-                    broadcastRoundTransitionTimer(gameRoomId, game);
+        ScheduledFuture<?> transitionTask = gameTimerTaskScheduler.schedule(() -> {
+            try {
+                onTransitionComplete.run();
+                log.info("Round transition completed - RoomId: {}", gameRoomId);
+            } catch (Exception e) {
+                log.error("Round transition failed - RoomId: {}", gameRoomId, e);
+            } finally {
+                cancelTask(gameRoomId, mainTaskKey);
+                cancelTask(gameRoomId, syncTaskKey);
+            }
+        }, transitionEndTime);
 
-                }, Instant.now().plusMillis(TRANSITION_SYNC_INTERVAL_MS),
-                Duration.ofMillis(TRANSITION_SYNC_INTERVAL_MS));
-
-        transitionSyncTasks.put(taskKey, syncTask);
-
-        log.debug("Transition sync scheduled - RoomId: {}, Interval: {}ms",
-                gameRoomId, TRANSITION_SYNC_INTERVAL_MS);
+        registerTask(gameRoomId, mainTaskKey, transitionTask);
     }
 
-    private void broadcastRoundTransitionTimer(String gameRoomId, MultiGame game) {
-        Instant now = Instant.now();
-        Instant nextRoundStartTime = now.plusSeconds(NEXT_ROUND_DELAY_SECONDS);
-
+    private void broadcastRoundTransitionTimer(String gameRoomId, MultiGame game, Instant fixedNextRoundStartTime) {
         RoundTransitionTimerMessage message = RoundTransitionTimerMessage.builder()
-                .nextRoundStartTimeMs(nextRoundStartTime.toEpochMilli())
+                .nextRoundStartTimeMs(fixedNextRoundStartTime.toEpochMilli())
                 .serverTimestamp(System.currentTimeMillis())
                 .isLastRound(game.isLastRound())
                 .build();
-
-        String destination = MultiGameChannelConstants.getRoundTransitionChannel(gameRoomId);
-        messagingTemplate.convertAndSend(destination, message);
-
-        log.info("Round transition timer broadcasted - RoomId: {}, NextStartTime: {}, IsLastRound: {}",
-                gameRoomId, nextRoundStartTime, game.isLastRound());
+        messagingTemplate.convertAndSend(MultiGameChannelConstants.getRoundTransitionChannel(gameRoomId), message);
     }
 
-    /**
-     * 라운드 전환 콜백 스케줄링
-     */
-    private void scheduleRoundTransitionCallBack(String gameRoomId, Long gameId,
-                                                 Runnable onComplete,
-                                                 Instant executeTime, String taskKey) {
-        ScheduledFuture<?> transitionTask = gameTimerTaskScheduler.schedule(() -> {
-            try {
-                onComplete.run();
-                log.info("✅ Round transition completed - RoomId: {}, GameId: {}", gameRoomId, gameId);
-            } catch (Exception e) {
-                log.error("🚨 Round transition failed - RoomId: {}, GameId: {}", gameRoomId, gameId, e);
-            } finally {
-                cancelTransitionTask(taskKey);
-                cancelTransitionSyncTask(taskKey);
-            }
-        }, executeTime);
-
-        transitionTasks.put(taskKey, transitionTask);
-    }
-
-    private static String getTransitionTaskKey(String gameRoomId, Long gameId) {
-        return "transition:" + gameRoomId + ":" + gameId;
-    }
-
-    /**
-     * 타이머 수동 중지
-     */
     public void stopRoundTimer(String gameRoomId, BaseGameRound round) {
-        String taskKey = getTaskKey(gameRoomId, round);
-        cancelAllTasks(taskKey);
+        cancelTask(gameRoomId, KEY_PREFIX_ROUND_SYNC + round.getId());
+        cancelTask(gameRoomId, KEY_PREFIX_ROUND_COMPLETE + round.getId());
     }
 
-    /**
-     * 게임 전체 취소 - 모든 관련 태스크 정리
-     */
     public void cancelAllForGame(String gameRoomId, Long gameId) {
-        String transitionTaskKey = getTransitionTaskKey(gameRoomId, gameId);
-        cancelTransitionTask(transitionTaskKey);
-        cancelTransitionSyncTask(transitionTaskKey);
+        Map<String, ScheduledFuture<?>> tasks = roomTaskMap.remove(gameRoomId);
 
-        // 모든 라운드 관련 태스크도 정리 (roomId로 시작하는 키)
-        syncTasks.keySet().stream()
-                .filter(key -> key.startsWith(gameRoomId + ":"))
-                .forEach(this::cancelSyncTask);
-        completionTasks.keySet().stream()
-                .filter(key -> key.startsWith(gameRoomId + ":"))
-                .forEach(this::cancelCompletionTask);
-
-        log.info("All timer tasks cancelled for game - RoomId: {}, GameId: {}", gameRoomId, gameId);
-    }
-
-    // === Task 관리 ===
-
-    private void cancelSyncTask(String taskKey) {
-        ScheduledFuture<?> syncTask = syncTasks.remove(taskKey);
-        if (syncTask != null) {
-            syncTask.cancel(false);
+        if (tasks != null) {
+            tasks.values().forEach(task -> {
+                if (task != null) task.cancel(false);
+            });
+            log.info("All timer tasks cancelled for game - RoomId: {}, TaskCount: {}", gameRoomId, tasks.size());
+        } else {
+            log.info("No active timer tasks found for game - RoomId: {}", gameRoomId);
         }
     }
 
-    private void cancelCompletionTask(String taskKey) {
-        ScheduledFuture<?> completionTask = completionTasks.remove(taskKey);
-        if (completionTask != null) {
-            completionTask.cancel(false);
-        }
+    private void registerTask(String gameRoomId, String taskKey, ScheduledFuture<?> task) {
+        roomTaskMap.computeIfAbsent(gameRoomId, k -> new ConcurrentHashMap<>())
+                .put(taskKey, task);
     }
 
-    private void cancelAllTasks(String taskKey) {
-        cancelSyncTask(taskKey);
-        cancelCompletionTask(taskKey);
-    }
-
-    private void cancelTransitionTask(String taskKey) {
-        ScheduledFuture<?> transitionTask = transitionTasks.remove(taskKey);
-        if (transitionTask != null) {
-            transitionTask.cancel(false);
-            log.debug("Transition task cancelled - TaskKey: {}", taskKey);
-        }
-    }
-
-    private void cancelTransitionSyncTask(String taskKey) {
-        ScheduledFuture<?> syncTask = transitionSyncTasks.remove(taskKey);
-        if (syncTask != null) {
-            syncTask.cancel(false);
-            log.debug("Transition sync task cancelled - TaskKey: {}", taskKey);
+    private void cancelTask(String gameRoomId, String taskKey) {
+        Map<String, ScheduledFuture<?>> tasks = roomTaskMap.get(gameRoomId);
+        if (tasks != null) {
+            ScheduledFuture<?> task = tasks.remove(taskKey);
+            if (task != null) {
+                task.cancel(false);
+            }
         }
     }
 }

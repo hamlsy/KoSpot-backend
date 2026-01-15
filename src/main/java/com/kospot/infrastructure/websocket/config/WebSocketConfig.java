@@ -23,7 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final WebSocketChannelInterceptor webSocketChannelInterceptor;
 
     public WebSocketConfig(@Value("${websocket.allowed-origins}") String allowedOrigins,
-                           WebSocketChannelInterceptor webSocketChannelInterceptor) {
+            WebSocketChannelInterceptor webSocketChannelInterceptor) {
         this.allowedOrigins = Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
@@ -39,6 +39,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOriginPatterns(allowedOrigins)
                 .withSockJS();
 
+        // k6 부하테스트용 Raw WebSocket 엔드포인트 (SockJS 없음)
+        // 주의: 프로덕션에서는 비활성화하거나 별도 보안 처리 필요
+        registry.addEndpoint("/ws-raw")
+                .setAllowedOriginPatterns("*");
+
         // 전역 알림 - 시스템 공지사항
         registry.addEndpoint("/ws/notification")
                 .setAllowedOriginPatterns(allowedOrigins)
@@ -46,15 +51,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     }
 
-
-    //Simple Broker Settings
-    //todo 프로덕션 환경에서는 Redis Pub/Sub으로 확장 가능
+    // Simple Broker Settings
+    // todo 프로덕션 환경에서는 Redis Pub/Sub으로 확장 가능
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // 클라이언트가 구독할 목적지 프리픽스 설정
         config.enableSimpleBroker(
-                "/topic",    // 다대다 브로드캐스트 (게임 룸 전체 메시지)
-                "/queue"     // 일대일 개인 메시지 (개별 플레이어 타겟팅)
+                "/topic", // 다대다 브로드캐스트 (게임 룸 전체 메시지)
+                "/queue" // 일대일 개인 메시지 (개별 플레이어 타겟팅)
         );
 
         // 클라이언트가 메시지를 전송할 때 사용할 프리픽스
@@ -72,21 +76,21 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setSendBufferSizeLimit(512 * 1024);
     }
 
-    //ec2 single core instance 설정 반영
+    // ec2 single core instance 설정 반영
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(webSocketChannelInterceptor);
         registration.taskExecutor()
-                .corePoolSize(2)
-                .maxPoolSize(4)
+                .corePoolSize(4)
+                .maxPoolSize(8)
                 .keepAliveSeconds(60);
     }
 
     @Override
     public void configureClientOutboundChannel(ChannelRegistration registration) {
         registration.taskExecutor()
-                .corePoolSize(2)
-                .maxPoolSize(4)
+                .corePoolSize(8)
+                .maxPoolSize(16)
                 .keepAliveSeconds(60);
     }
 }
