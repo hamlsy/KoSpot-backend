@@ -51,6 +51,25 @@ public class NoticeResponse {
     @Getter
     @Builder
     @ToString
+    public static class Markdown {
+        private Long noticeId;
+        private String title;
+        private String markdownContent;
+        private LocalDateTime createdDate;
+        public static Markdown from(Notice notice) {
+            return Markdown.builder()
+                    .noticeId(notice.getId())
+                    .title(notice.getTitle())
+                    .markdownContent(notice.getContentMd())
+                    .createdDate(notice.getCreatedDate())
+                    .build();
+        }
+
+    }
+
+    @Getter
+    @Builder
+    @ToString
     public static class NoticeImage {
         private Long imageId;   // DB Image PK
         private String url;     // 예: https://cdn.../notice-images/{imageId}/{uuid}.png

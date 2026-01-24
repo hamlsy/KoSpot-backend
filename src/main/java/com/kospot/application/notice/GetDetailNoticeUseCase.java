@@ -19,4 +19,8 @@ public class GetDetailNoticeUseCase {
         return NoticeResponse.Detail.from(noticeAdaptor.findById(id));
     }
 
+    public NoticeResponse.Markdown executeMarkdownContent(Long id) {
+        return NoticeResponse.Markdown.from(noticeAdaptor.findById(id));
+    }
+
 }

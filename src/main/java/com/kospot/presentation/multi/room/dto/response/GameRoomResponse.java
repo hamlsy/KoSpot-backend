@@ -15,6 +15,7 @@ public class GameRoomResponse {
     private int timeLimit;
     private String gameModeKey;
     private String playerMatchTypeKey;
+    private boolean isPoiNameVisible;
     private int maxPlayers;
     private int totalRounds;
 
@@ -26,6 +27,7 @@ public class GameRoomResponse {
                 .maxPlayers(gameRoom.getMaxPlayers())
                 .gameModeKey(gameRoom.getGameMode().name())
                 .playerMatchTypeKey(gameRoom.getPlayerMatchType().name())
+                .isPoiNameVisible(gameRoom.isPoiNameVisible())
                 .totalRounds(gameRoom.getTotalRounds())
                 .build();
     }

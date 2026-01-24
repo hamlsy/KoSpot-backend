@@ -49,6 +49,13 @@ public class NoticeController {
         return ApiResponseDto.onSuccess(getDetailNoticeUseCase.execute(noticeId));
     }
 
+    @Operation(summary = "수정 용 마크다운 공지사항 내용 조회", description = " 공지사항 수정 시 기존 내용을 마크다운 형식으로 조회합니다.")
+    @GetMapping("/{id}/markdown")
+    public ApiResponseDto<NoticeResponse.Markdown> findMarkdownContent(
+            @PathVariable("id") Long noticeId) {
+        return ApiResponseDto.onSuccess(getDetailNoticeUseCase.executeMarkdownContent(noticeId));
+    }
+
     @Operation(summary = "공지사항 생성", description = "공지사항을 생성합니다.")
     @PostMapping
     public ApiResponseDto<?> createNotice(@CurrentMember Member member, @RequestBody NoticeRequest.Create request) {

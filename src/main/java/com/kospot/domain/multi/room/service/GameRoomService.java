@@ -35,7 +35,7 @@ public class GameRoomService {
 
     public GameRoom updateGameRoom(GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {
         gameRoom.update(updateInfo.getTitle(),updateInfo.getTimeLimit(),
-                GameMode.fromKey(updateInfo.getGameModeKey()), PlayerMatchType.fromKey(updateInfo.getPlayerMatchTypeKey()),
+                GameMode.fromKey(updateInfo.getGameModeKey()), PlayerMatchType.fromKey(updateInfo.getPlayerMatchTypeKey()), updateInfo.isPoiNameVisible(),
                 updateInfo.getMaxPlayers(), updateInfo.isPrivateRoom(), updateInfo.getPassword(), updateInfo.getTeamCount(), updateInfo.getTotalRounds());
         return gameRoom;
     }
