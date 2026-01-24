@@ -22,8 +22,8 @@ public class MultiRoadViewGameService {
         PlayerMatchType matchType = gameRoom.getPlayerMatchType();
         int totalRounds = gameRoom.getTotalRounds();
         int timeLimit = gameRoom.getTimeLimit();
-        boolean isPoiNameVisible = gameRoom.isPoiNameVisible();
-        MultiRoadViewGame game = MultiRoadViewGame.createGame(gameRoom.getId(), matchType, isPoiNameVisible, totalRounds, timeLimit);
+        boolean poiNameVisible = gameRoom.isPoiNameVisible();
+        MultiRoadViewGame game = MultiRoadViewGame.createGame(gameRoom.getId(), matchType, poiNameVisible, totalRounds, timeLimit);
         return multiRoadViewGameRepository.save(game);
     }
 

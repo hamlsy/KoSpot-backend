@@ -121,8 +121,9 @@ public class LeaveGameRoomUseCase {
                 .orElse(null);
 
         if (leavingPlayer == null) {
-            // 이미 퇴장한 경우 방 삭제
-            return LeaveDecision.deleteRoom(gameRoom, member);
+            // 이미 퇴장한 경우 - 중복 호출 방지 (멱등성)
+            log.info("Player already left room - MemberId: {}, RoomId: {}", member.getId(), gameRoom.getId());
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_PLAYER_NOT_FOUND);
         }
 
         if (!leavingPlayer.isHost()) {

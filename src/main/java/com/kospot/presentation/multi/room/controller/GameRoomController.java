@@ -67,8 +67,8 @@ public class GameRoomController {
     @Operation(summary = "게임 방 상세 조회", description = "멀티 게임 방 상세 정보를 조회합니다.")
     @BotSuccess
     @GetMapping("/{roomId}")
-    public ApiResponseDto<GameRoomDetailResponse> getRoomDetail(@PathVariable("roomId") Long roomId) {
-        return ApiResponseDto.onSuccess(getGameRoomDetailUseCase.execute(roomId));
+    public ApiResponseDto<GameRoomDetailResponse> getRoomDetail(@PathVariable("roomId") Long roomId, @CurrentMember Member member) {
+        return ApiResponseDto.onSuccess(getGameRoomDetailUseCase.execute(member, roomId));
     }
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
