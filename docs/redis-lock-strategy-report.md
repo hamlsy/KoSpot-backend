@@ -12,7 +12,6 @@
 | Redis Transaction | 0.843s        | 0.176s                     | 없음           |
 | Redisson RLock    | 1.513s        | 0.514s                     | 없음           |
 
-> [!IMPORTANT]
 > **Lua Script가 Redisson RLock 대비 약 3배 빠른 성능**을 보였습니다.
 
 ---
@@ -62,7 +61,6 @@ xychart-beta
 
 ## 최적 방안 권고
 
-> [!TIP]
 > **Lua Script를 메인 전략으로 채택**하고, Redisson은 안전망으로 유지하는 것을 권장합니다.
 
 ### 채택 근거
@@ -108,11 +106,16 @@ game-room:
 
 ## 구현 파일
 
-| 파일                                                                                                                                               | 설명                    |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| [HostAssignmentLockStrategy.java](file:///c:/KoSpot-backend/src/main/java/com/kospot/infrastructure/lock/strategy/HostAssignmentLockStrategy.java) | Strategy 인터페이스     |
-| [RedissonLockStrategy.java](file:///c:/KoSpot-backend/src/main/java/com/kospot/infrastructure/lock/strategy/RedissonLockStrategy.java)             | Redisson 구현           |
-| [RedisTransactionStrategy.java](file:///c:/KoSpot-backend/src/main/java/com/kospot/infrastructure/lock/strategy/RedisTransactionStrategy.java)     | Transaction 구현        |
-| [LuaScriptStrategy.java](file:///c:/KoSpot-backend/src/main/java/com/kospot/infrastructure/lock/strategy/LuaScriptStrategy.java)                   | Lua Script 구현         |
-| [LockStrategyConfig.java](file:///c:/KoSpot-backend/src/main/java/com/kospot/infrastructure/lock/config/LockStrategyConfig.java)                   | 설정 기반 Strategy 선택 |
-| [LockStrategyBenchmarkTest.java](file:///c:/KoSpot-backend/src/test/java/com/kospot/infrastructure/lock/LockStrategyBenchmarkTest.java)            | 벤치마크 테스트         |
+| 파일                            | 설명                    |
+| ------------------------------- | ----------------------- |
+| HostAssignmentLockStrategy.java | Strategy 인터페이스     |
+| RedissonLockStrategy.java       | Redisson 구현           |
+| RedisTransactionStrategy.java   | Transaction 구현        |
+| LuaScriptStrategy.java          | Lua Script 구현         |
+| LockStrategyConfig.java         | 설정 기반 Strategy 선택 |
+| LockStrategyBenchmarkTest.java  | 벤치마크 테스트         |
+
+---
+
+_KoSpot 프로젝트 - Redis Lock Strategy 리팩토링 보고서_
+_작성일: 2026-01-25_
