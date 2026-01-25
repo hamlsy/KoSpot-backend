@@ -47,7 +47,7 @@ public abstract class MultiGame extends BaseTimeEntity {
     private Boolean isFinished;
 
     @Builder.Default
-    private boolean isPoiNameVisible = true;
+    private boolean poiNameVisible = true;
 
     @Enumerated(EnumType.STRING)
     private MultiGameStatus status;

@@ -52,9 +52,7 @@ public class GameAccessService {
             return GameAccessResponse.notAllowed("잘못된 접근입니다.");
         }
 
-        // 게임 방 참여자인 경우 게임 정보 반환
-        GameRoomDetailResponse gameRoomDetailResponse = getGameRoomDetailUseCase.execute(Long.parseLong(roomId));
-        return GameAccessResponse.allowed(gameRoomDetailResponse);
+        return GameAccessResponse.allowed();
     }
 
     private boolean isRoomNotAccessible(Member member, String roomId) {

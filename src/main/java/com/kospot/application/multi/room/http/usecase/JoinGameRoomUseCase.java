@@ -31,21 +31,22 @@ public class JoinGameRoomUseCase {
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
     private final ApplicationEventPublisher eventPublisher;
+    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
 
     public void executeV1(Member player, Long gameRoomId, GameRoomRequest.Join request) {
+        autoLeaveIfInOtherRoom(player, gameRoomId);
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
         validateGameCapacityV1(gameRoom);
         gameRoomService.joinGameRoom(player, gameRoom, request);
-        
+
         // member profile view 설정
-        if(memberProfileRedisAdaptor.findProfile(player.getId()) == null) {
+        if (memberProfileRedisAdaptor.findProfile(player.getId()) == null) {
             memberProfileRedisService.saveProfile(
                     player.getId(),
                     player.getNickname(),
-                    player.getEquippedMarkerImage().getImageUrl()
-            );
+                    player.getEquippedMarkerImage().getImageUrl());
         }
-        
+
         // GameRoom Redis 저장
         boolean isHost = gameRoom.isHost(player);
         GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.builder()
@@ -53,27 +54,36 @@ public class JoinGameRoomUseCase {
                 .markerImageUrl(player.getEquippedMarkerImage().getImageUrl())
                 .isHost(isHost)
                 .nickname(player.getNickname())
-//                .team(request.getTeam())
+                // .team(request.getTeam())
                 .joinedAt(System.currentTimeMillis())
                 .build();
         gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
-        
+
         // 알림용 이벤트 발행 (Redis 작업 완료 후)
-        //todo team 랜덤 배정
+        // todo team 랜덤 배정
         eventPublisher.publishEvent(new GameRoomJoinEvent(
-                gameRoomId, player.getId(), player.getNickname(), player.getEquippedMarkerImage().getImageUrl(), null, isHost
-        ));
+                gameRoomId, player.getId(), player.getNickname(), player.getEquippedMarkerImage().getImageUrl(), null,
+                isHost));
     }
 
     // Read - then - check - V1 todo refactor
     private void validateGameCapacityV1(GameRoom gameRoom) {
-        if(cannotJoinRoom(gameRoom)) {
+        if (cannotJoinRoom(gameRoom)) {
             throw new GameRoomHandler(ErrorStatus.GAME_ROOM_IS_FULL);
         }
     }
 
     private boolean cannotJoinRoom(GameRoom gameRoom) {
         return gameRoomRedisService.cannotJoinRoom(gameRoom.getId().toString(), gameRoom.getMaxPlayers());
+    }
+
+    private void autoLeaveIfInOtherRoom(Member player, Long targetRoomId) {
+        if (player.isAlreadyInOtherGameRoom(targetRoomId)) {
+            Long previousRoomId = player.getGameRoomId();
+            log.info("Auto-leaving room {} before joining room {} - MemberId: {}",
+                    previousRoomId, targetRoomId, player.getId());
+            leaveGameRoomUseCase.execute(player, previousRoomId);
+        }
     }
 
 }

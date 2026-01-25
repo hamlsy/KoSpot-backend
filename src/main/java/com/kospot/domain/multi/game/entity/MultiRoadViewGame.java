@@ -2,7 +2,6 @@ package com.kospot.domain.multi.game.entity;
 
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
-import com.kospot.domain.multi.room.entity.GameRoom;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -19,14 +18,14 @@ public class MultiRoadViewGame extends MultiGame {
     private Long id;
 
     // 생성 메서드
-    public static MultiRoadViewGame createGame(Long gameRoomId, PlayerMatchType matchType, boolean isPoiNameVisible,
+    public static MultiRoadViewGame createGame(Long gameRoomId, PlayerMatchType matchType, boolean poiNameVisible,
                                                Integer roundCount, Integer timeLimit) {
         MultiRoadViewGame game = MultiRoadViewGame.builder()
                 .matchType(matchType)
                 .gameMode(GameMode.ROADVIEW)  // 로드뷰 모드로 고정
                 .totalRounds(roundCount)
                 .timeLimit(timeLimit)
-                .isPoiNameVisible(isPoiNameVisible)
+                .poiNameVisible(poiNameVisible)
                 .currentRound(0) // 시작 전에는 0
                 .timeLimit(timeLimit)
                 .isFinished(false)

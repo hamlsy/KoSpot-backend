@@ -12,7 +12,6 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Entity
@@ -51,7 +50,7 @@ public class GameRoom extends BaseTimeEntity {
     private String password;
 
     @Builder.Default
-    private boolean isPoiNameVisible = true;
+    private boolean poiNameVisible = true;
 
     @Enumerated(EnumType.STRING)
     private GameRoomStatus status;
@@ -78,7 +77,7 @@ public class GameRoom extends BaseTimeEntity {
         this.host = host;
     }
 
-    public void update(String title, int timeLimit, GameMode gameMode, PlayerMatchType playerMatchType,
+    public void update(String title, int timeLimit, GameMode gameMode, PlayerMatchType playerMatchType, boolean poiNameVisible,
                        int maxPlayers, boolean privateRoom, String password, int teamCount, int totalRounds) {
         this.title = title;
         this.timeLimit = timeLimit;
@@ -86,6 +85,7 @@ public class GameRoom extends BaseTimeEntity {
         this.maxPlayers = maxPlayers;
         this.playerMatchType = playerMatchType;
         this.privateRoom = privateRoom;
+        this.poiNameVisible = poiNameVisible;
         this.password = password;
         this.teamCount = teamCount;
         this.totalRounds = totalRounds;

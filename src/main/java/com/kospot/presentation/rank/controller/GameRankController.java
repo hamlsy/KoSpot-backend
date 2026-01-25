@@ -4,6 +4,7 @@ import com.kospot.application.rank.usecase.GetRankingUseCase;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.presentation.rank.dto.response.GameRankResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,11 +27,11 @@ public class GameRankController {
 
     @Operation(summary = "게임 랭킹 조회", description = "특정 게임 모드와 랭크 티어에 해당하는 플레이어들의 랭킹 정보를 페이지 단위로 조회합니다.")
     @GetMapping
-    public ApiResponseDto<?> getRanking(
+    public ApiResponseDto<GameRankResponse.Ranking> getRanking(
             @CurrentMember Member member,
-            @RequestParam String gameMode,
-            @RequestParam String rankTier,
-            @RequestParam int page) {
+            @RequestParam("gameMode") String gameMode,
+            @RequestParam("rankTier") String rankTier,
+            @RequestParam("page") int page) {
 
         return ApiResponseDto.onSuccess(getRankingUseCase.execute(
                 member,

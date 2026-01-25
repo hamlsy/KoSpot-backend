@@ -4,7 +4,6 @@ import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.game.repository.MultiRoadViewGameRepository;
 import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,8 @@ public class MultiRoadViewGameService {
         PlayerMatchType matchType = gameRoom.getPlayerMatchType();
         int totalRounds = gameRoom.getTotalRounds();
         int timeLimit = gameRoom.getTimeLimit();
-        boolean isPoiNameVisible = gameRoom.isPoiNameVisible();
-        MultiRoadViewGame game = MultiRoadViewGame.createGame(gameRoom.getId(), matchType, isPoiNameVisible, totalRounds, timeLimit);
+        boolean poiNameVisible = gameRoom.isPoiNameVisible();
+        MultiRoadViewGame game = MultiRoadViewGame.createGame(gameRoom.getId(), matchType, poiNameVisible, totalRounds, timeLimit);
         return multiRoadViewGameRepository.save(game);
     }
 

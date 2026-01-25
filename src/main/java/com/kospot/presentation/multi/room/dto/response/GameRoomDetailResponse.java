@@ -1,5 +1,6 @@
 package com.kospot.presentation.multi.room.dto.response;
 
+import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import lombok.*;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class GameRoomDetailResponse {
 
     private Long roomId;
+    private boolean host;
     private String title;
     private int timeLimit;
     private String gameMode;
@@ -26,11 +28,12 @@ public class GameRoomDetailResponse {
 
     private List<GameRoomPlayerResponse> connectedPlayers;
 
-    public static GameRoomDetailResponse from(GameRoom gameRoom,
+    public static GameRoomDetailResponse from(GameRoom gameRoom, Member member,
                                               List<GameRoomPlayerInfo> playerInfos) {
         return GameRoomDetailResponse.builder()
                 .roomId(gameRoom.getId())
                 .title(gameRoom.getTitle())
+                .host(gameRoom.isHost(member))
                 .timeLimit(gameRoom.getTimeLimit())
                 .gameMode(gameRoom.getGameMode().name())
                 .gameType(gameRoom.getPlayerMatchType().name())
