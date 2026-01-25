@@ -1,6 +1,5 @@
 package com.kospot.application.multi.room.http.usecase;
 
-
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.service.GameRoomService;
@@ -29,25 +28,35 @@ public class CreateGameRoomUseCase {
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
     private final LobbyRoomNotificationService lobbyRoomNotificationService;
+    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
 
     public GameRoomResponse execute(Member host, GameRoomRequest.Create request) {
+        autoLeaveIfInRoom(host);
         GameRoom gameRoom = gameRoomService.createGameRoom(host, request);
         // redis 설정
         GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(host, true);
         gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
 
         // member profile view 설정
-        if(memberProfileRedisAdaptor.findProfile(host.getId()) == null) {
+        if (memberProfileRedisAdaptor.findProfile(host.getId()) == null) {
             memberProfileRedisService.saveProfile(
                     host.getId(),
                     host.getNickname(),
-                    host.getEquippedMarkerImage().getImageUrl()
-            );
+                    host.getEquippedMarkerImage().getImageUrl());
         }
         // notify
         lobbyRoomNotificationService.notifyRoomCreated(gameRoom);
 
         return GameRoomResponse.from(gameRoom);
+    }
+
+    private void autoLeaveIfInRoom(Member host) {
+        Long currentRoomId = host.getGameRoomId();
+        if (currentRoomId != null) {
+            log.info("Auto-leaving room {} before creating new room - MemberId: {}",
+                    currentRoomId, host.getId());
+            leaveGameRoomUseCase.execute(host, currentRoomId);
+        }
     }
 
 }
