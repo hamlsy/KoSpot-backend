@@ -58,6 +58,7 @@ public class UpdateGameRoomSettingsUseCase {
                 .playerMatchTypeKey(request.getPlayerMatchTypeKey())
                 .privateRoom(request.isPrivateRoom())
                 .totalRounds(request.getTotalRounds())
+                .timeLimit(request.getTimeLimit())
                 .maxPlayers(request.getMaxPlayers())
                 .password(request.getPassword())
                 .build();
