@@ -1,0 +1,122 @@
+package com.kospot.application.multi.round.roadview;
+
+import com.kospot.application.multi.flow.MultiGameFlowScheduler;
+import com.kospot.application.multi.game.service.CancelMultiGameService;
+import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
+import com.kospot.domain.multi.round.entity.RoadViewGameRound;
+import com.kospot.infrastructure.redis.domain.multi.game.service.MultiGameRedisService;
+import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
+import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;
+import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;
+import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class NextRoadViewRoundUseCaseTest {
+
+    private static final Long ROOM_ID = 1L;
+    private static final Long GAME_ID = 2L;
+    private static final Long ROUND_ID = 3L;
+
+    @Mock
+    private RoundPreparationService roundPreparationService;
+
+    @Mock
+    private MultiGameRedisService multiGameRedisService;
+
+    @Mock
+    private GameRoundNotificationService gameRoundNotificationService;
+
+    @Mock
+    private LobbyRoomNotificationService lobbyRoomNotificationService;
+
+    @Mock
+    private MultiGameFlowScheduler multiGameFlowScheduler;
+
+    @Mock
+    private GameTimerService gameTimerService;
+
+    @Mock
+    private PlatformTransactionManager transactionManager;
+
+    @Mock
+    private CancelMultiGameService cancelMultiGameService;
+
+    @InjectMocks
+    private NextRoadViewRoundUseCase useCase;
+
+    @Test
+    void reissueRound_skipsMutation_whenVersionChangedWhileWaitingLock() {
+        MultiRoadViewGame game = mockGame();
+        RoadViewGameRound round = mockRound(game);
+
+        when(multiGameRedisService.getRoundVersion("1", ROUND_ID)).thenReturn(10L, 11L);
+        when(roundPreparationService.getRoundForReissueWithLock(ROUND_ID, GAME_ID)).thenReturn(round);
+
+        MultiRoadViewGameResponse.RoundProblem response = useCase.reissueRound(ROOM_ID, GAME_ID, ROUND_ID);
+
+        assertThat(response.getRoundVersion()).isEqualTo(11L);
+        assertThat(response.getGameId()).isEqualTo(GAME_ID);
+        assertThat(response.getRoundId()).isEqualTo(ROUND_ID);
+
+        verify(roundPreparationService, never()).reissueRound(any(RoadViewGameRound.class), eq(GAME_ID));
+        verify(multiGameRedisService, never()).incrementRoundVersion("1", ROUND_ID);
+        verify(gameRoundNotificationService, never()).broadcastRoundStart(eq("1"), any());
+    }
+
+    @Test
+    void reissueRound_reissuesAndBroadcasts_onceWhenVersionUnchanged() {
+        MultiRoadViewGame game = mockGame();
+        RoadViewGameRound round = mockRound(game);
+
+        when(multiGameRedisService.getRoundVersion("1", ROUND_ID)).thenReturn(20L, 20L);
+        when(roundPreparationService.getRoundForReissueWithLock(ROUND_ID, GAME_ID)).thenReturn(round);
+        when(roundPreparationService.reissueRound(same(round), eq(GAME_ID)))
+                .thenReturn(new RoundPreparationService.ReissueResult(game, round));
+        when(multiGameRedisService.incrementRoundVersion("1", ROUND_ID)).thenReturn(21L);
+
+        MultiRoadViewGameResponse.RoundProblem response = useCase.reissueRound(ROOM_ID, GAME_ID, ROUND_ID);
+
+        assertThat(response.getRoundVersion()).isEqualTo(21L);
+        assertThat(response.getGameId()).isEqualTo(GAME_ID);
+        assertThat(response.getRoundId()).isEqualTo(ROUND_ID);
+
+        verify(roundPreparationService, times(1)).reissueRound(same(round), eq(GAME_ID));
+        verify(multiGameRedisService, times(1)).incrementRoundVersion("1", ROUND_ID);
+        verify(gameRoundNotificationService, times(1)).broadcastRoundStart(eq("1"), any());
+    }
+
+    private MultiRoadViewGame mockGame() {
+        MultiRoadViewGame game = org.mockito.Mockito.mock(MultiRoadViewGame.class);
+        when(game.getId()).thenReturn(GAME_ID);
+        when(game.isPoiNameVisible()).thenReturn(true);
+        return game;
+    }
+
+    private RoadViewGameRound mockRound(MultiRoadViewGame game) {
+        RoadViewGameRound round = org.mockito.Mockito.mock(RoadViewGameRound.class);
+        Coordinate coordinate = org.mockito.Mockito.mock(Coordinate.class);
+        when(round.getId()).thenReturn(ROUND_ID);
+        when(round.getMultiRoadViewGame()).thenReturn(game);
+        when(round.getTargetCoordinate()).thenReturn(coordinate);
+        when(coordinate.getPoiName()).thenReturn("poi");
+        when(coordinate.getLat()).thenReturn(37.0);
+        when(coordinate.getLng()).thenReturn(127.0);
+        return round;
+    }
+}
