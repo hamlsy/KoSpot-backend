@@ -2,7 +2,6 @@ package com.kospot.application.multi.round.roadview;
 
 import com.kospot.application.multi.flow.MultiGameFlowScheduler;
 import com.kospot.application.multi.game.service.CancelMultiGameService;
-import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
@@ -109,32 +108,30 @@ public class NextRoadViewRoundUseCase {
      */
     public MultiRoadViewGameResponse.RoundProblem reissueRound(Long roomId, Long gameId, Long roundId) {
         String roomKey = roomId.toString();
+        long observedVersion = multiGameRedisService.getRoundVersion(roomKey, roundId);
 
-        if (!multiGameRedisService.acquireRoundReissueLock(roomKey, roundId)) {
-            // 락 획득 실패 시 현재 버전 반환
-            RoundPreparationService.ReissueResult existing =
-                    roundPreparationService.reissueRound(roundId, gameId);
-            long version = multiGameRedisService.getRoundVersion(roomKey, roundId);
+        RoadViewGameRound lockedRound = roundPreparationService.getRoundForReissueWithLock(roundId, gameId);
+        long currentVersion = multiGameRedisService.getRoundVersion(roomKey, roundId);
+
+        if (currentVersion != observedVersion) {
+            log.info("Skip duplicate reissue request - RoomId: {}, RoundId: {}, ObservedVersion: {}, CurrentVersion: {}",
+                    roomKey, roundId, observedVersion, currentVersion);
             return MultiRoadViewGameResponse.RoundProblem.from(
-                    existing.getGame(), existing.getRound(), version);
+                    lockedRound.getMultiRoadViewGame(), lockedRound, currentVersion);
         }
 
-        try {
-            RoundPreparationService.ReissueResult result =
-                    roundPreparationService.reissueRound(roundId, gameId);
+        RoundPreparationService.ReissueResult result =
+                roundPreparationService.reissueRound(lockedRound, gameId);
 
-            long version = multiGameRedisService.incrementRoundVersion(roomKey, roundId);
-            MultiRoadViewGameResponse.RoundProblem problem =
-                    MultiRoadViewGameResponse.RoundProblem.from(
-                            result.getGame(), result.getRound(), version);
+        long version = multiGameRedisService.incrementRoundVersion(roomKey, roundId);
+        MultiRoadViewGameResponse.RoundProblem problem =
+                MultiRoadViewGameResponse.RoundProblem.from(
+                        result.getGame(), result.getRound(), version);
 
-            gameRoundNotificationService.broadcastRoundStart(roomKey, problem);
-            log.info("Reissued round problem - RoomId: {}, RoundId: {}", roomKey, roundId);
+        gameRoundNotificationService.broadcastRoundStart(roomKey, problem);
+        log.info("Reissued round problem - RoomId: {}, RoundId: {}, Version: {}", roomKey, roundId, version);
 
-            return problem;
-        } finally {
-            multiGameRedisService.releaseRoundReissueLock(roomKey, roundId);
-        }
+        return problem;
     }
 
     private void scheduleRound(String roomKey, RoadViewGameRound round, Object preview) {
