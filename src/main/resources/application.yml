@@ -1,8 +1,8 @@
 spring:
   servlet:
     multipart:
-      max-file-size: 50MB       # 업로드 가능한 단일 파일 크기
-      max-request-size: 60MB    # 요청 전체 크기 (파일 + 폼 데이터 포함)
+      max-file-size: 50MB # 업로드 가능한 단일 파일 크기
+      max-request-size: 60MB # 요청 전체 크기 (파일 + 폼 데이터 포함)
   profiles:
     active:
       - local
@@ -21,7 +21,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-#      ddl-auto: create-drop # 임시로, 배포시 다시 update로 변경 필요
+    #      ddl-auto: create-drop # 임시로, 배포시 다시 update로 변경 필요
     defer-datasource-initialization: true
     properties:
       hibernate:

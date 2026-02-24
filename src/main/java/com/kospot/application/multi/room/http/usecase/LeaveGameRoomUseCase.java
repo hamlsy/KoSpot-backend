@@ -2,13 +2,11 @@ package com.kospot.application.multi.room.http.usecase;
 
 import com.kospot.application.multi.game.service.CancelMultiGameService;
 import com.kospot.application.multi.room.vo.LeaveDecision;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.event.GameRoomLeaveEvent;
 import com.kospot.domain.multi.room.repository.GameRoomRepository;
@@ -18,35 +16,36 @@ import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
+import com.kospot.infrastructure.lock.strategy.HostAssignmentLockStrategy;
+import com.kospot.infrastructure.lock.vo.HostAssignmentResult;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
+/**
+ * 게임방 퇴장 UseCase
+ * 
+ * 동시성 제어: HostAssignmentLockStrategy를 통해 방장 재지정 로직 원자적 처리
+ * 설정: application.yml의 game-room.lock-strategy로 전략 선택 (기본값: lua)
+ */
 @Slf4j
 @UseCase
 @RequiredArgsConstructor
 @Transactional
 public class LeaveGameRoomUseCase {
 
-    private final MemberAdaptor memberAdaptor;
-    private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomRepository gameRoomRepository;
     private final GameRoomService gameRoomService;
     private final GameRoomRedisService gameRoomRedisService;
-    private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
     private final ApplicationEventPublisher eventPublisher;
-    private final RedissonClient redissonClient;
+
+    // Lock Strategy (Lua Script 권장)
+    private final HostAssignmentLockStrategy lockStrategy;
 
     // 게임 진행 중 퇴장 처리
     private final MultiRoadViewGameAdaptor multiRoadViewGameAdaptor;
@@ -65,129 +64,63 @@ public class LeaveGameRoomUseCase {
         }
 
         String roomId = gameRoom.getId().toString();
-        String lockKey = "lock:game:room:" + roomId;
-        RLock lock = redissonClient.getLock(lockKey);
 
-        try {
-            // 락 획득 (대기 5초, 자동 해제 10초)
-            if (!lock.tryLock(5, 10, TimeUnit.SECONDS)) {
-                throw new GameRoomHandler(ErrorStatus.GAME_ROOM_OPERATION_IN_PROGRESS);
-            }
+        // Lock Strategy를 통한 원자적 Redis 작업
+        HostAssignmentResult result = lockStrategy.executeWithLock(
+                roomId,
+                member.getId(),
+                () -> performLeaveOperation(roomId, member.getId()));
 
-            // 락 내부에서 Redis 상태 재검증 및 업데이트
-            LeaveDecision decision = makeLeaveDecisionWithLock(gameRoom, member, roomId);
-            GameRoomPlayerInfo playerInfo = applyLeaveToRedis(gameRoom, member, decision, roomId);
-
-            // 락 해제 후 DB 작업 (락 밖에서 수행)
-            lock.unlock();
-
-            applyLeaveToDatabase(member, gameRoom, decision);
-            gameRoomRedisService.cleanupPlayerSession(member.getId());
-
-            // 게임 진행 중 퇴장 시 GamePlayer 상태 업데이트 및 활성 플레이어 검증
-            // (방 삭제 시에는 applyLeaveToDatabase에서 이미 처리됨)
-            if (decision.getAction() != LeaveDecision.Action.DELETE_ROOM) {
-                handleGamePlayerAbandonIfPlaying(gameRoom, member);
-            }
-
-            // 이벤트 발행
-            eventPublisher.publishEvent(new GameRoomLeaveEvent(gameRoom, member, decision, playerInfo));
-
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Lock acquisition interrupted", e);
-        } finally {
-            if (lock.isHeldByCurrentThread()) {
-                lock.unlock();
-            }
+        if (!result.isSuccess()) {
+            log.warn("Leave operation failed - RoomId: {}, MemberId: {}, Error: {}",
+                    roomId, member.getId(), result.getErrorMessage());
+            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_OPERATION_IN_PROGRESS);
         }
+
+        // LeaveDecision 생성
+        LeaveDecision decision = convertToLeaveDecision(result, gameRoom, member);
+
+        // DB 작업 (락 밖에서 수행)
+        applyLeaveToDatabase(member, gameRoom, decision);
+        gameRoomRedisService.cleanupPlayerSession(member.getId());
+
+        // 게임 진행 중 퇴장 시 GamePlayer 상태 업데이트
+        if (decision.getAction() != LeaveDecision.Action.DELETE_ROOM) {
+            handleGamePlayerAbandonIfPlaying(gameRoom, member);
+        }
+
+        // 이벤트 발행
+        eventPublisher.publishEvent(new GameRoomLeaveEvent(
+                gameRoom, member, decision, result.getLeavingPlayerInfo()));
+
+        log.info("Player left room via {} - RoomId: {}, MemberId: {}, Action: {}",
+                lockStrategy.getStrategyName(), roomId, member.getId(), decision.getAction());
     }
 
-    private LeaveDecision makeLeaveDecisionWithLock(
-            GameRoom gameRoom,
-            Member member,
-            String roomId) {
-//        if (gameRoom.isNotHost(member)) {
-//            return LeaveDecision.normalLeave(member);
-//        }
-
-        // 락 내부에서 Redis 상태 재검증
-        List<GameRoomPlayerInfo> currentPlayers = gameRoomRedisService.getRoomPlayers(roomId);
-
-        // 퇴장 플레이어 정보 찾기
-        GameRoomPlayerInfo leavingPlayer = currentPlayers.stream()
-                .filter(p -> p.getMemberId().equals(member.getId()))
-                .findFirst()
-                .orElse(null);
-
-        if (leavingPlayer == null) {
-            // 이미 퇴장한 경우 - 중복 호출 방지 (멱등성)
-            log.info("Player already left room - MemberId: {}, RoomId: {}", member.getId(), gameRoom.getId());
-            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_PLAYER_NOT_FOUND);
+    /**
+     * Redis 레벨에서 퇴장 처리 수행 (Strategy에서 호출)
+     */
+    private HostAssignmentResult performLeaveOperation(String roomId, Long memberId) {
+        GameRoomPlayerInfo playerInfo = gameRoomRedisService.removePlayerFromRoom(roomId, memberId);
+        if (playerInfo == null) {
+            return HostAssignmentResult.failure("Player not found in room");
         }
-
-        if (!leavingPlayer.isHost()) {
-            return LeaveDecision.normalLeave(member);
-        }
-        Long leavingJoinedAt = leavingPlayer.getJoinedAt();
-
-        // 퇴장 플레이어보다 늦게 들어온 사람 중 가장 작은 joinedAt 찾기
-        Optional<GameRoomPlayerInfo> validCandidate = currentPlayers.stream()
-                .filter(p -> !p.getMemberId().equals(member.getId()))
-                .filter(p -> p.getJoinedAt() != null && p.getJoinedAt() > leavingJoinedAt)
-                .min(Comparator.comparing(GameRoomPlayerInfo::getJoinedAt));
-
-        if (validCandidate.isEmpty()) {
-            return LeaveDecision.deleteRoom(gameRoom, member);
-        }
-
-        return LeaveDecision.changeHost(
-                gameRoom,
-                member,
-                validCandidate.get());
+        return HostAssignmentResult.normalLeave(memberId, playerInfo);
     }
 
-    private GameRoomPlayerInfo applyLeaveToRedis(
+    /**
+     * HostAssignmentResult를 기존 LeaveDecision으로 변환
+     */
+    private LeaveDecision convertToLeaveDecision(
+            HostAssignmentResult result,
             GameRoom gameRoom,
-            Member member,
-            LeaveDecision decision,
-            String roomId) {
-        Long playerId = member.getId();
+            Member member) {
 
-        // 1. 플레이어 제거
-        GameRoomPlayerInfo playerInfo = gameRoomRedisService.removePlayerFromRoom(roomId, playerId);
-
-        // 2. LeaveDecision에 따른 추가 Redis 작업
-        switch (decision.getAction()) {
-            case DELETE_ROOM:
-                gameRoomRedisService.deleteRoomData(roomId);
-                log.info("Game room deleted - RoomId: {}", roomId);
-                break;
-            case CHANGE_HOST:
-                // 방장 변경: 다시 한 번 존재 여부 확인
-                GameRoomPlayerInfo newHostInfo = decision.getNewHostInfo();
-                List<GameRoomPlayerInfo> remainingPlayers = gameRoomRedisService.getRoomPlayers(roomId);
-
-                boolean isNewHostStillInRoom = remainingPlayers.stream()
-                        .anyMatch(p -> p.getMemberId().equals(newHostInfo.getMemberId()));
-
-                if (isNewHostStillInRoom) {
-                    newHostInfo.setHost(true);
-                    gameRoomRedisService.savePlayerToRoom(roomId, newHostInfo);
-                    log.info("Host changed - RoomId: {}, NewHostId: {}, NewHostName: {}",
-                            gameRoom.getId(), newHostInfo.getMemberId(), newHostInfo.getNickname());
-                } else {
-                    // Fallback: 새 방장이 이미 퇴장한 경우 방 삭제
-                    gameRoomRedisService.deleteRoomData(roomId);
-                    log.warn("New host already left - RoomId: {}, Deleting room", roomId);
-                }
-                break;
-            case NORMAL_LEAVE:
-                // 별도 처리 없음
-                break;
-        }
-
-        return playerInfo;
+        return switch (result.getAction()) {
+            case DELETE_ROOM -> LeaveDecision.deleteRoom(gameRoom, member);
+            case CHANGE_HOST -> LeaveDecision.changeHost(gameRoom, member, result.getNewHostInfo());
+            case NORMAL_LEAVE -> LeaveDecision.normalLeave(member);
+        };
     }
 
     private void applyLeaveToDatabase(Member member, GameRoom gameRoom, LeaveDecision decision) {
@@ -202,8 +135,6 @@ public class LeaveGameRoomUseCase {
                 lobbyRoomNotificationService.notifyRoomDeleted(gameRoom.getId());
                 break;
             case CHANGE_HOST:
-//                Member newHost = memberAdaptor.queryById(decision.getNewHostInfo().getMemberId());
-//                gameRoomService.changeHostToMember(gameRoom, newHost);
                 gameRoomRepository.updateHost(gameRoom.getId(), decision.getNewHostInfo().getMemberId());
                 break;
             case NORMAL_LEAVE:
