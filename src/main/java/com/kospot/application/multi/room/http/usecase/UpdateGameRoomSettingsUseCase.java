@@ -59,6 +59,7 @@ public class UpdateGameRoomSettingsUseCase {
                 .privateRoom(request.isPrivateRoom())
                 .totalRounds(request.getTotalRounds())
                 .timeLimit(request.getTimeLimit())
+                .poiNameVisible(request.isPoiNameVisible())
                 .maxPlayers(request.getMaxPlayers())
                 .password(request.getPassword())
                 .build();
