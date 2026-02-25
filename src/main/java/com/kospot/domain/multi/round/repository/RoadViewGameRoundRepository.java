@@ -2,11 +2,11 @@ package com.kospot.domain.multi.round.repository;
 
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
+import jakarta.persistence.LockModeType;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,4 +26,11 @@ public interface RoadViewGameRoundRepository extends JpaRepository<RoadViewGameR
            "JOIN FETCH rvr.multiRoadViewGame " +
            "WHERE rvr.id = :id")
     Optional<RoadViewGameRound> findByIdFetchGame(@Param("id") Long id);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT rvr FROM RoadViewGameRound rvr " +
+           "JOIN FETCH rvr.targetCoordinate " +
+           "JOIN FETCH rvr.multiRoadViewGame " +
+           "WHERE rvr.id = :id")
+    Optional<RoadViewGameRound> findByIdFetchGameForUpdate(@Param("id") Long id);
 }

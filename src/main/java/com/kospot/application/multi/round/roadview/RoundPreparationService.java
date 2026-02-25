@@ -84,14 +84,29 @@ public class RoundPreparationService {
      */
     public ReissueResult reissueRound(Long roundId, Long gameId) {
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchGame(roundId);
+        return reissueRound(round, gameId);
+    }
+
+    public RoadViewGameRound getRoundForReissueWithLock(Long roundId, Long gameId) {
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchGameForUpdate(roundId);
+        validateGameMatch(round, gameId);
+        return round;
+    }
+
+    public ReissueResult reissueRound(RoadViewGameRound round, Long gameId) {
+        MultiRoadViewGame game = validateGameMatch(round, gameId);
+        roadViewGameRoundService.reissueRound(round, round.getPlayerIds());
+        return new ReissueResult(game, round);
+    }
+
+    private MultiRoadViewGame validateGameMatch(RoadViewGameRound round, Long gameId) {
         MultiRoadViewGame game = round.getMultiRoadViewGame();
 
         if (!game.getId().equals(gameId)) {
             throw new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND);
         }
 
-        roadViewGameRoundService.reissueRound(round, round.getPlayerIds());
-        return new ReissueResult(game, round);
+        return game;
     }
 
     /**
