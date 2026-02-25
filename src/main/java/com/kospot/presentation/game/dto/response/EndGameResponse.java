@@ -14,13 +14,15 @@ public class EndGameResponse {
     @Getter
     @Builder
     public static class RoadViewPractice {
+        private String nickname;
         private double answerDistance;
         private String fullAddress;
         private String poiName;
         private double score;
 
-        public static RoadViewPractice from(RoadViewGame game, Coordinate coordinate){
+        public static RoadViewPractice from(Member member, RoadViewGame game, Coordinate coordinate){
             return RoadViewPractice.builder()
+                    .nickname(member.getNickname())
                     .score(game.getScore())
                     .answerDistance(game.getAnswerDistance())
                     .fullAddress(coordinate.getAddress().getFullAddress())

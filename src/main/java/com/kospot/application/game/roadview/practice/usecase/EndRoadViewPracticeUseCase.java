@@ -28,6 +28,6 @@ public class EndRoadViewPracticeUseCase {
         //event
         eventPublisher.publishEvent(new RoadViewPracticeEvent(member, game));
 
-        return EndGameResponse.RoadViewPractice.from(game, game.getCoordinate());
+        return EndGameResponse.RoadViewPractice.from(member, game, game.getCoordinate());
     }
 }
