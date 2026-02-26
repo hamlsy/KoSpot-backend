@@ -1,6 +1,7 @@
 package com.kospot.presentation.member.controller;
 
 import com.kospot.application.member.GetMemberProfileUseCase;
+import com.kospot.application.member.GetMemberShopInfoUseCase;
 import com.kospot.application.member.GetPlayerSummaryUseCase;
 import com.kospot.application.member.SetNicknameUseCase;
 import com.kospot.application.member.UpdateNicknameUseCase;
@@ -10,6 +11,7 @@ import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse;
+import com.kospot.presentation.member.dto.response.MemberShopInfoResponse;
 import com.kospot.presentation.member.dto.response.PlayerSummaryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final GetMemberProfileUseCase getMemberProfileUseCase;
+    private final GetMemberShopInfoUseCase getMemberShopInfoUseCase;
     private final GetPlayerSummaryUseCase getPlayerSummaryUseCase;
     private final SetNicknameUseCase setNicknameUseCase;
     private final UpdateNicknameUseCase updateNicknameUseCase;
@@ -34,6 +37,13 @@ public class MemberController {
     @BotSuccess
     public ApiResponseDto<MemberProfileResponse> getMemberProfile(@CurrentMember Member member) {
         MemberProfileResponse response = getMemberProfileUseCase.execute(member);
+        return ApiResponseDto.onSuccess(response);
+    }
+
+    @Operation(summary = "상점 내 정보 조회", description = "상점 페이지에서 필요한 내 포인트, 장착 아이템, 보유 아이템 정보를 조회합니다.")
+    @GetMapping("/shop-info")
+    public ApiResponseDto<MemberShopInfoResponse> getMemberShopInfo(@CurrentMember Member member) {
+        MemberShopInfoResponse response = getMemberShopInfoUseCase.execute(member);
         return ApiResponseDto.onSuccess(response);
     }
 
