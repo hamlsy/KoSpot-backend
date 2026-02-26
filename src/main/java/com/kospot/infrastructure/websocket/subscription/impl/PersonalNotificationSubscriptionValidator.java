@@ -14,8 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class PersonalNotificationSubscriptionValidator implements SubscriptionValidator {
 
-    private static final String PERSONAL_NOTIFICATION_SUFFIX = "/notification";
-
     @Override
     public boolean canSubscribe(WebSocketMemberPrincipal principal, String destination) {
         if (principal == null || principal.getMemberId() == null || principal.getMemberId() <= 0) {
@@ -23,19 +21,7 @@ public class PersonalNotificationSubscriptionValidator implements SubscriptionVa
             return false;
         }
 
-        Long requestedMemberId = NotificationChannelConstants.extractMemberIdFromDestination(destination);
-        if (requestedMemberId == null) {
-            log.warn("Personal notification access denied - Invalid memberId in destination: {}", destination);
-            return false;
-        }
-
-        boolean isOwner = requestedMemberId.equals(principal.getMemberId());
-        if (!isOwner) {
-            log.warn("Personal notification access denied - Not owner: PrincipalMemberId={}, DestinationMemberId={}",
-                    principal.getMemberId(), requestedMemberId);
-            return false;
-        }
-
+        // user-destination 구독은 본인 세션에만 바인딩되므로, 인증만 있으면 허용
         return true;
     }
 
@@ -45,11 +31,7 @@ public class PersonalNotificationSubscriptionValidator implements SubscriptionVa
             return false;
         }
 
-        if (!destination.startsWith("/user/")) {
-            return false;
-        }
-
-        return destination.endsWith(PERSONAL_NOTIFICATION_SUFFIX);
+        return NotificationChannelConstants.PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL.equals(destination);
     }
 
     @Override

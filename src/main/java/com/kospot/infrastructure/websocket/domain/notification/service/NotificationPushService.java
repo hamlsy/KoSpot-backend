@@ -29,10 +29,13 @@ public class NotificationPushService {
             payloadType = NotificationMessage.class,
             trigger = "알림 발생(개인)",
             description = "특정 사용자에게 개인 알림을 전송합니다.",
-            destination = "/user/{memberId}/notification"
+            destination = "/user/queue/notification"
     )
     public void sendToMember(Long memberId, NotificationMessage message) {
-        String destination = NotificationChannelConstants.getPersonalNotificationChannel(memberId);
-        simpMessagingTemplate.convertAndSend(destination, message);
+        simpMessagingTemplate.convertAndSendToUser(
+                String.valueOf(memberId),
+                NotificationChannelConstants.getPersonalNotificationSendDestination(),
+                message
+        );
     }
 }

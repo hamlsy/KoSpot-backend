@@ -39,19 +39,6 @@ public class SendAdminMessageUseCase {
                 admin.getId()
         );
 
-        List<Notification> notifications = targetMemberIds.stream()
-                .map(memberId -> Notification.create(
-                        memberId,
-                        NotificationType.ADMIN_MESSAGE,
-                        request.getTitle(),
-                        request.getContent(),
-                        payloadJson,
-                        null
-                ))
-                .toList();
-
-        notificationService.saveAll(notifications);
-
         NotificationMessage pushMessage = NotificationMessage.builder()
                 .notificationId(null)
                 .type(NotificationType.ADMIN_MESSAGE.name())
@@ -64,10 +51,31 @@ public class SendAdminMessageUseCase {
                 .build();
 
         if (request.getTargetType() == AdminNotificationRequest.TargetType.ALL) {
+            // 전체 발송: DB fan-out + 전역 푸시
+            List<Notification> notifications = targetMemberIds.stream()
+                    .map(memberId -> Notification.create(
+                            memberId,
+                            NotificationType.ADMIN_MESSAGE,
+                            request.getTitle(),
+                            request.getContent(),
+                            payloadJson,
+                            null
+                    ))
+                    .toList();
+            notificationService.saveAll(notifications);
             notificationPushService.sendGlobal(pushMessage);
         } else {
+            // 선택 발송: 사용자별로 생성해서 notificationId 포함 푸시
             for (Long memberId : targetMemberIds) {
-                notificationPushService.sendToMember(memberId, pushMessage);
+                Notification notification = notificationService.create(
+                        memberId,
+                        NotificationType.ADMIN_MESSAGE,
+                        request.getTitle(),
+                        request.getContent(),
+                        payloadJson,
+                        null
+                );
+                notificationPushService.sendToMember(memberId, NotificationMessage.from(notification));
             }
         }
 

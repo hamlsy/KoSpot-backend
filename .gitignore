@@ -48,6 +48,9 @@ out/
 logs/
 *.log
 
+### Local dump files ###
+src/main/resources/dump/
+
 ### OS ###
 .DS_Store
 Thumbs.db

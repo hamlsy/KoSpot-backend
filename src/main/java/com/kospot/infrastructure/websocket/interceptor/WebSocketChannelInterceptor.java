@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import static com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants.PREFIX_CHAT;
 import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
+import static com.kospot.infrastructure.websocket.domain.notification.constants.NotificationChannelConstants.PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL;
 import static com.kospot.infrastructure.websocket.domain.notification.constants.NotificationChannelConstants.PREFIX_NOTIFICATION;
 
 @Slf4j
@@ -159,8 +160,8 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
             return true;
         }
 
-        // 개인 알림 채널: /user/{memberId}/notification
-        return destination.startsWith("/user/") && destination.endsWith("/notification");
+        // 개인 알림 채널: /user/queue/notification
+        return PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL.equals(destination);
     }
 
     /**
