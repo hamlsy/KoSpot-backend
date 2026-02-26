@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +25,9 @@ public class GameTypeStatistic {
     public void update(double score) {
         this.games++;
         this.totalScore += score;
-        this.avgScore = this.totalScore / this.games;
+//        this.avgScore = this.totalScore / this.games;
+        this.avgScore = BigDecimal.valueOf(this.totalScore / this.games)
+                .setScale(3, RoundingMode.HALF_UP)
+                .doubleValue();
     }
 }
