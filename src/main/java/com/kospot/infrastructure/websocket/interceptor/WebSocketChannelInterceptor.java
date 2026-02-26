@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import static com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants.PREFIX_CHAT;
 import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
+import static com.kospot.infrastructure.websocket.domain.notification.constants.NotificationChannelConstants.PREFIX_NOTIFICATION;
 
 @Slf4j
 @Component
@@ -134,8 +135,10 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
             throw new WebSocketHandler(ErrorStatus.INVALID_DESTINATION);
         }
 
-        // 확장 가능한 구독 권한 검증
-        // validateSubscriptionAccess(principal, destination); // 나중에 확장 적용
+        // 알림 채널만 우선 적용 (기존 채널들 영향 최소화)
+        if (needsSubscriptionValidation(destination)) {
+            validateSubscriptionAccess(principal, destination);
+        }
 
         // 세션 정보 저장 (연결 해제 시 정리용)
         webSocketSessionService.saveSessionInfo(accessor.getSessionId(), destination, principal);
@@ -145,6 +148,19 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
 
         log.info("Subscription registered - MemberId: {}, Destination: {}, SessionId: {}",
                 principal.getMemberId(), destination, sessionId);
+    }
+
+    private boolean needsSubscriptionValidation(String destination) {
+        if (destination == null) {
+            return false;
+        }
+
+        if (destination.startsWith(PREFIX_NOTIFICATION)) {
+            return true;
+        }
+
+        // 개인 알림 채널: /user/{memberId}/notification
+        return destination.startsWith("/user/") && destination.endsWith("/notification");
     }
 
     /**
