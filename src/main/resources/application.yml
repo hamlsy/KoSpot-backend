@@ -106,3 +106,9 @@ cloud:
 
 websocket:
   allowed-origins: ${WEBSOCKET_ALLOWED_ORIGINS}
+
+slack:
+  enabled: ${SLACK_ENABLED:false}
+  webhook:
+    error-url: ${SLACK_WEBHOOK_ERROR_URL:}
+    registration-url: ${SLACK_WEBHOOK_REGISTRATION_URL:}

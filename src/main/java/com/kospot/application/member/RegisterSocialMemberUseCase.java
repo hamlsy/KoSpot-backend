@@ -11,6 +11,7 @@ import com.kospot.domain.memberitem.entity.MemberItem;
 import com.kospot.domain.memberitem.service.MemberItemService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;
+import com.kospot.infrastructure.slack.SlackNotifier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +28,10 @@ public class RegisterSocialMemberUseCase {
     private final MemberItemService memberItemService;
     private final ItemAdaptor itemAdaptor;
 
-    //redis
+    // redis
     private final MemberProfileRedisService memberProfileRedisService;
+
+    private final SlackNotifier slackNotifier;
 
     public Member execute(String username, String email) {
         Member member = memberService.initializeMember(username, email);
@@ -43,7 +46,11 @@ public class RegisterSocialMemberUseCase {
         memberItemService.equipItem(member, memberItem);
 
         // redis profile cache update
-        memberProfileRedisService.saveProfile(member.getId(), member.getNickname(), defaultMarker.getImage().getImageUrl());
+        memberProfileRedisService.saveProfile(member.getId(), member.getNickname(),
+                defaultMarker.getImage().getImageUrl());
+
+        // Slack 회원가입 알림
+        slackNotifier.sendRegistrationAlert(member.getId(), email);
 
         return member;
     }
