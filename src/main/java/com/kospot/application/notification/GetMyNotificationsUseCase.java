@@ -2,15 +2,11 @@ package com.kospot.application.notification;
 
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.notification.adaptor.NotificationAdaptor;
-import com.kospot.domain.notification.entity.Notification;
+import com.kospot.domain.notification.model.NotificationData;
 import com.kospot.domain.notification.vo.NotificationType;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.notification.dto.response.NotificationResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -33,11 +29,9 @@ public class GetMyNotificationsUseCase {
             Boolean isRead
     ) {
         int pageSize = normalizeSize(size);
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.Direction.DESC, "createdDate");
+        List<NotificationData> notifications = notificationAdaptor.queryPage(member.getId(), page, pageSize, type, isRead);
 
-        Page<Notification> notifications = notificationAdaptor.queryPage(member.getId(), type, isRead, pageable);
-
-        return notifications.getContent().stream()
+        return notifications.stream()
                 .map(NotificationResponse.Item::from)
                 .toList();
     }

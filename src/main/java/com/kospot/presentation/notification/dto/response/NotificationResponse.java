@@ -1,6 +1,7 @@
 package com.kospot.presentation.notification.dto.response;
 
 import com.kospot.domain.notification.entity.Notification;
+import com.kospot.domain.notification.model.NotificationData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +39,21 @@ public class NotificationResponse {
                     .isRead(notification.isRead())
                     .readAt(notification.getReadAt())
                     .createdAt(notification.getCreatedDate())
+                    .build();
+        }
+
+        public static Item from(NotificationData notification) {
+            return Item.builder()
+                    .notificationId(notification.notificationId())
+                    .receiverMemberId(notification.receiverMemberId())
+                    .type(notification.type().name())
+                    .title(notification.title())
+                    .content(notification.content())
+                    .payloadJson(notification.payloadJson())
+                    .sourceId(notification.sourceId())
+                    .isRead(notification.isRead())
+                    .readAt(notification.readAt())
+                    .createdAt(notification.createdAt())
                     .build();
         }
     }
