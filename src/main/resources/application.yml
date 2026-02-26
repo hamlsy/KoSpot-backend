@@ -28,6 +28,8 @@ spring:
         format_sql: true
         show_sql: false
 
+    open-in-view: false
+
   security:
     oauth2:
       client:

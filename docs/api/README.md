@@ -25,6 +25,9 @@ KoSpot 백엔드 API 전체 문서입니다. 프론트엔드 개발자가 쉽게
 - [Notice API](./notice/README.md) - 공지사항
 - [Banner API](./banner/README.md) - 배너
 
+### 🔔 알림
+- [Notification API](./notification/README.md) - 알림(REST + WebSocket)
+
 ### 🏠 메인 페이지
 - [Main Page API](./main/README.md) - 메인 페이지 정보
 
