@@ -178,11 +178,12 @@ function subscribeToPhotoAnswer(roomId) {
 
 #### 1. 개인 알림 채널
 ```javascript
-// 채널: /user/{memberId}/notification
-// 설명: 개인에게만 전송되는 알림 (게임 초대, 친구 요청 등)
+// 채널: /user/queue/notification
+// 설명: 개인에게만 전송되는 알림 (관리자 메시지, 친구 요청 등)
+// 참고: Spring STOMP user-destination 방식 (서버가 memberId로 라우팅)
 
-function subscribeToPersonalNotification(memberId) {
-    return stompClient.subscribe(`/user/${memberId}/notification`, function(message) {
+function subscribeToPersonalNotification() {
+    return stompClient.subscribe('/user/queue/notification', function(message) {
         const notification = JSON.parse(message.body);
         showPersonalNotification(notification);
     });
@@ -437,7 +438,7 @@ class GameRoomManager {
         
         // 개인 알림 구독
         this.subscriptions.set('personalNotification', 
-            subscribeToPersonalNotification(this.memberId));
+            subscribeToPersonalNotification());
     }
     
     // 게임 시작 시 추가 구독
@@ -548,7 +549,7 @@ class WebSocketManager {
 | **팀 마커** | `/topic/game/{roomId}/roadview/team/{teamId}/marker` | 팀별 마커 정보 | 팀 로드뷰 게임 시 |
 | **포토 제출** | `/topic/game/{roomId}/photo/submit` | 포토 답안 제출 | 포토 게임 시 |
 | **포토 답안** | `/topic/game/{roomId}/photo/answer` | 포토 답안 공개 | 포토 게임 시 |
-| **개인 알림** | `/user/{memberId}/notification` | 개인 알림 | 로그인 시 |
+| **개인 알림** | `/user/queue/notification` | 개인 알림 | 로그인 시 |
 | **게임 초대** | `/user/{memberId}/gameInvite` | 게임 초대 | 로그인 시 |
 | **로비 채팅** | `/topic/chat/lobby` | 전역 채팅 | 로비 입장 시 |
 | **전역 알림** | `/topic/notification/global` | 시스템 알림 | 앱 시작 시 |
