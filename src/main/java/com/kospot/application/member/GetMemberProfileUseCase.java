@@ -8,6 +8,7 @@ import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.statistic.entity.GameModeStatistic;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse.GameStatistics.RoadViewGameStats;
@@ -31,18 +32,16 @@ public class GetMemberProfileUseCase {
 
     private final MemberStatisticAdaptor memberStatisticAdaptor;
     private final GameRankAdaptor gameRankAdaptor;
+    private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
     public MemberProfileResponse execute(Member member) {
         MemberStatistic statistic = memberStatisticAdaptor.queryByMemberFetchModeStatistics(member);
-
-        String profileImageUrl = member.getEquippedMarkerImage() != null 
-                ? member.getEquippedMarkerImage().getImageUrl() 
-                : null;
+        MemberProfileRedisAdaptor.MemberProfileView cachedProfile = memberProfileRedisAdaptor.findProfile(member.getId());
         
         return MemberProfileResponse.builder()
                 .nickname(member.getNickname())
                 .email(member.getEmail())
-                .profileImageUrl(profileImageUrl)
+                .profileImageUrl(cachedProfile.markerImageUrl())
                 .currentPoint(member.getPoint())
                 .joinedAt(member.getCreatedDate())
                 .lastPlayedAt(statistic.getLastPlayedAt())

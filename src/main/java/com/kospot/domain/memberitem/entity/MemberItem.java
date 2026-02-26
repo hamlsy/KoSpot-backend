@@ -5,6 +5,7 @@ import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -29,6 +30,7 @@ public class MemberItem extends BaseTimeEntity {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    @Builder.Default
     private Boolean isEquipped = false;
 
     //business

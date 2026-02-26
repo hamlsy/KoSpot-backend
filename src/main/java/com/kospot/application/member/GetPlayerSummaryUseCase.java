@@ -9,6 +9,8 @@ import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.statistic.entity.GameModeStatistic;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.presentation.member.dto.response.MemberProfileResponse;
 import com.kospot.presentation.member.dto.response.PlayerSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ public class GetPlayerSummaryUseCase {
     private final MemberAdaptor memberAdaptor;
     private final MemberStatisticAdaptor memberStatisticAdaptor;
     private final GameRankAdaptor gameRankAdaptor;
+    private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
     public PlayerSummaryResponse execute(Long memberId) {
         // Member 조회 (equippedMarkerImage 포함)
@@ -37,9 +40,7 @@ public class GetPlayerSummaryUseCase {
         List<GameRank> ranks = gameRankAdaptor.queryAllByMember(member);
 
         // equippedMarkerImageUrl 추출
-        String equippedMarkerImageUrl = member.getEquippedMarkerImage() != null
-                ? member.getEquippedMarkerImage().getImageUrl()
-                : null;
+        String equippedMarkerImageUrl = memberProfileRedisAdaptor.findProfile(memberId).markerImageUrl();
 
         // PlayStreak 추출
         int playStreak = statistic.getPlayStreak() != null

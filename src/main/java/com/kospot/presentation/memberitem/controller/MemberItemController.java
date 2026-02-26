@@ -14,10 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,7 +40,7 @@ public class MemberItemController {
     }
 
     @Operation(summary = "아이템 장착", description = "인벤토리에서 아이템을 장착합니다.")
-    @GetMapping("/{memberItemId}")
+    @PutMapping("/{memberItemId}")
     public ApiResponseDto<?> equipItem(@CurrentMember Member member, @PathVariable("memberItemId") Long memberItemId) {
         equipMemberItemUseCase.execute(member, memberItemId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);

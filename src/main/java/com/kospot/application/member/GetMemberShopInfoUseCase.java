@@ -21,7 +21,7 @@ public class GetMemberShopInfoUseCase {
     public MemberShopInfoResponse execute(Member member) {
         List<MemberItemResponse> ownedItems = memberItemAdaptor.queryAllByMemberFetch(member);
         List<MemberItemResponse> equippedItems = ownedItems.stream()
-                .filter(item -> item.isEquipped())
+                .filter(item -> item.getIsEquipped())
                 .collect(Collectors.toList());
 
         return MemberShopInfoResponse.builder()

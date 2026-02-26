@@ -18,7 +18,7 @@ public class MemberItemResponse {
     private String itemImageUrl;
     private String name;
     private String description;
-    private boolean isEquipped;
+    private Boolean isEquipped;
     private LocalDateTime purchaseTime;
 
 }
