@@ -33,6 +33,22 @@ public class NotificationAdaptor {
         return notificationRepository.findAllByReceiverMemberIdAndType(receiverMemberId, type, pageable);
     }
 
+    public Page<Notification> queryPage(Long receiverMemberId, NotificationType type, Boolean isRead, Pageable pageable) {
+        if (type == null && isRead == null) {
+            return notificationRepository.findAllByReceiverMemberId(receiverMemberId, pageable);
+        }
+
+        if (type != null && isRead == null) {
+            return notificationRepository.findAllByReceiverMemberIdAndType(receiverMemberId, type, pageable);
+        }
+
+        if (type == null) {
+            return notificationRepository.findAllByReceiverMemberIdAndIsRead(receiverMemberId, isRead, pageable);
+        }
+
+        return notificationRepository.findAllByReceiverMemberIdAndTypeAndIsRead(receiverMemberId, type, isRead, pageable);
+    }
+
     public long countUnread(Long receiverMemberId) {
         return notificationRepository.countByReceiverMemberIdAndIsReadFalse(receiverMemberId);
     }

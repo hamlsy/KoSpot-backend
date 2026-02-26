@@ -18,6 +18,15 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     Page<Notification> findAllByReceiverMemberIdAndType(Long receiverMemberId, NotificationType type, Pageable pageable);
 
+    Page<Notification> findAllByReceiverMemberIdAndIsRead(Long receiverMemberId, boolean isRead, Pageable pageable);
+
+    Page<Notification> findAllByReceiverMemberIdAndTypeAndIsRead(
+            Long receiverMemberId,
+            NotificationType type,
+            boolean isRead,
+            Pageable pageable
+    );
+
     Optional<Notification> findByIdAndReceiverMemberId(Long id, Long receiverMemberId);
 
     long countByReceiverMemberIdAndIsReadFalse(Long receiverMemberId);
