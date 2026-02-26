@@ -1,6 +1,5 @@
 package com.kospot.presentation.notification.dto.message;
 
-import com.kospot.domain.notification.entity.Notification;
 import com.kospot.domain.notification.model.NotificationData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,19 +22,6 @@ public class NotificationMessage {
     private Long sourceId;
     private Boolean isRead;
     private LocalDateTime createdAt;
-
-    public static NotificationMessage from(Notification notification) {
-        return NotificationMessage.builder()
-                .notificationId(notification.getId())
-                .type(notification.getType().name())
-                .title(notification.getTitle())
-                .content(notification.getContent())
-                .payloadJson(notification.getPayloadJson())
-                .sourceId(notification.getSourceId())
-                .isRead(notification.isRead())
-                .createdAt(notification.getCreatedDate())
-                .build();
-    }
 
     public static NotificationMessage from(NotificationData notification) {
         return NotificationMessage.builder()
