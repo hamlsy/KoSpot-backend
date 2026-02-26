@@ -3,8 +3,8 @@ package com.kospot.application.notification.listener;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.notice.event.NoticeCreatedEvent;
-import com.kospot.domain.notification.entity.Notification;
-import com.kospot.domain.notification.service.NotificationService;
+import com.kospot.domain.notification.model.NotificationCreateCommand;
+import com.kospot.domain.notification.port.NotificationStore;
 import com.kospot.domain.notification.vo.NotificationType;
 import com.kospot.infrastructure.websocket.domain.notification.service.NotificationPushService;
 import com.kospot.presentation.notification.dto.message.NotificationMessage;
@@ -22,18 +22,18 @@ import java.util.List;
 public class NoticeNotificationEventListener {
 
     private final MemberAdaptor memberAdaptor;
-    private final NotificationService notificationService;
+    private final NotificationStore notificationStore;
     private final NotificationPushService notificationPushService;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handle(NoticeCreatedEvent event) {
         try {
-            // 1) DB 알림 생성 (전체 사용자 fan-out)
+            // 1) Redis 알림 저장 (전체 사용자 fan-out, TTL=2주)
             List<Member> members = memberAdaptor.findAll();
 
             String payloadJson = String.format("{\"noticeId\":%d}", event.getNoticeId());
-            List<Notification> notifications = members.stream()
-                    .map(member -> Notification.create(
+            List<NotificationCreateCommand> commands = members.stream()
+                    .map(member -> new NotificationCreateCommand(
                             member.getId(),
                             NotificationType.NOTICE,
                             event.getTitle(),
@@ -43,7 +43,7 @@ public class NoticeNotificationEventListener {
                     ))
                     .toList();
 
-            notificationService.saveAll(notifications);
+            notificationStore.saveAll(commands);
 
             // 2) 전역 STOMP 푸시
             NotificationMessage message = NotificationMessage.builder()

@@ -1,8 +1,9 @@
 package com.kospot.application.notification.listener;
 
-import com.kospot.domain.notification.entity.Notification;
 import com.kospot.domain.notification.event.FriendRequestCreatedEvent;
-import com.kospot.domain.notification.service.NotificationService;
+import com.kospot.domain.notification.model.NotificationCreateCommand;
+import com.kospot.domain.notification.model.NotificationData;
+import com.kospot.domain.notification.port.NotificationStore;
 import com.kospot.domain.notification.vo.NotificationType;
 import com.kospot.infrastructure.websocket.domain.notification.service.NotificationPushService;
 import com.kospot.presentation.notification.dto.message.NotificationMessage;
@@ -17,7 +18,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class FriendRequestNotificationEventListener {
 
-    private final NotificationService notificationService;
+    private final NotificationStore notificationStore;
     private final NotificationPushService notificationPushService;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -29,14 +30,14 @@ public class FriendRequestNotificationEventListener {
                     event.getSenderMemberId()
             );
 
-            Notification notification = notificationService.create(
+            NotificationData notification = notificationStore.save(new NotificationCreateCommand(
                     event.getReceiverMemberId(),
                     NotificationType.FRIEND_REQUEST,
                     "친구 요청",
                     null,
                     payloadJson,
                     event.getFriendRequestId()
-            );
+            ));
 
             notificationPushService.sendToMember(
                     event.getReceiverMemberId(),

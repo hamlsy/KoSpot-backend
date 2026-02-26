@@ -3,8 +3,9 @@ package com.kospot.application.admin.notification;
 import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.service.MemberService;
-import com.kospot.domain.notification.entity.Notification;
-import com.kospot.domain.notification.service.NotificationService;
+import com.kospot.domain.notification.model.NotificationCreateCommand;
+import com.kospot.domain.notification.model.NotificationData;
+import com.kospot.domain.notification.port.NotificationStore;
 import com.kospot.domain.notification.vo.NotificationType;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.websocket.domain.notification.service.NotificationPushService;
@@ -26,7 +27,7 @@ public class SendAdminMessageUseCase {
 
     private final MemberService memberService;
     private final MemberAdaptor memberAdaptor;
-    private final NotificationService notificationService;
+    private final NotificationStore notificationStore;
     private final NotificationPushService notificationPushService;
 
     public int execute(Member admin, AdminNotificationRequest.SendMessage request) {
@@ -51,9 +52,9 @@ public class SendAdminMessageUseCase {
                 .build();
 
         if (request.getTargetType() == AdminNotificationRequest.TargetType.ALL) {
-            // 전체 발송: DB fan-out + 전역 푸시
-            List<Notification> notifications = targetMemberIds.stream()
-                    .map(memberId -> Notification.create(
+            // 전체 발송: Redis fan-out + 전역 푸시
+            List<NotificationCreateCommand> commands = targetMemberIds.stream()
+                    .map(memberId -> new NotificationCreateCommand(
                             memberId,
                             NotificationType.ADMIN_MESSAGE,
                             request.getTitle(),
@@ -62,19 +63,19 @@ public class SendAdminMessageUseCase {
                             null
                     ))
                     .toList();
-            notificationService.saveAll(notifications);
+            notificationStore.saveAll(commands);
             notificationPushService.sendGlobal(pushMessage);
         } else {
             // 선택 발송: 사용자별로 생성해서 notificationId 포함 푸시
             for (Long memberId : targetMemberIds) {
-                Notification notification = notificationService.create(
+                NotificationData notification = notificationStore.save(new NotificationCreateCommand(
                         memberId,
                         NotificationType.ADMIN_MESSAGE,
                         request.getTitle(),
                         request.getContent(),
                         payloadJson,
                         null
-                );
+                ));
                 notificationPushService.sendToMember(memberId, NotificationMessage.from(notification));
             }
         }
