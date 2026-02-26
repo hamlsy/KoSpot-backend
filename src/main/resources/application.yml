@@ -108,3 +108,6 @@ cloud:
 
 websocket:
   allowed-origins: ${WEBSOCKET_ALLOWED_ORIGINS}
+
+notification:
+  ttl-days: 14
