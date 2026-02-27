@@ -4,10 +4,12 @@ import com.kospot.infrastructure.exception.object.general.GeneralException;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.exception.payload.code.Reason;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.slack.SlackNotifier;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,77 +21,90 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 @Hidden
 @Slf4j
-@RestControllerAdvice(annotations = {RestController.class})
+@RequiredArgsConstructor
+@RestControllerAdvice(annotations = { RestController.class })
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
-    private static final String CONSTRAINT_VIOLATION_EXCEPTION_ERROR_MESSAGE =  "ConstraintViolationException 추출 도중 에러 발생";
-    private static final String UNEXPECTED_ERROR_OCCURRED_MESSAGE = "Unexpected error occurred: ";
+        private static final String CONSTRAINT_VIOLATION_EXCEPTION_ERROR_MESSAGE = "ConstraintViolationException 추출 도중 에러 발생";
+        private static final String UNEXPECTED_ERROR_OCCURRED_MESSAGE = "Unexpected error occurred: ";
 
-    @ExceptionHandler
-    public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
-        String errorMessage = e.getConstraintViolations().stream()
-                .map(ConstraintViolation::getMessage)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException(CONSTRAINT_VIOLATION_EXCEPTION_ERROR_MESSAGE));
+        private final SlackNotifier slackNotifier;
 
-        return handleExceptionInternalConstraint(e, ErrorStatus.valueOf(errorMessage), HttpHeaders.EMPTY, request);
-    }
+        @ExceptionHandler
+        public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
+                String errorMessage = e.getConstraintViolations().stream()
+                                .map(ConstraintViolation::getMessage)
+                                .findFirst()
+                                .orElseThrow(() -> new RuntimeException(CONSTRAINT_VIOLATION_EXCEPTION_ERROR_MESSAGE));
 
-    private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, ErrorStatus errorCommonStatus,
-                                                                     HttpHeaders headers, WebRequest request) {
-        ApiResponseDto<Object> body = ApiResponseDto.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(),
-                null);
-        return super.handleExceptionInternal(
-                e,
-                body,
-                headers,
-                errorCommonStatus.getHttpStatus(),
-                request
-        );
-    }
+                return handleExceptionInternalConstraint(e, ErrorStatus.valueOf(errorMessage), HttpHeaders.EMPTY,
+                                request);
+        }
 
-    @ExceptionHandler
-    public ResponseEntity<Object> exception(Exception e, WebRequest request) {
-        log.error(UNEXPECTED_ERROR_OCCURRED_MESSAGE, e);
+        private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, ErrorStatus errorCommonStatus,
+                        HttpHeaders headers, WebRequest request) {
+                ApiResponseDto<Object> body = ApiResponseDto.onFailure(errorCommonStatus.getCode(),
+                                errorCommonStatus.getMessage(),
+                                null);
+                return super.handleExceptionInternal(
+                                e,
+                                body,
+                                headers,
+                                errorCommonStatus.getHttpStatus(),
+                                request);
+        }
 
-        return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY,
-                ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(), request, e.getMessage());
-    }
+        @ExceptionHandler
+        public ResponseEntity<Object> exception(Exception e, WebRequest request) {
+                log.error(UNEXPECTED_ERROR_OCCURRED_MESSAGE, e);
+                slackNotifier.sendErrorAlert(e.getMessage(), getStackTraceAsString(e));
 
-    private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, ErrorStatus errorCommonStatus,
-                                                                HttpHeaders headers, HttpStatus status,
-                                                                WebRequest request, String errorPoint) {
-        ApiResponseDto<Object> body = ApiResponseDto.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(),
-                errorPoint);
-        return super.handleExceptionInternal(
-                e,
-                body,
-                headers,
-                status,
-                request
-        );
-    }
+                return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY,
+                                ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(), request, e.getMessage());
+        }
 
-    @ExceptionHandler
-    public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
-        Reason errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
-        return handleExceptionInternal(generalException, errorReasonHttpStatus, null, request);
-    }
+        private String getStackTraceAsString(Exception e) {
+                StringWriter sw = new StringWriter();
+                e.printStackTrace(new PrintWriter(sw));
+                return sw.toString();
+        }
 
-    private ResponseEntity<Object> handleExceptionInternal(Exception e, Reason reason,
-                                                           HttpHeaders headers, HttpServletRequest request) {
+        private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, ErrorStatus errorCommonStatus,
+                        HttpHeaders headers, HttpStatus status,
+                        WebRequest request, String errorPoint) {
+                ApiResponseDto<Object> body = ApiResponseDto.onFailure(errorCommonStatus.getCode(),
+                                errorCommonStatus.getMessage(),
+                                errorPoint);
+                return super.handleExceptionInternal(
+                                e,
+                                body,
+                                headers,
+                                status,
+                                request);
+        }
 
-        ApiResponseDto<Object> body = ApiResponseDto.onFailure(reason.getCode(), reason.getMessage(), null);
+        @ExceptionHandler
+        public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
+                Reason errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
+                return handleExceptionInternal(generalException, errorReasonHttpStatus, null, request);
+        }
 
-        WebRequest webRequest = new ServletWebRequest(request);
-        return super.handleExceptionInternal(
-                e,
-                body,
-                headers,
-                reason.getHttpStatus(),
-                webRequest
-        );
-    }
+        private ResponseEntity<Object> handleExceptionInternal(Exception e, Reason reason,
+                        HttpHeaders headers, HttpServletRequest request) {
+
+                ApiResponseDto<Object> body = ApiResponseDto.onFailure(reason.getCode(), reason.getMessage(), null);
+
+                WebRequest webRequest = new ServletWebRequest(request);
+                return super.handleExceptionInternal(
+                                e,
+                                body,
+                                headers,
+                                reason.getHttpStatus(),
+                                webRequest);
+        }
 
 }
