@@ -25,6 +25,9 @@ KoSpot 백엔드 API 전체 문서입니다. 프론트엔드 개발자가 쉽게
 - [Notice API](./notice/README.md) - 공지사항
 - [Banner API](./banner/README.md) - 배너
 
+### 🔔 알림
+- [Notification API](./notification/README.md) - 알림(REST + WebSocket)
+
 ### 🏠 메인 페이지
 - [Main Page API](./main/README.md) - 메인 페이지 정보
 
@@ -124,8 +127,9 @@ GET /main
 ### 4. 아이템 구매 및 장착
 ```
 1. GET /item/MARKER (아이템 목록 조회)
-2. GET /memberItem/{itemId}/purchase (아이템 구매)
-3. GET /memberItem/{memberItemId} (아이템 장착)
+2. GET /member/shop-info (내 포인트/보유/장착 아이템 조회)
+3. GET /memberItem/{itemId}/purchase (아이템 구매)
+4. GET /memberItem/{memberItemId} (아이템 장착)
 ```
 
 ### 5. 프로필 조회

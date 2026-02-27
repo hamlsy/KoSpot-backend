@@ -14,4 +14,10 @@ public final class RedisKeyConstants {
     public static final String ACTIVE_BANNERS_KEY = "main:active-banners";
     public static final String RECENT_NOTICES_KEY = "main:recent-notices";
 
+    // Notification keys
+    public static final String NOTIFICATION_SEQ_KEY = "notification:seq";
+    public static final String NOTIFICATION_ITEM_KEY_PATTERN = "notification:item:%s";
+    public static final String NOTIFICATION_USER_INDEX_KEY_PATTERN = "notification:user:%s:index";
+    public static final String NOTIFICATION_USER_UNREAD_KEY_PATTERN = "notification:user:%s:unread";
+
 }

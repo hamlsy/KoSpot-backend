@@ -28,6 +28,8 @@ spring:
         format_sql: true
         show_sql: false
 
+    open-in-view: false
+
   security:
     oauth2:
       client:
@@ -107,8 +109,13 @@ cloud:
 websocket:
   allowed-origins: ${WEBSOCKET_ALLOWED_ORIGINS}
 
+
+notification:
+  ttl-days: 14
+
 slack:
   enabled: ${SLACK_ENABLED:false}
   webhook:
     error-url: ${SLACK_WEBHOOK_ERROR_URL:}
     registration-url: ${SLACK_WEBHOOK_REGISTRATION_URL:}
+

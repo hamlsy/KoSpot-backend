@@ -69,6 +69,13 @@ stompClient.connect({
 |------|------|
 | `/topic/lobby` | 글로벌 로비 채팅 |
 | `/topic/chat/lobby` | 로비 채팅 (Deprecated) |
+| `/topic/notification/global` | 전역 알림 (공지사항/시스템) |
+| `/topic/notification/maintenance` | 시스템 점검 알림 |
+
+### 개인 채널
+| 채널 | 설명 |
+|------|------|
+| `/user/queue/notification` | 개인 알림 (관리자 메시지/친구 요청 등) |
 
 ### 게임방 채널
 | 채널 패턴 | 설명 |
@@ -98,6 +105,16 @@ stompClient.connect({
 stompClient.subscribe('/topic/lobby', function(message) {
   const data = JSON.parse(message.body);
   console.log('수신:', data);
+});
+```
+
+#### 개인 알림 구독
+개인 알림은 Spring STOMP의 user-destination 방식을 사용합니다.
+
+```javascript
+stompClient.subscribe('/user/queue/notification', function(message) {
+  const notification = JSON.parse(message.body);
+  console.log('개인 알림:', notification);
 });
 ```
 
@@ -157,6 +174,22 @@ stompClient.send('/app/chat.message.lobby', {}, JSON.stringify({
   },
   "players": null,
   "timestamp": 1730707800000
+}
+```
+
+### 알림 메시지
+
+#### 전역/개인 알림 공통
+```json
+{
+  "notificationId": 1,
+  "type": "NOTICE",
+  "title": "공지사항 제목",
+  "content": "(선택) 관리자 메시지 내용",
+  "payloadJson": "{\"noticeId\":123}",
+  "sourceId": 123,
+  "isRead": false,
+  "createdAt": "2026-02-26T10:30:00"
 }
 ```
 

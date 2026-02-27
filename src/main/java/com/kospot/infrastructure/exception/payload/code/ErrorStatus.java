@@ -108,6 +108,10 @@ public enum ErrorStatus implements BaseCode {
     // Statistic Error (4381 ~ 4390)
     STATISTIC_NOT_FOUND(NOT_FOUND, 4381, "해당 통계를 찾을 수 없습니다."),
 
+    // Notification Error (4391 ~ 4400)
+    NOTIFICATION_NOT_FOUND(NOT_FOUND, 4391, "해당 알림을 찾을 수 없습니다."),
+    NOTIFICATION_ACCESS_DENIED(FORBIDDEN, 4392, "해당 알림에 접근할 수 없습니다."),
+
 
     ;
 

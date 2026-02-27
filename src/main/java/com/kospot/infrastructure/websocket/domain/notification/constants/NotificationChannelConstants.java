@@ -23,13 +23,24 @@ public class NotificationChannelConstants {
     // ==================== 개인 메시지 채널 ====================
 
     /**
-     * 개인 알림 채널 생성
-     * @param memberId 멤버 ID
-     * @return 개인 알림 채널 경로 (/user/{memberId}/notification)
+     * 개인 알림 구독 채널
+     * - STOMP user-destination 방식
+     * - 클라이언트 구독: /user/queue/notification
      */
-    public static String getPersonalNotificationChannel(Long memberId) {
-        validateMemberId(memberId);
-        return PREFIX_USER + memberId + "/notification";
+    public static final String PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL = "/user/queue/notification";
+
+    /**
+     * 개인 알림 전송 destination
+     * - 서버 전송: convertAndSendToUser(memberId, /queue/notification, payload)
+     */
+    public static final String PERSONAL_NOTIFICATION_SEND_DESTINATION = "/queue/notification";
+
+    public static String getPersonalNotificationSubscribeChannel() {
+        return PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL;
+    }
+
+    public static String getPersonalNotificationSendDestination() {
+        return PERSONAL_NOTIFICATION_SEND_DESTINATION;
     }
 
     /**

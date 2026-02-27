@@ -1,0 +1,18 @@
+package com.kospot.domain.notification.vo;
+
+public enum NotificationType {
+
+    ADMIN_MESSAGE("관리자 메시지"),
+    NOTICE("공지사항"),
+    FRIEND_REQUEST("친구 요청");
+
+    private final String description;
+
+    NotificationType(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+}

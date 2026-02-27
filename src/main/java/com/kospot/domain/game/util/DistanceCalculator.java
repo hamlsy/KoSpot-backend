@@ -2,6 +2,9 @@ package com.kospot.domain.game.util;
 
 import com.kospot.domain.coordinate.entity.Coordinate;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class DistanceCalculator {
 
     private static final double EARTH_RADIUS_KM = 6371.0;
@@ -18,7 +21,12 @@ public class DistanceCalculator {
                 * Math.sin(dLng / 2) * Math.sin(dLng / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return EARTH_RADIUS_KM * c;
+
+        double distance = EARTH_RADIUS_KM * c;
+        return BigDecimal.valueOf(distance)
+                .setScale(3, RoundingMode.HALF_UP)
+                .doubleValue();
+
     }
 
     private static double deg2rad(double deg) {
