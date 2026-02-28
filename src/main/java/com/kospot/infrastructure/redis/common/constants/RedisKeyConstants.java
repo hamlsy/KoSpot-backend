@@ -20,4 +20,8 @@ public final class RedisKeyConstants {
     public static final String NOTIFICATION_USER_INDEX_KEY_PATTERN = "notification:user:%s:index";
     public static final String NOTIFICATION_USER_UNREAD_KEY_PATTERN = "notification:user:%s:unread";
 
+    // Friend cache keys
+    public static final String FRIEND_LIST_KEY_PATTERN = "friend:list:%s:v1";
+    public static final String FRIEND_INCOMING_KEY_PATTERN = "friend:incoming:%s:v1";
+
 }

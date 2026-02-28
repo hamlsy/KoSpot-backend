@@ -5,6 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static com.kospot.infrastructure.redis.common.constants.RedisKeyConstants.REDIS_LOBBY_USERS;
 
 @Slf4j
@@ -26,6 +31,27 @@ public class LobbyPresenceService {
 
     public long getLobbyUserCount() {
         return redisTemplate.opsForHash().size(REDIS_LOBBY_USERS);
+    }
+
+    public Set<Long> getOnlineMemberIds() {
+        Map<Object, Object> entries = redisTemplate.opsForHash().entries(REDIS_LOBBY_USERS);
+        if (entries == null || entries.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        return entries.values().stream()
+                .map(Object::toString)
+                .map(this::parseLong)
+                .filter(v -> v != null)
+                .collect(Collectors.toSet());
+    }
+
+    private Long parseLong(String value) {
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
 }

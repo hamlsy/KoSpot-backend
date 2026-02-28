@@ -7,6 +7,7 @@ KoSpot 백엔드 API 전체 문서입니다. 프론트엔드 개발자가 쉽게
 ### 🔐 인증 & 회원
 - [Auth API](./auth/README.md) - 인증 (로그인, 토큰 재발급, 로그아웃)
 - [Member API](./member/README.md) - 회원 정보 및 프로필
+- [Friend API](./friend/README.md) - 친구/친구요청/친구채팅 및 실시간 양식
 
 ### 🎮 게임
 - [Game API](./game/README.md) - 로드뷰 게임 (싱글 플레이)
