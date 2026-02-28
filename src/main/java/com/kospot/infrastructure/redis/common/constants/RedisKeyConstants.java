@@ -9,6 +9,9 @@ public final class RedisKeyConstants {
     // redis
     public static final String REDIS_LOBBY_USERS = "lobby:users";
     public static final String REDIS_RECENT_CHAT_KEY = "chat:recent:";
+    public static final String TRANSIENT_GLOBAL_LOBBY_CHAT_KEY = "chat:transient:lobby:global";
+    public static final String TRANSIENT_GAME_ROOM_CHAT_KEY_PATTERN = "chat:transient:room:%s";
+    public static final String TRANSIENT_GLOBAL_GAME_CHAT_KEY_PATTERN = "chat:transient:game:%s:global";
 
     // Main page cache keys
     public static final String ACTIVE_BANNERS_KEY = "main:active-banners";

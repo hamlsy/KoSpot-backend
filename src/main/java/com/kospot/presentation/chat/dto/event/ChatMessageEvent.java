@@ -30,7 +30,7 @@ public class ChatMessageEvent {
                     .nickname(chatMessage.getNickname())
                     .content(chatMessage.getContent())
                     .messageType(chatMessage.getMessageType().name())
-                    .timestamp(chatMessage.getCreatedDate())
+                    .timestamp(resolveTimestamp(chatMessage))
                     .build();
         }
     }
@@ -57,7 +57,7 @@ public class ChatMessageEvent {
                     .content(chatMessage.getContent())
                     .messageType(chatMessage.getMessageType().name())
                     .teamId(chatMessage.getTeamId())
-                    .timestamp(chatMessage.getCreatedDate())
+                    .timestamp(resolveTimestamp(chatMessage))
                     .build();
         }
     }
@@ -82,9 +82,16 @@ public class ChatMessageEvent {
                     .nickname(chatMessage.getNickname())
                     .content(chatMessage.getContent())
                     .messageType(chatMessage.getMessageType().name())
-                    .timestamp(chatMessage.getCreatedDate())
+                    .timestamp(resolveTimestamp(chatMessage))
                     .build();
         }
+    }
+
+    private static LocalDateTime resolveTimestamp(ChatMessage chatMessage) {
+        if (chatMessage.getCreatedDate() != null) {
+            return chatMessage.getCreatedDate();
+        }
+        return LocalDateTime.now();
     }
 
 }

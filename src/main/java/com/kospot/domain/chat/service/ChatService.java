@@ -1,7 +1,7 @@
 package com.kospot.domain.chat.service;
 
 import com.kospot.domain.chat.entity.ChatMessage;
-import com.kospot.domain.chat.repository.ChatMessageRepository;
+import com.kospot.infrastructure.redis.domain.chat.transientstore.TransientChatRedisStore;
 import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants;
@@ -12,20 +12,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.function.Function;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ChatService {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final ChatMessageRepository chatMessageRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final TransientChatRedisStore transientChatRedisStore;
 
     @WebSocketDoc(
             payloadType = ChatMessageEvent.GlobalLobby.class,
@@ -37,22 +35,28 @@ public class ChatService {
         processAndSend(
                 chatMessage,
                 ChatMessageEvent.GlobalLobby::from,  // DTO 변환 전략
-                LobbyChannelConstants.GLOBAL_LOBBY_CHANNEL      // 채널
+                LobbyChannelConstants.GLOBAL_LOBBY_CHANNEL,
+                TransientChatRedisStore.GLOBAL_LOBBY_CHAT_KEY
         );
     }
 
     public <T> void processAndSend(
             ChatMessage chatMessage,
             Function<ChatMessage, T> dtoMapper,
-            String destination
+            String destination,
+            String transientStorageKey
     ) {
         try {
-            chatMessage.generateMessageId();
-            validateMessageDeduplication(chatMessage);
-
-            chatMessageRepository.save(chatMessage);
+            if (chatMessage.getMessageId() == null) {
+                chatMessage.generateMessageId();
+            }
+            if (!validateMessageDeduplication(chatMessage)) {
+                return;
+            }
 
             T response = dtoMapper.apply(chatMessage);
+
+            transientChatRedisStore.store(transientStorageKey, response, resolveTimestampMillis());
 
             simpMessagingTemplate.convertAndSend(destination, response);
 
@@ -63,12 +67,18 @@ public class ChatService {
         }
     }
 
-    private void validateMessageDeduplication(ChatMessage chatMessage) {
+    private boolean validateMessageDeduplication(ChatMessage chatMessage) {
         String deduplicationKey = "dedup:" + chatMessage.getMessageId();
         Boolean isNew = redisTemplate.opsForValue().setIfAbsent(deduplicationKey, "1", Duration.ofMinutes(5));
         if (!Boolean.TRUE.equals(isNew)) {
             log.warn("Duplicate message detected: {}", chatMessage.getMessageId());
+            return false;
         }
+        return true;
+    }
+
+    private long resolveTimestampMillis() {
+        return System.currentTimeMillis();
     }
 
     @WebSocketDoc(
@@ -80,7 +90,8 @@ public class ChatService {
     public void sendGameRoomMessage(ChatMessage chatMessage) {
         processAndSend(chatMessage,
                 ChatMessageEvent.GameRoom::from,
-                GameRoomChannelConstants.getGameRoomChatChannel(chatMessage.getGameRoomId().toString())
+                GameRoomChannelConstants.getGameRoomChatChannel(chatMessage.getGameRoomId().toString()),
+                TransientChatRedisStore.gameRoomChatKey(chatMessage.getGameRoomId())
         );
     }
 
@@ -93,7 +104,8 @@ public class ChatService {
     public void sendSoloGameMessage(ChatMessage chatMessage) {
         processAndSend(chatMessage,
                 ChatMessageEvent.MultiGameGlobal::from,
-                MultiGameChannelConstants.getGlobalChatChannel(chatMessage.getGameRoomId().toString())
+                MultiGameChannelConstants.getGlobalChatChannel(chatMessage.getGameRoomId().toString()),
+                TransientChatRedisStore.globalGameChatKey(chatMessage.getGameRoomId())
         );
     }
 

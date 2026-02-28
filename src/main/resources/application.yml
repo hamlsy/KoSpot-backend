@@ -133,4 +133,7 @@ chat:
     flush-interval-ms: ${CHAT_PERSIST_FLUSH_INTERVAL_MS:1000}
     max-retry: ${CHAT_PERSIST_MAX_RETRY:5}
     shutdown-timeout-ms: ${CHAT_PERSIST_SHUTDOWN_TIMEOUT_MS:10000}
+  transient:
+    enabled: ${CHAT_TRANSIENT_ENABLED:true}
+    ttl-days: ${CHAT_TRANSIENT_TTL_DAYS:14}
 
