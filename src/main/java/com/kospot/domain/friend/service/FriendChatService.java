@@ -21,10 +21,6 @@ public class FriendChatService {
         return friendChatRoomRepository.save(room);
     }
 
-    public FriendChatMessage saveMessage(FriendChatMessage message) {
-        return friendChatMessageRepository.save(message);
-    }
-
     public List<FriendChatMessage> queryRecentMessages(Long roomId, int page, int size) {
         return friendChatMessageRepository.findRecentMessagesByRoomId(roomId, PageRequest.of(page, size));
     }
