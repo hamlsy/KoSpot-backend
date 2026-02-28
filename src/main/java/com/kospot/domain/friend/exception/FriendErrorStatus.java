@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 
 @Getter
 @RequiredArgsConstructor
@@ -25,7 +26,8 @@ public enum FriendErrorStatus implements BaseCode {
     INVALID_FRIEND_REQUEST_STATE(CONFLICT, 4156, "친구 요청 상태가 올바르지 않습니다."),
 
     FRIEND_REQUEST_RECEIVER_ONLY(FORBIDDEN, 4157, "요청 수신자만 처리할 수 있습니다."),
-    FRIEND_CHAT_ACCESS_DENIED(FORBIDDEN, 4158, "해당 친구 채팅방에 접근할 수 없습니다.");
+    FRIEND_CHAT_ACCESS_DENIED(FORBIDDEN, 4158, "해당 친구 채팅방에 접근할 수 없습니다."),
+    FRIEND_CHAT_STREAM_UNAVAILABLE(SERVICE_UNAVAILABLE, 4159, "친구 채팅 저장 대기열이 일시적으로 사용할 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final Integer code;
