@@ -23,8 +23,9 @@ import java.time.LocalDateTime;
 @Table(
         name = "daily_mvp",
         indexes = {
-                @Index(name = "idx_daily_mvp_member_id", columnList = "memberId"),
-                @Index(name = "idx_daily_mvp_road_view_game_id", columnList = "roadViewGameId")
+                @Index(name = "idx_daily_mvp_member_id", columnList = "member_id"),
+                @Index(name = "idx_daily_mvp_road_view_game_id", columnList = "road_view_game_id"),
+                @Index(name = "idx_daily_mvp_reward_date", columnList = "reward_granted, mvp_date")
         }
 )
 public class DailyMvp extends BaseTimeEntity {
@@ -36,10 +37,10 @@ public class DailyMvp extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private LocalDate mvpDate;
 
-    @Column(nullable = false)
+    @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(nullable = false)
+    @Column(name = "road_view_game_id", nullable = false)
     private Long roadViewGameId;
 
     @Column(nullable = false)
@@ -62,9 +63,10 @@ public class DailyMvp extends BaseTimeEntity {
     @Column(nullable = false)
     private int rewardPoint;
 
-    @Column(nullable = false)
+    @Column(name = "reward_granted", nullable = false)
     private boolean rewardGranted;
 
+    @Column(name = "reward_granted_at")
     private LocalDateTime rewardGrantedAt;
 
     public static DailyMvp create(LocalDate mvpDate, RoadViewGame game, GameRank gameRank, int rewardPoint) {

@@ -20,6 +20,13 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        name = "road_view_game",
+        indexes = {
+                @Index(name = "idx_road_view_game_mvp", columnList = "game_mode, game_status, ended_at, score, id"),
+                @Index(name = "idx_road_view_game_member_status_created", columnList = "member_member_id, game_status, created_date")
+        }
+)
 public class RoadViewGame extends Game {
 
     @Id

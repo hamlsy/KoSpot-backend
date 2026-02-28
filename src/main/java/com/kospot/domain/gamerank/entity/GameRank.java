@@ -16,6 +16,13 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(
+        name = "game_rank",
+        indexes = {
+                @Index(name = "idx_game_rank_member_mode", columnList = "member_id, game_mode"),
+                @Index(name = "idx_game_rank_mode_tier_rating", columnList = "game_mode, rank_tier, rating_score")
+        }
+)
 public class GameRank extends BaseTimeEntity {
 
     @Id
