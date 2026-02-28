@@ -137,3 +137,7 @@ chat:
     enabled: ${CHAT_TRANSIENT_ENABLED:true}
     ttl-days: ${CHAT_TRANSIENT_TTL_DAYS:14}
 
+mvp:
+  reward-point: ${MVP_REWARD_POINT:200}
+  aggregate-cron: ${MVP_AGGREGATE_CRON:0 0 * * * *}
+  reward-cron: ${MVP_REWARD_CRON:0 5 0 * * *}
