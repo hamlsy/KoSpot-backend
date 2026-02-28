@@ -77,6 +77,11 @@ stompClient.connect({
 |------|------|
 | `/user/queue/notification` | 개인 알림 (관리자 메시지/친구 요청 등) |
 
+### 친구 채팅 채널 (명세 초안)
+| 채널 패턴 | 설명 |
+|----------|------|
+| `/topic/friends/chat-room/{roomId}` | 친구 1:1 채팅 실시간 수신 (초안) |
+
 ### 게임방 채널
 | 채널 패턴 | 설명 |
 |----------|------|
@@ -271,6 +276,7 @@ stompClient.connect(headers,
 
 - [REST API 문서](../README.md)
 - [멀티 게임 API](../multi/README.md)
+- [친구 API](../friend/README.md)
 - [Redis 데이터 구조](../../../Redis-Data-Structure-Guide.md)
 - [Redis-STOMP 통합](../../../Redis-STOMP-Integration-Guide.md)
 
