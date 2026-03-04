@@ -106,7 +106,11 @@ kospot-backend/
 - Redis를 활용한 실시간 데이터 관리 및 캐싱
 - WebSocket(STOMP) 기반 실시간 멀티플레이 지원
 
----
+## 로컬 Redis 실행 (Docker Compose)
+
+Redis Stream(`XREADGROUP`) 기반 로컬 테스트를 위해 Redis 7.x를 고정합니다.
+Windows native Redis 대신 아래 Compose 파일로 로컬 Redis를 실행하세요.
+
 
 문의: dltmddud1122@naver.com
 

@@ -1,10 +1,6 @@
 package com.kospot.presentation.member.controller;
 
-import com.kospot.application.member.GetMemberProfileUseCase;
-import com.kospot.application.member.GetMemberShopInfoUseCase;
-import com.kospot.application.member.GetPlayerSummaryUseCase;
-import com.kospot.application.member.SetNicknameUseCase;
-import com.kospot.application.member.UpdateNicknameUseCase;
+import com.kospot.application.member.*;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.adsense.BotSuccess;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
@@ -13,11 +9,15 @@ import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.member.dto.response.MemberProfileResponse;
 import com.kospot.presentation.member.dto.response.MemberShopInfoResponse;
 import com.kospot.presentation.member.dto.response.PlayerSummaryResponse;
+import com.kospot.presentation.member.dto.response.SearchMemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +31,7 @@ public class MemberController {
     private final GetPlayerSummaryUseCase getPlayerSummaryUseCase;
     private final SetNicknameUseCase setNicknameUseCase;
     private final UpdateNicknameUseCase updateNicknameUseCase;
+    private final SearchMembersByNicknameUseCase searchMembersByNickNameUseCase;
 
     @Operation(summary = "내 정보 조회", description = "회원의 프로필과 게임 통계, 랭킹, 아이템 정보를 조회합니다.")
     @GetMapping("/profile")
@@ -72,6 +73,15 @@ public class MemberController {
     public ApiResponseDto<?> updateNickname(@CurrentMember Member member, @RequestParam("nickname") String nickname) {
         updateNicknameUseCase.execute(member, nickname);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
+
+    @Operation(summary = "친구 추가할 멤버 닉네임으로 조회", description = "친구 추가 시, 닉네임으로 멤버를 검색하여 친구 요청을 보낼 수 있도록 합니다.")
+    @GetMapping("/search")
+    public ApiResponseDto<List<SearchMemberResponse>> searchMembersByNickname(
+            @CurrentMember Member member,
+            @RequestParam("nickname") String nickname
+    ) {
+        return ApiResponseDto.onSuccess(searchMembersByNickNameUseCase.execute(member, nickname));
     }
 
 }

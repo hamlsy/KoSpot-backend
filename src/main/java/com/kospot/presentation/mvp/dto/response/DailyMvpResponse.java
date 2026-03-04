@@ -16,29 +16,25 @@ public class DailyMvpResponse {
     public static class Daily {
         private LocalDate mvpDate;
         private Long memberId;
-        private String playerName;
+        private String nickname;
         private String equippedMarkerImageUrl;
         private RankTier rankTier;
         private RankLevel rankLevel;
         private int ratingScore;
         private double gameScore;
         private String poiName;
-        private int rewardPoint;
-        private boolean rewardGranted;
 
         public static Daily from(DailyMvp dailyMvp, MemberProfileRedisAdaptor.MemberProfileView profileView) {
             return Daily.builder()
                     .mvpDate(dailyMvp.getMvpDate())
                     .memberId(dailyMvp.getMemberId())
-                    .playerName(profileView.nickname())
+                    .nickname(profileView.nickname())
                     .equippedMarkerImageUrl(profileView.markerImageUrl())
                     .rankTier(dailyMvp.getRankTier())
                     .rankLevel(dailyMvp.getRankLevel())
                     .ratingScore(dailyMvp.getRatingScore())
                     .gameScore(dailyMvp.getGameScore())
                     .poiName(dailyMvp.getPoiName())
-                    .rewardPoint(dailyMvp.getRewardPoint())
-                    .rewardGranted(dailyMvp.isRewardGranted())
                     .build();
         }
     }

@@ -27,6 +27,10 @@ public class MemberAdaptor {
         );
     }
 
+    public List<Member> queryAllByNicknameKeyword(String keyword) {
+        return repository.findAllByNicknameKeyword(keyword);
+    }
+
     public Member queryByIdFetchMarkerImage(Long memberId) {
         return repository.findByIdFetchEquippedMarkerImage(memberId).orElseThrow(
                 () -> new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND)

@@ -48,7 +48,7 @@ class GetDailyMvpUseCaseTest {
         DailyMvpResponse.Daily cached = DailyMvpResponse.Daily.builder()
                 .mvpDate(date)
                 .memberId(1L)
-                .playerName("cached-user")
+                .nickname("cached-user")
                 .rankTier(RankTier.GOLD)
                 .rankLevel(RankLevel.ONE)
                 .ratingScore(2500)
@@ -61,7 +61,7 @@ class GetDailyMvpUseCaseTest {
         DailyMvpResponse.Daily result = getDailyMvpUseCase.execute(date);
 
         assertNotNull(result);
-        assertEquals("cached-user", result.getPlayerName());
+        assertEquals("cached-user", result.getNickname());
         verifyNoInteractions(dailyMvpAdaptor, memberProfileRedisAdaptor);
     }
 
@@ -108,7 +108,7 @@ class GetDailyMvpUseCaseTest {
         DailyMvpResponse.Daily result = getDailyMvpUseCase.execute(date);
 
         assertNotNull(result);
-        assertEquals("db-user", result.getPlayerName());
+        assertEquals("db-user", result.getNickname());
         verify(dailyMvpCacheService).cache(eq(date), any(DailyMvpResponse.Daily.class));
         verify(dailyMvpCacheService).releaseRebuildLock(date);
     }

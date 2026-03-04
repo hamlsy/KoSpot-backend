@@ -52,6 +52,7 @@ public class FriendController {
     private final SendFriendChatMessageUseCase sendFriendChatMessageUseCase;
     private final GetFriendChatMessagesUseCase getFriendChatMessagesUseCase;
 
+
     @Operation(summary = "내 친구 목록 조회", description = "내 친구들의 요약 정보를 조회합니다.")
     @GetMapping
     public ApiResponseDto<List<FriendListResponse>> getMyFriends(@CurrentMember Member member) {

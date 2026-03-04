@@ -33,17 +33,15 @@ public class CreateGameRoomUseCase {
     public GameRoomResponse execute(Member host, GameRoomRequest.Create request) {
         autoLeaveIfInRoom(host);
         GameRoom gameRoom = gameRoomService.createGameRoom(host, request);
-        // redis 설정
-        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(host, true);
-        gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
 
         // member profile view 설정
-        if (memberProfileRedisAdaptor.findProfile(host.getId()) == null) {
-            memberProfileRedisService.saveProfile(
-                    host.getId(),
-                    host.getNickname(),
-                    host.getEquippedMarkerImage().getImageUrl());
-        }
+        MemberProfileRedisAdaptor.MemberProfileView profileView = memberProfileRedisAdaptor.findProfile(host.getId());
+
+        // redis 설정
+        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(host, profileView.markerImageUrl(), true);
+        gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
+
+
         // notify
         lobbyRoomNotificationService.notifyRoomCreated(gameRoom);
 

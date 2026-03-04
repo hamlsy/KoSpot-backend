@@ -1,0 +1,160 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "org.springframework.security",
+    "module": "spring-security-test",
+    "version": "6.4.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.10.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.springframework.security",
+          "module": "spring-security-core",
+          "version": {
+            "requires": "6.4.2"
+          }
+        },
+        {
+          "group": "org.springframework.security",
+          "module": "spring-security-web",
+          "version": {
+            "requires": "6.4.2"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-core",
+          "version": {
+            "requires": "6.2.1"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-test",
+          "version": {
+            "requires": "6.2.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "spring-security-test-6.4.2.jar",
+          "url": "spring-security-test-6.4.2.jar",
+          "size": 132216,
+          "sha512": "918d11578e62ba3ab9dd7144367c0b1a9a475ad9e6489e87895deb382e6f2d92d701052dc86d552a1cbbaa3a714ea5eb9622c9d5271ffd455d93bf5ae9674a0c",
+          "sha256": "4e62e58a86074250ac5d584145121b432f977ca91ba754a224353884c7254303",
+          "sha1": "2ed4270718d0b3c204ae6be98ed800bc111a014a",
+          "md5": "4fd25698cfb62c981ddb7fbbb9ddd995"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.springframework.security",
+          "module": "spring-security-core",
+          "version": {
+            "requires": "6.4.2"
+          }
+        },
+        {
+          "group": "org.springframework.security",
+          "module": "spring-security-web",
+          "version": {
+            "requires": "6.4.2"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-core",
+          "version": {
+            "requires": "6.2.1"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-test",
+          "version": {
+            "requires": "6.2.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "spring-security-test-6.4.2.jar",
+          "url": "spring-security-test-6.4.2.jar",
+          "size": 132216,
+          "sha512": "918d11578e62ba3ab9dd7144367c0b1a9a475ad9e6489e87895deb382e6f2d92d701052dc86d552a1cbbaa3a714ea5eb9622c9d5271ffd455d93bf5ae9674a0c",
+          "sha256": "4e62e58a86074250ac5d584145121b432f977ca91ba754a224353884c7254303",
+          "sha1": "2ed4270718d0b3c204ae6be98ed800bc111a014a",
+          "md5": "4fd25698cfb62c981ddb7fbbb9ddd995"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "spring-security-test-6.4.2-javadoc.jar",
+          "url": "spring-security-test-6.4.2-javadoc.jar",
+          "size": 232750,
+          "sha512": "9758a6ff81c6623cbaf746eb2642460ce136d7709087bc22a561e406fb0fb309e080fe94154418739bd804351dd12420066c8319056fb62f3d21eb12717abd0f",
+          "sha256": "1c41012cc5ba88e8ae5bd855ef1f88a9fd3e427992a81c60e59f08ad8c09563e",
+          "sha1": "9c9a60b4c40e1ccf0a08635ce7d169d0107e7e8c",
+          "md5": "743a772e37caf2514be903dd0e20a233"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "spring-security-test-6.4.2-sources.jar",
+          "url": "spring-security-test-6.4.2-sources.jar",
+          "size": 56485,
+          "sha512": "f43c6bc6b4133c42cdc7e5a91ff0592d8e4f4f9c37a96feced76feb2bc3c5e59fe40c7639d16c948c77bd93a4f851ae51f694a141bb6677bf6d40f2386f1a9e7",
+          "sha256": "6f2734b4e7345053423b7e627763f6df5f872aadbfc6d88964f66314f0f3a690",
+          "sha1": "38941cd35a2823d808e35d05ad51f539884ecbb8",
+          "md5": "24e82d7aeba5f6da22c46497872769f4"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "org.springframework.security",
+    "module": "spring-security-config",
+    "version": "6.4.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.10.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.springframework.security",
+          "module": "spring-security-core",
+          "version": {
+            "requires": "6.4.2"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-aop",
+          "version": {
+            "requires": "6.2.1"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-beans",
+          "version": {
+            "requires": "6.2.1"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-context",
+          "version": {
+            "requires": "6.2.1"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-core",
+          "version": {
+            "requires": "6.2.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "spring-security-config-6.4.2.jar",
+          "url": "spring-security-config-6.4.2.jar",
+          "size": 2023275,
+          "sha512": "aed8832a4c0d6f8236ebf806ec77e2a87c153b2abcc49e84503bbe7798d71be616022f736373374ed6e58be1d51d4c5faed82e7ccdb96bd4facf41c1eb75f787",
+          "sha256": "5fab4c9578e52f034c20a1c7192c887f8e79aa08b9fd0c517a9e7aff05f70c70",
+          "sha1": "5ed985329eb14b1c61045160c8dcbbcab179ddd3",
+          "md5": "79be0e9518340dca861e0b47234a5dde"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.springframework.security",
+          "module": "spring-security-core",
+          "version": {
+            "requires": "6.4.2"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-aop",
+          "version": {
+            "requires": "6.2.1"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-beans",
+          "version": {
+            "requires": "6.2.1"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-context",
+          "version": {
+            "requires": "6.2.1"
+          }
+        },
+        {
+          "group": "org.springframework",
+          "module": "spring-core",
+          "version": {
+            "requires": "6.2.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "spring-security-config-6.4.2.jar",
+          "url": "spring-security-config-6.4.2.jar",
+          "size": 2023275,
+          "sha512": "aed8832a4c0d6f8236ebf806ec77e2a87c153b2abcc49e84503bbe7798d71be616022f736373374ed6e58be1d51d4c5faed82e7ccdb96bd4facf41c1eb75f787",
+          "sha256": "5fab4c9578e52f034c20a1c7192c887f8e79aa08b9fd0c517a9e7aff05f70c70",
+          "sha1": "5ed985329eb14b1c61045160c8dcbbcab179ddd3",
+          "md5": "79be0e9518340dca861e0b47234a5dde"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "spring-security-config-6.4.2-javadoc.jar",
+          "url": "spring-security-config-6.4.2-javadoc.jar",
+          "size": 1171637,
+          "sha512": "8c4fec4b401566a3632c9f9d08c3d182b080048a2943bcc2a8fbec7cf736ef0f58bbe2ebdcfae630205ebc3aa8888dff11ce7cf72a860041508c64c65ba264ae",
+          "sha256": "cffee14aab60128b13e617b69244a62e43a8db5e974562a8aa9e70b6211d3c27",
+          "sha1": "2e2485de893dc62d891de383e68fe61cff36e5ff",
+          "md5": "ae6d6a0c8af4f087233156e68f6eab7d"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "spring-security-config-6.4.2-sources.jar",
+          "url": "spring-security-config-6.4.2-sources.jar",
+          "size": 1384192,
+          "sha512": "4126d40f72f356d16b8a7b79bdda872feb6b23c98ba20222f227d2418efd783322955eca27b6f77c154cbc491ce0c7ec46486b4b2fb64348791352145f81e94f",
+          "sha256": "06be2fe504f6eb4dfb4150522262488500f62dfddf82e178c20038fc8de4da6d",
+          "sha1": "38869efa641e527f79d058077d792c7af9c872bc",
+          "md5": "d2b71262e1270249e401a41895ab7f8b"
+        },
+        {
+          "name": "spring-security-config-6.4.2-sources.jar",
+          "url": "spring-security-config-6.4.2-sources.jar",
+          "size": 1384192,
+          "sha512": "4126d40f72f356d16b8a7b79bdda872feb6b23c98ba20222f227d2418efd783322955eca27b6f77c154cbc491ce0c7ec46486b4b2fb64348791352145f81e94f",
+          "sha256": "06be2fe504f6eb4dfb4150522262488500f62dfddf82e178c20038fc8de4da6d",
+          "sha1": "38869efa641e527f79d058077d792c7af9c872bc",
+          "md5": "d2b71262e1270249e401a41895ab7f8b"
+        }
+      ]
+    }
+  ]
+}
