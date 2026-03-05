@@ -6,6 +6,7 @@ import com.kospot.application.friend.GetFriendChatMessagesUseCase;
 import com.kospot.application.friend.GetIncomingFriendRequestsUseCase;
 import com.kospot.application.friend.GetMyFriendsUseCase;
 import com.kospot.application.friend.GetOrCreateFriendChatRoomUseCase;
+import com.kospot.application.friend.RejectFriendRequestUseCase;
 import com.kospot.application.friend.SendFriendChatMessageUseCase;
 import com.kospot.application.friend.SendFriendRequestUseCase;
 import com.kospot.domain.member.entity.Member;
@@ -46,12 +47,12 @@ public class FriendController {
     private final GetMyFriendsUseCase getMyFriendsUseCase;
     private final SendFriendRequestUseCase sendFriendRequestUseCase;
     private final ApproveFriendRequestUseCase approveFriendRequestUseCase;
+    private final RejectFriendRequestUseCase rejectFriendRequestUseCase;
     private final DeleteFriendUseCase deleteFriendUseCase;
     private final GetIncomingFriendRequestsUseCase getIncomingFriendRequestsUseCase;
     private final GetOrCreateFriendChatRoomUseCase getOrCreateFriendChatRoomUseCase;
     private final SendFriendChatMessageUseCase sendFriendChatMessageUseCase;
     private final GetFriendChatMessagesUseCase getFriendChatMessagesUseCase;
-
 
     @Operation(summary = "내 친구 목록 조회", description = "내 친구들의 요약 정보를 조회합니다.")
     @GetMapping
@@ -63,8 +64,7 @@ public class FriendController {
     @PostMapping("/requests")
     public ApiResponseDto<FriendRequestActionResponse> sendFriendRequest(
             @CurrentMember Member member,
-            @Valid @RequestBody FriendRequestCreateRequest request
-    ) {
+            @Valid @RequestBody FriendRequestCreateRequest request) {
         return ApiResponseDto.onSuccess(sendFriendRequestUseCase.execute(member, request.receiverMemberId()));
     }
 
@@ -72,9 +72,16 @@ public class FriendController {
     @PatchMapping("/requests/{requestId}/approve")
     public ApiResponseDto<FriendRequestActionResponse> approveFriendRequest(
             @CurrentMember Member member,
-            @PathVariable("requestId") Long requestId
-    ) {
+            @PathVariable("requestId") Long requestId) {
         return ApiResponseDto.onSuccess(approveFriendRequestUseCase.execute(member, requestId));
+    }
+
+    @Operation(summary = "친구 요청 거절", description = "받은 친구 요청을 거절합니다.")
+    @PatchMapping("/requests/{requestId}/reject")
+    public ApiResponseDto<FriendRequestActionResponse> rejectFriendRequest(
+            @CurrentMember Member member,
+            @PathVariable("requestId") Long requestId) {
+        return ApiResponseDto.onSuccess(rejectFriendRequestUseCase.execute(member, requestId));
     }
 
     @Operation(summary = "받은 친구 요청 조회", description = "내가 받은 친구 요청 목록을 조회합니다.")
@@ -82,8 +89,7 @@ public class FriendController {
     public ApiResponseDto<List<IncomingFriendRequestResponse>> getIncomingRequests(
             @CurrentMember Member member,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false) Integer size
-    ) {
+            @RequestParam(value = "size", required = false) Integer size) {
         return ApiResponseDto.onSuccess(getIncomingFriendRequestsUseCase.execute(member, page, size));
     }
 
@@ -91,8 +97,7 @@ public class FriendController {
     @DeleteMapping("/{friendMemberId}")
     public ApiResponseDto<?> deleteFriend(
             @CurrentMember Member member,
-            @PathVariable("friendMemberId") Long friendMemberId
-    ) {
+            @PathVariable("friendMemberId") Long friendMemberId) {
         deleteFriendUseCase.execute(member, friendMemberId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
@@ -101,8 +106,7 @@ public class FriendController {
     @GetMapping("/{friendMemberId}/chat-room")
     public ApiResponseDto<FriendChatRoomResponse> getOrCreateChatRoom(
             @CurrentMember Member member,
-            @PathVariable("friendMemberId") Long friendMemberId
-    ) {
+            @PathVariable("friendMemberId") Long friendMemberId) {
         return ApiResponseDto.onSuccess(getOrCreateFriendChatRoomUseCase.execute(member, friendMemberId));
     }
 
@@ -111,8 +115,7 @@ public class FriendController {
     public ApiResponseDto<FriendChatMessageResponse> sendChatMessage(
             @CurrentMember Member member,
             @PathVariable("roomId") Long roomId,
-            @Valid @RequestBody FriendChatMessageCreateRequest request
-    ) {
+            @Valid @RequestBody FriendChatMessageCreateRequest request) {
         return ApiResponseDto.onSuccess(sendFriendChatMessageUseCase.execute(member, roomId, request.content()));
     }
 
@@ -122,8 +125,7 @@ public class FriendController {
             @CurrentMember Member member,
             @PathVariable("roomId") Long roomId,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false) Integer size
-    ) {
+            @RequestParam(value = "size", required = false) Integer size) {
         return ApiResponseDto.onSuccess(getFriendChatMessagesUseCase.execute(member, roomId, page, size));
     }
 }
