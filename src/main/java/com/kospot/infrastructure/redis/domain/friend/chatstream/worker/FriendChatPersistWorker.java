@@ -165,6 +165,7 @@ public class FriendChatPersistWorker implements SmartLifecycle {
 
         try {
             batchInsertRepository.batchInsert(payloads);
+            batchInsertRepository.batchUpdateRoomLastMessageAt(extractRoomLastMessageAt(payloads));
             ackRecords(validRecords);
             validRecords.forEach(record -> failureCountByStreamId.remove(record.getId().getValue()));
             log.debug("Friend chat batch persisted. size={}", validRecords.size());
@@ -234,6 +235,18 @@ public class FriendChatPersistWorker implements SmartLifecycle {
                 .toArray(String[]::new);
 
         stringRedisTemplate.opsForStream().acknowledge(properties.getStreamKey(), properties.getGroup(), ids);
+    }
+
+    private Map<Long, LocalDateTime> extractRoomLastMessageAt(List<FriendChatStreamMessage> payloads) {
+        Map<Long, LocalDateTime> roomLastMessageAt = new HashMap<>();
+        for (FriendChatStreamMessage payload : payloads) {
+            roomLastMessageAt.merge(
+                    payload.roomId(),
+                    payload.createdAt(),
+                    (current, candidate) -> candidate.isAfter(current) ? candidate : current
+            );
+        }
+        return roomLastMessageAt;
     }
 
     private void ensureGroupWithRetryLog() {

@@ -6,7 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,6 +26,14 @@ public class FriendChatBatchInsertRepository {
             ON DUPLICATE KEY UPDATE message_id = message_id
             """;
 
+    private static final String UPDATE_ROOM_LAST_MESSAGE_AT_SQL = """
+            UPDATE friend_chat_room
+            SET last_message_at = ?,
+                last_modified_date = ?
+            WHERE id = ?
+              AND (last_message_at IS NULL OR last_message_at < ?)
+            """;
+
     private final JdbcTemplate jdbcTemplate;
 
     public void batchInsert(List<FriendChatStreamMessage> messages) {
@@ -35,6 +45,21 @@ public class FriendChatBatchInsertRepository {
             ps.setString(4, message.content());
             ps.setTimestamp(5, now);
             ps.setTimestamp(6, now);
+        });
+    }
+
+    public void batchUpdateRoomLastMessageAt(Map<Long, LocalDateTime> roomLastMessageAtMap) {
+        if (roomLastMessageAtMap == null || roomLastMessageAtMap.isEmpty()) {
+            return;
+        }
+
+        List<Map.Entry<Long, LocalDateTime>> entries = roomLastMessageAtMap.entrySet().stream().toList();
+        jdbcTemplate.batchUpdate(UPDATE_ROOM_LAST_MESSAGE_AT_SQL, entries, entries.size(), (ps, entry) -> {
+            Timestamp timestamp = Timestamp.valueOf(entry.getValue());
+            ps.setTimestamp(1, timestamp);
+            ps.setTimestamp(2, timestamp);
+            ps.setLong(3, entry.getKey());
+            ps.setTimestamp(4, timestamp);
         });
     }
 }
