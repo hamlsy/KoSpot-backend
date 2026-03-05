@@ -7,12 +7,10 @@ import com.kospot.application.friend.GetIncomingFriendRequestsUseCase;
 import com.kospot.application.friend.GetMyFriendsUseCase;
 import com.kospot.application.friend.GetOrCreateFriendChatRoomUseCase;
 import com.kospot.application.friend.RejectFriendRequestUseCase;
-import com.kospot.application.friend.SendFriendChatMessageUseCase;
 import com.kospot.application.friend.SendFriendRequestUseCase;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
-import com.kospot.presentation.friend.dto.request.FriendChatMessageCreateRequest;
 import com.kospot.presentation.friend.dto.request.FriendRequestCreateRequest;
 import com.kospot.presentation.friend.dto.response.FriendChatMessageResponse;
 import com.kospot.presentation.friend.dto.response.FriendChatRoomResponse;
@@ -50,7 +48,6 @@ public class FriendController {
     private final DeleteFriendUseCase deleteFriendUseCase;
     private final GetIncomingFriendRequestsUseCase getIncomingFriendRequestsUseCase;
     private final GetOrCreateFriendChatRoomUseCase getOrCreateFriendChatRoomUseCase;
-    private final SendFriendChatMessageUseCase sendFriendChatMessageUseCase;
     private final GetFriendChatMessagesUseCase getFriendChatMessagesUseCase;
 
     @Operation(summary = "내 친구 목록 조회", description = "내 친구들의 요약 정보를 조회합니다.")
@@ -107,15 +104,6 @@ public class FriendController {
             @CurrentMember Long memberId,
             @PathVariable("friendMemberId") Long friendMemberId) {
         return ApiResponseDto.onSuccess(getOrCreateFriendChatRoomUseCase.execute(memberId, friendMemberId));
-    }
-
-    @Operation(summary = "친구 채팅 메시지 전송", description = "친구 채팅방에 메시지를 저장합니다.")
-    @PostMapping("/chat-rooms/{roomId}/messages")
-    public ApiResponseDto<FriendChatMessageResponse> sendChatMessage(
-            @CurrentMember Long memberId,
-            @PathVariable("roomId") Long roomId,
-            @Valid @RequestBody FriendChatMessageCreateRequest request) {
-        return ApiResponseDto.onSuccess(sendFriendChatMessageUseCase.execute(memberId, roomId, request.content()));
     }
 
     @Operation(summary = "친구 채팅 메시지 조회", description = "친구 채팅방의 메시지를 최신순으로 조회합니다.")
