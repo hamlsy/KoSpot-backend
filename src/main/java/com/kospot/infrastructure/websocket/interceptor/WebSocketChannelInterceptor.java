@@ -14,6 +14,8 @@ import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisSe
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.context.PendingLeaveContext;
+import com.kospot.infrastructure.websocket.domain.friend.constants.FriendChatChannelConstants;
+import com.kospot.infrastructure.websocket.domain.friend.service.FriendChatSubscriptionCacheService;
 import com.kospot.infrastructure.websocket.session.service.WebSocketSessionService;
 import com.kospot.infrastructure.websocket.subscription.SubscriptionValidationManager;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +45,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     private final RedisTemplate<String, String> redisTemplate;
     private final TokenService tokenService;
     private final SubscriptionValidationManager subscriptionValidationManager;
+    private final FriendChatSubscriptionCacheService friendChatSubscriptionCacheService;
 
     // session service
     private final WebSocketSessionService webSocketSessionService;
@@ -136,7 +139,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
             throw new WebSocketHandler(ErrorStatus.INVALID_DESTINATION);
         }
 
-        // 알림 채널만 우선 적용 (기존 채널들 영향 최소화)
+        // 알림/친구채팅 채널 권한 검증
         if (needsSubscriptionValidation(destination)) {
             validateSubscriptionAccess(principal, destination);
         }
@@ -146,6 +149,8 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         if (subscriptionId != null) {
             webSocketSessionService.saveSubscription(sessionId, subscriptionId, destination);
         }
+
+        allowFriendChatRoomIfNeeded(sessionId, destination);
 
         log.info("Subscription registered - MemberId: {}, Destination: {}, SessionId: {}",
                 principal.getMemberId(), destination, sessionId);
@@ -161,7 +166,11 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         }
 
         // 개인 알림 채널: /user/queue/notification
-        return PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL.equals(destination);
+        if (PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL.equals(destination)) {
+            return true;
+        }
+
+        return destination.startsWith(FriendChatChannelConstants.PREFIX_FRIEND_CHAT_ROOM);
     }
 
     /**
@@ -173,9 +182,41 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         if (sessionId == null) {
             return;
         }
+        friendChatSubscriptionCacheService.removeSession(sessionId);
     }
 
     private void handleUnsubscribe(StompHeaderAccessor accessor) {
+        String sessionId = accessor.getSessionId();
+        String subscriptionId = accessor.getSubscriptionId();
+
+        if (sessionId == null || subscriptionId == null) {
+            return;
+        }
+
+        String destination = webSocketSessionService.getSubscription(sessionId, subscriptionId);
+        if (destination != null && destination.startsWith(FriendChatChannelConstants.PREFIX_FRIEND_CHAT_ROOM)) {
+            Long roomId = FriendChatChannelConstants.extractRoomIdFromDestination(destination);
+            if (roomId != null) {
+                friendChatSubscriptionCacheService.removeRoom(sessionId, roomId);
+            }
+        }
+    }
+
+    private void allowFriendChatRoomIfNeeded(String sessionId, String destination) {
+        if (sessionId == null || destination == null) {
+            return;
+        }
+
+        if (!destination.startsWith(FriendChatChannelConstants.PREFIX_FRIEND_CHAT_ROOM)) {
+            return;
+        }
+
+        Long roomId = FriendChatChannelConstants.extractRoomIdFromDestination(destination);
+        if (roomId == null) {
+            throw new WebSocketHandler(ErrorStatus.INVALID_DESTINATION);
+        }
+
+        friendChatSubscriptionCacheService.allowRoom(sessionId, roomId);
     }
 
     /**

@@ -11,6 +11,8 @@ import com.kospot.infrastructure.redis.common.service.SessionContextRedisService
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.context.PendingLeaveContext;
+import com.kospot.infrastructure.websocket.domain.friend.constants.FriendChatChannelConstants;
+import com.kospot.infrastructure.websocket.domain.friend.service.FriendChatSubscriptionCacheService;
 import com.kospot.infrastructure.websocket.session.service.WebSocketSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,7 @@ public class WebSocketEventHandler {
     //session
     private final SessionContextRedisService sessionContextRedisService;
     private final WebSocketSessionService webSocketSessionService;
+    private final FriendChatSubscriptionCacheService friendChatSubscriptionCacheService;
 
     //usecase
     private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
@@ -77,6 +80,13 @@ public class WebSocketEventHandler {
         String sessionId = accessor.getSessionId();
         String subscriptionId = accessor.getSubscriptionId();
         String destination = webSocketSessionService.getSubscription(sessionId, subscriptionId);
+
+        if (destination != null && destination.startsWith(FriendChatChannelConstants.PREFIX_FRIEND_CHAT_ROOM)) {
+            Long roomId = FriendChatChannelConstants.extractRoomIdFromDestination(destination);
+            if (roomId != null) {
+                friendChatSubscriptionCacheService.removeRoom(sessionId, roomId);
+            }
+        }
 
         if (destination != null && destination.startsWith(PREFIX_CHAT)) {
             leaveGlobalLobbyUseCase.execute(accessor);
@@ -146,6 +156,7 @@ public class WebSocketEventHandler {
         }
 
         webSocketSessionService.cleanupSession(sessionId);
+        friendChatSubscriptionCacheService.removeSession(sessionId);
         sessionContextRedisService.removeAllAttr(sessionId);
 
         log.info("WebSocket 연결 해제 - SessionId: {}, Reason: {}", sessionId, reason);
