@@ -14,6 +14,8 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     Optional<Friendship> findByCanonicalPairKey(String canonicalPairKey);
 
+    List<Friendship> findByCanonicalPairKeyIn(List<String> canonicalPairKeys);
+
     @Query("""
             select new com.kospot.domain.friend.repository.FriendSummaryQueryModel(
                 case when f.memberLowId = :memberId then f.memberHighId else f.memberLowId end,
@@ -32,6 +34,6 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             order by f.lastModifiedDate desc
             """)
     List<FriendSummaryQueryModel> findFriendSummaries(@Param("memberId") Long memberId,
-                                                      @Param("status") FriendshipStatus status,
-                                                      @Param("gameMode") GameMode gameMode);
+            @Param("status") FriendshipStatus status,
+            @Param("gameMode") GameMode gameMode);
 }

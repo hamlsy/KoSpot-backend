@@ -33,6 +33,10 @@ public class FriendAdaptor {
         return friendRequestRepository.findByCanonicalPairKey(canonicalPairKey);
     }
 
+    public List<FriendRequest> queryRequestsByCanonicalPairs(List<String> canonicalPairKeys) {
+        return friendRequestRepository.findByCanonicalPairKeyIn(canonicalPairKeys);
+    }
+
     public FriendRequest queryRequestById(Long requestId) {
         return friendRequestRepository.findById(requestId)
                 .orElseThrow(() -> new FriendHandler(FriendErrorStatus.FRIEND_REQUEST_NOT_FOUND));
@@ -42,12 +46,15 @@ public class FriendAdaptor {
         return friendRequestRepository.findIncomingByReceiverAndStatus(
                 receiverMemberId,
                 FriendRequestStatus.PENDING,
-                PageRequest.of(page, size)
-        );
+                PageRequest.of(page, size));
     }
 
     public Optional<Friendship> queryFriendshipByCanonicalPair(String canonicalPairKey) {
         return friendshipRepository.findByCanonicalPairKey(canonicalPairKey);
+    }
+
+    public List<Friendship> queryFriendshipsByCanonicalPairs(List<String> canonicalPairKeys) {
+        return friendshipRepository.findByCanonicalPairKeyIn(canonicalPairKeys);
     }
 
     public List<FriendSummaryQueryModel> queryFriendSummaries(Long memberId) {
