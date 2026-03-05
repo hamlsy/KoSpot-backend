@@ -6,6 +6,7 @@ import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.item.vo.ItemType;
 import com.kospot.presentation.item.dto.request.ItemRequest;
 import com.kospot.domain.item.service.ItemService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
@@ -17,10 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class RegisterItemUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final ItemService itemService;
     private final ImageService imageService;
 
-    public void execute(Member member, ItemRequest.Create request, MultipartFile file){
+    public void execute(Long memberId, ItemRequest.Create request, MultipartFile file){
+        Member member = memberAdaptor.queryById(memberId);
         member.validateAdmin();
         ItemType itemType = ItemType.fromKey(request.getItemTypeKey());
         // insert image

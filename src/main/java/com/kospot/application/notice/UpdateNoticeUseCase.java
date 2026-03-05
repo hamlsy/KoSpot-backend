@@ -1,5 +1,6 @@
 package com.kospot.application.notice;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.notice.adaptor.NoticeAdaptor;
 import com.kospot.domain.notice.entity.Notice;
@@ -17,11 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UpdateNoticeUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final NoticeAdaptor noticeAdaptor;
     private final NoticeService noticeService;
     private final RecentNoticeCacheService recentNoticeCacheService;
 
-    public void execute(Member member, Long noticeId, NoticeRequest.Update request) {
+    public void execute(Long memberId, Long noticeId, NoticeRequest.Update request) {
+        Member member = memberAdaptor.queryById(memberId);
         member.validateAdmin();
         Notice notice = noticeAdaptor.findByIdFetchImage(noticeId);
         noticeService.updateNotice(notice, request);

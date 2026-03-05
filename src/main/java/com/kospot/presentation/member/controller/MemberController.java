@@ -1,7 +1,6 @@
 package com.kospot.presentation.member.controller;
 
 import com.kospot.application.member.*;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.adsense.BotSuccess;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
@@ -36,15 +35,15 @@ public class MemberController {
     @Operation(summary = "내 정보 조회", description = "회원의 프로필과 게임 통계, 랭킹, 아이템 정보를 조회합니다.")
     @GetMapping("/profile")
     @BotSuccess
-    public ApiResponseDto<MemberProfileResponse> getMemberProfile(@CurrentMember Member member) {
-        MemberProfileResponse response = getMemberProfileUseCase.execute(member);
+    public ApiResponseDto<MemberProfileResponse> getMemberProfile(@CurrentMember Long memberId) {
+        MemberProfileResponse response = getMemberProfileUseCase.execute(memberId);
         return ApiResponseDto.onSuccess(response);
     }
 
     @Operation(summary = "상점 내 정보 조회", description = "상점 페이지에서 필요한 내 포인트, 장착 아이템, 보유 아이템 정보를 조회합니다.")
     @GetMapping("/shop-info")
-    public ApiResponseDto<MemberShopInfoResponse> getMemberShopInfo(@CurrentMember Member member) {
-        MemberShopInfoResponse response = getMemberShopInfoUseCase.execute(member);
+    public ApiResponseDto<MemberShopInfoResponse> getMemberShopInfo(@CurrentMember Long memberId) {
+        MemberShopInfoResponse response = getMemberShopInfoUseCase.execute(memberId);
         return ApiResponseDto.onSuccess(response);
     }
 
@@ -57,31 +56,31 @@ public class MemberController {
 
     @Operation(summary = "테스트용 멤버 조회", description = "테스트용 멤버 조회")
     @GetMapping("/me")
-    public ApiResponseDto<String> testCurrentMember(@CurrentMember Member member) {
-        return ApiResponseDto.onSuccess(member.getUsername());
+    public ApiResponseDto<String> testCurrentMember(@CurrentMember Long memberId) {
+        return ApiResponseDto.onSuccess(String.valueOf(memberId));
     }
 
     @Operation(summary = "닉네임 설정", description = "회원의 닉네임을 설정합니다.")
     @PostMapping("/set-nickname")
-    public ApiResponseDto<?> setNickname(@CurrentMember Member member, @RequestParam("nickname") String nickname) {
-        setNicknameUseCase.execute(member, nickname);
+    public ApiResponseDto<?> setNickname(@CurrentMember Long memberId, @RequestParam("nickname") String nickname) {
+        setNicknameUseCase.execute(memberId, nickname);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "닉네임 업데이트", description = "회원의 닉네임을 업데이트합니다.")
     @PostMapping("/update-nickname")
-    public ApiResponseDto<?> updateNickname(@CurrentMember Member member, @RequestParam("nickname") String nickname) {
-        updateNicknameUseCase.execute(member, nickname);
+    public ApiResponseDto<?> updateNickname(@CurrentMember Long memberId, @RequestParam("nickname") String nickname) {
+        updateNicknameUseCase.execute(memberId, nickname);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "친구 추가할 멤버 닉네임으로 조회", description = "친구 추가 시, 닉네임으로 멤버를 검색하여 친구 요청을 보낼 수 있도록 합니다.")
     @GetMapping("/search")
     public ApiResponseDto<List<SearchMemberResponse>> searchMembersByNickname(
-            @CurrentMember Member member,
+            @CurrentMember Long memberId,
             @RequestParam("nickname") String nickname
     ) {
-        return ApiResponseDto.onSuccess(searchMembersByNickNameUseCase.execute(member, nickname));
+        return ApiResponseDto.onSuccess(searchMembersByNickNameUseCase.execute(memberId, nickname));
     }
 
 }

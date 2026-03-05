@@ -2,7 +2,6 @@ package com.kospot.presentation.image.controller;
 
 import com.kospot.application.image.UpdateImageUseCase;
 import com.kospot.domain.image.service.ImageService;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -44,8 +43,8 @@ public class ImageController {
 
     @Operation(summary = "이미지 수정", description = "이미지를 수정합니다.")
     @PutMapping("/")
-    public ApiResponseDto<?> updateImage(@CurrentMember Member member, ImageRequest.Update request){
-        updateImageUseCase.execute(member, request);
+    public ApiResponseDto<?> updateImage(@CurrentMember Long memberId, ImageRequest.Update request){
+        updateImageUseCase.execute(memberId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

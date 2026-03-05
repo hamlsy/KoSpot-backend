@@ -1,7 +1,6 @@
 package com.kospot.presentation.admin.controller;
 
 import com.kospot.application.admin.notification.SendAdminMessageUseCase;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.admin.dto.request.AdminNotificationRequest;
@@ -31,10 +30,10 @@ public class AdminNotificationController {
     @Operation(summary = "관리자 메시지 발송", description = "관리자 메시지를 전체/선택 사용자에게 발송합니다.")
     @PostMapping("/messages")
     public ApiResponseDto<Map<String, Object>> sendAdminMessage(
-            @CurrentMember Member admin,
+            @CurrentMember Long adminId,
             @Valid @RequestBody AdminNotificationRequest.SendMessage request
     ) {
-        int sentCount = sendAdminMessageUseCase.execute(admin, request);
+        int sentCount = sendAdminMessageUseCase.execute(adminId, request);
         return ApiResponseDto.onSuccess(Map.of("sentCount", sentCount));
     }
 }

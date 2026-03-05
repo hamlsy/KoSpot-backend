@@ -1,5 +1,6 @@
 package com.kospot.application.multi.room.http.usecase;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UpdateGameRoomSettingsUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
     private final GameRoomRedisService gameRoomRedisService;
@@ -33,7 +35,8 @@ public class UpdateGameRoomSettingsUseCase {
     private final LobbyRoomNotificationService lobbyRoomNotificationService;
 
     // todo refactor
-    public GameRoomResponse execute(Member host, GameRoomRequest.Update request, Long gameRoomId) {
+    public GameRoomResponse execute(Long hostId, GameRoomRequest.Update request, Long gameRoomId) {
+        Member host = memberAdaptor.queryById(hostId);
         // host 검증
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
         gameRoom.validateHost(host);

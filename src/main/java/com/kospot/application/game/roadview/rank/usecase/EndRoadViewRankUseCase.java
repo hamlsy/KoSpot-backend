@@ -10,6 +10,7 @@ import com.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.domain.gamerank.adaptor.GameRankAdaptor;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.service.GameRankService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
@@ -21,13 +22,15 @@ import org.springframework.context.ApplicationEventPublisher;
 @Transactional
 public class EndRoadViewRankUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final RoadViewGameAdaptor roadViewGameAdaptor;
     private final RoadViewGameService roadViewGameService;
     private final GameRankAdaptor gameRankAdaptor;
     private final GameRankService gameRankService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public EndGameResponse.RoadViewRank execute(Member member, EndGameRequest.RoadView request) {
+    public EndGameResponse.RoadViewRank execute(Long memberId, EndGameRequest.RoadView request) {
+        Member member = memberAdaptor.queryById(memberId);
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.ROADVIEW);
         RoadViewGame game = roadViewGameAdaptor.queryByIdFetchCoordinate(request.getGameId());
         roadViewGameService.finishGame(member, game, request);

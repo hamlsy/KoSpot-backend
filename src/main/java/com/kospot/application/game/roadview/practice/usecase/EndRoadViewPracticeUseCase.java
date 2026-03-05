@@ -6,6 +6,7 @@ import com.kospot.presentation.game.dto.response.EndGameResponse;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.event.RoadViewPracticeEvent;
 import com.kospot.domain.game.service.RoadViewGameService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
@@ -17,11 +18,13 @@ import org.springframework.context.ApplicationEventPublisher;
 @Transactional
 public class EndRoadViewPracticeUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final RoadViewGameAdaptor roadViewGameAdaptor;
     private final RoadViewGameService roadViewGameService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public EndGameResponse.RoadViewPractice execute(Member member, EndGameRequest.RoadView request) {
+    public EndGameResponse.RoadViewPractice execute(Long memberId, EndGameRequest.RoadView request) {
+        Member member = memberAdaptor.queryById(memberId);
         RoadViewGame game = roadViewGameAdaptor.queryByIdFetchCoordinate(request.getGameId());
         roadViewGameService.finishGame(member, game, request);
 

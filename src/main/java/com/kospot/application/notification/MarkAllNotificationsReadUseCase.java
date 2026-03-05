@@ -1,5 +1,6 @@
 package com.kospot.application.notification;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.notification.port.NotificationStore;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -12,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MarkAllNotificationsReadUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final NotificationStore notificationStore;
 
-    public NotificationResponse.MarkAllReadResult execute(Member member) {
+    public NotificationResponse.MarkAllReadResult execute(Long memberId) {
+        Member member = memberAdaptor.queryById(memberId);
         int updated = notificationStore.markAllRead(member.getId());
         return NotificationResponse.MarkAllReadResult.of(updated);
     }

@@ -30,7 +30,8 @@ public class SendAdminMessageUseCase {
     private final NotificationStore notificationStore;
     private final NotificationPushService notificationPushService;
 
-    public int execute(Member admin, AdminNotificationRequest.SendMessage request) {
+    public int execute(Long adminId, AdminNotificationRequest.SendMessage request) {
+        Member admin = memberAdaptor.queryById(adminId);
         memberService.validateAdmin(admin);
 
         List<Long> targetMemberIds = resolveTargets(request);

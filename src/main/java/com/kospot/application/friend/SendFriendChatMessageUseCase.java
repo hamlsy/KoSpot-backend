@@ -7,6 +7,7 @@ import com.kospot.domain.friend.exception.FriendHandler;
 import com.kospot.domain.friend.model.FriendChatStreamMessage;
 import com.kospot.domain.friend.service.FriendChatService;
 import com.kospot.infrastructure.redis.domain.friend.chatstream.producer.FriendChatStreamProducer;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.friend.dto.response.FriendChatMessageResponse;
@@ -18,11 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SendFriendChatMessageUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final FriendAdaptor friendAdaptor;
     private final FriendChatService friendChatService;
     private final FriendChatStreamProducer friendChatStreamProducer;
 
-    public FriendChatMessageResponse execute(Member member, Long roomId, String content) {
+    public FriendChatMessageResponse execute(Long memberId, Long roomId, String content) {
+        Member member = memberAdaptor.queryById(memberId);
         FriendChatRoom room = friendAdaptor.queryChatRoomById(roomId);
         validateParticipant(room, member.getId());
 

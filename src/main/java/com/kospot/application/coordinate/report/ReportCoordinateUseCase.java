@@ -1,6 +1,7 @@
 package com.kospot.application.coordinate.report;
 
 import com.kospot.domain.coordinate.report.service.CoordinateReportService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.coordinate.report.dto.request.CoordinateReportRequest;
@@ -14,11 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReportCoordinateUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final CoordinateReportService coordinateReportService;
 
-    public void execute(CoordinateReportRequest.Report request, Member member) {
+    public void execute(CoordinateReportRequest.Report request, Long memberId) {
+        Member member = memberAdaptor.queryById(memberId);
         Long coordinateId = request.getCoordinateId();
-        Long memberId = member.getId();
         String reason = request.getReason();
         String detail = request.getDetail();
         coordinateReportService.reportCoordinate(coordinateId, memberId, reason, detail);

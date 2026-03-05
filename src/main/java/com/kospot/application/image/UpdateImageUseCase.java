@@ -1,6 +1,7 @@
 package com.kospot.application.image;
 
 import com.kospot.domain.image.service.ImageService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.image.dto.request.ImageRequest;
@@ -14,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UpdateImageUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final ImageService imageService;
 
-    public void execute(Member member, ImageRequest.Update request) {
+    public void execute(Long memberId, ImageRequest.Update request) {
+        Member member = memberAdaptor.queryById(memberId);
         member.validateAdmin();
         imageService.updateImage(request);
     }

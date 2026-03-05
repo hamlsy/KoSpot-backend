@@ -6,6 +6,7 @@ import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -34,6 +35,7 @@ public class NotifyStartGameUseCase {
     private static final long DEFAULT_COUNTDOWN_MS = 3_000L;
 
     // Domain Services
+    private final MemberAdaptor memberAdaptor;
     private final GameRoomService gameRoomService;
     private final GameRoomAdaptor gameRoomAdaptor;
 
@@ -46,7 +48,8 @@ public class NotifyStartGameUseCase {
     // Infrastructure Services (직접 사용)
     private final GameNotificationService gameNotificationService;
 
-    public MultiGameResponse.StartGame execute(Member host, Long gameRoomId) {
+    public MultiGameResponse.StartGame execute(Long hostId, Long gameRoomId) {
+        Member host = memberAdaptor.queryById(hostId);
         if (gameRoomId == null) {
             throw new GameHandler(ErrorStatus.GAME_ROOM_NOT_FOUND);
         }

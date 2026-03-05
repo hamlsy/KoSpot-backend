@@ -1,7 +1,6 @@
 package com.kospot.presentation.point.controller;
 
 import com.kospot.application.point.FindAllPointHistoryPagingUseCase;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.point.dto.response.PointHistoryResponse;
@@ -42,9 +41,9 @@ public class PointHistoryController {
      */
 
     @GetMapping("/")
-    public ApiResponseDto<List<PointHistoryResponse>> findAllByPointHistoryPaging(@CurrentMember Member member,
+    public ApiResponseDto<List<PointHistoryResponse>> findAllByPointHistoryPaging(@CurrentMember Long memberId,
                                                                                   @RequestParam(value = "page", defaultValue = "0") int page) {
-        return ApiResponseDto.onSuccess(findAllPointHistoryPaging.execute(member, page));
+        return ApiResponseDto.onSuccess(findAllPointHistoryPaging.execute(memberId, page));
     }
 
 

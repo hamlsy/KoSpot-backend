@@ -2,6 +2,7 @@ package com.kospot.application.multi.room.http.usecase;
 
 import com.kospot.application.multi.game.service.CancelMultiGameService;
 import com.kospot.application.multi.room.vo.LeaveDecision;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
@@ -39,6 +40,7 @@ import java.util.Optional;
 @Transactional
 public class LeaveGameRoomUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final GameRoomRepository gameRoomRepository;
     private final GameRoomService gameRoomService;
     private final GameRoomRedisService gameRoomRedisService;
@@ -55,7 +57,8 @@ public class LeaveGameRoomUseCase {
     // notify
     private final LobbyRoomNotificationService lobbyRoomNotificationService;
 
-    public void execute(Member member, Long gameRoomId) {
+    public void execute(Long memberId, Long gameRoomId) {
+        Member member = memberAdaptor.queryById(memberId);
         // 게임 방이 없을 경우 member leaveGameRoom 실행
         GameRoom gameRoom = gameRoomRepository.findById(gameRoomId).orElse(null);
         if (gameRoom == null) {

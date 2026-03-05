@@ -2,7 +2,6 @@ package com.kospot.presentation.admin.adsense.controller;
 
 import com.kospot.application.admin.adsense.LoginAdsenseUseCase;
 import com.kospot.application.admin.adsense.RegisterAdsenseBotUseCase;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -42,8 +41,8 @@ public class AdsenseController {
 
     @Operation
     @PostMapping("/register")
-    public ApiResponseDto<?> adsenseRegister(@RequestParam("username") String username, @CurrentMember Member admin) {
-        registerAdsenseBotUseCase.execute(username ,admin);
+    public ApiResponseDto<?> adsenseRegister(@RequestParam("username") String username, @CurrentMember Long adminId) {
+        registerAdsenseBotUseCase.execute(username ,adminId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

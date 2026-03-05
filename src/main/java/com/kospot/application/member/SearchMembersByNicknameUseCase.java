@@ -28,7 +28,8 @@ public class SearchMembersByNicknameUseCase {
     private final FriendAdaptor friendAdaptor;
     private final FriendPairService friendPairService;
 
-    public List<SearchMemberResponse> execute(Member member, String nickname) {
+    public List<SearchMemberResponse> execute(Long memberId, String nickname) {
+        Member member = memberAdaptor.queryById(memberId);
         List<Member> foundMember = memberAdaptor.queryAllByNicknameKeyword(nickname);
 
         if (foundMember.isEmpty()) {

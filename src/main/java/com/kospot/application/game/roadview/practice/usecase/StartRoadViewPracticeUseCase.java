@@ -5,6 +5,7 @@ import com.kospot.presentation.game.dto.response.StartGameResponse;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.service.AESService;
 import com.kospot.domain.game.service.RoadViewGameService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
@@ -15,11 +16,13 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class StartRoadViewPracticeUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final RoadViewGameService roadViewGameService;
     private final AESService aesService;
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
-    public StartGameResponse.RoadView execute(Member member, String sidoKey) {
+    public StartGameResponse.RoadView execute(Long memberId, String sidoKey) {
+        Member member = memberAdaptor.queryById(memberId);
         RoadViewGame game = roadViewGameService.startPracticeGame(member, sidoKey);
         MemberProfileRedisAdaptor.MemberProfileView cachedProfile = memberProfileRedisAdaptor.findProfile(member.getId());
         String markerImageUrl = cachedProfile.markerImageUrl();

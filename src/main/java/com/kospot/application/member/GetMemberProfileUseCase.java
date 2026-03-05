@@ -4,6 +4,7 @@ import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.gamerank.adaptor.GameRankAdaptor;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.statistic.entity.GameModeStatistic;
 import com.kospot.domain.statistic.entity.MemberStatistic;
@@ -30,11 +31,13 @@ import java.util.List;
 @Transactional(readOnly = true) // todo error handler
 public class GetMemberProfileUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final MemberStatisticAdaptor memberStatisticAdaptor;
     private final GameRankAdaptor gameRankAdaptor;
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
-    public MemberProfileResponse execute(Member member) {
+    public MemberProfileResponse execute(Long memberId) {
+        Member member = memberAdaptor.queryById(memberId);
         MemberStatistic statistic = memberStatisticAdaptor.queryByMemberFetchModeStatistics(member);
         MemberProfileRedisAdaptor.MemberProfileView cachedProfile = memberProfileRedisAdaptor.findProfile(member.getId());
         

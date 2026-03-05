@@ -8,6 +8,7 @@ import com.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.domain.gamerank.adaptor.GameRankAdaptor;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.service.GameRankService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
@@ -18,12 +19,14 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class StartRoadViewRankUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final RoadViewGameService roadViewGameService;
     private final GameRankAdaptor gameRankAdaptor;
     private final GameRankService gameRankService;
     private final AESService aesService;
 
-    public StartGameResponse.RoadView execute(Member member){
+    public StartGameResponse.RoadView execute(Long memberId){
+        Member member = memberAdaptor.queryById(memberId);
         RoadViewGame game = roadViewGameService.startRankGame(member);
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.ROADVIEW);
         gameRankService.applyPenaltyForAbandon(gameRank);

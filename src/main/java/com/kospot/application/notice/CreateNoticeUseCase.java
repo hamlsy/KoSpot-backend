@@ -1,5 +1,6 @@
 package com.kospot.application.notice;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.notice.entity.Notice;
 import com.kospot.domain.notice.event.NoticeCreatedEvent;
@@ -19,12 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CreateNoticeUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final NoticeImageAttachService noticeImageAttachService;
     private final NoticeService noticeService;
     private final RecentNoticeCacheService recentNoticeCacheService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public void execute(Member member, NoticeRequest.Create request) {
+    public void execute(Long memberId, NoticeRequest.Create request) {
+        Member member = memberAdaptor.queryById(memberId);
         member.validateAdmin();
         Notice notice = noticeService.createNotice(request);
         noticeImageAttachService.attachImagesFromContent(notice, request.getContentMd());

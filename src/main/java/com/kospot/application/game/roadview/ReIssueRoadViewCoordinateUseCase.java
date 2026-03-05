@@ -9,6 +9,7 @@ import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.service.AESService;
 import com.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.domain.game.vo.GameType;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.game.dto.response.StartGameResponse;
@@ -22,13 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReIssueRoadViewCoordinateUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final RoadViewGameAdaptor roadViewGameAdaptor;
     private final RoadViewGameService roadViewGameService;
     private final CoordinateService coordinateService;
     private final CoordinateAdaptor coordinateAdaptor;
     private final AESService aesService;
 
-    public StartGameResponse.ReIssue execute(Member member, Long gameId){
+    public StartGameResponse.ReIssue execute(Long memberId, Long gameId){
+        Member member = memberAdaptor.queryById(memberId);
         RoadViewGame game = roadViewGameAdaptor.queryByIdFetchCoordinate(gameId);
         Coordinate coordinate = game.getCoordinate();
         coordinateService.invalidateCoordinate(coordinate);

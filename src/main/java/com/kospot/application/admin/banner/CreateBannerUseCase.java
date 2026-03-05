@@ -2,6 +2,7 @@ package com.kospot.application.admin.banner;
 
 import com.kospot.domain.banner.entity.Banner;
 import com.kospot.domain.banner.service.BannerService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.banner.service.ActiveBannerCacheService;
@@ -13,11 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CreateBannerUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final BannerService bannerService;
     private final ActiveBannerCacheService activeBannerCacheService;
 
     @Transactional
-    public Long execute(Member admin, AdminBannerRequest.Create request) {
+    public Long execute(Long adminId, AdminBannerRequest.Create request) {
+        Member admin = memberAdaptor.queryById(adminId);
         admin.validateAdmin();
 
         Banner banner = bannerService.createBanner(

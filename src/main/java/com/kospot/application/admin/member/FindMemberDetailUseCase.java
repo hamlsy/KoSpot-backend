@@ -15,7 +15,8 @@ public class FindMemberDetailUseCase {
     private final MemberAdaptor memberAdaptor;
     private final MemberStatisticAdaptor memberStatisticAdaptor;
 
-    public AdminMemberResponse.MemberDetail execute(Member admin, Long memberId) {
+    public AdminMemberResponse.MemberDetail execute(Long adminId, Long memberId) {
+        Member admin = memberAdaptor.queryById(adminId);
         admin.validateAdmin();
 
         Member targetMember = memberAdaptor.queryById(memberId);

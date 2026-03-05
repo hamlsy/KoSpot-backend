@@ -15,7 +15,8 @@ public class FindAllMembersUseCase {
 
     private final MemberAdaptor memberAdaptor;
 
-    public Page<AdminMemberResponse.MemberInfo> execute(Member admin, Pageable pageable, String role) {
+    public Page<AdminMemberResponse.MemberInfo> execute(Long adminId, Pageable pageable, String role) {
+        Member admin = memberAdaptor.queryById(adminId);
         admin.validateAdmin();
 
         if (role != null && !role.isEmpty()) {

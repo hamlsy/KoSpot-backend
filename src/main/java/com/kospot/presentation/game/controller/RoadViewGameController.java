@@ -15,7 +15,6 @@ import com.kospot.presentation.game.dto.response.RoadViewGameHistoryResponse;
 import com.kospot.presentation.game.dto.response.StartGameResponse;
 import com.kospot.domain.game.service.AESService;
 import com.kospot.domain.game.util.ScoreCalculator;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -65,14 +64,14 @@ public class RoadViewGameController {
     @Operation(summary = "로드뷰 연습 게임 시작", description = "로드뷰 연습 게임을 시작합니다.")
     @BotSuccess
     @PostMapping("/practice/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@CurrentMember Member member, @RequestParam("sido") String sidoKey) {
-        return ApiResponseDto.onSuccess(startRoadViewPracticeUseCase.execute(member, sidoKey));
+    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@CurrentMember Long memberId, @RequestParam("sido") String sidoKey) {
+        return ApiResponseDto.onSuccess(startRoadViewPracticeUseCase.execute(memberId, sidoKey));
     }
 
     @Operation(summary = "로드뷰 연습 게임 종료", description = "로드뷰 연습 게임을 종료합니다.")
     @PostMapping("/practice/end")
-    public ApiResponseDto<EndGameResponse.RoadViewPractice> endPracticeGame(@CurrentMember Member member, @RequestBody EndGameRequest.RoadView request) {
-        return ApiResponseDto.onSuccess(endRoadViewPracticeUseCase.execute(member, request));
+    public ApiResponseDto<EndGameResponse.RoadViewPractice> endPracticeGame(@CurrentMember Long memberId, @RequestBody EndGameRequest.RoadView request) {
+        return ApiResponseDto.onSuccess(endRoadViewPracticeUseCase.execute(memberId, request));
     }
 
     /**
@@ -85,14 +84,14 @@ public class RoadViewGameController {
     @Operation(summary = "로드뷰 랭크 게임 시작", description = "로드뷰 랭크 게임을 시작합니다.")
     @BotSuccess
     @PostMapping("/rank/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startRankGame(@CurrentMember Member member) {
-        return ApiResponseDto.onSuccess(startRoadViewRankUseCase.execute(member));
+    public ApiResponseDto<StartGameResponse.RoadView> startRankGame(@CurrentMember Long memberId) {
+        return ApiResponseDto.onSuccess(startRoadViewRankUseCase.execute(memberId));
     }
 
     @Operation(summary = "로드뷰 랭크 게임 종료", description = "로드뷰 랭크 게임을 종료합니다.")
     @PostMapping("/rank/end")
-    public ApiResponseDto<EndGameResponse.RoadViewRank> endRankGame(@CurrentMember Member member, @RequestBody EndGameRequest.RoadView request) {
-        return ApiResponseDto.onSuccess(endRoadViewRankUseCase.execute(member, request));
+    public ApiResponseDto<EndGameResponse.RoadViewRank> endRankGame(@CurrentMember Long memberId, @RequestBody EndGameRequest.RoadView request) {
+        return ApiResponseDto.onSuccess(endRoadViewRankUseCase.execute(memberId, request));
     }
 
     /**
@@ -101,8 +100,8 @@ public class RoadViewGameController {
 
     @Operation(summary = "로드뷰 좌표 재발급", description = "로드뷰 연습 게임에서 좌표를 재발급합니다.")
     @PostMapping("/{gameId}/reissue-coordinate")
-    public ApiResponseDto<StartGameResponse.ReIssue> reissuePracticeCoordinate(@CurrentMember Member member, @PathVariable("gameId") Long gameId) {
-        return ApiResponseDto.onSuccess(reIssueRoadViewCoordinateUseCase.execute(member, gameId));
+    public ApiResponseDto<StartGameResponse.ReIssue> reissuePracticeCoordinate(@CurrentMember Long memberId, @PathVariable("gameId") Long gameId) {
+        return ApiResponseDto.onSuccess(reIssueRoadViewCoordinateUseCase.execute(memberId, gameId));
     }
 
 
@@ -118,19 +117,19 @@ public class RoadViewGameController {
     )
     @GetMapping("/history/recent")
     @BotSuccess
-    public ApiResponseDto<RoadViewGameHistoryResponse.RecentThree> getRecentThreeGames(@CurrentMember Member member) {
-        return ApiResponseDto.onSuccess(getRecentThreeRoadViewGamesUseCase.execute(member));
+    public ApiResponseDto<RoadViewGameHistoryResponse.RecentThree> getRecentThreeGames(@CurrentMember Long memberId) {
+        return ApiResponseDto.onSuccess(getRecentThreeRoadViewGamesUseCase.execute(memberId));
     }
 
     @Operation(summary = "로드뷰 게임 전체 기록 조회", description = "로드뷰 게임의 전체 완료된 기록을 페이지네이션으로 조회합니다.")
     @GetMapping("/history")
     public ApiResponseDto<RoadViewGameHistoryResponse.All> getAllGames(
-            @CurrentMember Member member,
+            @CurrentMember Long memberId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return ApiResponseDto.onSuccess(getAllRoadViewGamesUseCase.execute(member, pageable));
+        return ApiResponseDto.onSuccess(getAllRoadViewGamesUseCase.execute(memberId, pageable));
     }
 
     /**

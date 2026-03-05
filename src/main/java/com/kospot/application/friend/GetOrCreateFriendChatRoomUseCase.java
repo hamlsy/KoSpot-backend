@@ -8,6 +8,7 @@ import com.kospot.domain.friend.exception.FriendHandler;
 import com.kospot.domain.friend.service.FriendChatService;
 import com.kospot.domain.friend.service.FriendPairService;
 import com.kospot.domain.friend.vo.FriendshipStatus;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.friend.dto.response.FriendChatRoomResponse;
@@ -19,11 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class GetOrCreateFriendChatRoomUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final FriendAdaptor friendAdaptor;
     private final FriendPairService friendPairService;
     private final FriendChatService friendChatService;
 
-    public FriendChatRoomResponse execute(Member member, Long friendMemberId) {
+    public FriendChatRoomResponse execute(Long memberId, Long friendMemberId) {
+        Member member = memberAdaptor.queryById(memberId);
         String canonicalPairKey = friendPairService.canonicalPairKey(member.getId(), friendMemberId);
         Friendship friendship = friendAdaptor.queryFriendshipByCanonicalPair(canonicalPairKey)
                 .orElseThrow(() -> new FriendHandler(FriendErrorStatus.FRIENDSHIP_NOT_FOUND));

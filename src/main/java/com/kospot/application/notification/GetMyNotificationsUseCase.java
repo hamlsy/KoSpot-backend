@@ -1,5 +1,6 @@
 package com.kospot.application.notification;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.notification.adaptor.NotificationAdaptor;
 import com.kospot.domain.notification.model.NotificationData;
@@ -19,15 +20,17 @@ public class GetMyNotificationsUseCase {
     private static final int DEFAULT_SIZE = 20;
     private static final int MAX_SIZE = 50;
 
+    private final MemberAdaptor memberAdaptor;
     private final NotificationAdaptor notificationAdaptor;
 
     public List<NotificationResponse.Item> execute(
-            Member member,
+            Long memberId,
             int page,
             Integer size,
             NotificationType type,
             Boolean isRead
     ) {
+        Member member = memberAdaptor.queryById(memberId);
         int pageSize = normalizeSize(size);
         List<NotificationData> notifications = notificationAdaptor.queryPage(member.getId(), page, pageSize, type, isRead);
 

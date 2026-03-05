@@ -1,6 +1,7 @@
 package com.kospot.application.memberitem;
 
 import com.kospot.domain.item.vo.ItemType;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberitem.adaptor.MemberItemAdaptor;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -18,9 +19,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class FindAllMemberItemsByItemTypeUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final MemberItemAdaptor memberItemAdaptor;
 
-    public List<MemberItemResponse> execute(Member member, String itemType) {
+    public List<MemberItemResponse> execute(Long memberId, String itemType) {
+        Member member = memberAdaptor.queryById(memberId);
         return  memberItemAdaptor.queryByMemberAndItemTypeFetch(member, ItemType.fromKey(itemType));
     }
 

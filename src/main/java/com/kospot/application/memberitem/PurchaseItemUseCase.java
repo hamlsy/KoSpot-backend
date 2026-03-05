@@ -3,6 +3,7 @@ package com.kospot.application.memberitem;
 import com.kospot.domain.item.adaptor.ItemAdaptor;
 import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.item.service.ItemService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberitem.service.MemberItemService;
 import com.kospot.domain.point.vo.PointHistoryType;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 public class PurchaseItemUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final ItemAdaptor itemAdaptor;
     private final ItemService itemService;
     private final MemberItemService memberItemService;
@@ -26,7 +28,8 @@ public class PurchaseItemUseCase {
     private final PointHistoryService pointHistoryService;
 
     //todo 동시성 해결 및 트랜잭션 분리
-    public void execute(Member member, Long itemId) {
+    public void execute(Long memberId, Long itemId) {
+        Member member = memberAdaptor.queryById(memberId);
         Item item = itemAdaptor.queryById(itemId);
         int itemPrice = item.getPrice();
 

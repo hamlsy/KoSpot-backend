@@ -1,6 +1,7 @@
 package com.kospot.application.multi.access.service;
 
 import com.kospot.application.multi.room.http.usecase.GetGameRoomDetailUseCase;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
@@ -22,12 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GameAccessService {
 
+    private final MemberAdaptor memberAdaptor;
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomAdaptor gameRoomAdaptor;
 
     private final GetGameRoomDetailUseCase getGameRoomDetailUseCase;
 
-    public GameAccessResponse checkAccess(Member member, String roomId) {
+    public GameAccessResponse checkAccess(Long memberId, String roomId) {
+        Member member = memberAdaptor.queryById(memberId);
         // 방 존재 확인
         if(isRoomNotAccessible(member, roomId)) {
             return GameAccessResponse.notAllowed("존재하지 않는 방입니다.");

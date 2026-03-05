@@ -5,6 +5,7 @@ import com.kospot.domain.gamerank.adaptor.GameRankAdaptor;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankLevel;
 import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.rank.dto.response.GameRankResponse;
@@ -22,12 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GetRankingUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final GameRankAdaptor gameRankAdaptor;
 
     private final static int DEFAULT_SIZE = 20;
 
     public GameRankResponse.Ranking execute(
-            Member member, String gameMode, String rankTier, int page) {
+            Long memberId, String gameMode, String rankTier, int page) {
+        Member member = memberAdaptor.queryById(memberId);
 
         GameMode mode = GameMode.fromKey(gameMode);
         RankTier tier = RankTier.fromKey(rankTier);

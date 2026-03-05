@@ -26,7 +26,8 @@ public class KickPlayerUseCase {
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService notificationService;
 
-    public void execute(Member host, GameRoomRequest.Kick request, Long gameRoomId) {
+    public void execute(Long hostId, GameRoomRequest.Kick request, Long gameRoomId) {
+        Member host = memberAdaptor.queryById(hostId);
         Long targetPlayerId = request.getTargetPlayerId();
         
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
