@@ -62,6 +62,11 @@ public class SendFriendChatMessageUseCase {
             return wsPrincipal;
         }
 
+        WebSocketMemberPrincipal sessionPrincipal = WebSocketMemberPrincipal.getPrincipal(headerAccessor);
+        if (sessionPrincipal != null) {
+            return sessionPrincipal;
+        }
+
         throw new FriendHandler(FriendErrorStatus.FRIEND_CHAT_ACCESS_DENIED);
     }
 }
