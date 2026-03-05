@@ -4,6 +4,7 @@ import com.kospot.infrastructure.exception.object.general.GeneralException;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.exception.payload.code.Reason;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
+import com.kospot.infrastructure.security.exception.UnauthorizedException;
 import com.kospot.infrastructure.slack.SlackNotifier;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
@@ -91,6 +92,11 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
                 Reason errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
                 return handleExceptionInternal(generalException, errorReasonHttpStatus, null, request);
+        }
+
+        @ExceptionHandler
+        public ResponseEntity<Object> unauthorized(UnauthorizedException exception, HttpServletRequest request) {
+                return handleExceptionInternal(exception, ErrorStatus._UNAUTHORIZED.getReasonHttpStatus(), HttpHeaders.EMPTY, request);
         }
 
         private ResponseEntity<Object> handleExceptionInternal(Exception e, Reason reason,
