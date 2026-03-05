@@ -136,7 +136,7 @@ public class WebSocketEventHandler {
 
         if (!skipRoomLeave && gameRoomId != null) {
             try {
-                leaveGameRoomUseCase.execute(member, gameRoomId);
+                leaveGameRoomUseCase.execute(member.getId(), gameRoomId);
                 log.info("Member left game room - MemberId: {}, RoomId: {}", memberId, gameRoomId);
             } catch (Exception e) {
                 log.warn("Failed to leave game room - MemberId: {}, RoomId: {}", memberId, gameRoomId, e);
