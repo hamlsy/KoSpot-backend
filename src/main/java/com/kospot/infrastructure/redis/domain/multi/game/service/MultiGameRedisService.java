@@ -19,7 +19,9 @@ public class MultiGameRedisService {
     private static final int GAME_DATA_EXPIRY_HOURS = 1;
     private static final String ROUND_REISSUE_LOCK_KEY = "game:round:%s:%s:reissue:lock";
     private static final String ROUND_VERSION_KEY = "game:round:%s:%s:version";
+    private static final String GAME_START_LOCK_KEY = "game:room:%s:game:%s:start:lock";
     private static final long REISSUE_LOCK_TTL_SECONDS = 5L;
+    private static final long GAME_START_LOCK_TTL_SECONDS = 30L;
 
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -130,6 +132,17 @@ public class MultiGameRedisService {
         }
     }
 
+    public boolean acquireGameStartLock(String roomId, Long gameId) {
+        String key = getGameStartLockKey(roomId, gameId);
+        Boolean locked = redisTemplate.opsForValue()
+                .setIfAbsent(key, String.valueOf(System.currentTimeMillis()), GAME_START_LOCK_TTL_SECONDS, TimeUnit.SECONDS);
+        return Boolean.TRUE.equals(locked);
+    }
+
+    public void releaseGameStartLock(String roomId, Long gameId) {
+        redisTemplate.delete(getGameStartLockKey(roomId, gameId));
+    }
+
     private String getLoadingStatusKey(String roomId) {
         return String.format(GAME_LOADING_STATUS_KEY, roomId);
     }
@@ -144,6 +157,10 @@ public class MultiGameRedisService {
 
     private String getRoundVersionKey(String roomId, Long roundId) {
         return String.format(ROUND_VERSION_KEY, roomId, roundId);
+    }
+
+    private String getGameStartLockKey(String roomId, Long gameId) {
+        return String.format(GAME_START_LOCK_KEY, roomId, gameId);
     }
 }
 

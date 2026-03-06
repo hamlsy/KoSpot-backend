@@ -101,6 +101,14 @@ public class LoadingPhaseService {
         return multiGameRedisService.getCurrentGameId(roomId);
     }
 
+    public boolean acquireGameStartLock(String roomId, Long gameId) {
+        return multiGameRedisService.acquireGameStartLock(roomId, gameId);
+    }
+
+    public void releaseGameStartLock(String roomId, Long gameId) {
+        multiGameRedisService.releaseGameStartLock(roomId, gameId);
+    }
+
     /**
      * 로딩 상태를 정리한다.
      *
