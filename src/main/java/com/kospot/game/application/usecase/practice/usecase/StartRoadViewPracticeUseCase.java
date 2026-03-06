@@ -1,6 +1,6 @@
 package com.kospot.game.application.usecase.practice.usecase;
 
-import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.game.presentation.dto.response.StartGameResponse;
 import com.kospot.game.domain.entity.RoadViewGame;
 import com.kospot.game.application.service.AESService;

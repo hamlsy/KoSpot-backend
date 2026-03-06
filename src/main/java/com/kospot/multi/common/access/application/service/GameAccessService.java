@@ -1,0 +1,78 @@
+package com.kospot.multi.common.access.application.service;
+
+import com.kospot.multi.room.application.usecase.GetGameRoomDetailUseCase;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.multi.room.adaptor.GameRoomAdaptor;
+import com.kospot.multi.room.domain.entity.GameRoom;
+import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
+import com.kospot.multi.room.domain.vo.GameRoomStatus;
+import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.multi.common.access.presentation.response.GameAccessResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Slf4j
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class GameAccessService {
+
+    private final MemberAdaptor memberAdaptor;
+    private final GameRoomRedisService gameRoomRedisService;
+    private final GameRoomAdaptor gameRoomAdaptor;
+
+    private final GetGameRoomDetailUseCase getGameRoomDetailUseCase;
+
+    public GameAccessResponse checkAccess(Long memberId, String roomId) {
+        Member member = memberAdaptor.queryById(memberId);
+        // 방 존재 확인
+        if(isRoomNotAccessible(member, roomId)) {
+            return GameAccessResponse.notAllowed("존재하지 않는 방입니다.");
+        }
+
+        // 게임 방 참여자가 아닌 경우
+        // 1. redis 검증
+        List<GameRoomPlayerInfo> gameRoomPlayerInfos =  gameRoomRedisService.getRoomPlayers(roomId);
+        boolean isParticipant = gameRoomPlayerInfos.stream()
+                .anyMatch(playerInfo -> playerInfo.getMemberId().equals(member.getId()));
+        // 2. DB 검증
+        boolean isParticipantInDB = member.getGameRoomId() != null &&
+                member.getGameRoomId().equals(Long.parseLong(roomId));
+        if(!isParticipant || !isParticipantInDB) {
+            return GameAccessResponse.notAllowed("게임 방 참여자가 아닙니다.");
+        }
+
+
+        // 게임방 상태 확인 todo refactor, 일단 재접속 로직은 나중에 구현
+        GameRoom room = gameRoomAdaptor.queryById(Long.parseLong(roomId));
+        if(room.getStatus() != GameRoomStatus.WAITING) {
+            return GameAccessResponse.notAllowed("잘못된 접근입니다.");
+        }
+
+        return GameAccessResponse.allowed();
+    }
+
+    private boolean isRoomNotAccessible(Member member, String roomId) {
+        if(roomId == null) {
+            return true;
+        }
+        try {
+            long id = Long.parseLong(roomId);
+            if (id < 0) {
+                return true;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        if(!gameRoomAdaptor.existsById(Long.parseLong(roomId))) {
+            return true;
+        }
+        return false;
+    }
+
+}

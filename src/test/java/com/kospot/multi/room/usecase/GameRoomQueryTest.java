@@ -1,9 +1,9 @@
 package com.kospot.multi.room.usecase;
 
 import com.kospot.member.domain.entity.Member;
-import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.domain.multi.room.vo.GameRoomStatus;
-import com.kospot.domain.multi.room.repository.GameRoomRepository;
+import com.kospot.multi.room.domain.entity.GameRoom;
+import com.kospot.multi.room.domain.vo.GameRoomStatus;
+import com.kospot.multi.room.infrastructure.persistence.GameRoomRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;

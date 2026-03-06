@@ -1,15 +1,15 @@
 package com.kospot.application.multi.round.roadview;
 
 import com.kospot.game.domain.vo.GameMode;
-import com.kospot.domain.multi.game.vo.PlayerMatchType;
-import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
-import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.submission.event.EarlyRoundCompletionEvent;
-import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
+import com.kospot.multi.game.domain.vo.PlayerMatchType;
+import com.kospot.multi.round.adaptor.RoadViewGameRoundAdaptor;
+import com.kospot.multi.round.entity.RoadViewGameRound;
+import com.kospot.multi.submission.event.EarlyRoundCompletionEvent;
+import com.kospot.multi.submission.service.RoadViewSubmissionService;
 import com.kospot.common.annotation.usecase.UseCase;
-import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
-import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
-import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;
+import com.kospot.common.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
+import com.kospot.common.redis.domain.multi.submission.service.SubmissionRedisService;
+import com.kospot.common.websocket.domain.multi.timer.service.GameTimerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

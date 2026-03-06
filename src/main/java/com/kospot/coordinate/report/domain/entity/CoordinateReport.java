@@ -1,6 +1,6 @@
 package com.kospot.coordinate.report.domain.entity;
 
-import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.common.auditing.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

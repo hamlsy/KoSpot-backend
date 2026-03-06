@@ -1,7 +1,7 @@
 package com.kospot.application.multi.submission.listener;
 
 import com.kospot.application.multi.round.roadview.CheckAndCompleteRoundEarlyUseCase;
-import com.kospot.domain.multi.submission.event.PlayerSubmissionCompletedEvent;
+import com.kospot.multi.submission.event.PlayerSubmissionCompletedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

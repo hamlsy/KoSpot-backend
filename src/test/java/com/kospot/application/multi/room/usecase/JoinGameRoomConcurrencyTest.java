@@ -1,18 +1,18 @@
 package com.kospot.application.multi.room.usecase;
 
-import com.kospot.application.multi.room.http.usecase.JoinGameRoomUseCase;
+import com.kospot.multi.room.application.usecase.JoinGameRoomUseCase;
 import com.kospot.game.domain.vo.GameMode;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.member.domain.vo.Role;
-import com.kospot.domain.multi.game.vo.PlayerMatchType;
-import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.domain.multi.room.repository.GameRoomRepository;
-import com.kospot.domain.multi.room.vo.GameRoomStatus;
+import com.kospot.multi.game.domain.vo.PlayerMatchType;
+import com.kospot.multi.room.domain.entity.GameRoom;
+import com.kospot.multi.room.infrastructure.persistence.GameRoomRepository;
+import com.kospot.multi.room.domain.vo.GameRoomStatus;
 import com.kospot.common.exception.object.domain.GameRoomHandler;
-import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
-import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
+import com.kospot.common.redis.domain.multi.room.dao.GameRoomRedisRepository;
+import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

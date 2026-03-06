@@ -1,6 +1,6 @@
 package com.kospot.banner.domain.entity;
 
-import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.common.auditing.entity.BaseTimeEntity;
 import com.kospot.image.domain.entity.Image;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

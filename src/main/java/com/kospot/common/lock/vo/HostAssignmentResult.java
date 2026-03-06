@@ -1,6 +1,6 @@
 package com.kospot.common.lock.vo;
 
-import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
+import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
 import lombok.Builder;
 import lombok.Getter;
 

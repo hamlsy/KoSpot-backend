@@ -3,7 +3,7 @@ package com.kospot.mvp.presentation.response;
 import com.kospot.gamerank.domain.vo.RankLevel;
 import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.mvp.domain.entity.DailyMvp;
-import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import lombok.Builder;
 import lombok.Getter;
 

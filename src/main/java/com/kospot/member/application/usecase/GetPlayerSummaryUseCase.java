@@ -9,7 +9,7 @@ import com.kospot.statistic.application.adaptor.MemberStatisticAdaptor;
 import com.kospot.statistic.domain.entity.GameModeStatistic;
 import com.kospot.statistic.domain.entity.MemberStatistic;
 import com.kospot.common.annotation.usecase.UseCase;
-import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.member.presentation.response.PlayerSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

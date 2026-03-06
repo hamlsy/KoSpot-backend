@@ -1,10 +1,13 @@
 package com.kospot.application.multi.flow;
 
-import com.kospot.application.multi.game.message.LoadingStatusMessage;
+import com.kospot.multi.common.flow.GameTransitionOrchestrator;
+import com.kospot.multi.common.flow.LoadingPhaseService;
+import com.kospot.multi.common.flow.MultiGameFlowScheduler;
+import com.kospot.multi.game.application.message.LoadingStatusMessage;
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
-import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
-import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.presentation.multi.game.dto.message.LoadingAckMessage;
+import com.kospot.multi.game.application.adaptor.MultiRoadViewGameAdaptor;
+import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
+import com.kospot.multi.game.presentation.dto.message.LoadingAckMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

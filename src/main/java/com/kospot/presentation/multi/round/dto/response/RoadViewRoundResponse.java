@@ -1,10 +1,10 @@
 package com.kospot.presentation.multi.round.dto.response;
 
-import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
-import com.kospot.presentation.multi.gamePlayer.dto.response.GamePlayerResponse;
+import com.kospot.multi.game.domain.entity.MultiRoadViewGame;
+import com.kospot.multi.player.domain.entity.GamePlayer;
+import com.kospot.multi.round.entity.RoadViewGameRound;
+import com.kospot.multi.submission.entity.roadview.RoadViewSubmission;
+import com.kospot.multi.player.presentation.response.GamePlayerResponse;
 import com.kospot.presentation.multi.submission.dto.response.SubmissionResponse;
 import lombok.*;
 

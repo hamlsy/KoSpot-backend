@@ -1,6 +1,6 @@
 package com.kospot.statistic.domain.entity;
 
-import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.common.auditing.entity.BaseTimeEntity;
 import com.kospot.game.domain.vo.GameMode;
 import com.kospot.game.domain.vo.GameType;
 import com.kospot.member.domain.entity.Member;

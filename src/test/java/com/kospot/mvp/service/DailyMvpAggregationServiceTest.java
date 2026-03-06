@@ -11,7 +11,7 @@ import com.kospot.member.domain.entity.Member;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.domain.entity.DailyMvp;
 import com.kospot.mvp.application.service.DailyMvpAggregationService;
-import com.kospot.infrastructure.redis.domain.mvp.service.DailyMvpCacheService;
+import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

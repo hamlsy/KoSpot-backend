@@ -2,7 +2,7 @@ package com.kospot.common.lock.strategy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
+import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
 import com.kospot.common.lock.vo.HostAssignmentResult;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

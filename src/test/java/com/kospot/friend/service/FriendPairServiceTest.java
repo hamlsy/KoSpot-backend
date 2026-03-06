@@ -1,6 +1,6 @@
 package com.kospot.friend.service;
 
-import com.kospot.domain.friend.service.FriendPairService;
+import com.kospot.friend.application.service.FriendPairService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

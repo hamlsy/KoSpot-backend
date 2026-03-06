@@ -1,9 +1,10 @@
 package com.kospot.infrastructure.redis.domain.friend.chatstream.worker;
 
-import com.kospot.infrastructure.redis.domain.friend.chatstream.config.FriendChatPersistProperties;
-import com.kospot.infrastructure.redis.domain.friend.chatstream.dlq.FriendChatDlqPublisher;
-import com.kospot.infrastructure.redis.domain.friend.chatstream.init.FriendChatStreamInitializer;
-import com.kospot.infrastructure.redis.domain.friend.chatstream.persistence.FriendChatBatchInsertRepository;
+import com.kospot.friend.infrastructure.redis.chatstream.config.FriendChatPersistProperties;
+import com.kospot.friend.infrastructure.redis.chatstream.dlq.FriendChatDlqPublisher;
+import com.kospot.friend.infrastructure.redis.chatstream.init.FriendChatStreamInitializer;
+import com.kospot.friend.infrastructure.redis.chatstream.persistence.FriendChatBatchInsertRepository;
+import com.kospot.friend.infrastructure.redis.chatstream.worker.FriendChatPersistWorker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

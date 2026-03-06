@@ -1,6 +1,6 @@
 package com.kospot.point.domain.entity;
 
-import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.common.auditing.entity.BaseTimeEntity;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.point.domain.vo.PointHistoryType;
 import jakarta.persistence.*;

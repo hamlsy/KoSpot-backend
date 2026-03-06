@@ -1,12 +1,12 @@
 package com.kospot.mvp.application.listener;
 
 import com.kospot.mvp.domain.event.MvpRewardGrantedEvent;
-import com.kospot.domain.notification.model.NotificationCreateCommand;
-import com.kospot.domain.notification.model.NotificationData;
-import com.kospot.domain.notification.port.NotificationStore;
-import com.kospot.domain.notification.vo.NotificationType;
-import com.kospot.infrastructure.websocket.domain.notification.service.NotificationPushService;
-import com.kospot.presentation.notification.dto.message.NotificationMessage;
+import com.kospot.notification.domain.model.NotificationCreateCommand;
+import com.kospot.notification.domain.model.NotificationData;
+import com.kospot.notification.infrastructure.persistence.NotificationStore;
+import com.kospot.notification.domain.vo.NotificationType;
+import com.kospot.common.websocket.domain.notification.service.NotificationPushService;
+import com.kospot.notification.presentation.dto.message.NotificationMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

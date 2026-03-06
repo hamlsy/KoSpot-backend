@@ -1,8 +1,8 @@
 package com.kospot.friend.entity;
 
-import com.kospot.domain.friend.entity.FriendRequest;
-import com.kospot.domain.friend.exception.FriendHandler;
-import com.kospot.domain.friend.vo.FriendRequestStatus;
+import com.kospot.friend.domain.entity.FriendRequest;
+import com.kospot.friend.domain.exception.FriendHandler;
+import com.kospot.friend.domain.vo.FriendRequestStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

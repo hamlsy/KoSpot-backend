@@ -6,7 +6,7 @@ import com.kospot.banner.application.service.BannerService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.common.annotation.usecase.UseCase;
-import com.kospot.infrastructure.redis.domain.banner.service.ActiveBannerCacheService;
+import com.kospot.banner.infrastructure.redis.service.ActiveBannerCacheService;
 import com.kospot.admin.presentation.dto.request.AdminBannerRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

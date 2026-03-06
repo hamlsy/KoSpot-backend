@@ -1,12 +1,13 @@
 package com.kospot.application.friend;
 
-import com.kospot.domain.friend.exception.FriendHandler;
-import com.kospot.infrastructure.redis.domain.friend.chatstream.producer.FriendChatStreamProducer;
-import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.infrastructure.websocket.domain.friend.constants.FriendChatChannelConstants;
-import com.kospot.infrastructure.websocket.domain.friend.service.FriendChatSubscriptionCacheService;
-import com.kospot.presentation.chat.dto.request.ChatMessageDto;
-import com.kospot.presentation.friend.dto.response.FriendChatMessageResponse;
+import com.kospot.friend.domain.exception.FriendHandler;
+import com.kospot.friend.application.usecase.SendFriendChatMessageUseCase;
+import com.kospot.friend.infrastructure.redis.chatstream.producer.FriendChatStreamProducer;
+import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
+import com.kospot.common.websocket.domain.friend.constants.FriendChatChannelConstants;
+import com.kospot.common.websocket.domain.friend.service.FriendChatSubscriptionCacheService;
+import com.kospot.chat.presentation.dto.request.ChatMessageDto;
+import com.kospot.friend.presentation.dto.response.FriendChatMessageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

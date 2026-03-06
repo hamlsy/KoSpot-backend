@@ -1,7 +1,7 @@
 package com.kospot.friend.entity;
 
-import com.kospot.domain.friend.entity.Friendship;
-import com.kospot.domain.friend.vo.FriendshipStatus;
+import com.kospot.friend.domain.entity.Friendship;
+import com.kospot.friend.domain.vo.FriendshipStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

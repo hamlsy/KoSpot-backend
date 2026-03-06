@@ -1,6 +1,6 @@
 package com.kospot.member.domain.entity;
 
-import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.common.auditing.entity.BaseTimeEntity;
 import com.kospot.image.domain.entity.Image;
 import com.kospot.member.domain.vo.Role;
 import com.kospot.member.domain.exception.MemberHandler;

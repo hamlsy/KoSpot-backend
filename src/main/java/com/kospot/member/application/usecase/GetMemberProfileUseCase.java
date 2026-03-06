@@ -9,7 +9,7 @@ import com.kospot.member.domain.entity.Member;
 import com.kospot.statistic.domain.entity.GameModeStatistic;
 import com.kospot.statistic.domain.entity.MemberStatistic;
 import com.kospot.common.annotation.usecase.UseCase;
-import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.member.presentation.response.MemberProfileResponse;
 import com.kospot.member.presentation.response.MemberProfileResponse.GameStatistics;
 import com.kospot.member.presentation.response.MemberProfileResponse.GameStatistics.RoadViewGameStats;

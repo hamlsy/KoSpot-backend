@@ -1,6 +1,6 @@
 package com.kospot.image.domain.entity;
 
-import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.common.auditing.entity.BaseTimeEntity;
 import com.kospot.image.domain.vo.ImageType;
 import com.kospot.item.domain.vo.ImageStatus;
 import com.kospot.notice.domain.entity.Notice;

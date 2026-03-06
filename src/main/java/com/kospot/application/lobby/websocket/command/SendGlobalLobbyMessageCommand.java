@@ -1,8 +1,7 @@
 package com.kospot.application.lobby.websocket.command;
 
-import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
-import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.presentation.chat.dto.request.ChatMessageDto;
+import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.chat.presentation.dto.request.ChatMessageDto;
 import lombok.Builder;
 import lombok.Getter;
 

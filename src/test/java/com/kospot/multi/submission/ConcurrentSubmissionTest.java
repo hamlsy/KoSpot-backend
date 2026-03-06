@@ -1,7 +1,7 @@
 package com.kospot.multi.submission;
 
 import com.kospot.coordinate.application.usecase.ImportCoordinateUseCase;
-import com.kospot.application.multi.game.usecase.NotifyStartGameUseCase;
+import com.kospot.multi.game.application.usecase.NotifyStartGameUseCase;
 import com.kospot.application.multi.round.roadview.CheckAndCompleteRoundEarlyUseCase;
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
 import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
@@ -11,26 +11,27 @@ import com.kospot.image.infrastructure.persistence.ImageRepository;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.member.domain.vo.Role;
-import com.kospot.domain.multi.game.repository.MultiRoadViewGameRepository;
-import com.kospot.domain.multi.game.vo.PlayerMatchType;
-import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multi.gamePlayer.repository.GamePlayerRepository;
-import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.domain.multi.room.repository.GameRoomRepository;
-import com.kospot.domain.multi.room.vo.GameRoomStatus;
-import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.round.repository.RoadViewGameRoundRepository;
+import com.kospot.multi.game.infrastructure.persistence.MultiRoadViewGameRepository;
+import com.kospot.multi.game.domain.vo.PlayerMatchType;
+import com.kospot.multi.game.presentation.dto.response.MultiGameResponse;
+import com.kospot.multi.player.domain.entity.GamePlayer;
+import com.kospot.multi.player.infrastructure.persistence.GamePlayerRepository;
+import com.kospot.multi.room.domain.entity.GameRoom;
+import com.kospot.multi.room.infrastructure.persistence.GameRoomRepository;
+import com.kospot.multi.room.domain.vo.GameRoomStatus;
+import com.kospot.multi.round.entity.RoadViewGameRound;
+import com.kospot.multi.round.repository.RoadViewGameRoundRepository;
 import com.kospot.coordinate.domain.entity.Coordinate;
 import com.kospot.coordinate.domain.entity.LocationType;
 import com.kospot.coordinate.domain.entity.Sido;
 import com.kospot.coordinate.infrastructure.persistence.CoordinateRepository;
 import com.kospot.coordinate.domain.vo.Address;
-import com.kospot.domain.multi.submission.repository.RoadViewSubmissionRepository;
-import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
-import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
-import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
-import com.kospot.presentation.multi.game.dto.request.MultiGameRequest;
-import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;
+import com.kospot.multi.submission.repository.RoadViewSubmissionRepository;
+import com.kospot.multi.submission.service.RoadViewSubmissionService;
+import com.kospot.common.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
+import com.kospot.common.redis.domain.multi.submission.service.SubmissionRedisService;
+import com.kospot.multi.game.presentation.dto.request.MultiGameRequest;
+import com.kospot.multi.game.presentation.dto.response.MultiRoadViewGameResponse;
 import com.kospot.presentation.multi.submission.dto.request.SubmitRoadViewRequest;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -168,7 +169,7 @@ class ConcurrentSubmissionTest {
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);
         
         // 1단계: 게임 생성
-        com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
+        MultiGameResponse.StartGame startGameResponse =
                 notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
@@ -313,7 +314,7 @@ class ConcurrentSubmissionTest {
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);
         
         // 1단계: 게임 생성
-        com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse = 
+        MultiGameResponse.StartGame startGameResponse =
                 notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
@@ -416,7 +417,7 @@ class ConcurrentSubmissionTest {
         // Given: 게임 시작 및 모든 플레이어 제출
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);
 
-        com.kospot.presentation.multi.game.dto.response.MultiGameResponse.StartGame startGameResponse =
+        MultiGameResponse.StartGame startGameResponse =
                 notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
 

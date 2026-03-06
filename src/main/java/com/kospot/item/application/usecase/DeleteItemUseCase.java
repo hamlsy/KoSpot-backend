@@ -3,7 +3,7 @@ package com.kospot.item.application.usecase;
 import com.kospot.item.application.service.ItemService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.domain.memberitem.service.MemberItemService;
+import com.kospot.memberitem.application.service.MemberItemService;
 import com.kospot.common.annotation.usecase.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

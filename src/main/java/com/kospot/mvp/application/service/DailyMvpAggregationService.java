@@ -7,7 +7,7 @@ import com.kospot.gamerank.application.adaptor.GameRankAdaptor;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.domain.entity.DailyMvp;
-import com.kospot.infrastructure.redis.domain.mvp.service.DailyMvpCacheService;
+import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

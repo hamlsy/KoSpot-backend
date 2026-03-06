@@ -1,6 +1,6 @@
 package com.kospot.mvp.domain.entity;
 
-import com.kospot.domain.auditing.entity.BaseTimeEntity;
+import com.kospot.common.auditing.entity.BaseTimeEntity;
 import com.kospot.game.domain.entity.RoadViewGame;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.gamerank.domain.vo.RankLevel;

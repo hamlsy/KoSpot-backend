@@ -1,9 +1,8 @@
 package com.kospot.presentation.multi.lobby.controller;
 
 import com.kospot.application.lobby.http.usecase.JoinGlobalLobbyUseCase;
-import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.application.lobby.websocket.usecase.SendGlobalLobbyMessageUseCase;
-import com.kospot.presentation.chat.dto.request.ChatMessageDto;
+import com.kospot.chat.presentation.dto.request.ChatMessageDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;

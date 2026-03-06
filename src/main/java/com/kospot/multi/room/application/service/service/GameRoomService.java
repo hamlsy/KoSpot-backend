@@ -1,0 +1,85 @@
+package com.kospot.multi.room.application.service.service;
+
+import com.kospot.game.domain.vo.GameMode;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.multi.game.domain.vo.PlayerMatchType;
+import com.kospot.multi.room.domain.entity.GameRoom;
+import com.kospot.multi.room.infrastructure.persistence.GameRoomRepository;
+import com.kospot.multi.room.domain.vo.GameRoomUpdateInfo;
+import com.kospot.common.exception.object.domain.WebSocketHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
+import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class GameRoomService {
+
+    private final MemberAdaptor memberAdaptor;
+    private final GameRoomRepository gameRoomRepository;
+
+    // join까지 한번에 처리
+    public GameRoom createGameRoom(Member host, GameRoomRequest.Create request) {
+        GameRoom gameRoom = request.toEntity();
+        gameRoom.setHost(host);
+        GameRoom savedRoom = gameRoomRepository.save(gameRoom);
+        host.joinGameRoom(savedRoom.getId());
+        return savedRoom;
+    }
+
+    public GameRoom updateGameRoom(GameRoomUpdateInfo updateInfo, GameRoom gameRoom) {
+        gameRoom.update(updateInfo.getTitle(),updateInfo.getTimeLimit(),
+                GameMode.fromKey(updateInfo.getGameModeKey()), PlayerMatchType.fromKey(updateInfo.getPlayerMatchTypeKey()), updateInfo.isPoiNameVisible(),
+                updateInfo.getMaxPlayers(), updateInfo.isPrivateRoom(), updateInfo.getPassword(), updateInfo.getTeamCount(), updateInfo.getTotalRounds());
+        return gameRoom;
+    }
+
+    public void markGameRoomAsInGame(GameRoom gameRoom, Member host) {
+        gameRoom.start(host);
+    }
+
+    public void markGameRoomAsWaiting(GameRoom gameRoom) {
+        gameRoom.endGame();
+    }
+
+    public void joinGameRoom(Member player, GameRoom gameRoom, GameRoomRequest.Join request) {
+        gameRoom.join(player, request.getPassword(), gameRoom.getId());
+    }
+
+    public void leaveGameRoom(Member player, GameRoom gameRoom) {
+        gameRoom.leaveRoom(player);
+    }
+
+    public void deleteRoom(GameRoom gameRoom) {
+//        gameRoom.deleteRoom();
+        memberAdaptor.queryAllByGameRoomId(gameRoom.getId()).forEach(Member::leaveGameRoom);
+        gameRoomRepository.delete(gameRoom);
+    }
+
+    public void kickPlayer(Member host, Member targetPlayer, GameRoom gameRoom) {
+        gameRoom.kickPlayer(host, targetPlayer);
+    }
+
+    public void updateMemberLeaveStatus(Member member) {
+        member.leaveGameRoom();
+    }
+
+    public void validateKickPermission(GameRoom gameRoom, Member host, Long targetMemberId) {
+        gameRoom.validateHost(host);
+
+        Member targetMember = memberAdaptor.queryById(targetMemberId);
+        if (!targetMember.getGameRoomId().equals(gameRoom.getId())) {
+            throw new WebSocketHandler(ErrorStatus._BAD_REQUEST);
+        }
+    }
+
+    public void changeHostToMember(GameRoom gameRoom, Member newHost) {
+        gameRoom.setHost(newHost);
+    }
+}

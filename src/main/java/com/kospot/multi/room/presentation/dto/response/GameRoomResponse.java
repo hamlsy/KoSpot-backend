@@ -1,0 +1,35 @@
+package com.kospot.multi.room.presentation.dto.response;
+
+import com.kospot.multi.room.domain.entity.GameRoom;
+import lombok.*;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class GameRoomResponse {
+
+    private Long gameRoomId;
+    private String title;
+    private int timeLimit;
+    private String gameModeKey;
+    private String playerMatchTypeKey;
+    private boolean isPoiNameVisible;
+    private int maxPlayers;
+    private int totalRounds;
+
+    public static GameRoomResponse from(GameRoom gameRoom) {
+        return GameRoomResponse.builder()
+                .gameRoomId(gameRoom.getId())
+                .title(gameRoom.getTitle())
+                .timeLimit(gameRoom.getTimeLimit())
+                .maxPlayers(gameRoom.getMaxPlayers())
+                .gameModeKey(gameRoom.getGameMode().name())
+                .playerMatchTypeKey(gameRoom.getPlayerMatchType().name())
+                .isPoiNameVisible(gameRoom.isPoiNameVisible())
+                .totalRounds(gameRoom.getTotalRounds())
+                .build();
+    }
+
+}

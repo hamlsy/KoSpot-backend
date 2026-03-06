@@ -1,18 +1,18 @@
 package com.kospot.application.lobby.websocket.usecase;
 
 import com.kospot.application.lobby.websocket.command.SendGlobalLobbyMessageCommand;
-import com.kospot.domain.chat.entity.ChatMessage;
-import com.kospot.domain.chat.service.ChatService;
-import com.kospot.domain.chat.vo.MessageType;
+import com.kospot.chat.domain.entity.ChatMessage;
+import com.kospot.chat.application.service.ChatService;
+import com.kospot.chat.domain.vo.MessageType;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.common.exception.object.domain.WebSocketHandler;
 import com.kospot.common.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
-import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;
-import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.presentation.chat.dto.request.ChatMessageDto;
+import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.member.infrastructure.redis.service.MemberProfileRedisService;
+import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
+import com.kospot.chat.presentation.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;

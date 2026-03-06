@@ -2,7 +2,7 @@ package com.kospot.mvp.application.scheduler;
 
 import com.kospot.mvp.application.service.DailyMvpAggregationService;
 import com.kospot.mvp.application.service.DailyMvpRewardService;
-import com.kospot.infrastructure.redis.domain.mvp.service.DailyMvpCacheService;
+import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

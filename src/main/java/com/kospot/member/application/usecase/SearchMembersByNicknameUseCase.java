@@ -1,11 +1,11 @@
 package com.kospot.member.application.usecase;
 
-import com.kospot.domain.friend.adaptor.FriendAdaptor;
-import com.kospot.domain.friend.entity.FriendRequest;
-import com.kospot.domain.friend.entity.Friendship;
-import com.kospot.domain.friend.service.FriendPairService;
-import com.kospot.domain.friend.vo.FriendRequestStatus;
-import com.kospot.domain.friend.vo.FriendshipStatus;
+import com.kospot.friend.application.adaptor.FriendAdaptor;
+import com.kospot.friend.domain.entity.FriendRequest;
+import com.kospot.friend.domain.entity.Friendship;
+import com.kospot.friend.application.service.FriendPairService;
+import com.kospot.friend.domain.vo.FriendRequestStatus;
+import com.kospot.friend.domain.vo.FriendshipStatus;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.common.annotation.usecase.UseCase;

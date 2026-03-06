@@ -1,7 +1,7 @@
 package com.kospot.application.multi.room.http.usecase;
 
-import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
-import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
+import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

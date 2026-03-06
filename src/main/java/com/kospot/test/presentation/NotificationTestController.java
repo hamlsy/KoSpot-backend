@@ -1,6 +1,6 @@
 package com.kospot.test.presentation;
 
-import com.kospot.domain.notification.event.FriendRequestCreatedEvent;
+import com.kospot.notification.domain.event.FriendRequestCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

@@ -1,6 +1,6 @@
 package com.kospot.member.presentation.response;
 
-import com.kospot.presentation.memberitem.dto.response.MemberItemResponse;
+import com.kospot.memberitem.presentation.response.MemberItemResponse;
 import lombok.Builder;
 import lombok.Getter;
 

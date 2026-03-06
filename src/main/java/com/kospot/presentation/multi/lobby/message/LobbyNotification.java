@@ -1,8 +1,7 @@
 package com.kospot.presentation.multi.lobby.message;
 
-import com.kospot.domain.multi.room.vo.GameRoomStatus;
-import com.kospot.presentation.multi.room.dto.message.GameRoomUpdateMessage;
-import com.kospot.presentation.multi.room.dto.response.FindGameRoomResponse;
+import com.kospot.multi.room.domain.vo.GameRoomStatus;
+import com.kospot.multi.room.presentation.dto.response.FindGameRoomResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
