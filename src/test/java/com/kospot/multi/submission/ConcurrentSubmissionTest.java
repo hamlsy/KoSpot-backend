@@ -1,6 +1,6 @@
 package com.kospot.multi.submission;
 
-import com.kospot.application.coordinate.ImportCoordinateUseCase;
+import com.kospot.coordinate.application.usecase.ImportCoordinateUseCase;
 import com.kospot.application.multi.game.usecase.NotifyStartGameUseCase;
 import com.kospot.application.multi.round.roadview.CheckAndCompleteRoundEarlyUseCase;
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
@@ -20,11 +20,11 @@ import com.kospot.domain.multi.room.repository.GameRoomRepository;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.repository.RoadViewGameRoundRepository;
-import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.LocationType;
-import com.kospot.domain.coordinate.entity.Sido;
-import com.kospot.domain.coordinate.repository.CoordinateRepository;
-import com.kospot.domain.coordinate.vo.Address;
+import com.kospot.coordinate.domain.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.LocationType;
+import com.kospot.coordinate.domain.entity.Sido;
+import com.kospot.coordinate.infrastructure.persistence.CoordinateRepository;
+import com.kospot.coordinate.domain.vo.Address;
 import com.kospot.domain.multi.submission.repository.RoadViewSubmissionRepository;
 import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;

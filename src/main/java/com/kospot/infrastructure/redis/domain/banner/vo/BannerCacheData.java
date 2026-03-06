@@ -1,12 +1,10 @@
 package com.kospot.infrastructure.redis.domain.banner.vo;
 
-import com.kospot.domain.banner.entity.Banner;
+import com.kospot.banner.domain.entity.Banner;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 /**
  * Redis 캐시용 Banner 데이터 VO

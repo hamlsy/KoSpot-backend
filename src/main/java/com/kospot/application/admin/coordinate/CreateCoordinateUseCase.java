@@ -1,10 +1,10 @@
 package com.kospot.application.admin.coordinate;
 
-import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.LocationType;
-import com.kospot.domain.coordinate.entity.Sido;
-import com.kospot.domain.coordinate.service.CoordinateService;
-import com.kospot.domain.coordinate.vo.Address;
+import com.kospot.coordinate.domain.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.LocationType;
+import com.kospot.coordinate.domain.entity.Sido;
+import com.kospot.coordinate.application.service.CoordinateService;
+import com.kospot.coordinate.domain.vo.Address;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;

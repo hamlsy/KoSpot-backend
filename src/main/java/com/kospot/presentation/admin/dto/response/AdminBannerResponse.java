@@ -1,6 +1,6 @@
 package com.kospot.presentation.admin.dto.response;
 
-import com.kospot.domain.banner.entity.Banner;
+import com.kospot.banner.domain.entity.Banner;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

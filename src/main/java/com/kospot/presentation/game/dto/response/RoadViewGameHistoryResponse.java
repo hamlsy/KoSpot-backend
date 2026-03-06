@@ -1,6 +1,6 @@
 package com.kospot.presentation.game.dto.response;
 
-import com.kospot.domain.coordinate.entity.Sido;
+import com.kospot.coordinate.domain.entity.Sido;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameType;

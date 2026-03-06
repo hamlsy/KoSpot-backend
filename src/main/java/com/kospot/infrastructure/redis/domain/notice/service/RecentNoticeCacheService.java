@@ -1,14 +1,13 @@
 package com.kospot.infrastructure.redis.domain.notice.service;
 
-import com.kospot.domain.notice.adaptor.NoticeAdaptor;
-import com.kospot.domain.notice.entity.Notice;
+import com.kospot.notice.application.adaptor.NoticeAdaptor;
+import com.kospot.notice.domain.entity.Notice;
 import com.kospot.infrastructure.redis.domain.notice.dao.NoticeCacheRedisRepository;
 import com.kospot.infrastructure.redis.domain.notice.vo.NoticeCacheData;
 import com.kospot.presentation.notice.dto.response.NoticeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;

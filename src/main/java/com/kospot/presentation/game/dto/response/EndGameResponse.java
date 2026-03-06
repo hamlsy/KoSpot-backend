@@ -1,6 +1,6 @@
 package com.kospot.presentation.game.dto.response;
 
-import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.Coordinate;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankLevel;

@@ -1,6 +1,6 @@
 package com.kospot.application.admin.coordinate;
 
-import com.kospot.domain.coordinate.service.CoordinateExcelService;
+import com.kospot.coordinate.application.service.CoordinateExcelService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;

@@ -1,7 +1,7 @@
 package com.kospot.application.admin.banner;
 
-import com.kospot.domain.banner.entity.Banner;
-import com.kospot.domain.banner.service.BannerService;
+import com.kospot.banner.domain.entity.Banner;
+import com.kospot.banner.application.service.BannerService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;

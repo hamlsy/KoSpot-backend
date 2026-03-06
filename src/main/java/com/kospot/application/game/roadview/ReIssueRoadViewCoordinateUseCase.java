@@ -1,9 +1,9 @@
 package com.kospot.application.game.roadview;
 
-import com.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
-import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.Sido;
-import com.kospot.domain.coordinate.service.CoordinateService;
+import com.kospot.coordinate.application.adaptor.CoordinateAdaptor;
+import com.kospot.coordinate.domain.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.Sido;
+import com.kospot.coordinate.application.service.CoordinateService;
 import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.service.AESService;

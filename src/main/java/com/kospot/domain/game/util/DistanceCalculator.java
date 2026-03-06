@@ -1,6 +1,6 @@
 package com.kospot.domain.game.util;
 
-import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.Coordinate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

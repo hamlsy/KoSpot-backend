@@ -1,7 +1,7 @@
 package com.kospot.domain.game.entity;
 
-import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.Sido;
+import com.kospot.coordinate.domain.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.Sido;
 import com.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameStatus;

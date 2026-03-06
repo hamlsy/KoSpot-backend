@@ -1,6 +1,6 @@
 package com.kospot.multi.game;
 
-import com.kospot.application.coordinate.ImportCoordinateUseCase;
+import com.kospot.coordinate.application.usecase.ImportCoordinateUseCase;
 import com.kospot.application.multi.game.usecase.NotifyStartGameUseCase;
 import com.kospot.application.multi.game.usecase.FinishMultiRoadViewGameUseCase;
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;

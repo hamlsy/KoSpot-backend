@@ -1,7 +1,7 @@
 package com.kospot.domain.game.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.Coordinate;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameStatus;
 import com.kospot.domain.game.vo.GameType;

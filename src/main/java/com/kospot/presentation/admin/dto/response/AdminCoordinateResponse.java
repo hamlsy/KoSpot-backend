@@ -1,7 +1,7 @@
 package com.kospot.presentation.admin.dto.response;
 
-import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.LocationType;
+import com.kospot.coordinate.domain.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.LocationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

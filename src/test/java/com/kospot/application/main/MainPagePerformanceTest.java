@@ -1,7 +1,7 @@
 package com.kospot.application.main;
 
-import com.kospot.domain.banner.entity.Banner;
-import com.kospot.domain.banner.repository.BannerRepository;
+import com.kospot.banner.domain.entity.Banner;
+import com.kospot.banner.infrastructure.persistence.BannerRepository;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.image.vo.ImageType;
@@ -11,8 +11,8 @@ import com.kospot.domain.item.vo.ItemType;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.member.domain.vo.Role;
-import com.kospot.domain.notice.entity.Notice;
-import com.kospot.domain.notice.repository.NoticeRepository;
+import com.kospot.notice.domain.entity.Notice;
+import com.kospot.notice.infrastructure.persistence.NoticeRepository;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.domain.statistic.repository.MemberStatisticRepository;
 import com.kospot.presentation.main.dto.response.MainPageResponse;

@@ -1,10 +1,10 @@
 package com.kospot.infrastructure.redis.domain.banner.service;
 
-import com.kospot.domain.banner.adaptor.BannerAdaptor;
-import com.kospot.domain.banner.entity.Banner;
+import com.kospot.banner.application.adaptor.BannerAdaptor;
+import com.kospot.banner.domain.entity.Banner;
 import com.kospot.infrastructure.redis.domain.banner.dao.BannerCacheRedisRepository;
 import com.kospot.infrastructure.redis.domain.banner.vo.BannerCacheData;
-import com.kospot.presentation.banner.dto.response.BannerResponse;
+import com.kospot.banner.presentation.response.BannerResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

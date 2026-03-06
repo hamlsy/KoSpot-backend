@@ -1,12 +1,11 @@
 package com.kospot.infrastructure.redis.domain.notice.vo;
 
-import com.kospot.domain.notice.entity.Notice;
+import com.kospot.notice.domain.entity.Notice;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**

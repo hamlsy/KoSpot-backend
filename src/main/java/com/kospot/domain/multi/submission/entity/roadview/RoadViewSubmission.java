@@ -1,12 +1,11 @@
 package com.kospot.domain.multi.submission.entity.roadview;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.Coordinate;
 import com.kospot.domain.game.util.DistanceCalculator;
 import com.kospot.domain.game.util.ScoreCalculator;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

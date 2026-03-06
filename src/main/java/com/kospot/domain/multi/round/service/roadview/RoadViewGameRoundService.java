@@ -1,11 +1,11 @@
 package com.kospot.domain.multi.round.service.roadview;
 
-import com.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
-import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.coordinate.application.adaptor.CoordinateAdaptor;
+import com.kospot.coordinate.domain.entity.Coordinate;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.round.repository.RoadViewGameRoundRepository;
-import com.kospot.domain.coordinate.service.CoordinateService;
+import com.kospot.coordinate.application.service.CoordinateService;
 import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;

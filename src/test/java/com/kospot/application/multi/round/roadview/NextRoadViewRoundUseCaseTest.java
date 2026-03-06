@@ -2,7 +2,7 @@ package com.kospot.application.multi.round.roadview;
 
 import com.kospot.application.multi.flow.MultiGameFlowScheduler;
 import com.kospot.application.multi.game.service.CancelMultiGameService;
-import com.kospot.domain.coordinate.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.Coordinate;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.infrastructure.redis.domain.multi.game.service.MultiGameRedisService;

@@ -1,8 +1,8 @@
 package com.kospot.domain.game.service;
 
-import com.kospot.domain.coordinate.adaptor.CoordinateAdaptor;
-import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.entity.Sido;
+import com.kospot.coordinate.application.adaptor.CoordinateAdaptor;
+import com.kospot.coordinate.domain.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.Sido;
 import com.kospot.domain.game.util.DistanceCalculator;
 import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.domain.game.vo.GameType;

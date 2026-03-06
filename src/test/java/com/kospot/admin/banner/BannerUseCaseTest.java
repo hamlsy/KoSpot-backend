@@ -1,8 +1,8 @@
 package com.kospot.admin.banner;
 
 import com.kospot.application.admin.banner.*;
-import com.kospot.domain.banner.entity.Banner;
-import com.kospot.domain.banner.repository.BannerRepository;
+import com.kospot.banner.domain.entity.Banner;
+import com.kospot.banner.infrastructure.persistence.BannerRepository;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.image.vo.ImageType;

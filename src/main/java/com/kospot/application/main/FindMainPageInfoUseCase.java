@@ -8,7 +8,7 @@ import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.banner.service.ActiveBannerCacheService;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.infrastructure.redis.domain.notice.service.RecentNoticeCacheService;
-import com.kospot.presentation.banner.dto.response.BannerResponse;
+import com.kospot.banner.presentation.response.BannerResponse;
 import com.kospot.presentation.main.dto.response.MainPageResponse;
 import com.kospot.presentation.notice.dto.response.NoticeResponse;
 import lombok.RequiredArgsConstructor;
