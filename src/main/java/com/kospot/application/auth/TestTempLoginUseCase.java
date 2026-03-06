@@ -3,7 +3,7 @@ package com.kospot.application.auth;
 import com.kospot.member.application.usecase.RegisterSocialMemberUseCase;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
-import com.kospot.domain.point.service.PointService;
+import com.kospot.point.application.service.PointService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.service.TokenService;

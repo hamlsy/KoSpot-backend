@@ -2,7 +2,7 @@ package com.kospot.infrastructure.redis.domain.mvp.service;
 
 import com.kospot.infrastructure.redis.common.constants.RedisKeyConstants;
 import com.kospot.infrastructure.redis.domain.mvp.dao.DailyMvpCacheRedisRepository;
-import com.kospot.presentation.mvp.dto.response.DailyMvpResponse;
+import com.kospot.mvp.presentation.response.DailyMvpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -10,7 +10,7 @@ import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisA
 import com.kospot.infrastructure.redis.domain.notice.service.RecentNoticeCacheService;
 import com.kospot.banner.presentation.response.BannerResponse;
 import com.kospot.presentation.main.dto.response.MainPageResponse;
-import com.kospot.presentation.notice.dto.response.NoticeResponse;
+import com.kospot.notice.presentation.dto.response.NoticeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 

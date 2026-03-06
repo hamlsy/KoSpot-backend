@@ -2,12 +2,12 @@ package com.kospot.mvp.service;
 
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.domain.mvp.adaptor.DailyMvpAdaptor;
-import com.kospot.domain.mvp.entity.DailyMvp;
-import com.kospot.domain.mvp.service.DailyMvpRewardService;
-import com.kospot.domain.point.service.PointHistoryService;
-import com.kospot.domain.point.service.PointService;
-import com.kospot.domain.point.vo.PointHistoryType;
+import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
+import com.kospot.mvp.domain.entity.DailyMvp;
+import com.kospot.mvp.application.service.DailyMvpRewardService;
+import com.kospot.point.application.service.PointHistoryService;
+import com.kospot.point.application.service.PointService;
+import com.kospot.point.domain.vo.PointHistoryType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package com.kospot.presentation.multi.game.dto.response;
 
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.point.util.PointCalculator;
+import com.kospot.point.common.utils.PointCalculator;
 import com.kospot.presentation.multi.gamePlayer.dto.response.GamePlayerResponse;
 import lombok.Builder;
 import lombok.Getter;

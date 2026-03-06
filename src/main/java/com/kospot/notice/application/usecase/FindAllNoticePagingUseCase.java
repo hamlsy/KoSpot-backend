@@ -3,7 +3,7 @@ package com.kospot.notice.application.usecase;
 import com.kospot.notice.application.adaptor.NoticeAdaptor;
 import com.kospot.notice.domain.entity.Notice;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.presentation.notice.dto.response.NoticeResponse;
+import com.kospot.notice.presentation.dto.response.NoticeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

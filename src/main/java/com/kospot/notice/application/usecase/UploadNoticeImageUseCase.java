@@ -5,7 +5,7 @@ import com.kospot.domain.image.service.ImageService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.presentation.notice.dto.response.NoticeResponse;
+import com.kospot.notice.presentation.dto.response.NoticeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;

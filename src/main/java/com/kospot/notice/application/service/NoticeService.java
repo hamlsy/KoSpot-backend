@@ -2,7 +2,7 @@ package com.kospot.notice.application.service;
 
 import com.kospot.notice.domain.entity.Notice;
 import com.kospot.notice.infrastructure.persistence.NoticeRepository;
-import com.kospot.presentation.notice.dto.request.NoticeRequest;
+import com.kospot.notice.presentation.dto.request.NoticeRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

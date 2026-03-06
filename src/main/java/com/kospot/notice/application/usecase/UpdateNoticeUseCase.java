@@ -7,7 +7,7 @@ import com.kospot.notice.domain.entity.Notice;
 import com.kospot.notice.application.service.NoticeService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.notice.service.RecentNoticeCacheService;
-import com.kospot.presentation.notice.dto.request.NoticeRequest;
+import com.kospot.notice.presentation.dto.request.NoticeRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;

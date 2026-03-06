@@ -1,12 +1,12 @@
 package com.kospot.point.usecase;
 
-import com.kospot.application.point.FindAllPointHistoryPagingUseCase;
+import com.kospot.point.application.usecase.FindAllPointHistoryPagingUseCase;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
-import com.kospot.domain.point.entity.PointHistory;
-import com.kospot.domain.point.vo.PointHistoryType;
-import com.kospot.domain.point.repository.PointHistoryRepository;
-import com.kospot.presentation.point.dto.response.PointHistoryResponse;
+import com.kospot.point.domain.entity.PointHistory;
+import com.kospot.point.domain.vo.PointHistoryType;
+import com.kospot.point.infrastructure.persistence.PointHistoryRepository;
+import com.kospot.point.presentation.response.PointHistoryResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
