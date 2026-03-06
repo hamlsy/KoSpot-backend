@@ -5,7 +5,7 @@ import com.kospot.application.multi.game.usecase.NotifyStartGameUseCase;
 import com.kospot.application.multi.round.roadview.CheckAndCompleteRoundEarlyUseCase;
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
 import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.image.domain.entity.Image;
 import com.kospot.image.infrastructure.persistence.ImageRepository;
 import com.kospot.member.domain.entity.Member;

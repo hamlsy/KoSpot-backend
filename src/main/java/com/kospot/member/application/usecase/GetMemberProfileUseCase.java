@@ -1,6 +1,6 @@
 package com.kospot.member.application.usecase;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.gamerank.application.adaptor.GameRankAdaptor;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.statistic.application.adaptor.MemberStatisticAdaptor;

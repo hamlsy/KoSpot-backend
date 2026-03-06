@@ -1,7 +1,7 @@
 package com.kospot.statistic.application.service;
 
-import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.game.vo.GameType;
+import com.kospot.game.domain.vo.GameMode;
+import com.kospot.game.domain.vo.GameType;
 import com.kospot.statistic.application.adaptor.MemberStatisticAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.statistic.domain.entity.MemberStatistic;

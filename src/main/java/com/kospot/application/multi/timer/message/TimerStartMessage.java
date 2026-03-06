@@ -1,6 +1,5 @@
 package com.kospot.application.multi.timer.message;
 
-import com.kospot.domain.game.vo.GameMode;
 import lombok.*;
 
 @Data

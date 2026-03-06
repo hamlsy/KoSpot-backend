@@ -1,8 +1,8 @@
 package com.kospot.mvp.application.service;
 
-import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
-import com.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.application.adaptor.RoadViewGameAdaptor;
+import com.kospot.game.domain.entity.RoadViewGame;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.gamerank.application.adaptor.GameRankAdaptor;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;

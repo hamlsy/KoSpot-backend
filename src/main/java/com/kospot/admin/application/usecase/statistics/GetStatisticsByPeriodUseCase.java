@@ -1,6 +1,6 @@
 package com.kospot.admin.application.usecase.statistics;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.statistic.application.adaptor.GameModeStatisticAdaptor;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.admin.presentation.dto.response.GameModeStatisticSummary;

@@ -1,7 +1,7 @@
 package com.kospot.domain.multi.round.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.common.exception.object.domain.GameRoundHandler;
 import com.kospot.common.exception.payload.code.ErrorStatus;
 import jakarta.persistence.MappedSuperclass;

@@ -1,6 +1,6 @@
 package com.kospot.statistic.application.adaptor;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 
 import com.kospot.statistic.domain.entity.GameModeStatistic;
 import com.kospot.statistic.infrastructure.persistence.GameModeStatisticRepository;

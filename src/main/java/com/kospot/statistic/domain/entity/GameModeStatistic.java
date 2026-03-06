@@ -1,7 +1,7 @@
 package com.kospot.statistic.domain.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.statistic.domain.vo.GameTypeStatistic;
 import com.kospot.statistic.domain.vo.MultiGameStatistic;
 import jakarta.persistence.*;

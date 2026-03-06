@@ -1,6 +1,6 @@
 package com.kospot.image.presentation.controller;
 
-import com.kospot.application.image.UpdateImageUseCase;
+import com.kospot.image.application.usecase.UpdateImageUseCase;
 import com.kospot.image.application.service.ImageService;
 import com.kospot.common.exception.payload.code.SuccessStatus;
 import com.kospot.common.exception.payload.dto.ApiResponseDto;

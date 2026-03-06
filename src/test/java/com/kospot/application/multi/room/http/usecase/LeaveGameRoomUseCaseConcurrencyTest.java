@@ -1,6 +1,6 @@
 package com.kospot.application.multi.room.http.usecase;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.image.domain.entity.Image;
 import com.kospot.image.infrastructure.persistence.ImageRepository;
 import com.kospot.member.domain.entity.Member;

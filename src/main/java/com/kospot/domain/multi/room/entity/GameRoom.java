@@ -1,7 +1,7 @@
 package com.kospot.domain.multi.room.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;

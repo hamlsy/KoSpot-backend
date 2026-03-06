@@ -1,6 +1,6 @@
 package com.kospot.domain.multi.submission.event;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

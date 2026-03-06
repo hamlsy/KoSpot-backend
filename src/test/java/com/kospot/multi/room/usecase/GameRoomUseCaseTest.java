@@ -1,7 +1,7 @@
 package com.kospot.multi.room.usecase;
 
 import com.kospot.application.multi.room.http.usecase.*;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.domain.vo.Role;

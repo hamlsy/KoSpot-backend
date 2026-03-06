@@ -1,6 +1,6 @@
 package com.kospot.domain.multi.round.entity;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.domain.multi.game.entity.MultiPhotoGame;
 import com.kospot.domain.multi.submission.entity.photo.PhotoPlayerSubmission;
 import jakarta.persistence.*;

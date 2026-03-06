@@ -1,6 +1,6 @@
 package com.kospot.presentation.multi.game.mapper;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.game.factory.GameCreationResult;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;

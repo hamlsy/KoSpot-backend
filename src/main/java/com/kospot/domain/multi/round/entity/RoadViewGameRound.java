@@ -1,7 +1,7 @@
 package com.kospot.domain.multi.round.entity;
 
 import com.kospot.coordinate.domain.entity.Coordinate;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import jakarta.persistence.*;
 import lombok.*;

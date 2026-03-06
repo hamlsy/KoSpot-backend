@@ -1,6 +1,6 @@
 package com.kospot.statistic.infrastructure.persistence;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 
 import com.kospot.statistic.domain.entity.GameModeStatistic;
 import org.springframework.data.domain.Page;

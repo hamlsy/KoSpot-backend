@@ -11,7 +11,7 @@ import com.kospot.domain.friend.repository.FriendSummaryQueryModel;
 import com.kospot.domain.friend.repository.FriendshipRepository;
 import com.kospot.domain.friend.vo.FriendRequestStatus;
 import com.kospot.domain.friend.vo.FriendshipStatus;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.common.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

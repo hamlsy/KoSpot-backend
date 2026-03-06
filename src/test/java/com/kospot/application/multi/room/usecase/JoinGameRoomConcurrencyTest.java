@@ -1,7 +1,7 @@
 package com.kospot.application.multi.room.usecase;
 
 import com.kospot.application.multi.room.http.usecase.JoinGameRoomUseCase;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.member.domain.vo.Role;

@@ -2,7 +2,7 @@ package com.kospot.domain.friend.repository;
 
 import com.kospot.domain.friend.entity.Friendship;
 import com.kospot.domain.friend.vo.FriendshipStatus;
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,6 +1,6 @@
 package com.kospot.application.multi.game.strategy;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.domain.multi.game.factory.GameCreationResult;
 import com.kospot.domain.multi.game.factory.MultiRoadViewGameFactory;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;

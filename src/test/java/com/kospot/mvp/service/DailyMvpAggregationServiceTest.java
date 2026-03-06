@@ -1,7 +1,8 @@
 package com.kospot.mvp.service;
 
-import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
-import com.kospot.domain.game.entity.RoadViewGame;
+import com.kospot.game.application.adaptor.RoadViewGameAdaptor;
+import com.kospot.game.domain.entity.RoadViewGame;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.gamerank.application.adaptor.GameRankAdaptor;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.gamerank.domain.vo.RankLevel;
@@ -99,7 +100,7 @@ class DailyMvpAggregationServiceTest {
 
         when(roadViewGameAdaptor.queryDailyMvpCandidate(any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(game));
-        when(gameRankAdaptor.queryByMemberAndGameMode(member, com.kospot.domain.game.vo.GameMode.ROADVIEW))
+        when(gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.ROADVIEW))
                 .thenReturn(gameRank);
         when(dailyMvpAdaptor.queryByDate(date)).thenReturn(Optional.empty());
         when(dailyMvpAdaptor.save(any(DailyMvp.class))).thenReturn(saved);

@@ -1,6 +1,6 @@
 package com.kospot.gamerank.infrastructure.persistence;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.member.domain.entity.Member;

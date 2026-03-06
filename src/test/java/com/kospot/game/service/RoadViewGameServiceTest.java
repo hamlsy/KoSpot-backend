@@ -1,15 +1,15 @@
 package com.kospot.game.service;
 
-import com.kospot.application.game.roadview.practice.usecase.EndRoadViewPracticeUseCase;
+import com.kospot.game.application.usecase.practice.usecase.EndRoadViewPracticeUseCase;
 import com.kospot.application.game.roadview.rank.usecase.EndRoadViewRankUseCase;
-import com.kospot.presentation.game.dto.request.EndGameRequest;
-import com.kospot.presentation.game.dto.response.EndGameResponse;
-import com.kospot.domain.game.vo.GameType;
-import com.kospot.domain.game.vo.GameStatus;
-import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.domain.game.repository.RoadViewGameRepository;
-import com.kospot.domain.game.service.RoadViewGameService;
+import com.kospot.game.presentation.dto.request.EndGameRequest;
+import com.kospot.game.presentation.dto.response.EndGameResponse;
+import com.kospot.game.domain.vo.GameType;
+import com.kospot.game.domain.vo.GameStatus;
+import com.kospot.game.domain.vo.GameMode;
+import com.kospot.game.domain.entity.RoadViewGame;
+import com.kospot.game.infrastructure.persistence.RoadViewGameRepository;
+import com.kospot.game.application.service.RoadViewGameService;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.gamerank.infrastructure.persistence.GameRankRepository;

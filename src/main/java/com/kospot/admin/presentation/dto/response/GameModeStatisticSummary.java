@@ -1,6 +1,6 @@
 package com.kospot.admin.presentation.dto.response;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package com.kospot.admin.presentation.dto.response;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.domain.vo.Role;
 import com.kospot.statistic.domain.entity.GameModeStatistic;

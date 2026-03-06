@@ -1,6 +1,6 @@
 package com.kospot.gamerank.application.adaptor;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.gamerank.infrastructure.persistence.GameRankRepository;
 import com.kospot.gamerank.domain.vo.RankTier;

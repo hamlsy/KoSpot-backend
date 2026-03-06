@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.websocket.domain.multi.timer.vo;
 
-import com.kospot.domain.game.vo.GameMode;
+import com.kospot.game.domain.vo.GameMode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
