@@ -2,8 +2,8 @@ package com.kospot.application.multi.room.http.usecase;
 
 import com.kospot.application.multi.game.service.CancelMultiGameService;
 import com.kospot.application.multi.room.vo.LeaveDecision;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;

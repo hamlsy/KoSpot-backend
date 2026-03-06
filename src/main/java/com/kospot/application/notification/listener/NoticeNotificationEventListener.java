@@ -1,7 +1,7 @@
 package com.kospot.application.notification.listener;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.notice.event.NoticeCreatedEvent;
 import com.kospot.domain.notification.model.NotificationCreateCommand;
 import com.kospot.domain.notification.port.NotificationStore;

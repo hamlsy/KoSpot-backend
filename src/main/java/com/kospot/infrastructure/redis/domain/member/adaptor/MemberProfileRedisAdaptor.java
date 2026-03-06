@@ -1,7 +1,7 @@
 package com.kospot.infrastructure.redis.domain.member.adaptor;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.redis.domain.member.dao.MemberProfileRedisRepository;
 import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;
 import lombok.RequiredArgsConstructor;

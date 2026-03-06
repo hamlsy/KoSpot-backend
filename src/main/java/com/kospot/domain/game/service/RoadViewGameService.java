@@ -8,7 +8,7 @@ import com.kospot.presentation.game.dto.request.EndGameRequest;
 import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.repository.RoadViewGameRepository;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

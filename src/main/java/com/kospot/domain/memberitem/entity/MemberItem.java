@@ -2,7 +2,7 @@ package com.kospot.domain.memberitem.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.item.entity.Item;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

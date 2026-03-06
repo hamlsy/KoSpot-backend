@@ -5,7 +5,7 @@ import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankLevel;
 import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 

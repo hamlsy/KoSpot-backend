@@ -1,7 +1,7 @@
 package com.kospot.application.multi.game.usecase;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.service.GameRoomService;

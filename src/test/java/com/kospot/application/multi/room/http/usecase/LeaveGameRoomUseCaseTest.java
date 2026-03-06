@@ -1,8 +1,8 @@
 package com.kospot.application.multi.room.http.usecase;
 
 import com.kospot.application.multi.room.vo.LeaveDecision;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.event.GameRoomLeaveEvent;

@@ -3,7 +3,7 @@ package com.kospot.domain.gamerank.repository;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

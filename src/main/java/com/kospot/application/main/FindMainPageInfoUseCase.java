@@ -1,13 +1,12 @@
 package com.kospot.application.main;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.banner.service.ActiveBannerCacheService;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
-import com.kospot.infrastructure.redis.domain.member.dao.MemberProfileRedisRepository;
 import com.kospot.infrastructure.redis.domain.notice.service.RecentNoticeCacheService;
 import com.kospot.presentation.banner.dto.response.BannerResponse;
 import com.kospot.presentation.main.dto.response.MainPageResponse;

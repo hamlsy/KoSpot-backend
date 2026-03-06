@@ -1,7 +1,5 @@
 package com.kospot.domain.multi.room.event;
 
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.multi.room.entity.GameRoom;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -6,7 +6,7 @@ import com.kospot.domain.game.event.RoadViewRankEvent;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.gamerank.entity.GameRank;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.statistic.service.MemberStatisticService;
 import com.kospot.infrastructure.exception.object.domain.EventHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;

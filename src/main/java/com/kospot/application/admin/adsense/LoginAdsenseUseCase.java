@@ -1,23 +1,17 @@
 package com.kospot.application.admin.adsense;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.security.vo.CustomUserDetails;
-import io.netty.handler.codec.http.cookie.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.util.List;
 
 @Slf4j

@@ -1,8 +1,8 @@
 package com.kospot.point.usecase;
 
 import com.kospot.application.point.FindAllPointHistoryPagingUseCase;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.repository.MemberRepository;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.domain.point.entity.PointHistory;
 import com.kospot.domain.point.vo.PointHistoryType;
 import com.kospot.domain.point.repository.PointHistoryRepository;

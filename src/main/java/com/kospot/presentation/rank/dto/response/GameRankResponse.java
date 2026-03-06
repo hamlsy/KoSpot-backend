@@ -3,12 +3,11 @@ package com.kospot.presentation.rank.dto.response;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankLevel;
 import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

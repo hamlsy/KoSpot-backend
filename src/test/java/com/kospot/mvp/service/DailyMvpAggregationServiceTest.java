@@ -6,7 +6,7 @@ import com.kospot.domain.gamerank.adaptor.GameRankAdaptor;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankLevel;
 import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.mvp.adaptor.DailyMvpAdaptor;
 import com.kospot.domain.mvp.entity.DailyMvp;
 import com.kospot.domain.mvp.service.DailyMvpAggregationService;

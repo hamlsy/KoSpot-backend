@@ -1,7 +1,7 @@
 package com.kospot.domain.memberitem.repository;
 
 import com.kospot.domain.item.vo.ItemType;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.memberitem.entity.MemberItem;
 import com.kospot.presentation.memberitem.dto.response.MemberItemResponse;
 import org.springframework.data.jpa.repository.JpaRepository;

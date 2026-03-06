@@ -1,8 +1,8 @@
 package com.kospot.application.auth;
 
-import com.kospot.application.member.RegisterSocialMemberUseCase;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.repository.MemberRepository;
+import com.kospot.member.application.usecase.RegisterSocialMemberUseCase;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.domain.point.service.PointService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.security.dto.JwtToken;

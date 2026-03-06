@@ -4,7 +4,7 @@ import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.domain.game.vo.GameStatus;
 import com.kospot.domain.game.vo.GameType;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.exception.object.domain.GameHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;

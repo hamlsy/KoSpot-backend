@@ -1,8 +1,8 @@
 package com.kospot.application.item;
 
 import com.kospot.domain.item.service.ItemService;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.memberitem.service.MemberItemService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import lombok.RequiredArgsConstructor;

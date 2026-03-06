@@ -3,14 +3,13 @@ package com.kospot.infrastructure.websocket.handler;
 import com.kospot.application.lobby.http.usecase.JoinGlobalLobbyUseCase;
 import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.application.multi.room.http.usecase.LeaveGameRoomUseCase;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.infrastructure.websocket.context.PendingLeaveContext;
 import com.kospot.infrastructure.websocket.domain.friend.constants.FriendChatChannelConstants;
 import com.kospot.infrastructure.websocket.domain.friend.service.FriendChatSubscriptionCacheService;
 import com.kospot.infrastructure.websocket.session.service.WebSocketSessionService;
@@ -25,14 +24,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import static com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants.PREFIX_CHAT;
-import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
 
 @Slf4j
 @Component

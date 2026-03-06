@@ -1,6 +1,6 @@
 package com.kospot.domain.point.repository;
 
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.point.entity.PointHistory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

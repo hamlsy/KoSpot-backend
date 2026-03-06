@@ -3,7 +3,7 @@ package com.kospot.domain.statistic.service;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.domain.statistic.repository.MemberStatisticRepository;
 import lombok.RequiredArgsConstructor;

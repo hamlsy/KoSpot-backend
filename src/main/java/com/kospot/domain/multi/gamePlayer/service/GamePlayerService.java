@@ -1,7 +1,7 @@
 package com.kospot.domain.multi.gamePlayer.service;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.gamePlayer.repository.GamePlayerRepository;

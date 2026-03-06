@@ -1,6 +1,6 @@
 package com.kospot.domain.multi.gamePlayer.entity;
 
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.multi.game.entity.MultiPhotoGame;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.gamePlayer.vo.GamePlayerStatus;

@@ -1,6 +1,6 @@
 package com.kospot.domain.statistic.repository;
 
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

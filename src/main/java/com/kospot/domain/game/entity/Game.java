@@ -5,7 +5,7 @@ import com.kospot.domain.coordinate.entity.Coordinate;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameStatus;
 import com.kospot.domain.game.vo.GameType;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.exception.object.domain.GameHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;

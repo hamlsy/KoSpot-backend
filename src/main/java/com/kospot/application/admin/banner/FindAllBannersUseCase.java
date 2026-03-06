@@ -1,8 +1,8 @@
 package com.kospot.application.admin.banner;
 
 import com.kospot.domain.banner.adaptor.BannerAdaptor;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.admin.dto.response.AdminBannerResponse;
 import lombok.RequiredArgsConstructor;

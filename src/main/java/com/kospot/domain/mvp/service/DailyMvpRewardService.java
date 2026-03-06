@@ -1,7 +1,7 @@
 package com.kospot.domain.mvp.service;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.mvp.adaptor.DailyMvpAdaptor;
 import com.kospot.domain.mvp.entity.DailyMvp;
 import com.kospot.domain.mvp.event.MvpRewardGrantedEvent;

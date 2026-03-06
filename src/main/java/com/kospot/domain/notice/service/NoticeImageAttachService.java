@@ -4,7 +4,6 @@ import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
 import com.kospot.domain.image.vo.ImageType;
 import com.kospot.domain.item.vo.ImageStatus;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.notice.entity.Notice;
 import com.kospot.domain.notice.utils.MarkdownImageExtractor;
 import com.kospot.infrastructure.s3.resolver.S3KeyResolver;

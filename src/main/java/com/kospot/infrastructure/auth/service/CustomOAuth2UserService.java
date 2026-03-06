@@ -1,10 +1,10 @@
 package com.kospot.infrastructure.auth.service;
 
-import com.kospot.application.member.RegisterSocialMemberUseCase;
+import com.kospot.member.application.usecase.RegisterSocialMemberUseCase;
 import com.kospot.domain.gamerank.service.GameRankService;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.statistic.service.MemberStatisticService;
-import com.kospot.domain.member.repository.MemberRepository;
+import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.infrastructure.auth.domain.CustomOAuthUser;
 import com.kospot.infrastructure.auth.domain.OAuth2Attributes;
 import com.kospot.infrastructure.auth.vo.SocialType;

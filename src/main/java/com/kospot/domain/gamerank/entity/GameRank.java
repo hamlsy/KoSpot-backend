@@ -4,7 +4,7 @@ import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.gamerank.vo.RankLevel;
 import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

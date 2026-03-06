@@ -1,8 +1,8 @@
 package com.kospot.application.image;
 
 import com.kospot.domain.image.service.ImageService;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.image.dto.request.ImageRequest;
 import lombok.RequiredArgsConstructor;

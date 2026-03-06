@@ -1,6 +1,6 @@
 package com.kospot.domain.point.service;
 
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.presentation.point.dto.response.PointHistoryResponse;
 import com.kospot.domain.point.entity.PointHistory;

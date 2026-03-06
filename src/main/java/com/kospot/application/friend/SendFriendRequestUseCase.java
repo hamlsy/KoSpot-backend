@@ -2,14 +2,13 @@ package com.kospot.application.friend;
 
 import com.kospot.domain.friend.adaptor.FriendAdaptor;
 import com.kospot.domain.friend.entity.FriendRequest;
-import com.kospot.domain.friend.entity.Friendship;
 import com.kospot.domain.friend.exception.FriendErrorStatus;
 import com.kospot.domain.friend.exception.FriendHandler;
 import com.kospot.domain.friend.service.FriendPairService;
 import com.kospot.domain.friend.service.FriendService;
 import com.kospot.domain.friend.vo.FriendshipStatus;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.notification.event.FriendRequestCreatedEvent;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.friend.service.FriendCacheRedisService;

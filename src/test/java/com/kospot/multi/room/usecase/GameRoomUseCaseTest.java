@@ -2,10 +2,10 @@ package com.kospot.multi.room.usecase;
 
 import com.kospot.application.multi.room.http.usecase.*;
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.vo.Role;
-import com.kospot.domain.member.repository.MemberRepository;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.member.domain.vo.Role;
+import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;

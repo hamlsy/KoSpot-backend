@@ -1,6 +1,6 @@
 package com.kospot.application.multi.room.vo;
 
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import lombok.Builder;

@@ -1,8 +1,8 @@
 package com.kospot.application.multi.submission.http.usecase;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
 import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;

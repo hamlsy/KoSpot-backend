@@ -1,7 +1,6 @@
 package com.kospot.infrastructure.security.service;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.infrastructure.auth.domain.CustomOAuthUser;
 import com.kospot.infrastructure.exception.object.general.GeneralException;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;

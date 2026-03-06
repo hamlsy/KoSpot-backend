@@ -3,7 +3,7 @@ package com.kospot.domain.game.repository;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.game.vo.GameStatus;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

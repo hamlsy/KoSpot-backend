@@ -1,6 +1,6 @@
 package com.kospot.presentation.main.dto.response;
 
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.presentation.banner.dto.response.BannerResponse;
 import com.kospot.presentation.notice.dto.response.NoticeResponse;

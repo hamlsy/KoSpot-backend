@@ -1,7 +1,7 @@
 package com.kospot.domain.point.adaptor;
 
 
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.point.entity.PointHistory;
 import com.kospot.domain.point.repository.PointHistoryRepository;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;

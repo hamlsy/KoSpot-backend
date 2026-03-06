@@ -1,8 +1,8 @@
 package com.kospot.application.item;
 
 import com.kospot.domain.item.adaptor.ItemAdaptor;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.domain.item.vo.ItemType;
 import com.kospot.infrastructure.annotation.usecase.UseCase;

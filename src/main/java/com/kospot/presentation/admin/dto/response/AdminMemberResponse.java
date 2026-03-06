@@ -1,8 +1,8 @@
 package com.kospot.presentation.admin.dto.response;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.vo.Role;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.member.domain.vo.Role;
 import com.kospot.domain.statistic.entity.GameModeStatistic;
 import com.kospot.domain.statistic.entity.MemberStatistic;
 import com.kospot.domain.statistic.vo.PlayStreak;

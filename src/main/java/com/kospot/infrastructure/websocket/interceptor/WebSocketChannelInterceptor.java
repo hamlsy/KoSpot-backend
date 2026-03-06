@@ -1,19 +1,10 @@
 package com.kospot.infrastructure.websocket.interceptor;
 
-import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
-import com.kospot.application.multi.room.http.usecase.LeaveGameRoomUseCase;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
-import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
-import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.infrastructure.websocket.context.PendingLeaveContext;
 import com.kospot.infrastructure.websocket.domain.friend.constants.FriendChatChannelConstants;
 import com.kospot.infrastructure.websocket.domain.friend.service.FriendChatSubscriptionCacheService;
 import com.kospot.infrastructure.websocket.session.service.WebSocketSessionService;
@@ -32,8 +23,6 @@ import org.springframework.lang.NonNull;
 import java.time.Duration;
 import java.util.UUID;
 
-import static com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants.PREFIX_CHAT;
-import static com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
 import static com.kospot.infrastructure.websocket.domain.notification.constants.NotificationChannelConstants.PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL;
 import static com.kospot.infrastructure.websocket.domain.notification.constants.NotificationChannelConstants.PREFIX_NOTIFICATION;
 

@@ -1,6 +1,6 @@
 package com.kospot.presentation.multi.room.dto.response;
 
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
 import lombok.*;

@@ -1,13 +1,12 @@
 package com.kospot.infrastructure.adsense.aop;
 
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.vo.Role;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.member.domain.vo.Role;
 import com.kospot.infrastructure.annotation.adsense.BotSuccess;
 import com.kospot.infrastructure.exception.payload.code.Reason;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
-import com.kospot.infrastructure.security.dto.JwtToken;
 import com.kospot.infrastructure.security.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +14,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
 

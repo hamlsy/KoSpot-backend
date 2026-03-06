@@ -1,7 +1,7 @@
 package com.kospot.domain.point.service;
 
 import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 
 import com.kospot.domain.point.util.PointCalculator;
 import lombok.RequiredArgsConstructor;

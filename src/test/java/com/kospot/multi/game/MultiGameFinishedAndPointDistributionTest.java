@@ -8,9 +8,9 @@ import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayer
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.image.entity.Image;
 import com.kospot.domain.image.repository.ImageRepository;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.repository.MemberRepository;
-import com.kospot.domain.member.vo.Role;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.member.infrastructure.persistence.MemberRepository;
+import com.kospot.member.domain.vo.Role;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.game.repository.MultiRoadViewGameRepository;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;

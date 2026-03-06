@@ -3,7 +3,7 @@ package com.kospot.domain.item.adaptor;
 import com.kospot.domain.item.entity.Item;
 import com.kospot.domain.item.vo.ItemType;
 import com.kospot.domain.item.repository.ItemRepository;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.exception.object.domain.ItemHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;

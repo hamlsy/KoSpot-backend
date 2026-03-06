@@ -1,8 +1,8 @@
 package com.kospot.application.coordinate.report;
 
 import com.kospot.domain.coordinate.report.service.CoordinateReportService;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.coordinate.report.dto.request.CoordinateReportRequest;
 import lombok.RequiredArgsConstructor;
