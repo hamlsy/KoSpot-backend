@@ -3,8 +3,9 @@ package com.kospot.multi.room.application.websocket.usecase;
 import com.kospot.multi.player.domain.vo.GameTeam;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.common.websocket.domain.multi.room.service.GameRoomNotificationService;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
+import com.kospot.multi.room.infrastructure.websocket.service.GameRoomNotificationService;
+
 import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

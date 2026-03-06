@@ -1,9 +1,10 @@
 package com.kospot.multi.room.application.usecase;
 
-import com.kospot.multi.room.adaptor.GameRoomAdaptor;
+import com.kospot.multi.room.application.adaptor.GameRoomAdaptor;
 import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.common.annotation.usecase.UseCase;
-import com.kospot.common.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
+
+import com.kospot.multi.room.infrastructure.redis.adaptor.GameRoomRedisAdaptor;
 import com.kospot.multi.room.presentation.dto.response.FindGameRoomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

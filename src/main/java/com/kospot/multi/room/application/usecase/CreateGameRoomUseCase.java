@@ -8,8 +8,9 @@ import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.member.infrastructure.redis.service.MemberProfileRedisService;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.common.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
+
+import com.kospot.multi.lobby.infrastructure.websocket.service.LobbyRoomNotificationService;
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
 import com.kospot.multi.room.presentation.dto.response.GameRoomResponse;
 import lombok.RequiredArgsConstructor;

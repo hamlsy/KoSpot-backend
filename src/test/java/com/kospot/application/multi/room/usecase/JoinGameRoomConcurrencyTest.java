@@ -10,8 +10,9 @@ import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.infrastructure.persistence.GameRoomRepository;
 import com.kospot.multi.room.domain.vo.GameRoomStatus;
 import com.kospot.common.exception.object.domain.GameRoomHandler;
-import com.kospot.common.redis.domain.multi.room.dao.GameRoomRedisRepository;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+
+import com.kospot.multi.room.infrastructure.redis.dao.GameRoomRedisRepository;
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -105,7 +106,7 @@ class JoinGameRoomConcurrencyTest {
             executorService.execute(() -> {
                 try {
                     Member member = testMembers.get(memberIndex);
-                    joinGameRoomUseCase.executeV1(member, testGameRoom.getId(), joinRequest);
+                    joinGameRoomUseCase.executeV1(member.getId(), testGameRoom.getId(), joinRequest);
                     successCount.incrementAndGet();
                     log.debug("✅ 성공 - Member: {}", member.getNickname());
                 } catch (GameRoomHandler e) {

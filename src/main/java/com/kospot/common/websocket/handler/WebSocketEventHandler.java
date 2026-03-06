@@ -1,18 +1,19 @@
 package com.kospot.common.websocket.handler;
 
-import com.kospot.application.lobby.http.usecase.JoinGlobalLobbyUseCase;
-import com.kospot.application.lobby.http.usecase.LeaveGlobalLobbyUseCase;
+import com.kospot.multi.lobby.application.usecase.JoinGlobalLobbyUseCase;
+import com.kospot.multi.lobby.application.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.multi.room.application.usecase.LeaveGameRoomUseCase;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.common.exception.object.domain.WebSocketHandler;
 import com.kospot.common.exception.payload.code.ErrorStatus;
 import com.kospot.common.redis.common.service.SessionContextRedisService;
-import com.kospot.common.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
+
 import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.common.websocket.domain.friend.constants.FriendChatChannelConstants;
-import com.kospot.common.websocket.domain.friend.service.FriendChatSubscriptionCacheService;
+import com.kospot.friend.infrastructure.websocket.constants.FriendChatChannelConstants;
+import com.kospot.friend.infrastructure.websocket.service.FriendChatSubscriptionCacheService;
 import com.kospot.common.websocket.session.service.WebSocketSessionService;
+import com.kospot.multi.room.infrastructure.redis.adaptor.GameRoomRedisAdaptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -24,7 +25,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
-import static com.kospot.common.websocket.domain.multi.lobby.constants.LobbyChannelConstants.PREFIX_CHAT;
+import static com.kospot.multi.lobby.infrastructure.websocket.constants.LobbyChannelConstants.PREFIX_CHAT;
 
 @Slf4j
 @Component

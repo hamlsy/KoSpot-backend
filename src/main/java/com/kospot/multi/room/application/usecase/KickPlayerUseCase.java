@@ -2,13 +2,14 @@ package com.kospot.multi.room.application.usecase;
 
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.multi.room.adaptor.GameRoomAdaptor;
+import com.kospot.multi.room.application.adaptor.GameRoomAdaptor;
 import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.application.service.service.GameRoomService;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
 import com.kospot.common.annotation.usecase.UseCase;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.common.websocket.domain.multi.room.service.GameRoomNotificationService;
+
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
+import com.kospot.multi.room.infrastructure.websocket.service.GameRoomNotificationService;
 import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

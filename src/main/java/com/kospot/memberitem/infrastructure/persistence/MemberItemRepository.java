@@ -38,7 +38,7 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
                                                          @Param("itemType") ItemType itemType);
 
 
-    @Query("select new com.kospot.presentation.memberitem.dto.response.MemberItemResponse(" +
+    @Query("select new com.kospot.memberitem.presentation.response.MemberItemResponse(" +
             "mi.id, mi.item.itemType, mi.item.image.imageUrl, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
             "from MemberItem mi join mi.item join mi.item.image " +
             "where mi.member = :member and mi.item.itemType = :itemType")
@@ -51,7 +51,7 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
     @Query("select count(mi) from MemberItem mi where mi.member = :member and mi.isEquipped = true")
     long countEquippedByMember(@Param("member") Member member);
 
-    @Query("select new com.kospot.presentation.memberitem.dto.response.MemberItemResponse(" +
+    @Query("select new com.kospot.memberitem.presentation.response.MemberItemResponse(" +
             "mi.id, mi.item.itemType, mi.item.image.imageUrl, mi.item.name, mi.item.description, mi.isEquipped, mi.createdDate) " +
             "from MemberItem mi join mi.item join mi.item.image " +
             "where mi.member = :member")

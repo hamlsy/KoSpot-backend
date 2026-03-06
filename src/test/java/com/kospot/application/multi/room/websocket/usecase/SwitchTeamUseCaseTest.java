@@ -4,7 +4,7 @@ import com.kospot.multi.room.application.websocket.usecase.SwitchTeamUseCase;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
 import com.kospot.multi.player.domain.exception.GameTeamHandler;
 import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.common.websocket.domain.multi.room.service.GameRoomNotificationService;
+import com.kospot.multi.room.infrastructure.websocket.service.GameRoomNotificationService;
 import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
 import lombok.extern.slf4j.Slf4j;

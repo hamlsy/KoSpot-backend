@@ -20,7 +20,7 @@ import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.infrastructure.persistence.GameRoomRepository;
 import com.kospot.multi.room.domain.vo.GameRoomStatus;
 import com.kospot.multi.round.entity.RoadViewGameRound;
-import com.kospot.multi.round.repository.RoadViewGameRoundRepository;
+import com.kospot.multi.round.infrastructure.persistence.RoadViewGameRoundRepository;
 import com.kospot.point.infrastructure.persistence.PointHistoryRepository;
 import com.kospot.point.common.utils.PointCalculator;
 import com.kospot.point.domain.vo.PointHistoryType;

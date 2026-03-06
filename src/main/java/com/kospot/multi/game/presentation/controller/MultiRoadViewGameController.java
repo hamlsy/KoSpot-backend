@@ -1,6 +1,6 @@
 package com.kospot.multi.game.presentation.controller;
 
-import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
+import com.kospot.multi.round.application.usecase.roadview.NextRoadViewRoundUseCase;
 import com.kospot.common.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

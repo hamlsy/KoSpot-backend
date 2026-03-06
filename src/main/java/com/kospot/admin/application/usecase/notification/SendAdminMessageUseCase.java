@@ -8,7 +8,7 @@ import com.kospot.notification.domain.model.NotificationData;
 import com.kospot.notification.infrastructure.persistence.NotificationStore;
 import com.kospot.notification.domain.vo.NotificationType;
 import com.kospot.common.annotation.usecase.UseCase;
-import com.kospot.common.websocket.domain.notification.service.NotificationPushService;
+import com.kospot.notification.infrastructure.websocket.service.NotificationPushService;
 import com.kospot.admin.presentation.dto.request.AdminNotificationRequest;
 import com.kospot.notification.presentation.dto.message.NotificationMessage;
 import lombok.RequiredArgsConstructor;

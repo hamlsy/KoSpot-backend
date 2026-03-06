@@ -1,7 +1,7 @@
 package com.kospot.common.websocket.subscription.impl;
 
 import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.common.websocket.domain.notification.constants.NotificationChannelConstants;
+import com.kospot.notification.infrastructure.websocket.constants.NotificationChannelConstants;
 import com.kospot.common.websocket.subscription.SubscriptionValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package com.kospot.multi.common.flow;
 
 import com.kospot.multi.game.application.message.LoadingStatusMessage;
-import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
+import com.kospot.multi.round.application.usecase.roadview.NextRoadViewRoundUseCase;
 import com.kospot.multi.game.application.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.multi.game.domain.entity.MultiRoadViewGame;
 import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;

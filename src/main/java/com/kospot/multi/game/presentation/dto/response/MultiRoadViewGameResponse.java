@@ -7,7 +7,7 @@ import com.kospot.multi.game.domain.entity.MultiRoadViewGame;
 import com.kospot.multi.player.domain.entity.GamePlayer;
 import com.kospot.multi.round.entity.RoadViewGameRound;
 import com.kospot.multi.player.presentation.response.GamePlayerResponse;
-import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
+import com.kospot.multi.round.presentation.dto.response.RoadViewRoundResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

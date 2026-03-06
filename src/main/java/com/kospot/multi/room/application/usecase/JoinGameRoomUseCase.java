@@ -2,7 +2,7 @@ package com.kospot.multi.room.application.usecase;
 
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.multi.room.adaptor.GameRoomAdaptor;
+import com.kospot.multi.room.application.adaptor.GameRoomAdaptor;
 import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.domain.event.GameRoomJoinEvent;
 import com.kospot.multi.room.application.service.service.GameRoomService;
@@ -12,7 +12,8 @@ import com.kospot.common.exception.object.domain.GameRoomHandler;
 import com.kospot.common.exception.payload.code.ErrorStatus;
 import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.member.infrastructure.redis.service.MemberProfileRedisService;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

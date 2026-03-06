@@ -6,7 +6,7 @@ import com.kospot.notice.domain.event.NoticeCreatedEvent;
 import com.kospot.notification.domain.model.NotificationCreateCommand;
 import com.kospot.notification.infrastructure.persistence.NotificationStore;
 import com.kospot.notification.domain.vo.NotificationType;
-import com.kospot.common.websocket.domain.notification.service.NotificationPushService;
+import com.kospot.notification.infrastructure.websocket.service.NotificationPushService;
 import com.kospot.notification.presentation.dto.message.NotificationMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

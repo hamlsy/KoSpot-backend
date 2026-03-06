@@ -1,6 +1,6 @@
 package com.kospot.common.redis.common.config;
 
-import com.kospot.common.redis.domain.multi.timer.lisnter.GameTimerKeyExpirationListener;
+import com.kospot.multi.timer.infrastructure.redis.listener.GameTimerKeyExpirationListener;
 import lombok.RequiredArgsConstructor;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -69,7 +69,7 @@ public class RedisConfig {
     // pub/sub 사용 이유: TTL 만료 수신 -> application 에게 알림
     @Bean
     public RedisMessageListenerContainer redisContainer (RedisConnectionFactory connectionFactory,
-                                                         GameTimerKeyExpirationListener listener) {
+                                                         com.kospot.multi.timer.infrastructure.redis.listener.GameTimerKeyExpirationListener listener) {
         // Redis Pub/Sub 이벤트 수신 컨테이너
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);

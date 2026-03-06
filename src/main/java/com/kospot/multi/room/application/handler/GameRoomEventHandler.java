@@ -5,7 +5,7 @@ import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.domain.event.GameRoomJoinEvent;
 import com.kospot.multi.room.domain.event.GameRoomLeaveEvent;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
-import com.kospot.common.websocket.domain.multi.room.service.GameRoomNotificationService;
+import com.kospot.multi.room.infrastructure.websocket.service.GameRoomNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

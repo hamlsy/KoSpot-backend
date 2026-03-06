@@ -29,7 +29,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAvailableItemsByItemTypeFetchImage(@Param("itemType") ItemType itemType);
 
     @Query("""
-        select new com.kospot.presentation.item.dto.response.ItemResponse(
+        select new com.kospot.item.presentation.dto.response.ItemResponse(
           i.id, i.name, i.description, i.price, i.stock, img.imageUrl,
           (mi.id is not null)
         )

@@ -19,8 +19,9 @@ import com.kospot.common.exception.object.domain.GameRoomHandler;
 import com.kospot.common.exception.payload.code.ErrorStatus;
 import com.kospot.common.lock.strategy.HostAssignmentLockStrategy;
 import com.kospot.common.lock.vo.HostAssignmentResult;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.common.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
+
+import com.kospot.multi.lobby.infrastructure.websocket.service.LobbyRoomNotificationService;
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

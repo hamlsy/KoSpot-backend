@@ -3,7 +3,7 @@ package com.kospot.common.websocket.subscription.impl;
 import com.kospot.friend.application.adaptor.FriendAdaptor;
 import com.kospot.friend.domain.entity.FriendChatRoom;
 import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.common.websocket.domain.friend.constants.FriendChatChannelConstants;
+import com.kospot.friend.infrastructure.websocket.constants.FriendChatChannelConstants;
 import com.kospot.common.websocket.subscription.SubscriptionValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

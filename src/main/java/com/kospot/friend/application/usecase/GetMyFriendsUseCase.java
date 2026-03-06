@@ -7,7 +7,7 @@ import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.friend.infrastructure.redis.service.FriendCacheRedisService;
-import com.kospot.common.websocket.domain.multi.lobby.service.LobbyPresenceService;
+import com.kospot.multi.lobby.infrastructure.websocket.service.LobbyPresenceService;
 import com.kospot.friend.presentation.dto.response.FriendListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

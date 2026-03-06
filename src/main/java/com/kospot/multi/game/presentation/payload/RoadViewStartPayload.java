@@ -1,6 +1,6 @@
 package com.kospot.multi.game.presentation.payload;
 
-import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
+import com.kospot.multi.round.presentation.dto.response.RoadViewRoundResponse;
 import lombok.Builder;
 import lombok.Getter;
 

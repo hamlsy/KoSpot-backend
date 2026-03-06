@@ -2,8 +2,9 @@ package com.kospot.common.websocket.subscription.impl;
 
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
 import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.common.websocket.domain.multi.room.constants.GameRoomChannelConstants;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
+import com.kospot.multi.room.infrastructure.websocket.constants.GameRoomChannelConstants;
+
 import com.kospot.common.websocket.subscription.SubscriptionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.kospot.common.websocket.domain.multi.room.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
+import static com.kospot.multi.room.infrastructure.websocket.constants.GameRoomChannelConstants.PREFIX_GAME_ROOM;
 
 /**
  * 게임방 구독 검증자

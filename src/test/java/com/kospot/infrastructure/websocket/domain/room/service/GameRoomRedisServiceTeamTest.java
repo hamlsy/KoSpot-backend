@@ -1,7 +1,8 @@
 package com.kospot.infrastructure.websocket.domain.room.service;
 
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

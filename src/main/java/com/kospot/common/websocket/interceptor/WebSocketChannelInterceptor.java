@@ -5,8 +5,8 @@ import com.kospot.common.exception.payload.code.ErrorStatus;
 import com.kospot.common.redis.common.service.SessionContextRedisService;
 import com.kospot.common.security.service.TokenService;
 import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.common.websocket.domain.friend.constants.FriendChatChannelConstants;
-import com.kospot.common.websocket.domain.friend.service.FriendChatSubscriptionCacheService;
+import com.kospot.friend.infrastructure.websocket.constants.FriendChatChannelConstants;
+import com.kospot.friend.infrastructure.websocket.service.FriendChatSubscriptionCacheService;
 import com.kospot.common.websocket.session.service.WebSocketSessionService;
 import com.kospot.common.websocket.subscription.SubscriptionValidationManager;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,8 @@ import org.springframework.lang.NonNull;
 import java.time.Duration;
 import java.util.UUID;
 
-import static com.kospot.common.websocket.domain.notification.constants.NotificationChannelConstants.PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL;
-import static com.kospot.common.websocket.domain.notification.constants.NotificationChannelConstants.PREFIX_NOTIFICATION;
+import static com.kospot.notification.infrastructure.websocket.constants.NotificationChannelConstants.PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL;
+import static com.kospot.notification.infrastructure.websocket.constants.NotificationChannelConstants.PREFIX_NOTIFICATION;
 
 @Slf4j
 @Component

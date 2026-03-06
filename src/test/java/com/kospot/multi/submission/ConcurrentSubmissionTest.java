@@ -2,9 +2,8 @@ package com.kospot.multi.submission;
 
 import com.kospot.coordinate.application.usecase.ImportCoordinateUseCase;
 import com.kospot.multi.game.application.usecase.NotifyStartGameUseCase;
-import com.kospot.application.multi.round.roadview.CheckAndCompleteRoundEarlyUseCase;
-import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
-import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
+
+
 import com.kospot.game.domain.vo.GameMode;
 import com.kospot.image.domain.entity.Image;
 import com.kospot.image.infrastructure.persistence.ImageRepository;
@@ -19,20 +18,25 @@ import com.kospot.multi.player.infrastructure.persistence.GamePlayerRepository;
 import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.infrastructure.persistence.GameRoomRepository;
 import com.kospot.multi.room.domain.vo.GameRoomStatus;
+import com.kospot.multi.room.infrastructure.redis.adaptor.GameRoomRedisAdaptor;
+import com.kospot.multi.round.application.usecase.roadview.CheckAndCompleteRoundEarlyUseCase;
+import com.kospot.multi.round.application.usecase.roadview.NextRoadViewRoundUseCase;
 import com.kospot.multi.round.entity.RoadViewGameRound;
-import com.kospot.multi.round.repository.RoadViewGameRoundRepository;
+import com.kospot.multi.round.infrastructure.persistence.RoadViewGameRoundRepository;
 import com.kospot.coordinate.domain.entity.Coordinate;
 import com.kospot.coordinate.domain.entity.LocationType;
 import com.kospot.coordinate.domain.entity.Sido;
 import com.kospot.coordinate.infrastructure.persistence.CoordinateRepository;
 import com.kospot.coordinate.domain.vo.Address;
-import com.kospot.multi.submission.repository.RoadViewSubmissionRepository;
-import com.kospot.multi.submission.service.RoadViewSubmissionService;
-import com.kospot.common.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
-import com.kospot.common.redis.domain.multi.submission.service.SubmissionRedisService;
+import com.kospot.multi.submission.application.usecase.SubmitRoadViewPlayerAnswerUseCase;
+import com.kospot.multi.submission.infrastructure.persistence.RoadViewSubmissionRepository;
+import com.kospot.multi.submission.application.service.RoadViewSubmissionService;
+
 import com.kospot.multi.game.presentation.dto.request.MultiGameRequest;
 import com.kospot.multi.game.presentation.dto.response.MultiRoadViewGameResponse;
-import com.kospot.presentation.multi.submission.dto.request.SubmitRoadViewRequest;
+
+import com.kospot.multi.submission.infrastructure.redis.service.SubmissionRedisService;
+import com.kospot.multi.submission.presentation.dto.request.SubmitRoadViewRequest;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -170,7 +174,7 @@ class ConcurrentSubmissionTest {
         
         // 1단계: 게임 생성
         MultiGameResponse.StartGame startGameResponse =
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
+                notifyStartGameUseCase.execute(hostMember.getId(), gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
         // 2단계: 1라운드 준비
@@ -222,7 +226,7 @@ class ConcurrentSubmissionTest {
 
                     // 제출 실행
                     submitRoadViewPlayerAnswerUseCase.execute(
-                            member, roomId, gameId, roundId, submitRequest);
+                            member.getId(), roomId, gameId, roundId, submitRequest);
 
                     successCount.incrementAndGet();
 
@@ -315,7 +319,7 @@ class ConcurrentSubmissionTest {
         
         // 1단계: 게임 생성
         MultiGameResponse.StartGame startGameResponse =
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
+                notifyStartGameUseCase.execute(hostMember.getId(), gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
         
         // 2단계: 1라운드 준비
@@ -353,7 +357,7 @@ class ConcurrentSubmissionTest {
                             .build();
 
                     submitRoadViewPlayerAnswerUseCase.execute(
-                            member, roomId, gameId, roundId, submitRequest);
+                            member.getId(), roomId, gameId, roundId, submitRequest);
 
                     // 이벤트 핸들러가 실행되기 전에 수동으로 조기 종료 체크
                     Thread.sleep(50); // 약간의 지연
@@ -418,7 +422,7 @@ class ConcurrentSubmissionTest {
         MultiGameRequest.Start startRequest = createStartRequest(gameRoom.getId(), 60);
 
         MultiGameResponse.StartGame startGameResponse =
-                notifyStartGameUseCase.execute(hostMember, gameRoom.getId());
+                notifyStartGameUseCase.execute(hostMember.getId(), gameRoom.getId());
         Long gameId = startGameResponse.getGameId();
 
         MultiRoadViewGameResponse.StartPlayerGame startResponse =
@@ -444,7 +448,7 @@ class ConcurrentSubmissionTest {
                     .build();
 
             submitRoadViewPlayerAnswerUseCase.execute(
-                    member, roomId, gameId, roundId, submitRequest);
+                    member.getId(), roomId, gameId, roundId, submitRequest);
         }
 
         // 이벤트 처리 대기 (모든 제출 완료)

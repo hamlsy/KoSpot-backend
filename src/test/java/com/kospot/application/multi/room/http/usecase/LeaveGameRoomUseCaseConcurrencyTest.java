@@ -12,7 +12,8 @@ import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.infrastructure.persistence.GameRoomRepository;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
 import com.kospot.multi.room.domain.vo.GameRoomStatus;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;

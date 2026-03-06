@@ -6,7 +6,7 @@ import com.kospot.member.domain.entity.Member;
 import com.kospot.member.domain.vo.Role;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.multi.game.domain.vo.PlayerMatchType;
-import com.kospot.multi.room.adaptor.GameRoomAdaptor;
+import com.kospot.multi.room.application.adaptor.GameRoomAdaptor;
 import com.kospot.multi.room.application.usecase.*;
 import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.domain.vo.GameRoomStatus;

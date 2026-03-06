@@ -1,10 +1,11 @@
 package com.kospot.multi.common.flow;
 
 import com.kospot.multi.game.application.message.LoadingStatusMessage;
+import com.kospot.multi.game.infrastructure.redis.service.MultiGameRedisService;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
-import com.kospot.common.redis.domain.multi.game.service.MultiGameRedisService;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.common.websocket.domain.multi.game.service.GameNotificationService;
+
+import com.kospot.multi.game.infrastructure.websocket.service.GameNotificationService;
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

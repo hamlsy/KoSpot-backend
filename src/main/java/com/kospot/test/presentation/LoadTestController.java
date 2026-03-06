@@ -1,6 +1,6 @@
 package com.kospot.test.presentation;
 
-import com.kospot.application.multi.timer.message.TimerSyncMessage;
+import com.kospot.multi.timer.application.message.TimerSyncMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;

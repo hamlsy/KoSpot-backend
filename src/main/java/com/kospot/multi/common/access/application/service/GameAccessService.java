@@ -3,12 +3,13 @@ package com.kospot.multi.common.access.application.service;
 import com.kospot.multi.room.application.usecase.GetGameRoomDetailUseCase;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.multi.room.adaptor.GameRoomAdaptor;
+import com.kospot.multi.room.application.adaptor.GameRoomAdaptor;
 import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
 import com.kospot.multi.room.domain.vo.GameRoomStatus;
-import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+
 import com.kospot.multi.common.access.presentation.response.GameAccessResponse;
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.kospot.multi.game.application.service;
 
-import com.kospot.multi.round.repository.PhotoGameRoundRepository;
+import com.kospot.multi.round.infrastructure.persistence.PhotoGameRoundRepository;
 import com.kospot.multi.game.infrastructure.persistence.MultiPhotoGameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

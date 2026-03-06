@@ -17,7 +17,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
     List<Friendship> findByCanonicalPairKeyIn(List<String> canonicalPairKeys);
 
     @Query("""
-            select new com.kospot.domain.friend.repository.FriendSummaryQueryModel(
+            select new com.kospot.friend.infrastructure.persistence.FriendSummaryQueryModel(
                 case when f.memberLowId = :memberId then f.memberHighId else f.memberLowId end,
                 m.nickname,
                 image.imageUrl,

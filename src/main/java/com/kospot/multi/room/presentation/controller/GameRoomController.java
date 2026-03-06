@@ -2,12 +2,11 @@ package com.kospot.multi.room.presentation.controller;
 
 
 import com.kospot.multi.game.application.usecase.NotifyStartGameUseCase;
-import com.kospot.application.multi.room.http.usecase.*;
+import com.kospot.multi.room.application.usecase.*;
 import com.kospot.common.annotation.adsense.BotSuccess;
 import com.kospot.common.exception.payload.code.SuccessStatus;
 import com.kospot.common.exception.payload.dto.ApiResponseDto;
 import com.kospot.common.security.aop.CurrentMember;
-import com.kospot.multi.room.application.usecase.*;
 import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
 import com.kospot.multi.room.presentation.dto.response.FindGameRoomResponse;
 import com.kospot.multi.room.presentation.dto.response.GameRoomDetailResponse;
