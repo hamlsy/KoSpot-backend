@@ -1,0 +1,68 @@
+package com.kospot.multi.player.application.service;
+
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.multi.game.domain.entity.MultiRoadViewGame;
+import com.kospot.multi.player.domain.entity.GamePlayer;
+import com.kospot.multi.player.infrastructure.persistence.GamePlayerRepository;
+import com.kospot.multi.room.domain.entity.GameRoom;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class GamePlayerService {
+
+    private final MemberAdaptor memberAdaptor;
+    private final GamePlayerRepository gamePlayerRepository;
+
+    /**
+     * 게임 시작 시 방의 모든 멤버를 게임 플레이어로 생성한다.
+     */
+    public List<GamePlayer> createRoadViewGamePlayers(GameRoom gameRoom, MultiRoadViewGame game) {
+        List<Member> members = memberAdaptor.queryAllByGameRoomId(gameRoom.getId());
+        List<GamePlayer> players = members.stream().map(
+                m -> GamePlayer.createRoadViewGamePlayer(m, game)).toList();
+        return gamePlayerRepository.saveAll(players);
+    }
+
+    /**
+     * 특정 게임에 속한 플레이어 목록을 조회한다.
+     */
+    public List<GamePlayer> findPlayersByGameId(Long gameId) {
+        return gamePlayerRepository.findAllByMultiRoadViewGameId(gameId);
+    }
+
+    //todo implement bulk update
+    public List<GamePlayer> updateTotalRank(List<GamePlayer> gamePlayers) {
+        // score 로 내림차순 정렬
+        gamePlayers.sort((a, b) -> Double.compare(b.getTotalScore(), a.getTotalScore()));
+
+        int rank = 1;
+        gamePlayers.get(0).updateRoundRank(rank);
+
+        // 이전 플레이어 점수와 같을 경우 동일 순위 부여
+        for (int i = 1; i < gamePlayers.size(); i++) {
+            GamePlayer currentPlayer = gamePlayers.get(i);
+            GamePlayer previousPlayer = gamePlayers.get(i - 1);
+            int previousRank = previousPlayer.getRoundRank();
+            if (hasSameScoreAsPreviousPlayer(currentPlayer, previousPlayer)) {
+                currentPlayer.updateRoundRank(previousRank);
+                continue;
+            }
+            // next rank
+            currentPlayer.updateRoundRank(previousRank + 1);
+        }
+        return gamePlayers;
+    }
+
+    private boolean hasSameScoreAsPreviousPlayer(GamePlayer current, GamePlayer previous) {
+        return current.getTotalScore() == previous.getTotalScore();
+    }
+}

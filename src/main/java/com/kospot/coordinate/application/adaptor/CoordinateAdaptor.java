@@ -1,0 +1,56 @@
+package com.kospot.coordinate.application.adaptor;
+
+import com.kospot.coordinate.domain.entity.Coordinate;
+import com.kospot.coordinate.domain.entity.Sido;
+import com.kospot.coordinate.infrastructure.persistence.CoordinateRepository;
+import com.kospot.common.annotation.adaptor.Adaptor;
+import com.kospot.common.exception.object.domain.CoordinateHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+@Adaptor
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class CoordinateAdaptor {
+
+    private final CoordinateRepository coordinateRepository;
+
+    // 특정 Sido의 랜덤 Coordinate
+    public Coordinate getRandomCoordinateBySido(Sido sido) {
+        long count = coordinateRepository.countBySido(sido);
+        if (count == 0) return null;
+
+        long randomOffset = ThreadLocalRandom.current().nextLong(count);
+        return coordinateRepository.findBySidoWithOffset(sido,
+                PageRequest.of((int)(randomOffset / 1), 1)).getContent().get(0);
+    }
+
+    // 전체 랜덤 Coordinate
+    // todo refactoring
+    public Coordinate getRandomCoordinate() {
+        long count = coordinateRepository.countAll();
+        if (count == 0) return null;
+        int randomOffset = ThreadLocalRandom.current().nextInt((int) count);
+
+        return coordinateRepository.findAllCoordinates(PageRequest.of(randomOffset, 1))
+                .stream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Coordinate queryById(Long id) {
+        return coordinateRepository.findById(id)
+                .orElseThrow(() -> new CoordinateHandler(ErrorStatus.COORDINATE_NOT_FOUND));
+    }
+
+    public Page<Coordinate> queryAll(Pageable pageable) {
+        return coordinateRepository.findAllCoordinates(pageable);
+    }
+
+}

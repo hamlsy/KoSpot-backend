@@ -1,16 +1,17 @@
 package com.kospot.mvp.service;
 
-import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
-import com.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.domain.gamerank.adaptor.GameRankAdaptor;
-import com.kospot.domain.gamerank.entity.GameRank;
-import com.kospot.domain.gamerank.vo.RankLevel;
-import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.mvp.adaptor.DailyMvpAdaptor;
-import com.kospot.domain.mvp.entity.DailyMvp;
-import com.kospot.domain.mvp.service.DailyMvpAggregationService;
-import com.kospot.infrastructure.redis.domain.mvp.service.DailyMvpCacheService;
+import com.kospot.game.application.adaptor.RoadViewGameAdaptor;
+import com.kospot.game.domain.entity.RoadViewGame;
+import com.kospot.game.domain.vo.GameMode;
+import com.kospot.gamerank.application.adaptor.GameRankAdaptor;
+import com.kospot.gamerank.domain.entity.GameRank;
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
+import com.kospot.mvp.domain.entity.DailyMvp;
+import com.kospot.mvp.application.service.DailyMvpAggregationService;
+import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -99,7 +100,7 @@ class DailyMvpAggregationServiceTest {
 
         when(roadViewGameAdaptor.queryDailyMvpCandidate(any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(game));
-        when(gameRankAdaptor.queryByMemberAndGameMode(member, com.kospot.domain.game.vo.GameMode.ROADVIEW))
+        when(gameRankAdaptor.queryByMemberAndGameMode(member, GameMode.ROADVIEW))
                 .thenReturn(gameRank);
         when(dailyMvpAdaptor.queryByDate(date)).thenReturn(Optional.empty());
         when(dailyMvpAdaptor.save(any(DailyMvp.class))).thenReturn(saved);

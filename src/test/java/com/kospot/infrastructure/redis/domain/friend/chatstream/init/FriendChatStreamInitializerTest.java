@@ -1,6 +1,7 @@
 package com.kospot.infrastructure.redis.domain.friend.chatstream.init;
 
-import com.kospot.infrastructure.redis.domain.friend.chatstream.config.FriendChatPersistProperties;
+import com.kospot.friend.infrastructure.redis.chatstream.config.FriendChatPersistProperties;
+import com.kospot.friend.infrastructure.redis.chatstream.init.FriendChatStreamInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,17 +1,19 @@
 package com.kospot.application.multi.room.http.usecase;
 
-import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.image.entity.Image;
-import com.kospot.domain.image.repository.ImageRepository;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.repository.MemberRepository;
-import com.kospot.domain.member.vo.Role;
-import com.kospot.domain.multi.game.vo.PlayerMatchType;
-import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.domain.multi.room.repository.GameRoomRepository;
-import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
-import com.kospot.domain.multi.room.vo.GameRoomStatus;
-import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.game.domain.vo.GameMode;
+import com.kospot.image.domain.entity.Image;
+import com.kospot.image.infrastructure.persistence.ImageRepository;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.member.infrastructure.persistence.MemberRepository;
+import com.kospot.member.domain.vo.Role;
+import com.kospot.multi.game.domain.vo.PlayerMatchType;
+import com.kospot.multi.room.application.usecase.LeaveGameRoomUseCase;
+import com.kospot.multi.room.domain.entity.GameRoom;
+import com.kospot.multi.room.infrastructure.persistence.GameRoomRepository;
+import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
+import com.kospot.multi.room.domain.vo.GameRoomStatus;
+
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;

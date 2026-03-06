@@ -1,0 +1,61 @@
+package com.kospot.memberitem.application.service;
+
+import com.kospot.item.domain.entity.Item;
+import com.kospot.item.domain.vo.ItemType;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.memberitem.application.adaptor.MemberItemAdaptor;
+import com.kospot.memberitem.domain.entity.MemberItem;
+import com.kospot.memberitem.infrastructure.persistence.MemberItemRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class MemberItemService {
+
+    private final MemberItemAdaptor memberItemAdaptor;
+    private final MemberItemRepository memberItemRepository;
+
+    public void equipItem(Member member, MemberItem memberItem) {
+
+        ItemType memberItemType = memberItem.getItem().getItemType();
+        // unEquip
+        unEquippedItems(member, memberItemType);
+
+        if(memberItemType.equals(ItemType.MARKER)) {
+            member.equippedMarkerImage(memberItem.getItem().getImage());
+        }
+
+        // equip
+        memberItem.equip();
+    }
+
+    // todo refactoring 전체를 꼭 탐색해야하나?
+    private void unEquippedItems(Member member, ItemType itemType){
+        List<MemberItem> equippedMemberItems = memberItemRepository.findEquippedItemByMemberAndItemType(member, itemType);
+        if(equippedItemsNotEmpty(equippedMemberItems)){
+            equippedMemberItems.forEach(MemberItem::unEquip);
+        }
+    }
+
+    private static boolean equippedItemsNotEmpty(List<MemberItem> equippedMemberItems) {
+        return !equippedMemberItems.isEmpty();
+    }
+
+    public void deleteAllByItemId(Long itemId) {
+        memberItemRepository.deleteAllByItemId(itemId);
+    }
+
+    public MemberItem purchaseItem(Member member, Item item) {
+        MemberItem memberItem = MemberItem.create(member, item);
+        return memberItemRepository.save(memberItem);
+    }
+
+
+}

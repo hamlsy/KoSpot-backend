@@ -1,12 +1,12 @@
 package com.kospot.application.multi.round.roadview;
 
-import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
-import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
-import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
-import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.domain.multi.round.service.roadview.RoadViewGameRoundService;
+import com.kospot.multi.game.application.adaptor.MultiRoadViewGameAdaptor;
+import com.kospot.multi.game.domain.entity.MultiRoadViewGame;
+import com.kospot.multi.player.application.adaptor.GamePlayerAdaptor;
+import com.kospot.multi.player.domain.entity.GamePlayer;
+import com.kospot.multi.round.application.adaptor.RoadViewGameRoundAdaptor;
+import com.kospot.multi.round.entity.RoadViewGameRound;
+import com.kospot.multi.round.application.roadview.RoadViewGameRoundService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

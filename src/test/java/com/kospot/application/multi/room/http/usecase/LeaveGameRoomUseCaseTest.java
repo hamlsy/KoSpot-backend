@@ -1,16 +1,18 @@
 package com.kospot.application.multi.room.http.usecase;
 
-import com.kospot.application.multi.room.vo.LeaveDecision;
-import com.kospot.domain.member.adaptor.MemberAdaptor;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
-import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.domain.multi.room.event.GameRoomLeaveEvent;
-import com.kospot.domain.multi.room.service.GameRoomService;
-import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
-import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.multi.room.application.usecase.LeaveGameRoomUseCase;
+import com.kospot.multi.room.application.vo.LeaveDecision;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.multi.room.application.adaptor.GameRoomAdaptor;
+import com.kospot.multi.room.domain.entity.GameRoom;
+import com.kospot.multi.room.domain.event.GameRoomLeaveEvent;
+import com.kospot.multi.room.application.service.service.GameRoomService;
+import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
+import com.kospot.common.exception.object.domain.GameRoomHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
+
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

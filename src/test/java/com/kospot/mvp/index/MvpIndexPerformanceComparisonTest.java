@@ -1,8 +1,8 @@
 package com.kospot.mvp.index;
 
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.repository.MemberRepository;
-import com.kospot.domain.member.vo.Role;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.member.infrastructure.persistence.MemberRepository;
+import com.kospot.member.domain.vo.Role;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

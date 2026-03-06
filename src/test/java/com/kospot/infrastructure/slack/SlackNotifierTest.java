@@ -1,5 +1,7 @@
 package com.kospot.infrastructure.slack;
 
+import com.kospot.common.slack.SlackNotifier;
+import com.kospot.common.slack.SlackProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,6 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.Map;
-import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

@@ -1,12 +1,13 @@
 package com.kospot.application.mvp.usecase;
 
-import com.kospot.domain.gamerank.vo.RankLevel;
-import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.mvp.adaptor.DailyMvpAdaptor;
-import com.kospot.domain.mvp.entity.DailyMvp;
-import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
-import com.kospot.infrastructure.redis.domain.mvp.service.DailyMvpCacheService;
-import com.kospot.presentation.mvp.dto.response.DailyMvpResponse;
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
+import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
+import com.kospot.mvp.domain.entity.DailyMvp;
+import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
+import com.kospot.mvp.application.usecase.GetDailyMvpUseCase;
+import com.kospot.mvp.presentation.response.DailyMvpResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,0 +1,37 @@
+package com.kospot.point.application.usecase;
+
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.point.application.adaptor.PointHistoryAdaptor;
+import com.kospot.point.domain.entity.PointHistory;
+import com.kospot.common.annotation.usecase.UseCase;
+import com.kospot.point.presentation.response.PointHistoryResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Slf4j
+@UseCase
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class FindAllPointHistoryPagingUseCase {
+
+    private final MemberAdaptor memberAdaptor;
+    private final static int SIZE = 10;
+    private final PointHistoryAdaptor pointHistoryAdaptor;
+
+    public List<PointHistoryResponse> execute(Long memberId, int page) {
+        Member member = memberAdaptor.queryById(memberId);
+        Pageable pageable = PageRequest.of(page, SIZE, Sort.Direction.DESC, "createdDate");
+        List<PointHistory> pointHistories = pointHistoryAdaptor.queryAllByMemberPaging(member, pageable);
+        return pointHistories.stream().map(PointHistoryResponse::from)
+                .collect(Collectors.toList());
+    }
+
+}

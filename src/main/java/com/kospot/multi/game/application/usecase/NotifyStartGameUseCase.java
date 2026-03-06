@@ -1,0 +1,130 @@
+package com.kospot.multi.game.application.usecase;
+
+import com.kospot.multi.common.flow.GameTransitionOrchestrator;
+import com.kospot.multi.game.application.strategy.MultiGameStartStrategy;
+import com.kospot.game.domain.vo.GameMode;
+import com.kospot.multi.game.domain.vo.PlayerMatchType;
+import com.kospot.multi.room.application.adaptor.GameRoomAdaptor;
+import com.kospot.multi.room.domain.entity.GameRoom;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.multi.room.application.service.service.GameRoomService;
+import com.kospot.common.annotation.usecase.UseCase;
+import com.kospot.common.exception.object.domain.GameHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
+import com.kospot.multi.game.infrastructure.websocket.service.GameNotificationService;
+import com.kospot.multi.common.flow.message.RoomGameStartMessage;
+import com.kospot.multi.game.presentation.dto.request.MultiGameRequest;
+import com.kospot.multi.game.presentation.dto.response.MultiGameResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * 게임 시작 알림 및 초기화를 처리하는 UseCase
+ * 방장이 게임 시작을 요청하면 전략을 통해 게임을 생성하고 로딩 단계를 시작한다.
+ */
+@Slf4j
+@UseCase
+@RequiredArgsConstructor
+@Transactional
+public class NotifyStartGameUseCase {
+
+    private static final long DEFAULT_COUNTDOWN_MS = 3_000L;
+
+    // Domain Services
+    private final MemberAdaptor memberAdaptor;
+    private final GameRoomService gameRoomService;
+    private final GameRoomAdaptor gameRoomAdaptor;
+
+    // Strategy Collection
+    private final List<MultiGameStartStrategy> startStrategies;
+
+    // Orchestrator
+    private final GameTransitionOrchestrator gameTransitionOrchestrator;
+
+    // Infrastructure Services (직접 사용)
+    private final GameNotificationService gameNotificationService;
+
+    public MultiGameResponse.StartGame execute(Long hostId, Long gameRoomId) {
+        Member host = memberAdaptor.queryById(hostId);
+        if (gameRoomId == null) {
+            throw new GameHandler(ErrorStatus.GAME_ROOM_NOT_FOUND);
+        }
+        GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
+        gameRoomService.markGameRoomAsInGame(gameRoom, host);
+
+        GameMode gameMode = gameRoom.getGameMode();
+        PlayerMatchType matchType = gameRoom.getPlayerMatchType();
+
+        MultiGameStartStrategy strategy = findStrategy(gameMode, matchType);
+
+        MultiGameStartStrategy.StartGamePreparation preparation =
+                strategy.prepare(gameRoom, gameMode, matchType);
+
+        MultiGameResponse.StartGame response = preparation.startGame();
+        String roomKey = gameRoom.getId().toString();
+
+        // 게임 시작 브로드캐스트
+        broadcastGameStart(roomKey, preparation, response);
+
+        // 로딩 단계 시작
+        gameTransitionOrchestrator.initializeLoadingPhase(roomKey, response.getGameId());
+
+        return response;
+    }
+
+    private GameMode resolveGameMode(GameRoom gameRoom, MultiGameRequest.Start request) {
+        String gameModeKey = request.getGameModeKey();
+        if (gameModeKey == null || gameModeKey.isBlank()) {
+            return gameRoom.getGameMode();
+        }
+        return GameMode.fromKey(gameModeKey);
+    }
+
+
+    private PlayerMatchType resolveMatchType(GameRoom gameRoom, MultiGameRequest.Start request) {
+        String matchTypeKey = request.getPlayerMatchTypeKey();
+        if (matchTypeKey == null || matchTypeKey.isBlank()) {
+            return gameRoom.getPlayerMatchType();
+        }
+        return PlayerMatchType.fromKey(matchTypeKey);
+    }
+
+    private MultiGameStartStrategy findStrategy(GameMode gameMode, PlayerMatchType matchType) {
+        return startStrategies.stream()
+                .filter(it -> it.supports(gameMode, matchType))
+                .findFirst()
+                .orElseThrow(() -> new GameHandler(ErrorStatus.GAME_TYPE_NOT_FOUND));
+
+    }
+
+
+    private void broadcastGameStart(String roomId,
+                                    MultiGameStartStrategy.StartGamePreparation preparation,
+                                    MultiGameResponse.StartGame response) {
+        long countdownMs = preparation.countdownMs() != null ? preparation.countdownMs() : DEFAULT_COUNTDOWN_MS;
+        long issuedAt = System.currentTimeMillis();
+        long deadlineTs = issuedAt + countdownMs;
+
+        RoomGameStartMessage startMessage = RoomGameStartMessage.builder()
+                .target(preparation.targetRoute())
+                .gameMode(response.getGameMode())
+                .matchType(response.getMatchType())
+                .gameId(response.getGameId())
+                .roundId(response.getRoundId())
+                .totalRounds(response.getTotalRounds())
+                .currentRound(response.getCurrentRound())
+                .roundTimeLimit(response.getRoundTimeLimit())
+                .countdownMs(countdownMs)
+                .deadlineTs(deadlineTs)
+                .issuedAt(issuedAt)
+                .players(response.getPlayers())
+                .payload(response.getPayload())
+                .build();
+
+        gameNotificationService.broadcastGameStart(roomId, startMessage);
+    }
+}
