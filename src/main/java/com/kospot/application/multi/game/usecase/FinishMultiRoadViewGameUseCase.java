@@ -6,7 +6,7 @@ import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
-import com.kospot.domain.statistic.service.MemberStatisticService;
+import com.kospot.statistic.application.service.MemberStatisticService;
 import com.kospot.domain.multi.game.adaptor.MultiRoadViewGameAdaptor;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;

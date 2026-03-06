@@ -1,5 +1,7 @@
 package com.kospot.mvp.service;
 
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
@@ -60,8 +62,8 @@ class DailyMvpRewardServiceTest {
                 .roadViewGameId(100L)
                 .rewardPoint(200)
                 .rewardGranted(false)
-                .rankLevel(com.kospot.domain.gamerank.vo.RankLevel.THREE)
-                .rankTier(com.kospot.domain.gamerank.vo.RankTier.SILVER)
+                .rankLevel(RankLevel.THREE)
+                .rankTier(RankTier.SILVER)
                 .poiName("서울역")
                 .gameScore(901.5)
                 .ratingScore(1200)

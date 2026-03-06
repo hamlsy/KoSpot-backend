@@ -1,7 +1,7 @@
 package com.kospot.application.mvp.usecase;
 
-import com.kospot.domain.gamerank.vo.RankLevel;
-import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.domain.entity.DailyMvp;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;

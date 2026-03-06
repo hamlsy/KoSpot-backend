@@ -2,8 +2,8 @@ package com.kospot.application.main;
 
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
-import com.kospot.domain.statistic.entity.MemberStatistic;
+import com.kospot.statistic.application.adaptor.MemberStatisticAdaptor;
+import com.kospot.statistic.domain.entity.MemberStatistic;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.banner.service.ActiveBannerCacheService;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;

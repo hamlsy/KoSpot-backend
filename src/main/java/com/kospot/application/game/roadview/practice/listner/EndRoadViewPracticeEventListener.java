@@ -5,7 +5,7 @@ import com.kospot.domain.game.event.RoadViewPracticeEvent;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameType;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.domain.statistic.service.MemberStatisticService;
+import com.kospot.statistic.application.service.MemberStatisticService;
 import com.kospot.common.exception.object.domain.EventHandler;
 import com.kospot.common.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;

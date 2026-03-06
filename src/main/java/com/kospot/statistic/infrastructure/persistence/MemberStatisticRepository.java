@@ -1,0 +1,25 @@
+package com.kospot.statistic.infrastructure.persistence;
+
+import com.kospot.member.domain.entity.Member;
+import com.kospot.statistic.domain.entity.MemberStatistic;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
+
+public interface MemberStatisticRepository extends JpaRepository<MemberStatistic, Long> {
+
+    @Query("select ms from MemberStatistic ms where ms.member = :member")
+    Optional<MemberStatistic> findByMember(@Param("member") Member member);
+
+    @Query("select ms from MemberStatistic ms where ms.member.id = :memberId")
+    Optional<MemberStatistic> findByMemberId(@Param("memberId") Long memberId);
+
+    @Query("select ms from MemberStatistic ms join fetch ms.modeStatistics where ms.member = :member")
+    Optional<MemberStatistic> findByMemberFetchModeStatistics(@Param("member") Member member);
+
+    @Query("select ms from MemberStatistic ms join fetch ms.modeStatistics where ms.member.id = :memberId")
+    Optional<MemberStatistic> findByMemberIdFetchModeStatistics(@Param("memberId") Long memberId);
+}
+

@@ -2,10 +2,10 @@ package com.kospot.mvp.service;
 
 import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.domain.gamerank.adaptor.GameRankAdaptor;
-import com.kospot.domain.gamerank.entity.GameRank;
-import com.kospot.domain.gamerank.vo.RankLevel;
-import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.gamerank.application.adaptor.GameRankAdaptor;
+import com.kospot.gamerank.domain.entity.GameRank;
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.domain.entity.DailyMvp;

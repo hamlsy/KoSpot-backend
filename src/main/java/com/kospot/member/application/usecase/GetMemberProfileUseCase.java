@@ -1,13 +1,13 @@
 package com.kospot.member.application.usecase;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.gamerank.adaptor.GameRankAdaptor;
-import com.kospot.domain.gamerank.entity.GameRank;
-import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
+import com.kospot.gamerank.application.adaptor.GameRankAdaptor;
+import com.kospot.gamerank.domain.entity.GameRank;
+import com.kospot.statistic.application.adaptor.MemberStatisticAdaptor;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.domain.statistic.entity.GameModeStatistic;
-import com.kospot.domain.statistic.entity.MemberStatistic;
+import com.kospot.statistic.domain.entity.GameModeStatistic;
+import com.kospot.statistic.domain.entity.MemberStatistic;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.member.presentation.response.MemberProfileResponse;

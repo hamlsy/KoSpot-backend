@@ -1,6 +1,6 @@
 package com.kospot.point.common.utils;
 
-import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.gamerank.domain.vo.RankTier;
 
 public class PointCalculator {
 

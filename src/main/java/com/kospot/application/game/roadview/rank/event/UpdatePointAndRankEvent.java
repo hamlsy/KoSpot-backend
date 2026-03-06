@@ -1,7 +1,7 @@
 package com.kospot.application.game.roadview.rank.event;
 
 import com.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.point.domain.vo.PointHistoryType;

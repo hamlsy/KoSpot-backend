@@ -2,9 +2,9 @@ package com.kospot.presentation.game.dto.response;
 
 import com.kospot.coordinate.domain.entity.Coordinate;
 import com.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.domain.gamerank.entity.GameRank;
-import com.kospot.domain.gamerank.vo.RankLevel;
-import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.gamerank.domain.entity.GameRank;
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.member.domain.entity.Member;
 import lombok.Builder;
 import lombok.Getter;

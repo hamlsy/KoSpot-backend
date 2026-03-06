@@ -1,6 +1,6 @@
 package com.kospot.point.application.service;
 
-import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.member.domain.entity.Member;
 
 import com.kospot.point.common.utils.PointCalculator;

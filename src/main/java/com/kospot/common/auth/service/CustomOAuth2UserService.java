@@ -1,9 +1,9 @@
 package com.kospot.common.auth.service;
 
 import com.kospot.member.application.usecase.RegisterSocialMemberUseCase;
-import com.kospot.domain.gamerank.service.GameRankService;
+import com.kospot.gamerank.application.service.GameRankService;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.domain.statistic.service.MemberStatisticService;
+import com.kospot.statistic.application.service.MemberStatisticService;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.common.auth.domain.CustomOAuthUser;
 import com.kospot.common.auth.domain.OAuth2Attributes;

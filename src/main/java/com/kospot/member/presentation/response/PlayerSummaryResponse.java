@@ -1,7 +1,7 @@
 package com.kospot.member.presentation.response;
 
-import com.kospot.domain.gamerank.vo.RankLevel;
-import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
 import lombok.Builder;
 import lombok.Getter;
 

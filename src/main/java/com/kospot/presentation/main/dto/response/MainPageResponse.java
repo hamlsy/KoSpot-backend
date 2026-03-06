@@ -1,7 +1,7 @@
 package com.kospot.presentation.main.dto.response;
 
 import com.kospot.member.domain.entity.Member;
-import com.kospot.domain.statistic.entity.MemberStatistic;
+import com.kospot.statistic.domain.entity.MemberStatistic;
 import com.kospot.banner.presentation.response.BannerResponse;
 import com.kospot.notice.presentation.dto.response.NoticeResponse;
 import lombok.AllArgsConstructor;

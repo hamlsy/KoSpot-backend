@@ -2,9 +2,9 @@ package com.kospot.mvp.domain.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.entity.RoadViewGame;
-import com.kospot.domain.gamerank.entity.GameRank;
-import com.kospot.domain.gamerank.vo.RankLevel;
-import com.kospot.domain.gamerank.vo.RankTier;
+import com.kospot.gamerank.domain.entity.GameRank;
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

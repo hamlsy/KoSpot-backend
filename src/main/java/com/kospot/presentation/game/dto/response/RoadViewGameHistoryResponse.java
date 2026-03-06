@@ -4,11 +4,11 @@ import com.kospot.coordinate.domain.entity.Sido;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.vo.GameMode;
 import com.kospot.domain.game.vo.GameType;
-import com.kospot.domain.gamerank.entity.GameRank;
-import com.kospot.domain.gamerank.vo.RankLevel;
-import com.kospot.domain.gamerank.vo.RankTier;
-import com.kospot.domain.statistic.entity.GameModeStatistic;
-import com.kospot.domain.statistic.entity.MemberStatistic;
+import com.kospot.gamerank.domain.entity.GameRank;
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
+import com.kospot.statistic.domain.entity.GameModeStatistic;
+import com.kospot.statistic.domain.entity.MemberStatistic;
 import lombok.Builder;
 import lombok.Getter;
 
