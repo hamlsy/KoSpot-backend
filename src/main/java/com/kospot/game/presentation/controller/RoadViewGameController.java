@@ -1,14 +1,15 @@
 package com.kospot.game.presentation.controller;
 
+import com.kospot.game.application.usecase.rank.EndRoadViewRankUseCase;
 import com.kospot.game.application.usecase.rank.ReIssueRoadViewCoordinateUseCase;
 import com.kospot.game.application.usecase.history.GetAllRoadViewGamesUseCase;
 import com.kospot.game.application.usecase.history.GetRecentThreeRoadViewGamesUseCase;
 import com.kospot.game.application.usecase.practice.usecase.EndRoadViewPracticeUseCase;
 import com.kospot.game.application.usecase.practice.usecase.StartRoadViewPracticeUseCase;
-import com.kospot.application.game.roadview.rank.usecase.EndRoadViewRankUseCase;
-import com.kospot.application.game.roadview.rank.usecase.StartRoadViewRankUseCase;
+
 import com.kospot.common.annotation.adsense.BotSuccess;
 import com.kospot.common.security.aop.CurrentMember;
+import com.kospot.game.application.usecase.rank.StartRoadViewRankUseCase;
 import com.kospot.game.presentation.dto.request.EndGameRequest;
 import com.kospot.game.presentation.dto.response.EndGameResponse;
 import com.kospot.game.presentation.dto.response.RoadViewGameHistoryResponse;
