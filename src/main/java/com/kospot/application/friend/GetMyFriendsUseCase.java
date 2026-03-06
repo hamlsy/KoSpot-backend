@@ -3,6 +3,7 @@ package com.kospot.application.friend;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.kospot.domain.friend.adaptor.FriendAdaptor;
 import com.kospot.domain.friend.repository.FriendSummaryQueryModel;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.friend.service.FriendCacheRedisService;
@@ -19,12 +20,13 @@ import java.util.Set;
 @Transactional(readOnly = true)
 public class GetMyFriendsUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final FriendAdaptor friendAdaptor;
     private final FriendCacheRedisService friendCacheRedisService;
     private final LobbyPresenceService lobbyPresenceService;
 
-    public List<FriendListResponse> execute(Member member) {
-        Long memberId = member.getId();
+    public List<FriendListResponse> execute(Long memberId) {
+        Member member = memberAdaptor.queryById(memberId);
 
         return friendCacheRedisService
                 .getFriendList(memberId, new TypeReference<List<FriendListResponse>>() {})

@@ -119,7 +119,7 @@ public class SubscriptionValidationManager {
      */
     private String getValidatorSupportInfo(SubscriptionValidator validator) {
         // 각 검증자의 supports 메서드를 통해 지원 패턴을 확인
-        String[] commonPrefixes = {"/topic/chat/", "/topic/lobby", "/topic/room/", "/topic/game/", "/user/", "/topic/notification/"};
+        String[] commonPrefixes = {"/topic/chat/", "/topic/lobby", "/topic/room/", "/topic/game/", "/user/", "/topic/notification/", "/topic/friend/chat-rooms/"};
         
         StringBuilder supportInfo = new StringBuilder();
         for (String prefix : commonPrefixes) {

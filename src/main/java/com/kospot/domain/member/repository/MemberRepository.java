@@ -23,6 +23,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByUsername(String username);
 
+    @Query("select m from Member m left join fetch m.equippedMarkerImage where m.nickname like %:keyword%")
+    List<Member> findAllByNicknameKeyword(@Param("keyword") String keyword);
+
     Page<Member> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
     Page<Member> findAllByRoleOrderByCreatedDateDesc(Role role, Pageable pageable);

@@ -29,11 +29,11 @@ public class GameRoomPlayerInfo {
     private Long joinedAt;
 
     @Deprecated // 메서드 내부에서 사용될 때만
-    public static GameRoomPlayerInfo from(Member member, boolean isHost) {
+    public static GameRoomPlayerInfo from(Member member, String markerImageUrl, boolean isHost) {
         return GameRoomPlayerInfo.builder()
                 .memberId(member.getId())
                 .nickname(member.getNickname())
-                .markerImageUrl(member.getEquippedMarkerImage().getImageUrl()) // 직렬화 주의!
+                .markerImageUrl(markerImageUrl) // 직렬화 주의!
                 .isHost(isHost) // 호스트 여부는 별도로 설정 필요
                 .joinedAt(System.currentTimeMillis())
                 .build();

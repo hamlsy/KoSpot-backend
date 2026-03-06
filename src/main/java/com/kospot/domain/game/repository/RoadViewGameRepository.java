@@ -1,6 +1,7 @@
 package com.kospot.domain.game.repository;
 
 import com.kospot.domain.game.entity.RoadViewGame;
+import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.game.vo.GameStatus;
 import com.kospot.domain.member.entity.Member;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface RoadViewGameRepository extends JpaRepository<RoadViewGame, Long> {
@@ -45,6 +47,21 @@ public interface RoadViewGameRepository extends JpaRepository<RoadViewGame, Long
     Page<RoadViewGame> findByMemberAndGameStatusOrderByCreatedAtDesc(
             @Param("member") Member member,
             @Param("gameStatus") GameStatus gameStatus,
+            Pageable pageable
+    );
+
+    @Query("select rg from RoadViewGame rg " +
+            "join fetch rg.member " +
+            "where rg.gameType = :gameType " +
+            "and rg.gameStatus = :gameStatus " +
+            "and rg.endedAt >= :startAt " +
+            "and rg.endedAt < :endAt " +
+            "order by rg.score desc, rg.endedAt asc, rg.id asc")
+    List<RoadViewGame> findDailyMvpCandidates(
+            @Param("gameType") GameType gameType,
+            @Param("gameStatus") GameStatus gameStatus,
+            @Param("startAt") LocalDateTime startAt,
+            @Param("endAt") LocalDateTime endAt,
             Pageable pageable
     );
 }

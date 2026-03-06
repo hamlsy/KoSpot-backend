@@ -2,7 +2,6 @@ package com.kospot.presentation.admin.controller;
 
 import com.kospot.application.admin.member.FindAllMembersUseCase;
 import com.kospot.application.admin.member.FindMemberDetailUseCase;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.admin.dto.response.AdminMemberResponse;
@@ -31,21 +30,21 @@ public class AdminMemberController {
     @Operation(summary = "회원 목록 조회", description = "관리자가 회원 목록을 페이징 조회합니다.")
     @GetMapping
     public ApiResponseDto<Page<AdminMemberResponse.MemberInfo>> findAllMembers(
-            @CurrentMember Member admin,
+            @CurrentMember Long adminId,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(value = "role", required = false) String role
     ) {
-        Page<AdminMemberResponse.MemberInfo> members = findAllMembersUseCase.execute(admin, pageable, role);
+        Page<AdminMemberResponse.MemberInfo> members = findAllMembersUseCase.execute(adminId, pageable, role);
         return ApiResponseDto.onSuccess(members);
     }
 
     @Operation(summary = "회원 상세 조회", description = "관리자가 특정 회원의 상세 정보를 조회합니다.")
     @GetMapping("/{memberId}")
     public ApiResponseDto<AdminMemberResponse.MemberDetail> findMemberDetail(
-            @CurrentMember Member admin,
+            @CurrentMember Long adminId,
             @PathVariable("memberId") Long memberId
     ) {
-        AdminMemberResponse.MemberDetail memberDetail = findMemberDetailUseCase.execute(admin, memberId);
+        AdminMemberResponse.MemberDetail memberDetail = findMemberDetailUseCase.execute(adminId, memberId);
         return ApiResponseDto.onSuccess(memberDetail);
     }
 }

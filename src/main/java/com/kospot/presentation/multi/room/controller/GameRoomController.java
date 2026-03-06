@@ -3,7 +3,6 @@ package com.kospot.presentation.multi.room.controller;
 
 import com.kospot.application.multi.game.usecase.NotifyStartGameUseCase;
 import com.kospot.application.multi.room.http.usecase.*;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.adsense.BotSuccess;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
@@ -52,55 +51,55 @@ public class GameRoomController {
 
     @Operation(summary = "게임 방 생성", description = "멀티 게임 방을 생성합니다.")
     @PostMapping("/")
-    public ApiResponseDto<GameRoomResponse> createRoom(@CurrentMember Member member, @RequestBody GameRoomRequest.Create request) {
-        return ApiResponseDto.onSuccess(createGameRoomUseCase.execute(member, request));
+    public ApiResponseDto<GameRoomResponse> createRoom(@CurrentMember Long memberId, @RequestBody GameRoomRequest.Create request) {
+        return ApiResponseDto.onSuccess(createGameRoomUseCase.execute(memberId, request));
     }
 
     @Operation(summary = "게임 방 수정", description = "멀티 게임 방을 수정합니다.")
     @PutMapping("/{roomId}")
-    public ApiResponseDto<GameRoomResponse> updateRoom(@CurrentMember Member member, 
+    public ApiResponseDto<GameRoomResponse> updateRoom(@CurrentMember Long memberId, 
                                                        @PathVariable("roomId") Long roomId,
                                                        @RequestBody GameRoomRequest.Update request) {
-        return ApiResponseDto.onSuccess(updateGameRoomSettingsUseCase.execute(member, request, roomId));
+        return ApiResponseDto.onSuccess(updateGameRoomSettingsUseCase.execute(memberId, request, roomId));
     }
 
     @Operation(summary = "게임 방 상세 조회", description = "멀티 게임 방 상세 정보를 조회합니다.")
     @BotSuccess
     @GetMapping("/{roomId}")
-    public ApiResponseDto<GameRoomDetailResponse> getRoomDetail(@PathVariable("roomId") Long roomId, @CurrentMember Member member) {
-        return ApiResponseDto.onSuccess(getGameRoomDetailUseCase.execute(member, roomId));
+    public ApiResponseDto<GameRoomDetailResponse> getRoomDetail(@PathVariable("roomId") Long roomId, @CurrentMember Long memberId) {
+        return ApiResponseDto.onSuccess(getGameRoomDetailUseCase.execute(memberId, roomId));
     }
 
     @Operation(summary = "게임 방 참여", description = "멀티 게임 방에 참여합니다.")
     @PostMapping("/{roomId}/join")
-    public ApiResponseDto<?> joinRoom(@CurrentMember Member member, 
+    public ApiResponseDto<?> joinRoom(@CurrentMember Long memberId, 
                                       @PathVariable("roomId") Long roomId,
                                       @RequestBody GameRoomRequest.Join request) {
-        joinGameRoomUseCase.executeV1(member, roomId, request);
+        joinGameRoomUseCase.executeV1(memberId, roomId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "게임 방 퇴장", description = "게임 방에서 퇴장합니다.")
     @DeleteMapping("/{roomId}/leave")
-    public ApiResponseDto<?> leaveRoom(@CurrentMember Member member, @PathVariable("roomId") Long roomId) {
-        leaveGameRoomUseCase.execute(member, roomId);
+    public ApiResponseDto<?> leaveRoom(@CurrentMember Long memberId, @PathVariable("roomId") Long roomId) {
+        leaveGameRoomUseCase.execute(memberId, roomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "게임 방 플레이어 강퇴", description = "게임 방에서 플레이어를 강퇴시킵니다.")
     @DeleteMapping("/{roomId}/kick")
-    public ApiResponseDto<?> kickPlayer(@CurrentMember Member member, 
+    public ApiResponseDto<?> kickPlayer(@CurrentMember Long memberId, 
                                        @PathVariable("roomId") Long roomId,
                                        @RequestBody GameRoomRequest.Kick request) {
-        kickPlayerUseCase.execute(member, request, roomId);
+        kickPlayerUseCase.execute(memberId, request, roomId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "게임 시작 알림", description = "게임 시작을 알립니다.")
     @PostMapping("/{roomId}/start")
-    public ApiResponseDto<MultiGameResponse.StartGame> notifyStartGame(@CurrentMember Member member,
+    public ApiResponseDto<MultiGameResponse.StartGame> notifyStartGame(@CurrentMember Long memberId,
                                                                        @PathVariable("roomId") Long roomId) {
-        return ApiResponseDto.onSuccess(notifyStartGameUseCase.execute(member, roomId));
+        return ApiResponseDto.onSuccess(notifyStartGameUseCase.execute(memberId, roomId));
     }
 
 }

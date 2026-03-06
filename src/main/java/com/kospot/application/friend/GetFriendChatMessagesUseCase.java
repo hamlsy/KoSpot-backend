@@ -5,6 +5,7 @@ import com.kospot.domain.friend.entity.FriendChatRoom;
 import com.kospot.domain.friend.exception.FriendErrorStatus;
 import com.kospot.domain.friend.exception.FriendHandler;
 import com.kospot.domain.friend.service.FriendChatService;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.friend.dto.response.FriendChatMessageResponse;
@@ -20,10 +21,12 @@ public class GetFriendChatMessagesUseCase {
 
     private static final int DEFAULT_PAGE_SIZE = 30;
 
+    private final MemberAdaptor memberAdaptor;
     private final FriendAdaptor friendAdaptor;
     private final FriendChatService friendChatService;
 
-    public List<FriendChatMessageResponse> execute(Member member, Long roomId, int page, Integer size) {
+    public List<FriendChatMessageResponse> execute(Long memberId, Long roomId, int page, Integer size) {
+        Member member = memberAdaptor.queryById(memberId);
         int pageSize = size == null ? DEFAULT_PAGE_SIZE : Math.min(Math.max(size, 1), 100);
 
         FriendChatRoom room = friendAdaptor.queryChatRoomById(roomId);

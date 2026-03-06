@@ -1,5 +1,6 @@
 package com.kospot.application.main;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
 import com.kospot.domain.statistic.entity.MemberStatistic;
@@ -21,13 +22,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FindMainPageInfoUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final MemberStatisticAdaptor memberStatisticAdaptor;
     private final ActiveBannerCacheService activeBannerCacheService;
     private final RecentNoticeCacheService recentNoticeCacheService;
 
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
-    public MainPageResponse.MainPageInfo execute(Member member) {
+    public MainPageResponse.MainPageInfo execute(Long memberId) {
+        Member member = memberId == null ? null : memberAdaptor.queryById(memberId);
         // 멤버 정보 조회
         MainPageResponse.MyInfo myInfo = null;
         if (member != null) {

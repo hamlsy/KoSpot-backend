@@ -1,7 +1,6 @@
 package com.kospot.presentation.admin.controller;
 
 import com.kospot.application.admin.access.ValidateAdminUseCase;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -28,8 +27,8 @@ public class AdminAccessController {
 
     @Operation(summary = "관리자 접근 권한 검증", description = "관리자 접근 권한을 검증합니다.")
     @GetMapping
-    public ApiResponseDto<?> validateAdminAccess(@CurrentMember Member member) {
-        validateAdminUseCase.execute(member);
+    public ApiResponseDto<?> validateAdminAccess(@CurrentMember Long memberId) {
+        validateAdminUseCase.execute(memberId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

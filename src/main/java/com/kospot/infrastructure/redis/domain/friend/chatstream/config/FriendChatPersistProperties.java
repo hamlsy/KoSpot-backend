@@ -23,4 +23,7 @@ public class FriendChatPersistProperties {
     private long flushIntervalMs = 1000L;
     private int maxRetry = 5;
     private long shutdownTimeoutMs = 10000L;
+    private long initRetryDelayMs = 1000L;
+    private long errorLogThrottleMs = 30000L;
+    private boolean initFailFast = true;
 }

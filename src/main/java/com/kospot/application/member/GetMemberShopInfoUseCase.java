@@ -1,5 +1,6 @@
 package com.kospot.application.member;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberitem.adaptor.MemberItemAdaptor;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -16,9 +17,11 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class GetMemberShopInfoUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final MemberItemAdaptor memberItemAdaptor;
 
-    public MemberShopInfoResponse execute(Member member) {
+    public MemberShopInfoResponse execute(Long memberId) {
+        Member member = memberAdaptor.queryById(memberId);
         List<MemberItemResponse> ownedItems = memberItemAdaptor.queryAllByMemberFetch(member);
         List<MemberItemResponse> equippedItems = ownedItems.stream()
                 .filter(item -> item.getIsEquipped())

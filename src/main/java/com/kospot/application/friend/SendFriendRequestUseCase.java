@@ -34,7 +34,8 @@ public class SendFriendRequestUseCase {
     private final FriendCacheRedisService friendCacheRedisService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public FriendRequestActionResponse execute(Member requester, Long receiverMemberId) {
+    public FriendRequestActionResponse execute(Long requesterId, Long receiverMemberId) {
+        Member requester = memberAdaptor.queryById(requesterId);
         validateNotSelf(requester.getId(), receiverMemberId);
         memberAdaptor.queryById(receiverMemberId);
 

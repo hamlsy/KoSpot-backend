@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class ChatMessageEvent {
 
@@ -91,7 +92,7 @@ public class ChatMessageEvent {
         if (chatMessage.getCreatedDate() != null) {
             return chatMessage.getCreatedDate();
         }
-        return LocalDateTime.now();
+        return LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
 }

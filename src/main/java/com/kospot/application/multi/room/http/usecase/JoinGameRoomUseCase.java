@@ -1,5 +1,6 @@
 package com.kospot.application.multi.room.http.usecase;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class JoinGameRoomUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomService gameRoomService;
     private final GameRoomRedisService gameRoomRedisService;
@@ -33,7 +35,8 @@ public class JoinGameRoomUseCase {
     private final ApplicationEventPublisher eventPublisher;
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
 
-    public void executeV1(Member player, Long gameRoomId, GameRoomRequest.Join request) {
+    public void executeV1(Long playerId, Long gameRoomId, GameRoomRequest.Join request) {
+        Member player = memberAdaptor.queryById(playerId);
         autoLeaveIfInOtherRoom(player, gameRoomId);
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
         validateGameCapacityV1(gameRoom);
@@ -82,7 +85,7 @@ public class JoinGameRoomUseCase {
             Long previousRoomId = player.getGameRoomId();
             log.info("Auto-leaving room {} before joining room {} - MemberId: {}",
                     previousRoomId, targetRoomId, player.getId());
-            leaveGameRoomUseCase.execute(player, previousRoomId);
+            leaveGameRoomUseCase.execute(player.getId(), previousRoomId);
         }
     }
 

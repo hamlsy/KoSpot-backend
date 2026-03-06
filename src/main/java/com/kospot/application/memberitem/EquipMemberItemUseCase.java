@@ -1,6 +1,7 @@
 package com.kospot.application.memberitem;
 
 import com.kospot.domain.item.vo.ItemType;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.memberitem.adaptor.MemberItemAdaptor;
 import com.kospot.domain.memberitem.entity.MemberItem;
@@ -15,12 +16,14 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class EquipMemberItemUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final MemberItemAdaptor memberItemAdaptor;
     private final MemberItemService memberItemService;
 
     private final MemberProfileRedisService memberProfileRedisService;
 
-    public void execute(Member member, Long memberItemId){
+    public void execute(Long memberId, Long memberItemId){
+        Member member = memberAdaptor.queryById(memberId);
         MemberItem memberItem = memberItemAdaptor.queryByIdFetchItemAndImage(memberItemId);
         memberItemService.equipItem(member, memberItem);
         if(memberItem.getItem().getItemType() == ItemType.MARKER) {

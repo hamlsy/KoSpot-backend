@@ -26,7 +26,8 @@ public class KickPlayerUseCase {
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomNotificationService notificationService;
 
-    public void execute(Member host, GameRoomRequest.Kick request, Long gameRoomId) {
+    public void execute(Long hostId, GameRoomRequest.Kick request, Long gameRoomId) {
+        Member host = memberAdaptor.queryById(hostId);
         Long targetPlayerId = request.getTargetPlayerId();
         
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
@@ -38,7 +39,7 @@ public class KickPlayerUseCase {
         
         gameRoomRedisService.removePlayerFromRoom(gameRoomId.toString(), targetPlayerId);
         
-        GameRoomPlayerInfo targetPlayerInfo = GameRoomPlayerInfo.from(targetPlayer, false);
+        GameRoomPlayerInfo targetPlayerInfo = GameRoomPlayerInfo.from(targetPlayer, null,false);
         notificationService.notifyPlayerKicked(gameRoomId.toString(), targetPlayerInfo);
         
         log.info("Player kicked - HostId: {}, TargetId: {}, RoomId: {}", 

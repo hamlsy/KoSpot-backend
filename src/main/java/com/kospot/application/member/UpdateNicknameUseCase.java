@@ -25,7 +25,8 @@ public class UpdateNicknameUseCase {
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
     private final MemberProfileRedisService memberProfileRedisService;
 
-    public void execute(Member member, String nickname) {
+    public void execute(Long memberId, String nickname) {
+        Member member = memberAdaptor.queryById(memberId);
         validateNicknameDuplication(nickname);
         memberService.updateNickname(member, nickname);
 

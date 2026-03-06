@@ -1,6 +1,6 @@
 package com.kospot.presentation.chat.dto.request;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class ChatMessageDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Lobby {
-        @NotEmpty
+        @NotBlank
         private String content;
     }
 
@@ -23,7 +23,7 @@ public class ChatMessageDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class GameRoom {
-        @NotEmpty
+        @NotBlank
         private String content;
         private String team;
     }
@@ -33,9 +33,17 @@ public class ChatMessageDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class GlobalGame {
-        @NotEmpty
         private Long playerId;
-        @NotEmpty
+        @NotBlank
+        private String content;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Friend {
+        @NotBlank
         private String content;
     }
 

@@ -1,7 +1,6 @@
 package com.kospot.presentation.main.controller;
 
 import com.kospot.application.main.FindMainPageInfoUseCase;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.infrastructure.security.aop.CurrentMemberOrNull;
@@ -34,8 +33,8 @@ public class MainPageController {
     )
     @GetMapping
     public ApiResponseDto<MainPageResponse.MainPageInfo> getMainPageInfo(
-            @CurrentMemberOrNull Member member) {
-        MainPageResponse.MainPageInfo mainPageInfo = findMainPageInfoUseCase.execute(member);
+            @CurrentMemberOrNull Long memberId) {
+        MainPageResponse.MainPageInfo mainPageInfo = findMainPageInfoUseCase.execute(memberId);
         return ApiResponseDto.onSuccess(mainPageInfo);
     }
 }

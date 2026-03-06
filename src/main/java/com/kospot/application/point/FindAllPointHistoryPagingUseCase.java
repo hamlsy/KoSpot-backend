@@ -1,5 +1,6 @@
 package com.kospot.application.point;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.point.adaptor.PointHistoryAdaptor;
 import com.kospot.domain.point.entity.PointHistory;
@@ -21,10 +22,12 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class FindAllPointHistoryPagingUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final static int SIZE = 10;
     private final PointHistoryAdaptor pointHistoryAdaptor;
 
-    public List<PointHistoryResponse> execute(Member member, int page) {
+    public List<PointHistoryResponse> execute(Long memberId, int page) {
+        Member member = memberAdaptor.queryById(memberId);
         Pageable pageable = PageRequest.of(page, SIZE, Sort.Direction.DESC, "createdDate");
         List<PointHistory> pointHistories = pointHistoryAdaptor.queryAllByMemberPaging(member, pageable);
         return pointHistories.stream().map(PointHistoryResponse::from)

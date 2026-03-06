@@ -7,7 +7,6 @@ import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.item.dto.request.ItemRequest;
 import com.kospot.presentation.item.dto.response.ItemResponse;
 import com.kospot.domain.item.service.ItemService;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,31 +54,31 @@ public class ItemController {
 
     @Operation(summary = "아이템 타입 별 조회", description = "타입 별 아이템들을 조회합니다.")
     @GetMapping("/{itemTypeKey}")
-    public ApiResponseDto<List<ItemResponse>> findItemsByItemType(@CurrentMember Member member, @PathVariable("itemTypeKey") String itemTypeKey) {
-        return ApiResponseDto.onSuccess(findAllItemsByTypeUseCase.execute(member, itemTypeKey));
+    public ApiResponseDto<List<ItemResponse>> findItemsByItemType(@CurrentMember Long memberId, @PathVariable("itemTypeKey") String itemTypeKey) {
+        return ApiResponseDto.onSuccess(findAllItemsByTypeUseCase.execute(memberId, itemTypeKey));
     }
 
     @Operation(summary = "아이템 등록", description = "아이템을 등록합니다.")
     @PostMapping("/")
-    public ApiResponseDto<?> registerItem(@CurrentMember Member member,
+    public ApiResponseDto<?> registerItem(@CurrentMember Long memberId,
                                           @ModelAttribute ItemRequest.Create request,
                                           @RequestParam("file") MultipartFile file) {
-        registerItemUseCase.execute(member, request, file);
+        registerItemUseCase.execute(memberId, request, file);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 상점 삭제", description = "아이템을 상점에서 삭제합니다.")
     @PutMapping("/{id}/deleteShop")
-    public ApiResponseDto<?> deleteItemFromShop(@CurrentMember Member member, @PathVariable("id") Long id) {
-        deleteItemFromShopUseCase.execute(member, id);
+    public ApiResponseDto<?> deleteItemFromShop(@CurrentMember Long memberId, @PathVariable("id") Long id) {
+        deleteItemFromShopUseCase.execute(memberId, id);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 상점 재등록", description = "아이템을 상점에 재등록합니다.")
     @PutMapping("/{id}/restoreShop")
-    public ApiResponseDto<?> restoreItemToShop(@CurrentMember Member member,
+    public ApiResponseDto<?> restoreItemToShop(@CurrentMember Long memberId,
                                                @PathVariable("id") Long id) {
-        restoreItemToShopUseCase.execute(member, id);
+        restoreItemToShopUseCase.execute(memberId, id);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
@@ -87,16 +86,16 @@ public class ItemController {
     //todo 사진도 업데이트
     @Operation(summary = "아이템 정보 업데이트", description = "아이템 정보를 업데이트 합니다.")
     @PutMapping("/info")
-    public ApiResponseDto<?> updateItemInfo(@CurrentMember Member member,
+    public ApiResponseDto<?> updateItemInfo(@CurrentMember Long memberId,
                                             @RequestBody ItemRequest.UpdateInfo request) {
-        updateItemInfoUseCase.execute(member, request);
+        updateItemInfoUseCase.execute(memberId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "아이템 삭제", description = "아이템을 삭제합니다.")
     @DeleteMapping("/{id}")
-    public ApiResponseDto<?> deleteItem(@CurrentMember Member member, @PathVariable("id") Long itemId) {
-        deleteItemUseCase.execute(member, itemId);
+    public ApiResponseDto<?> deleteItem(@CurrentMember Long memberId, @PathVariable("id") Long itemId) {
+        deleteItemUseCase.execute(memberId, itemId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

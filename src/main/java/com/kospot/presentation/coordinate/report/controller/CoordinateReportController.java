@@ -1,7 +1,6 @@
 package com.kospot.presentation.coordinate.report.controller;
 
 import com.kospot.application.coordinate.report.ReportCoordinateUseCase;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -26,8 +25,8 @@ public class CoordinateReportController {
     private final ReportCoordinateUseCase reportCoordinateUseCase;
 
     @PostMapping
-    public ApiResponseDto<?> reportCoordinate(@RequestBody CoordinateReportRequest.Report request, @CurrentMember Member member) {
-        reportCoordinateUseCase.execute(request, member);
+    public ApiResponseDto<?> reportCoordinate(@RequestBody CoordinateReportRequest.Report request, @CurrentMember Long memberId) {
+        reportCoordinateUseCase.execute(request, memberId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 

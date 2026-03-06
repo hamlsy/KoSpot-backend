@@ -3,6 +3,7 @@ package com.kospot.application.friend;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.kospot.domain.friend.adaptor.FriendAdaptor;
 import com.kospot.domain.friend.entity.FriendRequest;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.friend.service.FriendCacheRedisService;
@@ -20,13 +21,14 @@ public class GetIncomingFriendRequestsUseCase {
 
     private static final int DEFAULT_PAGE_SIZE = 20;
 
+    private final MemberAdaptor memberAdaptor;
     private final FriendAdaptor friendAdaptor;
     private final FriendCacheRedisService friendCacheRedisService;
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
-    public List<IncomingFriendRequestResponse> execute(Member member, int page, Integer size) {
+    public List<IncomingFriendRequestResponse> execute(Long memberId, int page, Integer size) {
+        Member member = memberAdaptor.queryById(memberId);
         int pageSize = size == null ? DEFAULT_PAGE_SIZE : Math.min(Math.max(size, 1), 50);
-        Long memberId = member.getId();
 
         if (page == 0) {
             return friendCacheRedisService

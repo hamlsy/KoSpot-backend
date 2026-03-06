@@ -1,6 +1,7 @@
 package com.kospot.application.multi.submission.http.usecase;
 
 import com.kospot.domain.game.vo.GameMode;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.gamePlayer.adaptor.GamePlayerAdaptor;
 import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SubmitRoadViewPlayerAnswerUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final RoadViewGameRoundAdaptor roadViewGameRoundAdaptor;
     private final GamePlayerAdaptor gamePlayerAdaptor;
     private final RoadViewSubmissionService roadViewSubmissionService;
@@ -31,8 +33,9 @@ public class SubmitRoadViewPlayerAnswerUseCase {
     private final SubmissionRedisService submissionRedisService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public void execute(Member member, String roomId, Long gameId,
+    public void execute(Long memberId, String roomId, Long gameId,
                         Long roundId, SubmitRoadViewRequest.Player request) {
+        Member member = memberAdaptor.queryById(memberId);
         RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchCoordinate(roundId);
         GamePlayer player = gamePlayerAdaptor.queryByMemberIdAndGameId(member.getId(), gameId);
 

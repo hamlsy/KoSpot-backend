@@ -3,6 +3,7 @@ package com.kospot.infrastructure.redis.domain.friend.chatstream.worker;
 import com.kospot.domain.friend.model.FriendChatStreamMessage;
 import com.kospot.infrastructure.redis.domain.friend.chatstream.config.FriendChatPersistProperties;
 import com.kospot.infrastructure.redis.domain.friend.chatstream.dlq.FriendChatDlqPublisher;
+import com.kospot.infrastructure.redis.domain.friend.chatstream.init.FriendChatStreamInitializer;
 import com.kospot.infrastructure.redis.domain.friend.chatstream.persistence.FriendChatBatchInsertRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ public class FriendChatPersistWorker implements SmartLifecycle {
     private final FriendChatPersistProperties properties;
     private final FriendChatBatchInsertRepository batchInsertRepository;
     private final FriendChatDlqPublisher dlqPublisher;
+    private final FriendChatStreamInitializer streamInitializer;
 
     private final List<MapRecord<String, Object, Object>> buffer = new ArrayList<>();
     private final Map<String, Integer> failureCountByStreamId = new ConcurrentHashMap<>();
@@ -44,12 +46,15 @@ public class FriendChatPersistWorker implements SmartLifecycle {
     private ExecutorService executorService;
     private Future<?> workerFuture;
     private long lastFlushAt;
+    private long lastNoGroupErrorLoggedAt;
 
     @Override
     public synchronized void start() {
         if (running || !properties.isEnabled()) {
             return;
         }
+
+        ensureGroupWithRetryLog();
 
         running = true;
         lastFlushAt = System.currentTimeMillis();
@@ -80,6 +85,18 @@ public class FriendChatPersistWorker implements SmartLifecycle {
                     flush();
                 }
             } catch (Exception e) {
+                if (isInterruptedError(e)) {
+                    if (!running || Thread.currentThread().isInterrupted()) {
+                        log.debug("Friend chat persist worker interrupted during shutdown.");
+                        break;
+                    }
+                    log.debug("Friend chat persist worker read interrupted. waiting for next loop.");
+                    continue;
+                }
+                if (isNoGroupError(e)) {
+                    handleNoGroupError(e);
+                    continue;
+                }
                 log.error("Friend chat persist worker loop error", e);
             }
         }
@@ -148,6 +165,7 @@ public class FriendChatPersistWorker implements SmartLifecycle {
 
         try {
             batchInsertRepository.batchInsert(payloads);
+            batchInsertRepository.batchUpdateRoomLastMessageAt(extractRoomLastMessageAt(payloads));
             ackRecords(validRecords);
             validRecords.forEach(record -> failureCountByStreamId.remove(record.getId().getValue()));
             log.debug("Friend chat batch persisted. size={}", validRecords.size());
@@ -217,6 +235,74 @@ public class FriendChatPersistWorker implements SmartLifecycle {
                 .toArray(String[]::new);
 
         stringRedisTemplate.opsForStream().acknowledge(properties.getStreamKey(), properties.getGroup(), ids);
+    }
+
+    private Map<Long, LocalDateTime> extractRoomLastMessageAt(List<FriendChatStreamMessage> payloads) {
+        Map<Long, LocalDateTime> roomLastMessageAt = new HashMap<>();
+        for (FriendChatStreamMessage payload : payloads) {
+            roomLastMessageAt.merge(
+                    payload.roomId(),
+                    payload.createdAt(),
+                    (current, candidate) -> candidate.isAfter(current) ? candidate : current
+            );
+        }
+        return roomLastMessageAt;
+    }
+
+    private void ensureGroupWithRetryLog() {
+        try {
+            streamInitializer.ensureGroup();
+        } catch (Exception e) {
+            log.warn("Friend chat stream group initialization failed. worker will retry. streamKey={}, group={}, reason={}",
+                    properties.getStreamKey(), properties.getGroup(), e.getMessage());
+        }
+    }
+
+    private void handleNoGroupError(Exception e) {
+        long now = System.currentTimeMillis();
+        if (now - lastNoGroupErrorLoggedAt >= properties.getErrorLogThrottleMs()) {
+            lastNoGroupErrorLoggedAt = now;
+            log.warn("Friend chat stream/group missing. reinitializing. streamKey={}, group={}, reason={}",
+                    properties.getStreamKey(), properties.getGroup(), e.getMessage());
+        }
+
+        ensureGroupWithRetryLog();
+        sleepRetryDelay();
+    }
+
+    private boolean isNoGroupError(Throwable throwable) {
+        Throwable current = throwable;
+        while (current != null) {
+            String message = current.getMessage();
+            if (message != null && message.contains("NOGROUP")) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
+    }
+
+    private boolean isInterruptedError(Throwable throwable) {
+        Throwable current = throwable;
+        while (current != null) {
+            if (current instanceof InterruptedException) {
+                return true;
+            }
+            String className = current.getClass().getName();
+            if (className.endsWith("RedisCommandInterruptedException")) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
+    }
+
+    private void sleepRetryDelay() {
+        try {
+            Thread.sleep(properties.getInitRetryDelayMs());
+        } catch (InterruptedException interruptedException) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Override

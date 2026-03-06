@@ -5,6 +5,7 @@ import com.kospot.domain.coordinate.entity.LocationType;
 import com.kospot.domain.coordinate.entity.Sido;
 import com.kospot.domain.coordinate.service.CoordinateService;
 import com.kospot.domain.coordinate.vo.Address;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.presentation.admin.dto.request.AdminCoordinateRequest;
@@ -15,10 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CreateCoordinateUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final CoordinateService coordinateService;
 
     @Transactional
-    public Long execute(Member admin, AdminCoordinateRequest.Create request) {
+    public Long execute(Long adminId, AdminCoordinateRequest.Create request) {
+        Member admin = memberAdaptor.queryById(adminId);
         admin.validateAdmin();
 
         Sido sido = Sido.fromKey(request.getSidoKey());

@@ -1,5 +1,6 @@
 package com.kospot.application.admin.adsense;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.service.MemberService;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
@@ -13,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RegisterAdsenseBotUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final MemberService memberService;
 
-    public void execute(String username, Member member) {
+    public void execute(String username, Long memberId) {
+        Member member = memberAdaptor.queryById(memberId);
         member.validateAdmin();
         memberService.registerAdsenseBot(username);
     }

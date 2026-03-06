@@ -2,6 +2,7 @@ package com.kospot.presentation.admin.controller;
 
 import com.kospot.application.admin.statistics.GetOverallStatisticsUseCase;
 import com.kospot.application.admin.statistics.GetStatisticsByPeriodUseCase;
+import com.kospot.application.admin.access.ValidateAdminUseCase;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
 import com.kospot.presentation.admin.dto.response.GameModeStatisticSummary;
@@ -20,12 +21,13 @@ public class AdminStatisticsController {
 
     private final GetOverallStatisticsUseCase getOverallStatisticsUseCase;
     private final GetStatisticsByPeriodUseCase getStatisticsByPeriodUseCase;
+    private final ValidateAdminUseCase validateAdminUseCase;
 
     @Operation(summary = "전체 통계 조회", description = "게임 모드별 전체 통계를 조회합니다.")
     @GetMapping("/overall")
     public ApiResponseDto<List<GameModeStatisticSummary>> getOverallStatistics(
-            @CurrentMember com.kospot.domain.member.entity.Member admin) {
-        admin.validateAdmin();
+            @CurrentMember Long adminId) {
+        validateAdminUseCase.execute(adminId);
         List<GameModeStatisticSummary> statistics = getOverallStatisticsUseCase.execute();
         return ApiResponseDto.onSuccess(statistics);
     }
@@ -33,9 +35,9 @@ public class AdminStatisticsController {
     @Operation(summary = "기간별 통계 조회", description = "일간/주간/월간 통계를 조회합니다.")
     @GetMapping("/period/{period}")
     public ApiResponseDto<List<GameModeStatisticSummary>> getStatisticsByPeriod(
-            @CurrentMember com.kospot.domain.member.entity.Member admin,
+            @CurrentMember Long adminId,
             @PathVariable String period) {
-        admin.validateAdmin();
+        validateAdminUseCase.execute(adminId);
         List<GameModeStatisticSummary> statistics = getStatisticsByPeriodUseCase.execute(period);
         return ApiResponseDto.onSuccess(statistics);
     }

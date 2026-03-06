@@ -1,7 +1,6 @@
 package com.kospot.presentation.notice.controller;
 
 import com.kospot.application.notice.*;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -58,30 +57,30 @@ public class NoticeController {
 
     @Operation(summary = "공지사항 생성", description = "공지사항을 생성합니다.")
     @PostMapping
-    public ApiResponseDto<?> createNotice(@CurrentMember Member member, @RequestBody NoticeRequest.Create request) {
-        createNoticeUseCase.execute(member, request);
+    public ApiResponseDto<?> createNotice(@CurrentMember Long memberId, @RequestBody NoticeRequest.Create request) {
+        createNoticeUseCase.execute(memberId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
     @PutMapping("/{id}")
-    public ApiResponseDto<?> updateNotice(@CurrentMember Member member, @PathVariable("id") Long noticeId, @ModelAttribute NoticeRequest.Update request) {
-        updateNoticeUseCase.execute(member, noticeId, request);
+    public ApiResponseDto<?> updateNotice(@CurrentMember Long memberId, @PathVariable("id") Long noticeId, @ModelAttribute NoticeRequest.Update request) {
+        updateNoticeUseCase.execute(memberId, noticeId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     //todo notice delete - admin
     @Operation(summary = "공지사항 삭제", description = "공지사항을 삭제합니다.")
     @DeleteMapping("/{id}")
-    public ApiResponseDto<?> deleteNotice(Member member, @PathVariable("id") Long noticeId) {
-        deleteNoticeUseCase.execute(member, noticeId);
+    public ApiResponseDto<?> deleteNotice(@CurrentMember Long memberId, @PathVariable("id") Long noticeId) {
+        deleteNoticeUseCase.execute(memberId, noticeId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "공지사항 이미지 첨부", description = "공지사항 작성 시 이미지를 첨부합니다.")
     @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponseDto<NoticeResponse.NoticeImage> uploadNoticeImage(@CurrentMember Member member, @RequestParam("file") MultipartFile file) {
-        NoticeResponse.NoticeImage noticeImage = uploadNoticeImageUseCase.execute(file, member);
+    public ApiResponseDto<NoticeResponse.NoticeImage> uploadNoticeImage(@CurrentMember Long memberId, @RequestParam("file") MultipartFile file) {
+        NoticeResponse.NoticeImage noticeImage = uploadNoticeImageUseCase.execute(file, memberId);
         return ApiResponseDto.onSuccess(noticeImage);
     }
 

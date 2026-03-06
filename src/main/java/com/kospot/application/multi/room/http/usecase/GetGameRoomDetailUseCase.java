@@ -1,5 +1,6 @@
 package com.kospot.application.multi.room.http.usecase;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
@@ -19,10 +20,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class GetGameRoomDetailUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final GameRoomAdaptor gameRoomAdaptor;
     private final GameRoomRedisService gameRoomRedisService;
 
-    public GameRoomDetailResponse execute(Member member, Long gameRoomId) {
+    public GameRoomDetailResponse execute(Long memberId, Long gameRoomId) {
+        Member member = memberAdaptor.queryById(memberId);
         GameRoom gameRoom = gameRoomAdaptor.queryById(gameRoomId);
         List<GameRoomPlayerInfo> players = gameRoomRedisService.getRoomPlayers(gameRoomId.toString());
 

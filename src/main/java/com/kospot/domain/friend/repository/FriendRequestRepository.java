@@ -14,8 +14,10 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
 
     Optional<FriendRequest> findByCanonicalPairKey(String canonicalPairKey);
 
+    List<FriendRequest> findByCanonicalPairKeyIn(List<String> canonicalPairKeys);
+
     @Query("select fr from FriendRequest fr where fr.receiverMemberId = :receiverMemberId and fr.status = :status order by fr.createdDate desc")
     List<FriendRequest> findIncomingByReceiverAndStatus(@Param("receiverMemberId") Long receiverMemberId,
-                                                        @Param("status") FriendRequestStatus status,
-                                                        Pageable pageable);
+            @Param("status") FriendRequestStatus status,
+            Pageable pageable);
 }

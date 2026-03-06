@@ -11,8 +11,9 @@ public enum PointHistoryType {
     PRACTICE_GAME("연습게임 플레이"),
     RANK_GAME("랭크게임 플레이"),
     MULTI_GAME("멀티게임 플레이"),
+    MVP_REWARD("오늘의 MVP 보상"),
     DAILY_BONUS("출석 보너스"),
-    EVENT_REWARD("이벤트 보상"),;
+    EVENT_REWARD("이벤트 보상");
 
     private final String description;
 

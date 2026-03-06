@@ -27,4 +27,10 @@ public final class RedisKeyConstants {
     public static final String FRIEND_LIST_KEY_PATTERN = "friend:list:%s:v1";
     public static final String FRIEND_INCOMING_KEY_PATTERN = "friend:incoming:%s:v1";
 
+    // Daily MVP cache keys
+    public static final String DAILY_MVP_KEY_PATTERN = "mvp:daily:%s:v1";
+    public static final String DAILY_MVP_NONE_KEY_PATTERN = "mvp:daily:none:%s:v1";
+    public static final String DAILY_MVP_REBUILD_LOCK_KEY_PATTERN = "mvp:daily:rebuild:lock:%s";
+    public static final String DAILY_MVP_SCHEDULE_LOCK_KEY_PATTERN = "mvp:daily:schedule:lock:%s";
+
 }

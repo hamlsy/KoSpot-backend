@@ -1,5 +1,6 @@
 package com.kospot.application.multi.room.http.usecase;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.service.GameRoomService;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CreateGameRoomUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final GameRoomRedisService gameRoomRedisService;
     private final GameRoomService gameRoomService;
 
@@ -30,20 +32,19 @@ public class CreateGameRoomUseCase {
     private final LobbyRoomNotificationService lobbyRoomNotificationService;
     private final LeaveGameRoomUseCase leaveGameRoomUseCase;
 
-    public GameRoomResponse execute(Member host, GameRoomRequest.Create request) {
+    public GameRoomResponse execute(Long hostId, GameRoomRequest.Create request) {
+        Member host = memberAdaptor.queryById(hostId);
         autoLeaveIfInRoom(host);
         GameRoom gameRoom = gameRoomService.createGameRoom(host, request);
-        // redis 설정
-        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(host, true);
-        gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
 
         // member profile view 설정
-        if (memberProfileRedisAdaptor.findProfile(host.getId()) == null) {
-            memberProfileRedisService.saveProfile(
-                    host.getId(),
-                    host.getNickname(),
-                    host.getEquippedMarkerImage().getImageUrl());
-        }
+        MemberProfileRedisAdaptor.MemberProfileView profileView = memberProfileRedisAdaptor.findProfile(host.getId());
+
+        // redis 설정
+        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.from(host, profileView.markerImageUrl(), true);
+        gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
+
+
         // notify
         lobbyRoomNotificationService.notifyRoomCreated(gameRoom);
 
@@ -55,7 +56,7 @@ public class CreateGameRoomUseCase {
         if (currentRoomId != null) {
             log.info("Auto-leaving room {} before creating new room - MemberId: {}",
                     currentRoomId, host.getId());
-            leaveGameRoomUseCase.execute(host, currentRoomId);
+            leaveGameRoomUseCase.execute(host.getId(), currentRoomId);
         }
     }
 

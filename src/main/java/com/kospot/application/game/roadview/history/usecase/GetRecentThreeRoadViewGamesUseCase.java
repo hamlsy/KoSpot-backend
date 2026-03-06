@@ -7,6 +7,7 @@ import com.kospot.domain.gamerank.adaptor.GameRankAdaptor;
 import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.service.GameRankService;
 import com.kospot.domain.statistic.adaptor.MemberStatisticAdaptor;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.statistic.entity.GameModeStatistic;
 import com.kospot.domain.statistic.entity.MemberStatistic;
@@ -22,12 +23,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class GetRecentThreeRoadViewGamesUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final RoadViewGameAdaptor roadViewGameAdaptor;
     private final GameRankAdaptor gameRankAdaptor;
     private final MemberStatisticAdaptor memberStatisticAdaptor;
     private final GameRankService gameRankService;
 
-    public RoadViewGameHistoryResponse.RecentThree execute(Member member) {
+    public RoadViewGameHistoryResponse.RecentThree execute(Long memberId) {
+        Member member = memberAdaptor.queryById(memberId);
         // 최근 3개 게임 기록 조회
         List<RoadViewGame> games = roadViewGameAdaptor.queryRecentThreeGamesByMember(member);
 

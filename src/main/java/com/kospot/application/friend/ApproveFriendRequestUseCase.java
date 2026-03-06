@@ -6,6 +6,7 @@ import com.kospot.domain.friend.entity.Friendship;
 import com.kospot.domain.friend.service.FriendPairService;
 import com.kospot.domain.friend.service.FriendService;
 import com.kospot.domain.friend.vo.FriendshipStatus;
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.friend.service.FriendCacheRedisService;
@@ -18,12 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ApproveFriendRequestUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final FriendAdaptor friendAdaptor;
     private final FriendService friendService;
     private final FriendPairService friendPairService;
     private final FriendCacheRedisService friendCacheRedisService;
 
-    public FriendRequestActionResponse execute(Member receiver, Long requestId) {
+    public FriendRequestActionResponse execute(Long receiverId, Long requestId) {
+        Member receiver = memberAdaptor.queryById(receiverId);
         FriendRequest request = friendAdaptor.queryRequestById(requestId);
         request.approve(receiver.getId());
         friendService.saveRequest(request);

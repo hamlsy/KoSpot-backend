@@ -3,6 +3,7 @@ package com.kospot.domain.game.adaptor;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.domain.game.repository.RoadViewGameRepository;
 import com.kospot.domain.game.vo.GameStatus;
+import com.kospot.domain.game.vo.GameType;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.object.domain.GameHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
@@ -13,7 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Adaptor
 @Transactional(readOnly = true)
@@ -49,5 +52,17 @@ public class RoadViewGameAdaptor {
                 GameStatus.COMPLETED,
                 pageable
         );
+    }
+
+    public Optional<RoadViewGame> queryDailyMvpCandidate(LocalDateTime startAt, LocalDateTime endAt) {
+        Pageable pageable = PageRequest.of(0, 1);
+        List<RoadViewGame> candidates = repository.findDailyMvpCandidates(
+                GameType.RANK,
+                GameStatus.COMPLETED,
+                startAt,
+                endAt,
+                pageable
+        );
+        return candidates.stream().findFirst();
     }
 }

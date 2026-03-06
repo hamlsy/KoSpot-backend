@@ -1,5 +1,6 @@
 package com.kospot.application.admin.access;
 
+import com.kospot.domain.member.adaptor.MemberAdaptor;
 import com.kospot.domain.member.entity.Member;
 import com.kospot.domain.member.exception.MemberErrorStatus;
 import com.kospot.domain.member.exception.MemberHandler;
@@ -15,9 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ValidateAdminUseCase {
 
+    private final MemberAdaptor memberAdaptor;
     private final MemberService memberService;
 
-    public void execute(Member member) {
+    public void execute(Long memberId) {
+        Member member = memberAdaptor.queryById(memberId);
         memberService.validateAdmin(member);
     }
 

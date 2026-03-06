@@ -1,7 +1,6 @@
 package com.kospot.presentation.multi.access.controller;
 
 import com.kospot.application.multi.access.service.GameAccessService;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.annotation.adsense.BotSuccess;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -25,9 +24,9 @@ public class GameAccessController {
     @BotSuccess
     public ApiResponseDto<GameAccessResponse> checkGameAccess(
             @PathVariable("roomId") String roomId,
-            @CurrentMember Member member
+            @CurrentMember Long memberId
     ) {
-        GameAccessResponse response = gameAccessService.checkAccess(member, roomId);
+        GameAccessResponse response = gameAccessService.checkAccess(memberId, roomId);
         return ApiResponseDto.onSuccess(response);
     }
 

@@ -1,7 +1,6 @@
 package com.kospot.presentation.multi.submission.controller;
 
 import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -30,9 +29,9 @@ public class GameSubmissionController {
             @PathVariable("roomId") String roomId,
             @PathVariable("gameId") Long gameId,
             @PathVariable("roundId") Long roundId,
-            @CurrentMember Member member,
+            @CurrentMember Long memberId,
             @Valid @RequestBody SubmitRoadViewRequest.Player request) {
-        submitRoadViewPlayerAnswerUseCase.execute(member, roomId, gameId, roundId, request);
+        submitRoadViewPlayerAnswerUseCase.execute(memberId, roomId, gameId, roundId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
@@ -42,7 +41,7 @@ public class GameSubmissionController {
             @PathVariable("roomId") String roomId,
             @PathVariable("gameId") Long gameId,
             @PathVariable("roundId") Long roundId,
-            @CurrentMember Member member,
+            @CurrentMember Long memberId,
             @Valid @RequestBody SubmitRoadViewRequest.Team request) {
         // TODO: 팀 모드 UseCase 구현 필요
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);

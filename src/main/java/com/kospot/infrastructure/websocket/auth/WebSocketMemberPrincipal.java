@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +21,21 @@ public class WebSocketMemberPrincipal implements Principal {
     }
 
     public static WebSocketMemberPrincipal getPrincipal(SimpMessageHeaderAccessor headerAccessor) {
-        return (WebSocketMemberPrincipal) headerAccessor.getSessionAttributes().get("user");
+        if (headerAccessor == null) {
+            return null;
+        }
+
+        Map<String, Object> sessionAttributes = headerAccessor.getSessionAttributes();
+        if (sessionAttributes == null) {
+            return null;
+        }
+
+        Object user = sessionAttributes.get("user");
+        if (user instanceof WebSocketMemberPrincipal principal) {
+            return principal;
+        }
+
+        return null;
     }
 
 }

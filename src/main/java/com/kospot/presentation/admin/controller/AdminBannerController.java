@@ -1,7 +1,6 @@
 package com.kospot.presentation.admin.controller;
 
 import com.kospot.application.admin.banner.*;
-import com.kospot.domain.member.entity.Member;
 import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
 import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
 import com.kospot.infrastructure.security.aop.CurrentMember;
@@ -35,60 +34,60 @@ public class AdminBannerController {
     @Operation(summary = "배너 생성", description = "관리자가 새로운 배너를 생성합니다. (이미지 파일 업로드)")
     @PostMapping(consumes = "multipart/form-data")
     public ApiResponseDto<Long> createBanner(
-            @CurrentMember Member admin,
+            @CurrentMember Long adminId,
             @Valid @ModelAttribute AdminBannerRequest.Create request
     ) {
-        Long bannerId = createBannerUseCase.execute(admin, request);
+        Long bannerId = createBannerUseCase.execute(adminId, request);
         return ApiResponseDto.onSuccess(bannerId);
     }
 
     @Operation(summary = "배너 수정", description = "관리자가 배너 정보를 수정합니다. (이미지 파일 선택적 업로드)")
     @PutMapping(value = "/{bannerId}", consumes = "multipart/form-data")
     public ApiResponseDto<?> updateBanner(
-            @CurrentMember Member admin,
+            @CurrentMember Long adminId,
             @PathVariable("bannerId") Long bannerId,
             @Valid @ModelAttribute AdminBannerRequest.Update request
     ) {
-        updateBannerUseCase.execute(admin, bannerId, request);
+        updateBannerUseCase.execute(adminId, bannerId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "배너 삭제", description = "관리자가 배너를 삭제합니다.")
     @DeleteMapping("/{bannerId}")
     public ApiResponseDto<?> deleteBanner(
-            @CurrentMember Member admin,
+            @CurrentMember Long adminId,
             @PathVariable("bannerId") Long bannerId
     ) {
-        deleteBannerUseCase.execute(admin, bannerId);
+        deleteBannerUseCase.execute(adminId, bannerId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "배너 목록 조회", description = "관리자가 전체 배너 목록을 조회합니다.")
     @GetMapping
     public ApiResponseDto<List<AdminBannerResponse.BannerInfo>> findAllBanners(
-            @CurrentMember Member admin
+            @CurrentMember Long adminId
     ) {
-        List<AdminBannerResponse.BannerInfo> banners = findAllBannersUseCase.execute(admin);
+        List<AdminBannerResponse.BannerInfo> banners = findAllBannersUseCase.execute(adminId);
         return ApiResponseDto.onSuccess(banners);
     }
 
     @Operation(summary = "배너 활성화", description = "관리자가 배너를 활성화합니다.")
     @PutMapping("/{bannerId}/activate")
     public ApiResponseDto<?> activateBanner(
-            @CurrentMember Member admin,
+            @CurrentMember Long adminId,
             @PathVariable("bannerId") Long bannerId
     ) {
-        activateBannerUseCase.execute(admin, bannerId);
+        activateBannerUseCase.execute(adminId, bannerId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
     @Operation(summary = "배너 비활성화", description = "관리자가 배너를 비활성화합니다.")
     @PutMapping("/{bannerId}/deactivate")
     public ApiResponseDto<?> deactivateBanner(
-            @CurrentMember Member admin,
+            @CurrentMember Long adminId,
             @PathVariable("bannerId") Long bannerId
     ) {
-        deactivateBannerUseCase.execute(admin, bannerId);
+        deactivateBannerUseCase.execute(adminId, bannerId);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 }
