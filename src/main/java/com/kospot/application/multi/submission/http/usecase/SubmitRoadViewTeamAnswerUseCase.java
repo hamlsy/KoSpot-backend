@@ -1,6 +1,6 @@
 package com.kospot.application.multi.submission.http.usecase;
 
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;

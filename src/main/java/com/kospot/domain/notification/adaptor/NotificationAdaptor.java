@@ -3,9 +3,9 @@ package com.kospot.domain.notification.adaptor;
 import com.kospot.domain.notification.model.NotificationData;
 import com.kospot.domain.notification.port.NotificationStore;
 import com.kospot.domain.notification.vo.NotificationType;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
-import com.kospot.infrastructure.exception.object.domain.NotificationHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.common.annotation.adaptor.Adaptor;
+import com.kospot.common.exception.object.domain.NotificationHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package com.kospot.application.notification;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.notification.port.NotificationStore;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.presentation.notification.dto.response.NotificationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

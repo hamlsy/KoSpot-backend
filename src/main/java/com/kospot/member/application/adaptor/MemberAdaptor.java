@@ -5,7 +5,7 @@ import com.kospot.member.domain.exception.MemberErrorStatus;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.member.domain.vo.Role;
 import com.kospot.member.domain.exception.MemberHandler;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.common.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

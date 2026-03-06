@@ -1,7 +1,7 @@
 package com.kospot.presentation.multi.game.controller;
 
 import com.kospot.application.multi.round.roadview.NextRoadViewRoundUseCase;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

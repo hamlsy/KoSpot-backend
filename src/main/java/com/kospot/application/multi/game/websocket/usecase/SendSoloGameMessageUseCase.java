@@ -4,9 +4,8 @@ import com.kospot.application.multi.game.websocket.command.SendSoloGameMessageCo
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.domain.chat.service.ChatService;
 import com.kospot.domain.chat.vo.MessageType;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
-import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
 import lombok.RequiredArgsConstructor;

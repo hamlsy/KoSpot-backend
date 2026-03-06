@@ -10,7 +10,7 @@ import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
 import com.kospot.domain.multi.submission.event.PlayerSubmissionCompletedEvent;
 import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.submission.service.SubmissionNotificationService;
 import com.kospot.presentation.multi.submission.dto.request.SubmitRoadViewRequest;

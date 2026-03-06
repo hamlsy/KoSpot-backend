@@ -5,7 +5,7 @@ import com.kospot.domain.friend.service.FriendPairService;
 import com.kospot.domain.friend.service.FriendService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.friend.service.FriendCacheRedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

@@ -11,7 +11,7 @@ import com.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.domain.game.vo.GameType;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.presentation.game.dto.response.StartGameResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

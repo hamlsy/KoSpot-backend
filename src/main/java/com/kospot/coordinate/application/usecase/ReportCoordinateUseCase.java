@@ -3,7 +3,7 @@ package com.kospot.coordinate.application.usecase;
 import com.kospot.coordinate.report.application.service.CoordinateReportService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.coordinate.report.presentation.request.CoordinateReportRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

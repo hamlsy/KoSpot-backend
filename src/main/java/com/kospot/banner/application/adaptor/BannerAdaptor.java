@@ -2,9 +2,9 @@ package com.kospot.banner.application.adaptor;
 
 import com.kospot.banner.domain.entity.Banner;
 import com.kospot.banner.infrastructure.persistence.BannerRepository;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
-import com.kospot.infrastructure.exception.object.domain.BannerHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.common.annotation.adaptor.Adaptor;
+import com.kospot.common.exception.object.domain.BannerHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 

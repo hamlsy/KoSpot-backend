@@ -7,7 +7,7 @@ import com.kospot.domain.game.service.AESService;
 import com.kospot.domain.game.service.RoadViewGameService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 

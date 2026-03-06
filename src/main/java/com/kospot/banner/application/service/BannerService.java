@@ -2,8 +2,8 @@ package com.kospot.banner.application.service;
 
 import com.kospot.banner.domain.entity.Banner;
 import com.kospot.banner.infrastructure.persistence.BannerRepository;
-import com.kospot.domain.image.entity.Image;
-import com.kospot.domain.image.service.ImageService;
+import com.kospot.image.domain.entity.Image;
+import com.kospot.image.application.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

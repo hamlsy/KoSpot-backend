@@ -6,7 +6,7 @@ import com.kospot.notice.domain.entity.Notice;
 import com.kospot.notice.domain.event.NoticeCreatedEvent;
 import com.kospot.notice.application.service.NoticeImageAttachService;
 import com.kospot.notice.application.service.NoticeService;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.notice.service.RecentNoticeCacheService;
 import com.kospot.notice.presentation.dto.request.NoticeRequest;
 import lombok.RequiredArgsConstructor;

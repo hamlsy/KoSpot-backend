@@ -1,6 +1,6 @@
 package com.kospot.notice.presentation.dto.response;
 
-import com.kospot.domain.image.entity.Image;
+import com.kospot.image.domain.entity.Image;
 import com.kospot.notice.domain.entity.Notice;
 import lombok.Builder;
 import lombok.Getter;

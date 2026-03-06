@@ -2,9 +2,9 @@ package com.kospot.notice.application.adaptor;
 
 import com.kospot.notice.domain.entity.Notice;
 import com.kospot.notice.infrastructure.persistence.NoticeRepository;
-import com.kospot.infrastructure.exception.object.domain.NoticeHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.common.exception.object.domain.NoticeHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
+import com.kospot.common.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

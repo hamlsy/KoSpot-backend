@@ -1,7 +1,7 @@
 package com.kospot.coordinate.application.usecase;
 
 import com.kospot.coordinate.application.service.CoordinateExcelService;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 

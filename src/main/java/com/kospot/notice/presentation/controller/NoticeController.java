@@ -1,8 +1,8 @@
 package com.kospot.notice.presentation.controller;
 
-import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
-import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.common.exception.payload.code.SuccessStatus;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.security.aop.CurrentMember;
 import com.kospot.notice.application.usecase.*;
 import com.kospot.notice.presentation.dto.request.NoticeRequest;
 import com.kospot.notice.presentation.dto.response.NoticeResponse;

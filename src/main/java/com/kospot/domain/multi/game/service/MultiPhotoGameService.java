@@ -1,19 +1,9 @@
 package com.kospot.domain.multi.game.service;
 
-import com.kospot.domain.multi.game.entity.MultiPhotoGame;
-import com.kospot.domain.multi.round.entity.PhotoGameRound;
 import com.kospot.domain.multi.round.repository.PhotoGameRoundRepository;
-import com.kospot.domain.multi.submission.entity.photo.PhotoPlayerSubmission;
 import com.kospot.domain.multi.game.repository.MultiPhotoGameRepository;
-import com.kospot.domain.multi.gamePlayer.entity.GamePlayer;
-import com.kospot.domain.multi.room.entity.GameRoom;
-import com.kospot.infrastructure.exception.object.domain.GameHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package com.kospot.presentation.auth.dto.response;
 
-import com.kospot.infrastructure.security.dto.JwtToken;
+import com.kospot.common.security.dto.JwtToken;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

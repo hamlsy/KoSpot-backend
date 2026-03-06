@@ -4,7 +4,7 @@ package com.kospot.point.application.adaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.point.domain.entity.PointHistory;
 import com.kospot.point.infrastructure.persistence.PointHistoryRepository;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.common.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;

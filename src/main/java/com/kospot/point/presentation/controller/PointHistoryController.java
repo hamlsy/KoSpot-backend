@@ -2,10 +2,10 @@ package com.kospot.point.presentation.controller;
 
 import com.kospot.point.application.usecase.FindAllPointHistoryPagingUseCase;
 import com.kospot.point.application.adaptor.PointHistoryAdaptor;
-import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.common.security.aop.CurrentMember;
 import com.kospot.point.presentation.response.PointHistoryResponse;
 import com.kospot.point.application.service.PointHistoryService;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

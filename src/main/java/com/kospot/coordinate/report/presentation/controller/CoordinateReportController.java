@@ -1,9 +1,9 @@
 package com.kospot.coordinate.report.presentation.controller;
 
 import com.kospot.coordinate.application.usecase.ReportCoordinateUseCase;
-import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
-import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.common.exception.payload.code.SuccessStatus;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.security.aop.CurrentMember;
 import com.kospot.coordinate.report.presentation.request.CoordinateReportRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

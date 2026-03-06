@@ -1,7 +1,7 @@
 package com.kospot.banner.application.usecase;
 
 import com.kospot.banner.application.adaptor.BannerAdaptor;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.banner.presentation.response.BannerResponse;
 import lombok.RequiredArgsConstructor;
 

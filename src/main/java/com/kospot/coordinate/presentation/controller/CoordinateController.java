@@ -4,7 +4,7 @@ import com.kospot.coordinate.application.usecase.ImportCoordinateUseCase;
 import com.kospot.coordinate.application.adaptor.CoordinateAdaptor;
 import com.kospot.coordinate.domain.entity.Sido;
 import com.kospot.coordinate.presentation.response.CoordinateResponse;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

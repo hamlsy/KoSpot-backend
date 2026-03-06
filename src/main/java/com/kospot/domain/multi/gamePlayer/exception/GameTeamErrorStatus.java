@@ -1,7 +1,7 @@
 package com.kospot.domain.multi.gamePlayer.exception;
 
-import com.kospot.infrastructure.exception.payload.code.BaseCode;
-import com.kospot.infrastructure.exception.payload.code.Reason;
+import com.kospot.common.exception.payload.code.BaseCode;
+import com.kospot.common.exception.payload.code.Reason;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

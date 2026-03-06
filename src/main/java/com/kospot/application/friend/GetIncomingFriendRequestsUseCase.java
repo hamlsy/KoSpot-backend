@@ -5,7 +5,7 @@ import com.kospot.domain.friend.adaptor.FriendAdaptor;
 import com.kospot.domain.friend.entity.FriendRequest;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.friend.service.FriendCacheRedisService;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.presentation.friend.dto.response.IncomingFriendRequestResponse;

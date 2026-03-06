@@ -1,9 +1,9 @@
 package com.kospot.infrastructure.websocket.interceptor;
 
-import com.kospot.infrastructure.exception.object.domain.WebSocketHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.common.exception.object.domain.WebSocketHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
-import com.kospot.infrastructure.security.service.TokenService;
+import com.kospot.common.security.service.TokenService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.domain.friend.constants.FriendChatChannelConstants;
 import com.kospot.infrastructure.websocket.domain.friend.service.FriendChatSubscriptionCacheService;

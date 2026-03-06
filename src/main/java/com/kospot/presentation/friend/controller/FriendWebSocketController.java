@@ -1,9 +1,8 @@
 package com.kospot.presentation.friend.controller;
 
 import com.kospot.application.friend.SendFriendChatMessageUseCase;
-import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
+import com.kospot.common.doc.annotation.WebSocketDoc;
 import com.kospot.presentation.chat.dto.request.ChatMessageDto;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

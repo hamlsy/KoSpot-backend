@@ -10,7 +10,7 @@ import com.kospot.domain.multi.round.service.roadview.RoadViewGameRoundService;
 import com.kospot.domain.multi.submission.adaptor.roadview.RoadViewSubmissionAdaptor;
 import com.kospot.domain.multi.submission.entity.roadview.RoadViewSubmission;
 import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
 import com.kospot.presentation.multi.round.dto.response.RoadViewRoundResponse;
 import lombok.RequiredArgsConstructor;

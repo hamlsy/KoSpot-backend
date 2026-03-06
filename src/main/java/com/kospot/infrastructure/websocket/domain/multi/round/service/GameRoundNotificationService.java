@@ -1,7 +1,6 @@
 package com.kospot.infrastructure.websocket.domain.multi.round.service;
 
-import com.kospot.application.multi.round.message.GameFinishedMessage;
-import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
+import com.kospot.common.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import com.kospot.presentation.multi.game.dto.response.MultiGameResponse;
 import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;

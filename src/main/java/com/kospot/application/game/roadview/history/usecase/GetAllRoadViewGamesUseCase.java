@@ -4,7 +4,7 @@ import com.kospot.domain.game.adaptor.RoadViewGameAdaptor;
 import com.kospot.domain.game.entity.RoadViewGame;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.presentation.game.dto.response.RoadViewGameHistoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,6 @@
 package com.kospot.application.multi.room.websocket.usecase;
 
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.common.service.SessionContextRedisService;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import lombok.RequiredArgsConstructor;

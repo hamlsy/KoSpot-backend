@@ -2,7 +2,7 @@ package com.kospot.mvp.application.usecase;
 
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.domain.entity.DailyMvp;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.infrastructure.redis.domain.mvp.service.DailyMvpCacheService;
 import com.kospot.mvp.presentation.response.DailyMvpResponse;

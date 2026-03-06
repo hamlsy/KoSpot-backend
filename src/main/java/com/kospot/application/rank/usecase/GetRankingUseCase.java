@@ -6,7 +6,7 @@ import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.vo.RankTier;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.presentation.rank.dto.response.GameRankResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

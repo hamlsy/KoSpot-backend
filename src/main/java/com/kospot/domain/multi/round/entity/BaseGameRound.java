@@ -2,8 +2,8 @@ package com.kospot.domain.multi.round.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.infrastructure.exception.object.domain.GameRoundHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.common.exception.object.domain.GameRoundHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

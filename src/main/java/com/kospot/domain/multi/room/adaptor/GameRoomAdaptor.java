@@ -2,9 +2,9 @@ package com.kospot.domain.multi.room.adaptor;
 
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.repository.GameRoomRepository;
-import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.common.exception.object.domain.GameRoomHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
+import com.kospot.common.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;

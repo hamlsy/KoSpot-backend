@@ -1,7 +1,7 @@
 package com.kospot.domain.game.vo;
 
-import com.kospot.infrastructure.exception.object.domain.GameHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.common.exception.object.domain.GameHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

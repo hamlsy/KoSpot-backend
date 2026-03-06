@@ -1,9 +1,8 @@
 package com.kospot.infrastructure.websocket.domain.multi.lobby.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
-import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
+import com.kospot.common.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants;
 import com.kospot.presentation.multi.lobby.message.LobbyNotification;
 import com.kospot.presentation.multi.room.dto.response.FindGameRoomResponse;

@@ -1,8 +1,8 @@
 package com.kospot.application.multi.room.http.usecase;
 
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.domain.image.entity.Image;
-import com.kospot.domain.image.repository.ImageRepository;
+import com.kospot.image.domain.entity.Image;
+import com.kospot.image.infrastructure.persistence.ImageRepository;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.member.domain.vo.Role;

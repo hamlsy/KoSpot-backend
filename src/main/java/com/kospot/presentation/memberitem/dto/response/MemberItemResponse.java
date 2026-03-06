@@ -1,6 +1,6 @@
 package com.kospot.presentation.memberitem.dto.response;
 
-import com.kospot.domain.item.vo.ItemType;
+import com.kospot.item.domain.vo.ItemType;
 import lombok.*;
 
 import java.time.LocalDateTime;

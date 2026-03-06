@@ -1,15 +1,15 @@
 package com.kospot.application.memberitem;
 
-import com.kospot.domain.item.adaptor.ItemAdaptor;
-import com.kospot.domain.item.entity.Item;
-import com.kospot.domain.item.service.ItemService;
+import com.kospot.item.application.adaptor.ItemAdaptor;
+import com.kospot.item.domain.entity.Item;
+import com.kospot.item.application.service.ItemService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.memberitem.service.MemberItemService;
 import com.kospot.point.domain.vo.PointHistoryType;
 import com.kospot.point.application.service.PointHistoryService;
 import com.kospot.point.application.service.PointService;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

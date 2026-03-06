@@ -15,7 +15,7 @@ import com.kospot.point.application.service.PointHistoryService;
 import com.kospot.point.application.service.PointService;
 import com.kospot.point.common.utils.PointCalculator;
 import com.kospot.point.domain.vo.PointHistoryType;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;
 import com.kospot.presentation.multi.game.dto.response.MultiGameResponse;

@@ -3,7 +3,7 @@ package com.kospot.infrastructure.redis.domain.multi.room.adaptor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.common.annotation.adaptor.Adaptor;
 import com.kospot.infrastructure.redis.domain.multi.room.constants.GameRoomRedisKeyConstants;
 import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import lombok.RequiredArgsConstructor;

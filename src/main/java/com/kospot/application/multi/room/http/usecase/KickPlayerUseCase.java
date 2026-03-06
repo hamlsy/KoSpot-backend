@@ -6,7 +6,7 @@ import com.kospot.domain.multi.room.adaptor.GameRoomAdaptor;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.service.GameRoomService;
 import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;
 import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;

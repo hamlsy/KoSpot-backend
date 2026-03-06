@@ -1,9 +1,9 @@
 package com.kospot.presentation.multi.submission.controller;
 
 import com.kospot.application.multi.submission.http.usecase.SubmitRoadViewPlayerAnswerUseCase;
-import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
-import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.common.exception.payload.code.SuccessStatus;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.security.aop.CurrentMember;
 import com.kospot.presentation.multi.submission.dto.request.SubmitRoadViewRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

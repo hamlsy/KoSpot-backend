@@ -1,10 +1,10 @@
 package com.kospot.application.image;
 
-import com.kospot.domain.image.service.ImageService;
+import com.kospot.image.application.service.ImageService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
-import com.kospot.presentation.image.dto.request.ImageRequest;
+import com.kospot.common.annotation.usecase.UseCase;
+import com.kospot.image.presentation.request.ImageRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;

@@ -12,7 +12,7 @@ import com.kospot.domain.friend.repository.FriendshipRepository;
 import com.kospot.domain.friend.vo.FriendRequestStatus;
 import com.kospot.domain.friend.vo.FriendshipStatus;
 import com.kospot.domain.game.vo.GameMode;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.common.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;

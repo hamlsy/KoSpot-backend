@@ -3,7 +3,7 @@ package com.kospot.application.friend;
 import com.kospot.domain.friend.exception.FriendErrorStatus;
 import com.kospot.domain.friend.exception.FriendHandler;
 import com.kospot.domain.friend.model.FriendChatStreamMessage;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.friend.chatstream.producer.FriendChatStreamProducer;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.domain.friend.constants.FriendChatChannelConstants;

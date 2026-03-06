@@ -2,7 +2,7 @@ package com.kospot.domain.chat.service;
 
 import com.kospot.domain.chat.entity.ChatMessage;
 import com.kospot.infrastructure.redis.domain.chat.transientstore.TransientChatRedisStore;
-import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
+import com.kospot.common.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import com.kospot.infrastructure.websocket.domain.multi.lobby.constants.LobbyChannelConstants;
 import com.kospot.infrastructure.websocket.domain.multi.room.constants.GameRoomChannelConstants;

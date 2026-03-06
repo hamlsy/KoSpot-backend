@@ -1,7 +1,7 @@
 package com.kospot.banner.presentation.controller;
 
 import com.kospot.banner.application.usecase.FindActiveBannersUseCase;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
 import com.kospot.banner.presentation.response.BannerResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

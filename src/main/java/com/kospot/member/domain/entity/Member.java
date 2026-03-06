@@ -1,11 +1,11 @@
 package com.kospot.member.domain.entity;
 
 import com.kospot.domain.auditing.entity.BaseTimeEntity;
-import com.kospot.domain.image.entity.Image;
+import com.kospot.image.domain.entity.Image;
 import com.kospot.member.domain.vo.Role;
 import com.kospot.member.domain.exception.MemberHandler;
-import com.kospot.infrastructure.exception.object.domain.PointHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.common.exception.object.domain.PointHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

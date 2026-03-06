@@ -1,8 +1,8 @@
 package com.kospot.presentation.rank.controller;
 
 import com.kospot.application.rank.usecase.GetRankingUseCase;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
-import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.security.aop.CurrentMember;
 import com.kospot.presentation.rank.dto.response.GameRankResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

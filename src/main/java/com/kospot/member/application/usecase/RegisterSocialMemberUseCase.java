@@ -1,17 +1,17 @@
 package com.kospot.member.application.usecase;
 
 import com.kospot.domain.gamerank.service.GameRankService;
-import com.kospot.domain.item.adaptor.ItemAdaptor;
-import com.kospot.domain.item.entity.Item;
-import com.kospot.domain.item.vo.ItemType;
+import com.kospot.item.application.adaptor.ItemAdaptor;
+import com.kospot.item.domain.entity.Item;
+import com.kospot.item.domain.vo.ItemType;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.application.service.MemberService;
 import com.kospot.domain.statistic.service.MemberStatisticService;
 import com.kospot.domain.memberitem.entity.MemberItem;
 import com.kospot.domain.memberitem.service.MemberItemService;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;
-import com.kospot.infrastructure.slack.SlackNotifier;
+import com.kospot.common.slack.SlackNotifier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;

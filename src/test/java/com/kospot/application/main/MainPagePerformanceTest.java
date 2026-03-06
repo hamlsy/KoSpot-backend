@@ -2,12 +2,12 @@ package com.kospot.application.main;
 
 import com.kospot.banner.domain.entity.Banner;
 import com.kospot.banner.infrastructure.persistence.BannerRepository;
-import com.kospot.domain.image.entity.Image;
-import com.kospot.domain.image.repository.ImageRepository;
-import com.kospot.domain.image.vo.ImageType;
-import com.kospot.domain.item.entity.Item;
-import com.kospot.domain.item.repository.ItemRepository;
-import com.kospot.domain.item.vo.ItemType;
+import com.kospot.image.domain.entity.Image;
+import com.kospot.image.infrastructure.persistence.ImageRepository;
+import com.kospot.image.domain.vo.ImageType;
+import com.kospot.item.domain.entity.Item;
+import com.kospot.item.infrastructure.persistence.ItemRepository;
+import com.kospot.item.domain.vo.ItemType;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.member.domain.vo.Role;

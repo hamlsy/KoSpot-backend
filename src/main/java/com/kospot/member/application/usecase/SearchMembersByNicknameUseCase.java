@@ -8,7 +8,7 @@ import com.kospot.domain.friend.vo.FriendRequestStatus;
 import com.kospot.domain.friend.vo.FriendshipStatus;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.member.presentation.response.SearchMemberResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

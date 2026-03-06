@@ -4,7 +4,7 @@ import com.kospot.member.domain.entity.Member;
 import com.kospot.member.domain.exception.MemberHandler;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.member.domain.vo.Role;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

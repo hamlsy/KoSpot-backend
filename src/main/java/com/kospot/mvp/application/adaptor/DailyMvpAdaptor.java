@@ -2,7 +2,7 @@ package com.kospot.mvp.application.adaptor;
 
 import com.kospot.mvp.domain.entity.DailyMvp;
 import com.kospot.mvp.infrastructure.persistence.DailyMvpRepository;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.common.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;

@@ -5,7 +5,7 @@ import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.notification.adaptor.NotificationAdaptor;
 import com.kospot.domain.notification.model.NotificationData;
 import com.kospot.domain.notification.vo.NotificationType;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.presentation.notification.dto.response.NotificationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

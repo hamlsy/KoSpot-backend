@@ -4,9 +4,9 @@ import com.kospot.domain.game.vo.GameMode;
 
 import com.kospot.domain.statistic.entity.GameModeStatistic;
 import com.kospot.domain.statistic.repository.GameModeStatisticRepository;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
-import com.kospot.infrastructure.exception.object.domain.StatisticHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
+import com.kospot.common.annotation.adaptor.Adaptor;
+import com.kospot.common.exception.object.domain.StatisticHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

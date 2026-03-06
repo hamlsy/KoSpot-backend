@@ -1,7 +1,7 @@
 package com.kospot.presentation.doc;
 
-import com.kospot.infrastructure.doc.collector.WebSocketDocCollector;
-import com.kospot.infrastructure.doc.dto.WebSocketEndpointDoc;
+import com.kospot.common.doc.collector.WebSocketDocCollector;
+import com.kospot.common.doc.dto.WebSocketEndpointDoc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

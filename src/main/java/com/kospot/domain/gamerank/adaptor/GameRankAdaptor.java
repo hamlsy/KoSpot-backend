@@ -5,7 +5,7 @@ import com.kospot.domain.gamerank.entity.GameRank;
 import com.kospot.domain.gamerank.repository.GameRankRepository;
 import com.kospot.domain.gamerank.vo.RankTier;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.common.annotation.adaptor.Adaptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

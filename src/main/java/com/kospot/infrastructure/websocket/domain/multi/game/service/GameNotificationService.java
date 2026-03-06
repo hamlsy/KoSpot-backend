@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.websocket.domain.multi.game.service;
 
-import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
+import com.kospot.common.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import com.kospot.application.multi.game.message.LoadingStatusMessage;
 import com.kospot.presentation.multi.flow.dto.message.RoomGameStartMessage;

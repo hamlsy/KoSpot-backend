@@ -4,7 +4,7 @@ import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.domain.exception.MemberErrorStatus;
 import com.kospot.member.application.service.MemberService;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.member.domain.exception.MemberHandler;
 import com.kospot.infrastructure.redis.domain.member.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.infrastructure.redis.domain.member.service.MemberProfileRedisService;

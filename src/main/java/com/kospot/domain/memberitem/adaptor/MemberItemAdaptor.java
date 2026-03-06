@@ -1,12 +1,12 @@
 package com.kospot.domain.memberitem.adaptor;
 
-import com.kospot.domain.item.vo.ItemType;
+import com.kospot.item.domain.vo.ItemType;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.memberitem.entity.MemberItem;
 import com.kospot.domain.memberitem.repository.MemberItemRepository;
-import com.kospot.infrastructure.exception.object.domain.MemberItemHandler;
-import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
-import com.kospot.infrastructure.annotation.adaptor.Adaptor;
+import com.kospot.common.exception.object.domain.MemberItemHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
+import com.kospot.common.annotation.adaptor.Adaptor;
 import com.kospot.presentation.memberitem.dto.response.MemberItemResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

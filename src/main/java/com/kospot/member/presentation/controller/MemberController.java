@@ -1,9 +1,9 @@
 package com.kospot.member.presentation.controller;
 
-import com.kospot.infrastructure.annotation.adsense.BotSuccess;
-import com.kospot.infrastructure.exception.payload.code.SuccessStatus;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
-import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.common.annotation.adsense.BotSuccess;
+import com.kospot.common.exception.payload.code.SuccessStatus;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.security.aop.CurrentMember;
 import com.kospot.member.application.usecase.*;
 import com.kospot.member.presentation.response.MemberProfileResponse;
 import com.kospot.member.presentation.response.MemberShopInfoResponse;

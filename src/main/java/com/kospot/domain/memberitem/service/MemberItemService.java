@@ -1,7 +1,7 @@
 package com.kospot.domain.memberitem.service;
 
-import com.kospot.domain.item.entity.Item;
-import com.kospot.domain.item.vo.ItemType;
+import com.kospot.item.domain.entity.Item;
+import com.kospot.item.domain.vo.ItemType;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.domain.memberitem.adaptor.MemberItemAdaptor;
 import com.kospot.domain.memberitem.entity.MemberItem;

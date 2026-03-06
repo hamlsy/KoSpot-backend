@@ -1,12 +1,12 @@
 package com.kospot.notice.application.service;
 
-import com.kospot.domain.image.entity.Image;
-import com.kospot.domain.image.repository.ImageRepository;
-import com.kospot.domain.image.vo.ImageType;
-import com.kospot.domain.item.vo.ImageStatus;
+import com.kospot.image.domain.entity.Image;
+import com.kospot.image.infrastructure.persistence.ImageRepository;
+import com.kospot.image.domain.vo.ImageType;
+import com.kospot.item.domain.vo.ImageStatus;
 import com.kospot.notice.domain.entity.Notice;
 import com.kospot.notice.common.utils.MarkdownImageExtractor;
-import com.kospot.infrastructure.s3.resolver.S3KeyResolver;
+import com.kospot.common.s3.resolver.S3KeyResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

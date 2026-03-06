@@ -6,7 +6,7 @@ import com.kospot.domain.multi.round.adaptor.RoadViewGameRoundAdaptor;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
 import com.kospot.domain.multi.submission.event.EarlyRoundCompletionEvent;
 import com.kospot.domain.multi.submission.service.RoadViewSubmissionService;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.room.adaptor.GameRoomRedisAdaptor;
 import com.kospot.infrastructure.redis.domain.multi.submission.service.SubmissionRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;

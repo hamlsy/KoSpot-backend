@@ -1,9 +1,9 @@
 package com.kospot.presentation.multi.access.controller;
 
 import com.kospot.application.multi.access.service.GameAccessService;
-import com.kospot.infrastructure.annotation.adsense.BotSuccess;
-import com.kospot.infrastructure.exception.payload.dto.ApiResponseDto;
-import com.kospot.infrastructure.security.aop.CurrentMember;
+import com.kospot.common.annotation.adsense.BotSuccess;
+import com.kospot.common.exception.payload.dto.ApiResponseDto;
+import com.kospot.common.security.aop.CurrentMember;
 import com.kospot.presentation.multi.access.dto.response.GameAccessResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.kospot.application.lobby.http.usecase;
 
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyPresenceService;
 import lombok.RequiredArgsConstructor;

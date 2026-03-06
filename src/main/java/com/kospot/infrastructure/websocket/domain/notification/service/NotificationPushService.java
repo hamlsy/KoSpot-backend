@@ -1,6 +1,6 @@
 package com.kospot.infrastructure.websocket.domain.notification.service;
 
-import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
+import com.kospot.common.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.notification.constants.NotificationChannelConstants;
 import com.kospot.presentation.notification.dto.message.NotificationMessage;
 import lombok.RequiredArgsConstructor;

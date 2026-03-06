@@ -7,7 +7,7 @@ import com.kospot.domain.friend.exception.FriendHandler;
 import com.kospot.domain.friend.service.FriendChatService;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.presentation.friend.dto.response.FriendChatMessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

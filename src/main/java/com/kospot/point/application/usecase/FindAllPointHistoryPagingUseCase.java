@@ -4,7 +4,7 @@ import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.point.application.adaptor.PointHistoryAdaptor;
 import com.kospot.point.domain.entity.PointHistory;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.point.presentation.response.PointHistoryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

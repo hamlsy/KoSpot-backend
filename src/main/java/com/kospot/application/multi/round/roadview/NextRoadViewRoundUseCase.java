@@ -5,7 +5,7 @@ import com.kospot.application.multi.game.service.CancelMultiGameService;
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
 import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.infrastructure.annotation.usecase.UseCase;
+import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.infrastructure.redis.domain.multi.game.service.MultiGameRedisService;
 import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
 import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;

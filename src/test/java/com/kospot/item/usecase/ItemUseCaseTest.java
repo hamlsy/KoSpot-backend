@@ -1,15 +1,15 @@
 package com.kospot.item.usecase;
 
-import com.kospot.application.item.*;
-import com.kospot.domain.item.adaptor.ItemAdaptor;
-import com.kospot.domain.item.entity.Item;
-import com.kospot.domain.item.vo.ItemType;
-import com.kospot.domain.item.repository.ItemRepository;
-import com.kospot.domain.item.service.ItemService;
+import com.kospot.item.application.adaptor.ItemAdaptor;
+import com.kospot.item.application.usecase.*;
+import com.kospot.item.domain.entity.Item;
+import com.kospot.item.domain.vo.ItemType;
+import com.kospot.item.infrastructure.persistence.ItemRepository;
+import com.kospot.item.application.service.ItemService;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.domain.vo.Role;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
-import com.kospot.presentation.item.dto.request.ItemRequest;
+import com.kospot.item.presentation.dto.request.ItemRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

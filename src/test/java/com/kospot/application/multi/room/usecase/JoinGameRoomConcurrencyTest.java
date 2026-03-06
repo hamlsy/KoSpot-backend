@@ -9,7 +9,7 @@ import com.kospot.domain.multi.game.vo.PlayerMatchType;
 import com.kospot.domain.multi.room.entity.GameRoom;
 import com.kospot.domain.multi.room.repository.GameRoomRepository;
 import com.kospot.domain.multi.room.vo.GameRoomStatus;
-import com.kospot.infrastructure.exception.object.domain.GameRoomHandler;
+import com.kospot.common.exception.object.domain.GameRoomHandler;
 import com.kospot.infrastructure.redis.domain.multi.room.dao.GameRoomRedisRepository;
 import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
 import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;

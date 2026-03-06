@@ -1,7 +1,7 @@
 package com.kospot.infrastructure.websocket.domain.multi.submission.service;
 
 import com.kospot.application.multi.submission.websocket.message.PlayerSubmissionMessage;
-import com.kospot.infrastructure.doc.annotation.WebSocketDoc;
+import com.kospot.common.doc.annotation.WebSocketDoc;
 import com.kospot.infrastructure.websocket.domain.multi.game.constants.MultiGameChannelConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
