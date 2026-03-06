@@ -2,6 +2,7 @@ package com.kospot.domain.multi.game.adaptor;
 
 import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
 import com.kospot.domain.multi.game.repository.MultiRoadViewGameRepository;
+import com.kospot.domain.multi.game.vo.MultiGameStatus;
 import com.kospot.infrastructure.exception.object.domain.GameHandler;
 import com.kospot.infrastructure.exception.payload.code.ErrorStatus;
 import com.kospot.infrastructure.annotation.adaptor.Adaptor;
@@ -25,6 +26,15 @@ public class MultiRoadViewGameAdaptor {
 
     public java.util.Optional<MultiRoadViewGame> findInProgressByGameRoomId(Long gameRoomId) {
         return repository.findInProgressByGameRoomId(gameRoomId);
+    }
+
+    @Transactional
+    public boolean transitionToInProgressIfPending(Long gameId) {
+        return repository.transitionToInProgressIfPending(
+                gameId,
+                MultiGameStatus.PENDING,
+                MultiGameStatus.IN_PROGRESS
+        ) == 1;
     }
 
 }

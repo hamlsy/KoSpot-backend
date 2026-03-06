@@ -71,15 +71,14 @@ public class GameTransitionOrchestrator {
         loadingPhaseService.broadcastLoadingStatus(roomId, statusMessage);
 
         if (statusMessage.isAllArrived()) {
-            onAllPlayersArrived(roomId, message.getRoundId());
+            onAllPlayersArrived(roomId);
         }
     }
 
     /**
      * 모든 플레이어가 도착했을 때 게임을 시작한다.
      */
-    private void onAllPlayersArrived(String roomId, Long roundId) {
-        multiGameFlowScheduler.cancel(roomId, MultiGameFlowScheduler.FlowTaskType.LOADING_TIMEOUT);
+    private void onAllPlayersArrived(String roomId) {
         Long currentGameId = loadingPhaseService.getCurrentGameId(roomId);
 
         if (currentGameId == null) {
@@ -87,15 +86,32 @@ public class GameTransitionOrchestrator {
             return;
         }
 
+        boolean startLockAcquired = loadingPhaseService.acquireGameStartLock(roomId, currentGameId);
+        if (!startLockAcquired) {
+            log.info("Skip duplicate game start request - RoomId: {}, GameId: {}", roomId, currentGameId);
+            return;
+        }
+
+        boolean keepLockUntilTtl = false;
+
+        multiGameFlowScheduler.cancel(roomId, MultiGameFlowScheduler.FlowTaskType.LOADING_TIMEOUT);
         log.info("All players arrived. Starting game - RoomId: {}, GameId: {}", roomId, currentGameId);
-        loadingPhaseService.cleanupLoadingState(roomId);
 
         try {
             Long numericRoomId = Long.parseLong(roomId);
             nextRoadViewRoundUseCase.executeInitial(numericRoomId, currentGameId);
+            loadingPhaseService.cleanupLoadingState(roomId);
+            keepLockUntilTtl = true;
         } catch (NumberFormatException e) {
             log.error("Failed to parse room id for starting game - RoomId: {}, GameId: {}",
                     roomId, currentGameId, e);
+        } catch (RuntimeException e) {
+            log.error("Failed to execute initial round - RoomId: {}, GameId: {}", roomId, currentGameId, e);
+            throw e;
+        } finally {
+            if (!keepLockUntilTtl) {
+                loadingPhaseService.releaseGameStartLock(roomId, currentGameId);
+            }
         }
     }
 

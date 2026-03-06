@@ -40,14 +40,13 @@ public class RoundPreparationService {
      * @return 라운드 준비 결과 (게임이 이미 진행 중이면 null)
      */
     public InitialRoundResult prepareInitialRound(Long gameId) {
-        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
-
-        if (game.isInProgress()) {
-            log.info("Game already started - skip initial preparation. GameId: {}", gameId);
+        boolean transitioned = multiRoadViewGameAdaptor.transitionToInProgressIfPending(gameId);
+        if (!transitioned) {
+            log.info("Game already started or not pending - skip initial preparation. GameId: {}", gameId);
             return null;
         }
 
-        game.startGame();
+        MultiRoadViewGame game = multiRoadViewGameAdaptor.queryById(gameId);
 
         List<GamePlayer> players = gamePlayerAdaptor.queryByMultiRoadViewGameIdWithMember(gameId);
         List<Long> playerIds = players.stream()
