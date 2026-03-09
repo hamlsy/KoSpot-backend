@@ -28,14 +28,24 @@ public class GameRoomPlayerInfo {
 
     private Long joinedAt;
 
+    private MultiplayerScreenState screenState;
+
+    private Long screenStateSeq;
+
+    private Long screenStateUpdatedAt;
+
     @Deprecated // 메서드 내부에서 사용될 때만
     public static GameRoomPlayerInfo from(Member member, String markerImageUrl, boolean isHost) {
+        long now = System.currentTimeMillis();
         return GameRoomPlayerInfo.builder()
                 .memberId(member.getId())
                 .nickname(member.getNickname())
                 .markerImageUrl(markerImageUrl) // 직렬화 주의!
                 .isHost(isHost) // 호스트 여부는 별도로 설정 필요
-                .joinedAt(System.currentTimeMillis())
+                .joinedAt(now)
+                .screenState(MultiplayerScreenState.ROOM)
+                .screenStateSeq(0L)
+                .screenStateUpdatedAt(now)
                 .build();
     }
 

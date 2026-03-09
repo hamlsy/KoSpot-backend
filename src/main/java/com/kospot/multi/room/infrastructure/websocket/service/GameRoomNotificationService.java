@@ -60,6 +60,16 @@ public class GameRoomNotificationService {
         log.info("Player kicked - RoomId: {}, PlayerId: {}", roomId, playerInfo.getMemberId());
     }
 
+    public void notifyPlayerScreenStateUpdated(String roomId, GameRoomPlayerInfo playerInfo) {
+        GameRoomNotification notification = GameRoomNotification.screenStateUpdated(roomId, playerInfo);
+        sendNotification(roomId, notification, GameRoomChannelConstants.getGameRoomPlayerListChannel(roomId));
+        log.debug("Player screen state updated - RoomId: {}, PlayerId: {}, State: {}, Seq: {}",
+                roomId,
+                playerInfo.getMemberId(),
+                playerInfo.getScreenState(),
+                playerInfo.getScreenStateSeq());
+    }
+
     /**
      * 방장 변경 알림
      */

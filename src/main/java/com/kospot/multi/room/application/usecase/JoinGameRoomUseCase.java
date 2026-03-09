@@ -7,6 +7,7 @@ import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.domain.event.GameRoomJoinEvent;
 import com.kospot.multi.room.application.service.service.GameRoomService;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
+import com.kospot.multi.room.domain.vo.MultiplayerScreenState;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.common.exception.object.domain.GameRoomHandler;
 import com.kospot.common.exception.payload.code.ErrorStatus;
@@ -53,21 +54,24 @@ public class JoinGameRoomUseCase {
 
         // GameRoom Redis 저장
         boolean isHost = gameRoom.isHost(player);
+        long now = System.currentTimeMillis();
         GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.builder()
                 .memberId(player.getId())
                 .markerImageUrl(player.getEquippedMarkerImage().getImageUrl())
                 .isHost(isHost)
                 .nickname(player.getNickname())
                 // .team(request.getTeam())
-                .joinedAt(System.currentTimeMillis())
+                .joinedAt(now)
+                .screenState(MultiplayerScreenState.ROOM)
+                .screenStateSeq(0L)
+                .screenStateUpdatedAt(now)
                 .build();
         gameRoomRedisService.savePlayerToRoom(gameRoom.getId().toString(), playerInfo);
 
         // 알림용 이벤트 발행 (Redis 작업 완료 후)
         // todo team 랜덤 배정
         eventPublisher.publishEvent(new GameRoomJoinEvent(
-                gameRoomId, player.getId(), player.getNickname(), player.getEquippedMarkerImage().getImageUrl(), null,
-                isHost));
+                gameRoomId, playerInfo));
     }
 
     // Read - then - check - V1 todo refactor

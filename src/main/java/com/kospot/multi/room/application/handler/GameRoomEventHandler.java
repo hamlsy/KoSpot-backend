@@ -23,14 +23,7 @@ public class GameRoomEventHandler {
     @EventListener
     public void handleJoin(GameRoomJoinEvent event) {
         String roomId = event.getRoomId().toString();
-        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.builder()
-                .memberId(event.getMemberId())
-                .markerImageUrl(event.getMarkerImageUrl())
-                .isHost(event.isHost())
-                .nickname(event.getNickname())
-                .team(event.getTeam())
-                .joinedAt(System.currentTimeMillis())
-                .build();
+        GameRoomPlayerInfo playerInfo = event.getPlayerInfo();
 
         // STOMP 알림만 전송
         gameRoomNotificationService.notifyPlayerJoined(roomId, playerInfo);
