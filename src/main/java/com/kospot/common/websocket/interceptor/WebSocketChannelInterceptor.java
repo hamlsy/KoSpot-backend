@@ -17,6 +17,7 @@ import org.springframework.messaging.MessageChannel;
 
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.lang.NonNull;
 
@@ -46,7 +47,8 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
 
     @Override
     public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
-        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+//        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
         if (accessor.getCommand() != null) {
             switch (accessor.getCommand()) {
@@ -69,7 +71,6 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
      */
     private void handleConnect(StompHeaderAccessor accessor) {
         String token = extractTokenOrNull(accessor);
-
         WebSocketMemberPrincipal principal;
         if (token != null) {
             principal = createPrincipalFromToken(token);
@@ -123,7 +124,6 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         String destination = accessor.getDestination();
         String sessionId = accessor.getSessionId();
         String subscriptionId = accessor.getSubscriptionId();
-
         if (destination == null) {
             throw new WebSocketHandler(ErrorStatus.INVALID_DESTINATION);
         }
