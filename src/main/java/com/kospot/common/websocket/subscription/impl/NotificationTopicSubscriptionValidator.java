@@ -25,7 +25,8 @@ public class NotificationTopicSubscriptionValidator implements SubscriptionValid
         if (destination == null) {
             return false;
         }
-        return destination.startsWith(NotificationChannelConstants.PREFIX_NOTIFICATION);
+        return destination.startsWith(NotificationChannelConstants.PREFIX_NOTIFICATION)
+                || NotificationChannelConstants.PERSONAL_NOTIFICATION_SUBSCRIBE_CHANNEL.equals(destination);
     }
 
     @Override
