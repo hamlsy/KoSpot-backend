@@ -3,6 +3,7 @@ package com.kospot.multi.room.presentation.controller;
 import com.kospot.multi.room.application.websocket.usecase.SendGameRoomMessageUseCase;
 import com.kospot.multi.room.application.websocket.usecase.SetGameRoomIdAttrUseCase;
 import com.kospot.multi.room.application.websocket.usecase.SwitchTeamUseCase;
+import com.kospot.multi.room.application.websocket.usecase.UpdatePlayerScreenStateUseCase;
 import com.kospot.doc.infrastructure.annotation.WebSocketDoc;
 import com.kospot.chat.presentation.dto.request.ChatMessageDto;
 import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
@@ -26,6 +27,7 @@ public class GameRoomWebSocketController {
     private final SetGameRoomIdAttrUseCase setGameRoomIdAttrUseCase;
     private final SendGameRoomMessageUseCase sendGameRoomMessageUseCase;
     private final SwitchTeamUseCase switchTeamUseCase;
+    private final UpdatePlayerScreenStateUseCase updatePlayerScreenStateUseCase;
 
     /**
      * 게임방 채팅 메시지 전송
@@ -56,6 +58,13 @@ public class GameRoomWebSocketController {
                            @Valid @Payload GameRoomRequest.SwitchTeam request,
                            SimpMessageHeaderAccessor headerAccessor) {
         switchTeamUseCase.execute(roomId, request, headerAccessor);
+    }
+
+    @MessageMapping("/room.{roomId}.screen.state")
+    public void updatePlayerScreenState(@DestinationVariable("roomId") String roomId,
+                                        @Valid @Payload GameRoomRequest.UpdateScreenState request,
+                                        SimpMessageHeaderAccessor headerAccessor) {
+        updatePlayerScreenStateUseCase.execute(roomId, request, headerAccessor);
     }
 
 }

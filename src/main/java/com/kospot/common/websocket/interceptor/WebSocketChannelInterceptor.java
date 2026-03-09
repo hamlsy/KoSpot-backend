@@ -106,14 +106,19 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     private void handleSend(StompHeaderAccessor accessor) {
         WebSocketMemberPrincipal principal = getPrincipal(accessor);
         Long memberId = principal.getMemberId();
+        String destination = accessor.getDestination();
 
-        if (isRateLimit(memberId)) {
+        if (isChatDestination(destination) && isRateLimit(memberId)) {
             log.warn("Rate limit exceeded - MemberId: {}", memberId);
             throw new WebSocketHandler(ErrorStatus.CHAT_RATE_LIMIT_EXCEEDED);
         }
 
         log.debug("Message sent - MemberId: {}, Destination: {}",
-                memberId, accessor.getDestination());
+                memberId, destination);
+    }
+
+    private boolean isChatDestination(String destination) {
+        return destination != null && destination.contains("chat");
     }
 
     /**
