@@ -139,6 +139,10 @@ public class GameRoomRedisService {
         return gameRoomRedisRepository.findPlayer(roomKey, memberId.toString()) != null;
     }
 
+    public Optional<GameRoomPlayerInfo> getRoomPlayer(String roomId, Long memberId) {
+        return Optional.ofNullable(findPlayer(roomId, memberId));
+    }
+
     public ScreenStateUpdateResult updatePlayerScreenStateIfNewer(
             String roomId,
             Long memberId,

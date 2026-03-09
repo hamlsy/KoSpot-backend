@@ -71,7 +71,7 @@ public class JoinGameRoomUseCase {
         // 알림용 이벤트 발행 (Redis 작업 완료 후)
         // todo team 랜덤 배정
         eventPublisher.publishEvent(new GameRoomJoinEvent(
-                gameRoomId, playerInfo));
+                gameRoomId, player.getId()));
     }
 
     // Read - then - check - V1 todo refactor
