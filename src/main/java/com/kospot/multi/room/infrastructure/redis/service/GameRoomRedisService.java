@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.multi.player.domain.exception.GameTeamErrorStatus;
 import com.kospot.multi.player.domain.exception.GameTeamHandler;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
+import com.kospot.multi.room.domain.vo.MultiplayerScreenState;
 import com.kospot.multi.room.infrastructure.redis.dao.GameRoomRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,23 @@ public class GameRoomRedisService {
     private final GameRoomRedisRepository gameRoomRedisRepository;
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
+
+    public enum ScreenStateUpdateStatus {
+        UPDATED,
+        NO_OP,
+        STALE,
+        NOT_FOUND
+    }
+
+    public record ScreenStateUpdateResult(ScreenStateUpdateStatus status, GameRoomPlayerInfo playerInfo) {
+        public static ScreenStateUpdateResult of(ScreenStateUpdateStatus status, GameRoomPlayerInfo playerInfo) {
+            return new ScreenStateUpdateResult(status, playerInfo);
+        }
+
+        public static ScreenStateUpdateResult of(ScreenStateUpdateStatus status) {
+            return new ScreenStateUpdateResult(status, null);
+        }
+    }
 
     /**
      * 게임방에 플레이어 정보 저장
@@ -114,6 +132,37 @@ public class GameRoomRedisService {
             log.error("Failed to get room players from Redis - RoomId: {}", roomId, e);
             return List.of();
         }
+    }
+
+    public boolean isPlayerInRoom(String roomId, Long memberId) {
+        String roomKey = getRoomKey(roomId);
+        return gameRoomRedisRepository.findPlayer(roomKey, memberId.toString()) != null;
+    }
+
+    public ScreenStateUpdateResult updatePlayerScreenStateIfNewer(
+            String roomId,
+            Long memberId,
+            MultiplayerScreenState state,
+            long seq,
+            long updatedAt
+    ) {
+        String roomKey = getRoomKey(roomId);
+        GameRoomRedisRepository.ScreenStateUpdateResult updateResult =
+                gameRoomRedisRepository.updatePlayerScreenStateIfNewer(
+                        roomKey,
+                        memberId.toString(),
+                        state.name(),
+                        seq,
+                        updatedAt
+                );
+
+        ScreenStateUpdateStatus status = mapScreenStateUpdateStatus(updateResult);
+        if (status == ScreenStateUpdateStatus.NOT_FOUND || status == ScreenStateUpdateStatus.STALE) {
+            return ScreenStateUpdateResult.of(status);
+        }
+
+        GameRoomPlayerInfo playerInfo = findPlayer(roomId, memberId);
+        return ScreenStateUpdateResult.of(status, playerInfo);
     }
 
     public void switchTeam(String roomId, Long memberId, String newTeam) {
@@ -204,6 +253,34 @@ public class GameRoomRedisService {
         String roomKey = getRoomKey(roomId);
         int currentPlayerCount = gameRoomRedisRepository.countPlayers(roomKey);
         return currentPlayerCount == 0;
+    }
+
+    private ScreenStateUpdateStatus mapScreenStateUpdateStatus(GameRoomRedisRepository.ScreenStateUpdateResult result) {
+        if (result == null) {
+            return ScreenStateUpdateStatus.NOT_FOUND;
+        }
+
+        return switch (result) {
+            case UPDATED -> ScreenStateUpdateStatus.UPDATED;
+            case NO_OP -> ScreenStateUpdateStatus.NO_OP;
+            case STALE -> ScreenStateUpdateStatus.STALE;
+            case NOT_FOUND -> ScreenStateUpdateStatus.NOT_FOUND;
+        };
+    }
+
+    private GameRoomPlayerInfo findPlayer(String roomId, Long memberId) {
+        try {
+            String roomKey = getRoomKey(roomId);
+            String playerJson = gameRoomRedisRepository.findPlayer(roomKey, memberId.toString());
+            if (playerJson == null) {
+                return null;
+            }
+
+            return objectMapper.readValue(playerJson, GameRoomPlayerInfo.class);
+        } catch (Exception e) {
+            log.error("Failed to deserialize player from Redis - RoomId: {}, MemberId: {}", roomId, memberId, e);
+            return null;
+        }
     }
 
     private String getRoomKey(String roomId) {
