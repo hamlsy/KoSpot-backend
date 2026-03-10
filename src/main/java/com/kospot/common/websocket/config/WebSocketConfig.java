@@ -2,13 +2,12 @@ package com.kospot.common.websocket.config;
 
 import com.kospot.common.websocket.interceptor.WebSocketChannelInterceptor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -24,16 +23,19 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final String[] allowedOrigins;
     private final WebSocketChannelInterceptor webSocketChannelInterceptor;
     private final WebSocketHeartbeatProperties webSocketHeartbeatProperties;
+    private final TaskScheduler webSocketHeartbeatTaskScheduler;
 
     public WebSocketConfig(@Value("${websocket.allowed-origins}") String allowedOrigins,
             WebSocketChannelInterceptor webSocketChannelInterceptor,
-            WebSocketHeartbeatProperties webSocketHeartbeatProperties) {
+            WebSocketHeartbeatProperties webSocketHeartbeatProperties,
+            @Qualifier("webSocketHeartbeatTaskScheduler") TaskScheduler webSocketHeartbeatTaskScheduler) {
         this.allowedOrigins = Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .toArray(String[]::new);
         this.webSocketChannelInterceptor = webSocketChannelInterceptor;
         this.webSocketHeartbeatProperties = webSocketHeartbeatProperties;
+        this.webSocketHeartbeatTaskScheduler = webSocketHeartbeatTaskScheduler;
     }
 
     // STOMP Endpoints
@@ -68,7 +70,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 "/topic", // 다대다 브로드캐스트 (게임 룸 전체 메시지)
                 "/queue" // 일대일 개인 메시지 (개별 플레이어 타겟팅)
         ).setHeartbeatValue(new long[] { serverOutgoingMs, serverIncomingMs })
-                .setTaskScheduler(webSocketHeartbeatTaskScheduler());
+                .setTaskScheduler(webSocketHeartbeatTaskScheduler);
 
         // 클라이언트가 메시지를 전송할 때 사용할 프리픽스
         config.setApplicationDestinationPrefixes("/app");
@@ -103,13 +105,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .keepAliveSeconds(60);
     }
 
-    @Bean(name = "webSocketHeartbeatTaskScheduler")
-    public TaskScheduler webSocketHeartbeatTaskScheduler() {
-        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(webSocketHeartbeatProperties.getHeartbeat().getSchedulerPoolSize());
-        scheduler.setThreadNamePrefix("ws-heartbeat-");
-        scheduler.setRemoveOnCancelPolicy(true);
-        scheduler.initialize();
-        return scheduler;
-    }
 }

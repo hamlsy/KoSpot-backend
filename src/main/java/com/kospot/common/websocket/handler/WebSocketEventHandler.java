@@ -49,9 +49,18 @@ public class WebSocketEventHandler {
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
-        if (sessionId != null) {
-            log.info("WebSocket 연결 성공 - SessionId: {}", sessionId);
+        if (sessionId == null) {
+            return;
         }
+
+        Long memberId = sessionContextRedisService.getAttr(sessionId, "memberId", Long.class);
+        if (memberId != null && memberId > 0) {
+            webSocketConnectionStateOrchestrator.handleReconnect(memberId, sessionId);
+            log.info("WebSocket 연결 성공 - MemberId: {}, SessionId: {}", memberId, sessionId);
+            return;
+        }
+
+        log.info("WebSocket 연결 성공 - SessionId: {}", sessionId);
     }
 
     @EventListener

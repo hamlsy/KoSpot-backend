@@ -3,9 +3,10 @@ package com.kospot.common.websocket.connection.service;
 import com.kospot.common.redis.common.service.SessionContextRedisService;
 import com.kospot.common.websocket.config.WebSocketHeartbeatProperties;
 import com.kospot.common.websocket.connection.domain.WebSocketConnectionState;
+import com.kospot.common.websocket.connection.event.WebSocketGracePeriodExpiredEvent;
 import com.kospot.common.websocket.session.service.WebSocketSessionService;
 import com.kospot.friend.infrastructure.websocket.service.FriendChatSubscriptionCacheService;
-import com.kospot.multi.room.application.usecase.LeaveGameRoomUseCase;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.TaskScheduler;
@@ -24,7 +25,7 @@ public class WebSocketConnectionStateOrchestrator {
 
     private static final String MEMBER_STATE_KEY_PATTERN = "websocket:connection:state:member:%d";
 
-    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
+    private final ApplicationEventPublisher eventPublisher;
     private final SessionContextRedisService sessionContextRedisService;
     private final WebSocketSessionService webSocketSessionService;
     private final FriendChatSubscriptionCacheService friendChatSubscriptionCacheService;
@@ -33,7 +34,7 @@ public class WebSocketConnectionStateOrchestrator {
     private final TaskScheduler webSocketHeartbeatTaskScheduler;
 
     public WebSocketConnectionStateOrchestrator(
-            LeaveGameRoomUseCase leaveGameRoomUseCase,
+            ApplicationEventPublisher eventPublisher,
             SessionContextRedisService sessionContextRedisService,
             WebSocketSessionService webSocketSessionService,
             FriendChatSubscriptionCacheService friendChatSubscriptionCacheService,
@@ -41,7 +42,7 @@ public class WebSocketConnectionStateOrchestrator {
             WebSocketHeartbeatProperties webSocketHeartbeatProperties,
             @Qualifier("webSocketHeartbeatTaskScheduler")
             TaskScheduler webSocketHeartbeatTaskScheduler) {
-        this.leaveGameRoomUseCase = leaveGameRoomUseCase;
+        this.eventPublisher = eventPublisher;
         this.sessionContextRedisService = sessionContextRedisService;
         this.webSocketSessionService = webSocketSessionService;
         this.friendChatSubscriptionCacheService = friendChatSubscriptionCacheService;
@@ -143,10 +144,10 @@ public class WebSocketConnectionStateOrchestrator {
 
         if (!skipRoomLeave && gameRoomId != null) {
             try {
-                leaveGameRoomUseCase.execute(memberId, gameRoomId);
-                log.info("Grace expired; member left game room - MemberId: {}, RoomId: {}", memberId, gameRoomId);
+                eventPublisher.publishEvent(new WebSocketGracePeriodExpiredEvent(memberId, gameRoomId));
+                log.info("Grace expired; published room-leave event - MemberId: {}, RoomId: {}", memberId, gameRoomId);
             } catch (Exception e) {
-                log.warn("Failed to finalize room leave after grace expiration - MemberId: {}, RoomId: {}",
+                log.warn("Failed to publish room-leave event after grace expiration - MemberId: {}, RoomId: {}",
                         memberId, gameRoomId, e);
             }
         } else if (skipRoomLeave) {
