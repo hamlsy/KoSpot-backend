@@ -108,6 +108,12 @@ cloud:
 
 websocket:
   allowed-origins: ${WEBSOCKET_ALLOWED_ORIGINS}
+  heartbeat:
+    server-outgoing-ms: ${WEBSOCKET_HEARTBEAT_SERVER_OUTGOING_MS:10000}
+    server-incoming-ms: ${WEBSOCKET_HEARTBEAT_SERVER_INCOMING_MS:10000}
+    dead-threshold-ms: ${WEBSOCKET_HEARTBEAT_DEAD_THRESHOLD_MS:30000}
+    grace-period-ms: ${WEBSOCKET_HEARTBEAT_GRACE_PERIOD_MS:60000}
+    scheduler-pool-size: ${WEBSOCKET_HEARTBEAT_SCHEDULER_POOL_SIZE:2}
 
 
 notification:
