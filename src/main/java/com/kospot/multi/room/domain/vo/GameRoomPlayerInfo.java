@@ -43,7 +43,7 @@ public class GameRoomPlayerInfo {
                 .markerImageUrl(markerImageUrl) // 직렬화 주의!
                 .isHost(isHost) // 호스트 여부는 별도로 설정 필요
                 .joinedAt(now)
-                .screenState(MultiplayerScreenState.ROOM)
+                .screenState(MultiplayerScreenState.JOINING)
                 .screenStateSeq(0L)
                 .screenStateUpdatedAt(now)
                 .build();
@@ -55,6 +55,7 @@ public class GameRoomPlayerInfo {
                 .nickname(playerInfo.getNickname())
                 .markerImageUrl(playerInfo.getMarkerImageUrl())
                 .isHost(playerInfo.isHost())
+                .screenState(playerInfo.getScreenState())
                 .build();
     }
 

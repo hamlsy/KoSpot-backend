@@ -3,6 +3,7 @@ package com.kospot.multi.room.presentation.controller;
 import com.kospot.multi.room.application.websocket.usecase.SendGameRoomMessageUseCase;
 import com.kospot.multi.room.application.websocket.usecase.SetGameRoomIdAttrUseCase;
 import com.kospot.multi.room.application.websocket.usecase.SwitchTeamUseCase;
+import com.kospot.multi.room.application.websocket.usecase.MarkPlayerRoomEnteredUseCase;
 import com.kospot.multi.room.application.websocket.usecase.UpdatePlayerScreenStateUseCase;
 import com.kospot.doc.infrastructure.annotation.WebSocketDoc;
 import com.kospot.chat.presentation.dto.request.ChatMessageDto;
@@ -27,6 +28,7 @@ public class GameRoomWebSocketController {
     private final SetGameRoomIdAttrUseCase setGameRoomIdAttrUseCase;
     private final SendGameRoomMessageUseCase sendGameRoomMessageUseCase;
     private final SwitchTeamUseCase switchTeamUseCase;
+    private final MarkPlayerRoomEnteredUseCase markPlayerRoomEnteredUseCase;
     private final UpdatePlayerScreenStateUseCase updatePlayerScreenStateUseCase;
 
     /**
@@ -48,6 +50,7 @@ public class GameRoomWebSocketController {
     @SubscribeMapping("/room/{roomId}/playerList")
     public void subscribeGameRoomPlayerList(@DestinationVariable("roomId")  String roomId, SimpMessageHeaderAccessor headerAccessor) {
         setGameRoomIdAttrUseCase.execute(roomId, headerAccessor);
+        markPlayerRoomEnteredUseCase.execute(roomId, headerAccessor);
     }
 
     //todo 1. race condition 해결

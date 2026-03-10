@@ -169,6 +169,24 @@ public class GameRoomRedisService {
         return ScreenStateUpdateResult.of(status, playerInfo);
     }
 
+    public ScreenStateUpdateResult promotePlayerToRoomIfJoining(String roomId, Long memberId, long updatedAt) {
+        String roomKey = getRoomKey(roomId);
+        GameRoomRedisRepository.ScreenStateUpdateResult updateResult =
+                gameRoomRedisRepository.promotePlayerToRoomIfJoining(
+                        roomKey,
+                        memberId.toString(),
+                        updatedAt
+                );
+
+        ScreenStateUpdateStatus status = mapScreenStateUpdateStatus(updateResult);
+        if (status == ScreenStateUpdateStatus.NOT_FOUND) {
+            return ScreenStateUpdateResult.of(status);
+        }
+
+        GameRoomPlayerInfo playerInfo = findPlayer(roomId, memberId);
+        return ScreenStateUpdateResult.of(status, playerInfo);
+    }
+
     public void switchTeam(String roomId, Long memberId, String newTeam) {
         try {
             if (isNotValidTeamCount(roomId, newTeam)) {

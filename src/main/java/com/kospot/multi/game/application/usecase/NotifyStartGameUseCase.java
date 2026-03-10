@@ -1,6 +1,7 @@
 package com.kospot.multi.game.application.usecase;
 
 import com.kospot.multi.common.flow.GameTransitionOrchestrator;
+import com.kospot.multi.game.application.service.GameStartReadinessService;
 import com.kospot.multi.game.application.strategy.MultiGameStartStrategy;
 import com.kospot.game.domain.vo.GameMode;
 import com.kospot.multi.game.domain.vo.PlayerMatchType;
@@ -38,6 +39,7 @@ public class NotifyStartGameUseCase {
     private final MemberAdaptor memberAdaptor;
     private final GameRoomService gameRoomService;
     private final GameRoomAdaptor gameRoomAdaptor;
+    private final GameStartReadinessService gameStartReadinessService;
 
     // Strategy Collection
     private final List<MultiGameStartStrategy> startStrategies;
@@ -54,6 +56,8 @@ public class NotifyStartGameUseCase {
             throw new GameHandler(ErrorStatus.GAME_ROOM_NOT_FOUND);
         }
         GameRoom gameRoom = gameRoomAdaptor.queryByIdFetchHost(gameRoomId);
+
+        gameStartReadinessService.validateReadyToStart(gameRoomId.toString());
         gameRoomService.markGameRoomAsInGame(gameRoom, host);
 
         GameMode gameMode = gameRoom.getGameMode();

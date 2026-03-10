@@ -44,11 +44,41 @@ public class GameRoomRedisRepository {
             return 'UPDATED'
             """;
 
+    private static final String PROMOTE_JOINING_TO_ROOM_LUA = """
+            local roomKey = KEYS[1]
+            local memberId = ARGV[1]
+            local updatedAt = tonumber(ARGV[2])
+
+            local playerJson = redis.call('HGET', roomKey, memberId)
+            if not playerJson then
+                return 'NOT_FOUND'
+            end
+
+            local player = cjson.decode(playerJson)
+            local currentState = player.screenState
+            local currentSeq = tonumber(player.screenStateSeq or 0)
+
+            if currentState ~= 'JOINING' then
+                return 'NO_OP'
+            end
+
+            player.screenState = 'ROOM'
+            player.screenStateSeq = currentSeq
+            player.screenStateUpdatedAt = updatedAt
+
+            redis.call('HSET', roomKey, memberId, cjson.encode(player))
+            return 'UPDATED'
+            """;
+
     private static final DefaultRedisScript<String> UPDATE_SCREEN_STATE_SCRIPT = new DefaultRedisScript<>();
+    private static final DefaultRedisScript<String> PROMOTE_JOINING_TO_ROOM_SCRIPT = new DefaultRedisScript<>();
 
     static {
         UPDATE_SCREEN_STATE_SCRIPT.setScriptText(UPDATE_SCREEN_STATE_LUA);
         UPDATE_SCREEN_STATE_SCRIPT.setResultType(String.class);
+
+        PROMOTE_JOINING_TO_ROOM_SCRIPT.setScriptText(PROMOTE_JOINING_TO_ROOM_LUA);
+        PROMOTE_JOINING_TO_ROOM_SCRIPT.setResultType(String.class);
     }
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -103,6 +133,29 @@ public class GameRoomRedisRepository {
                 memberId,
                 newState,
                 String.valueOf(newSeq),
+                String.valueOf(updatedAt)
+        );
+
+        if (result == null) {
+            return ScreenStateUpdateResult.NOT_FOUND;
+        }
+
+        try {
+            return ScreenStateUpdateResult.valueOf(result);
+        } catch (IllegalArgumentException e) {
+            return ScreenStateUpdateResult.NOT_FOUND;
+        }
+    }
+
+    public ScreenStateUpdateResult promotePlayerToRoomIfJoining(
+            String roomKey,
+            String memberId,
+            long updatedAt
+    ) {
+        String result = redisTemplate.execute(
+                PROMOTE_JOINING_TO_ROOM_SCRIPT,
+                Collections.singletonList(roomKey),
+                memberId,
                 String.valueOf(updatedAt)
         );
 

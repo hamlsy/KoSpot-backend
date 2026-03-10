@@ -62,7 +62,7 @@ public class JoinGameRoomUseCase {
                 .nickname(player.getNickname())
                 // .team(request.getTeam())
                 .joinedAt(now)
-                .screenState(MultiplayerScreenState.ROOM)
+                .screenState(MultiplayerScreenState.JOINING)
                 .screenStateSeq(0L)
                 .screenStateUpdatedAt(now)
                 .build();
