@@ -58,12 +58,12 @@ public class WebSocketEventHandler {
     }
 
     @EventListener
-    public void handleWebSocketSubscribeLisnter(SessionSubscribeEvent event) {
+    public void handleWebSocketSubscribeListener(SessionSubscribeEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String dest = headerAccessor.getDestination();
-        if ("/topic/chat/lobby".equals(dest)) {
-            joinGlobalLobbyUseCase.execute(headerAccessor); // join 처리
-        }
+//        if ("/topic/chat/lobby".equals(dest)) {
+//            joinGlobalLobbyUseCase.execute(headerAccessor); // join 처리
+//        }
     }
 
     @EventListener
