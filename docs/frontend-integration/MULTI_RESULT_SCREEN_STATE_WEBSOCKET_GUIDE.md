@@ -114,8 +114,10 @@ interface PlayerState {
 병합 규칙:
 - `PLAYER_LIST_UPDATED`: room 상태를 전체 교체
 - `SCREEN_STATE_UPDATED`: 해당 `memberId`만 부분 갱신
-- delta 적용 시 `screenStateSeq` 역전이면 drop
-- 동일 seq면 no-op
+- delta 적용 시 `incoming.screenStateSeq < current.screenStateSeq`이면 drop
+- `incoming.screenStateSeq == current.screenStateSeq`일 때
+  - `screenState`가 같으면 no-op
+  - `screenState`가 다르면 반영 (서버 승격 `JOINING -> ROOM` 케이스 대응)
 
 ## 8) 재연결 시 처리
 
