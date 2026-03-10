@@ -1,38 +1,34 @@
-# 멀티 결과창 상대 화면 상태 WebSocket 프론트 연동 명세
+# 멀티 GameRoom 화면 상태 동기화 프론트 연동 명세 (JOINING 게이트 반영)
 
-> 게임 종료 후 Result View에서 상대가 Room View로 돌아왔는지 실시간으로 표시하기 위한 프론트엔드 구현 명세서
+> 최신 백엔드 구현 기준 문서. 기존 분리 채널/스냅샷 방식이 아니라 `playerList` 채널 통합 방식이다.
 
-## 1. 목적
-- Result View에서 상대 플레이어의 현재 화면 상태(`RESULT`, `ROOM`, `IN_GAME`, `DISCONNECTED`)를 실시간으로 반영한다.
-- 이벤트 유실/재연결 상황에서도 스냅샷 요청으로 최종 상태를 복구한다.
+## 1) 목적
+- Result View에서 상대 화면 상태(`IN_GAME`, `RESULT`, `ROOM`)를 실시간 반영한다.
+- 조인 직후 실제 방 채널에 들어오기 전(`JOINING`)에는 게임 시작을 차단한다.
+- 방 화면 진입 여부를 서버가 신뢰할 수 있게 subscribe 이벤트와 연동한다.
 
-## 2. 프론트 변경 범위
+## 2) 핵심 변경점 요약
+- 서버는 조인 직후 플레이어를 `JOINING`으로 저장한다.
+- 프론트가 `/topic/room/{roomId}/playerList`를 구독하면 서버가 `JOINING -> ROOM`으로 승격한다.
+- 방장 시작 API(`/rooms/{roomId}/start`)는 시작 전 전원 `ROOM`인지 검증한다.
+- 화면 상태 delta/full sync 모두 기존 `playerList` 채널로 받는다.
 
-### 2.1 추가해야 하는 것
-- 화면 상태 전용 WebSocket 채널 구독 로직
-- 화면 상태 업데이트 전송 함수 (`sendScreenState`)
-- 초기 스냅샷 요청 함수 (`requestScreenStateSnapshot`)
-- 상태 시퀀스(`clientSeq`) 관리 로직
-- Result View 상대 상태 뱃지/문구 UI
+## 3) 프론트가 반드시 해야 하는 연결
 
-### 2.2 수정해야 하는 것
-- 게임 종료 시점 라우팅 로직: Result View 진입 직후 상태 이벤트 전송
-- 결과창 -> 방 복귀 버튼 핸들러: Room View 이동 직전/직후 상태 이벤트 전송
-- WebSocket 재연결 로직: 재연결 후 채널 재구독 + 스냅샷 재요청
-- 전역 스토어(또는 페이지 스토어): `roomId + memberId` 기준 상태 맵 추가
+### 3.1 방 진입 시 필수 순서
+1. REST 조인 호출: `POST /rooms/{roomId}/join`
+2. WebSocket 연결 확인
+3. 즉시 구독: `SUBSCRIBE /topic/room/{roomId}/playerList`
+4. 구독 성공 후 플레이어 리스트/상태 store 반영
 
----
+중요:
+- 3단계를 늦추면 본인 상태가 `JOINING`에 머물 수 있고, 방장이 시작 요청 시 서버에서 거절된다.
 
-## 3. 채널/메시지 명세
+### 3.2 화면 상태 전송
+클라이언트 전송 엔드포인트:
+- `SEND /app/room.{roomId}.screen.state`
 
-## 3.1 서버로 전송 (Client -> Server)
-
-### 화면 상태 업데이트
-`
-SEND /app/room.{roomId}.screen.state
-`
-
-요청 바디:
+요청 예시:
 ```json
 {
   "state": "RESULT",
@@ -41,206 +37,129 @@ SEND /app/room.{roomId}.screen.state
 }
 ```
 
-필드:
-- `state`: `IN_GAME | RESULT | ROOM`
-- `clientSeq`: 세션 내 단조 증가 정수 (필수)
-- `clientTimestamp`: 클라이언트 epoch ms (옵션)
+필드 규칙:
+- `state`: `IN_GAME | RESULT | ROOM`만 전송 (`JOINING`은 서버 관리 상태)
+- `clientSeq`: 같은 세션 내 단조 증가
+- `clientTimestamp`: epoch ms
 
-주의:
-- `memberId`는 보내지 않는다. 서버는 JWT Principal에서 식별한다.
-- `clientSeq`는 페이지 새로고침 시 0부터 재시작 가능(세션 기준).
+## 4) 서버 수신 채널/메시지 포맷
 
-### 스냅샷 요청
-`
-SEND /app/room.{roomId}.screen.state.snapshot
-`
+구독 채널:
+- `SUBSCRIBE /topic/room/{roomId}/playerList`
 
-요청 바디: 없음 또는 `{}`
-
-## 3.2 서버에서 수신 (Server -> Client)
-
-### 상태 변경 브로드캐스트
-`
-SUBSCRIBE /topic/game/{roomId}/screen/state
-`
-
-메시지 예시:
+메시지 공통 포맷:
 ```json
 {
+  "type": "SCREEN_STATE_UPDATED",
   "roomId": "123",
-  "memberId": 456,
-  "state": "ROOM",
-  "clientSeq": 13,
-  "revision": 87,
-  "serverTimestamp": 1760000000456
+  "playerInfo": {
+    "memberId": 456,
+    "nickname": "player",
+    "markerImageUrl": "...",
+    "isHost": false,
+    "screenState": "ROOM",
+    "screenStateSeq": 12,
+    "screenStateUpdatedAt": 1760000000456
+  },
+  "players": null,
+  "timestamp": 1760000000456
 }
 ```
 
-### 스냅샷 응답 (개인 큐)
-`
-SUBSCRIBE /user/queue/game/{roomId}/screen/state/snapshot
-`
+주요 `type`:
+- `SCREEN_STATE_UPDATED`: 특정 플레이어 상태 delta
+- `PLAYER_LIST_UPDATED`: 전체 플레이어 스냅샷(`players` 사용)
+- `PLAYER_JOINED`, `PLAYER_LEFT`, `PLAYER_KICKED`, `HOST_CHANGED`도 동일 채널로 수신
 
-메시지 예시:
-```json
-{
-  "roomId": "123",
-  "revision": 87,
-  "serverTimestamp": 1760000000500,
-  "states": [
-    {
-      "memberId": 123,
-      "state": "RESULT",
-      "clientSeq": 12,
-      "updatedAt": 1760000000000
-    },
-    {
-      "memberId": 456,
-      "state": "ROOM",
-      "clientSeq": 13,
-      "updatedAt": 1760000000450
-    }
-  ]
-}
-```
+## 5) 화면별 전송 타이밍
 
----
+### 5.1 게임 화면 진입
+- `sendScreenState(roomId, "IN_GAME")`
 
-## 4. 화면별 전송 타이밍 명세
+### 5.2 결과 화면 진입
+- Result View mount 직후 `sendScreenState(roomId, "RESULT")`
 
-## 4.1 IN_GAME -> RESULT
-- 트리거: 게임 종료 후 결과창 렌더링 직후
-- 동작: `sendScreenState(roomId, "RESULT")`
+### 5.3 결과 -> 방 복귀
+- 복귀 버튼 클릭 시 `sendScreenState(roomId, "ROOM")`
+- Room View mount 후 `ROOM` 1회 재전송 권장(멱등)
 
-## 4.2 RESULT -> ROOM
-- 트리거: 결과창의 "방으로 돌아가기" 액션
-- 동작: 라우팅 직전 `ROOM` 전송, 실패해도 라우팅 진행
-- 권장: Room View 진입 후 한 번 더 `ROOM` 재전송(멱등)
+## 6) 시작 버튼 UX 규칙 (중요)
 
-## 4.3 Room 체류
-- 트리거: Room View 최초 진입
-- 동작: `sendScreenState(roomId, "ROOM")`
+방장 UI에서 시작 버튼 처리:
+- `playerList`의 모든 플레이어 `screenState === "ROOM"`일 때만 활성화 권장
+- 1명이라도 `JOINING`이면 비활성 + 안내 문구 노출
 
-## 4.4 비정상 종료/새로고침
-- `beforeunload`에서 best-effort 전송은 시도 가능
-- 실패해도 서버 disconnect 보정(`DISCONNECTED`)을 신뢰
+권장 문구:
+- `참여 중인 플레이어가 있습니다. 잠시 후 다시 시도해주세요.`
 
----
+백엔드도 동일 검증을 하므로, 프론트에서 미리 막아 불필요한 에러 호출을 줄인다.
 
-## 5. 상태 저장(Store) 명세
+## 7) 상태 저장(Store) 규칙
 
-권장 전역 상태 구조:
+권장 타입:
 ```ts
-type ScreenState = "IN_GAME" | "RESULT" | "ROOM" | "DISCONNECTED";
+type ScreenState = "JOINING" | "IN_GAME" | "RESULT" | "ROOM" | "DISCONNECTED";
 
-interface MemberScreenState {
+interface PlayerState {
   memberId: number;
-  state: ScreenState;
-  clientSeq: number;
-  updatedAt: number;
-}
-
-interface RoomScreenStateStore {
-  roomId: string;
-  revision: number;
-  byMemberId: Record<number, MemberScreenState>;
-  lastSyncedAt: number;
+  screenState: ScreenState;
+  screenStateSeq: number;
+  screenStateUpdatedAt: number;
+  nickname: string;
+  markerImageUrl: string;
+  isHost: boolean;
 }
 ```
 
-클라이언트 적용 규칙:
-- 동일 `memberId`의 기존 상태보다 `clientSeq` 작으면 무시
-- 동일 `clientSeq`면 no-op
-- 스냅샷 수신 시 `revision`이 현재보다 크거나 같으면 전체 동기화
+병합 규칙:
+- `PLAYER_LIST_UPDATED`: room 상태를 전체 교체
+- `SCREEN_STATE_UPDATED`: 해당 `memberId`만 부분 갱신
+- delta 적용 시 `screenStateSeq` 역전이면 drop
+- 동일 seq면 no-op
 
----
+## 8) 재연결 시 처리
 
-## 6. UI 반영 명세 (Result View)
+재연결 성공 직후:
+1. `/topic/room/{roomId}/playerList` 재구독
+2. 현재 페이지 상태 재전송 (`IN_GAME` 또는 `RESULT` 또는 `ROOM`)
 
-상대 상태 표시 규칙:
-- `RESULT`: "상대가 결과 화면에 있습니다"
-- `ROOM`: "상대가 방으로 돌아왔습니다"
-- `IN_GAME`: "상대가 아직 게임 화면에 있습니다"
-- `DISCONNECTED`: "상대 연결이 일시 끊겼습니다"
+참고:
+- 현재 백엔드는 별도 `screen.state.snapshot` 엔드포인트를 제공하지 않는다.
+- 복구 기준은 `PLAYER_LIST_UPDATED` + 재전송 조합이다.
 
-권장 UI:
-- 상대 상태 텍스트 + 상태 점(dot) 컬러
-- `ROOM` 수신 시 버튼 강조: "상대가 돌아왔어요. 방으로 이동"
-
----
-
-## 7. 재연결/복구 명세
-
-재연결 성공 시 순서:
-1. `/topic/game/{roomId}/screen/state` 재구독
-2. `/user/queue/game/{roomId}/screen/state/snapshot` 재구독
-3. 스냅샷 재요청 전송
-4. 현재 화면 상태 재전송 (`RESULT` 또는 `ROOM`)
-
-복구 원칙:
-- 실시간 이벤트만 신뢰하지 말고 재연결 시 항상 스냅샷으로 보정
-
----
-
-## 8. 프론트 구현 예시 (TypeScript)
+## 9) 프론트 구현 예시 (TypeScript)
 
 ```typescript
-class ScreenStateSync {
+type ClientState = "IN_GAME" | "RESULT" | "ROOM";
+
+class RoomScreenStateSync {
   private seq = 0;
 
   constructor(private stomp: any, private roomId: string) {}
 
-  nextSeq(): number {
-    this.seq += 1;
-    return this.seq;
+  subscribePlayerList(onMessage: (payload: any) => void) {
+    return this.stomp.subscribe(`/topic/room/${this.roomId}/playerList`, (frame: any) => {
+      onMessage(JSON.parse(frame.body));
+    });
   }
 
-  sendState(state: "IN_GAME" | "RESULT" | "ROOM") {
+  sendState(state: ClientState) {
+    this.seq += 1;
     this.stomp.publish({
       destination: `/app/room.${this.roomId}.screen.state`,
       body: JSON.stringify({
         state,
-        clientSeq: this.nextSeq(),
+        clientSeq: this.seq,
         clientTimestamp: Date.now(),
       }),
-    });
-  }
-
-  requestSnapshot() {
-    this.stomp.publish({
-      destination: `/app/room.${this.roomId}.screen.state.snapshot`,
-      body: "{}",
-    });
-  }
-
-  subscribe(onChanged: (msg: any) => void, onSnapshot: (msg: any) => void) {
-    this.stomp.subscribe(`/topic/game/${this.roomId}/screen/state`, (frame: any) => {
-      onChanged(JSON.parse(frame.body));
-    });
-
-    this.stomp.subscribe(`/user/queue/game/${this.roomId}/screen/state/snapshot`, (frame: any) => {
-      onSnapshot(JSON.parse(frame.body));
     });
   }
 }
 ```
 
----
-
-## 9. QA 체크리스트
-- 결과창 진입 시 상대에게 `RESULT`가 즉시 보이는가
-- 방 복귀 시 상대에게 `ROOM`이 즉시 보이는가
-- 네트워크 끊김 후 재연결 시 스냅샷으로 상태가 복구되는가
-- 중복 클릭/중복 전송에도 UI가 흔들리지 않는가(멱등)
-- 본인 상태와 상대 상태를 구분해 표시하는가
-
----
-
-## 10. 프론트 작업 티켓 분리 권장
-- FE-1: 상태 채널 구독/전송 유틸 구현
-- FE-2: Result View 상태 UI 컴포넌트 추가
-- FE-3: clientSeq/store/revision 반영
-- FE-4: 재연결 + 스냅샷 복구 처리
-- FE-5: E2E 시나리오 테스트 (2인 멀티)
-
-이 문서 기준으로 구현하면 프론트는 최소 변경으로 실시간 상태 표시를 달성하면서, 재연결/유실 상황에서도 안정적으로 상태를 복구할 수 있다.
+## 10) QA 체크리스트
+- 조인 후 `playerList` 구독 직후 본인 상태가 `JOINING -> ROOM`으로 바뀌는가
+- 방장 시작 시 `JOINING` 플레이어가 있으면 시작이 차단되는가
+- Result 진입 시 상대에게 `RESULT`가 반영되는가
+- Room 복귀 시 상대에게 `ROOM`이 반영되는가
+- 재연결 후 재구독 + 상태 재전송으로 최종 상태가 복구되는가
