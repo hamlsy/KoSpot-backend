@@ -55,8 +55,6 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
                 case CONNECT -> handleConnect(accessor);
                 case SEND -> handleSend(accessor);
                 case SUBSCRIBE -> handleSubscribe(accessor);
-                case DISCONNECT -> handleDisconnect(accessor);
-                case UNSUBSCRIBE -> handleUnsubscribe(accessor);
                 default -> {
                     // 기타 명령어들은 무시 (ACK, NACK, RECEIPT, ERROR 등)
                 }
@@ -138,8 +136,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
             validateSubscriptionAccess(principal, destination);
         }
 
-        // 세션 정보 저장 (연결 해제 시 정리용)
-        webSocketSessionService.saveSessionInfo(accessor.getSessionId(), destination, principal);
+        // 구독 정보 저장 (연결 해제 시 정리용)
         if (subscriptionId != null) {
             webSocketSessionService.saveSubscription(sessionId, subscriptionId, destination);
         }
@@ -165,35 +162,6 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         }
 
         return destination.startsWith(FriendChatChannelConstants.PREFIX_FRIEND_CHAT_ROOM);
-    }
-
-    /**
-     * 연결 해제 시 세션 정리
-     */
-    // todo refactoring
-    private void handleDisconnect(StompHeaderAccessor accessor) {
-        String sessionId = accessor.getSessionId();
-        if (sessionId == null) {
-            return;
-        }
-        friendChatSubscriptionCacheService.removeSession(sessionId);
-    }
-
-    private void handleUnsubscribe(StompHeaderAccessor accessor) {
-        String sessionId = accessor.getSessionId();
-        String subscriptionId = accessor.getSubscriptionId();
-
-        if (sessionId == null || subscriptionId == null) {
-            return;
-        }
-
-        String destination = webSocketSessionService.getSubscription(sessionId, subscriptionId);
-        if (destination != null && destination.startsWith(FriendChatChannelConstants.PREFIX_FRIEND_CHAT_ROOM)) {
-            Long roomId = FriendChatChannelConstants.extractRoomIdFromDestination(destination);
-            if (roomId != null) {
-                friendChatSubscriptionCacheService.removeRoom(sessionId, roomId);
-            }
-        }
     }
 
     private void allowFriendChatRoomIfNeeded(String sessionId, String destination) {
