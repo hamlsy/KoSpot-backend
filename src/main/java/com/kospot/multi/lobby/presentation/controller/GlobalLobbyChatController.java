@@ -29,9 +29,9 @@ public class GlobalLobbyChatController {
         sendGlobalLobbyMessageUseCase.execute(dto, headerAccessor);
     }
 
-    @SubscribeMapping("/chat/lobby")
-    public void joinGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
-        joinGlobalLobbyUseCase.execute(headerAccessor);
-    }
+//    @SubscribeMapping("/chat/lobby")
+//    public void joinGlobalLobby(SimpMessageHeaderAccessor headerAccessor) {
+//        joinGlobalLobbyUseCase.execute(headerAccessor);
+//    }
 
 }

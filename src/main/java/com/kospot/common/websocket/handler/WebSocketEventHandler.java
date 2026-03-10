@@ -5,8 +5,6 @@ import com.kospot.multi.lobby.application.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.multi.room.application.usecase.LeaveGameRoomUseCase;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.common.exception.object.domain.WebSocketHandler;
-import com.kospot.common.exception.payload.code.ErrorStatus;
 import com.kospot.common.redis.common.service.SessionContextRedisService;
 
 import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
@@ -52,26 +50,29 @@ public class WebSocketEventHandler {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
         if (sessionId != null) {
-            sessionContextRedisService.setAttr(sessionId, "connectedAt", System.currentTimeMillis());
             log.info("WebSocket 연결 성공 - SessionId: {}", sessionId);
         }
     }
 
     @EventListener
-    public void handleWebSocketSubscribeLisnter(SessionSubscribeEvent event) {
+    public void handleWebSocketSubscribeListener(SessionSubscribeEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String dest = headerAccessor.getDestination();
-        if ("/topic/chat/lobby".equals(dest)) {
-            joinGlobalLobbyUseCase.execute(headerAccessor); // join 처리
-        }
+//        if ("/topic/chat/lobby".equals(dest)) {
+//            joinGlobalLobbyUseCase.execute(headerAccessor); // join 처리
+//        }
     }
 
     @EventListener
     public void handleWebSocketUnSubscribeListener(SessionUnsubscribeEvent event) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
-        WebSocketMemberPrincipal principal = getPrincipal(accessor);
         String sessionId = accessor.getSessionId();
         String subscriptionId = accessor.getSubscriptionId();
+        if (sessionId == null || subscriptionId == null) {
+            return;
+        }
+
+        WebSocketMemberPrincipal principal = getPrincipalOrNull(accessor);
         String destination = webSocketSessionService.getSubscription(sessionId, subscriptionId);
 
         if (destination != null && destination.startsWith(FriendChatChannelConstants.PREFIX_FRIEND_CHAT_ROOM)) {
@@ -99,8 +100,13 @@ public class WebSocketEventHandler {
 //        }
 
         webSocketSessionService.removeSubscription(sessionId, subscriptionId);
-        log.info("Unsubscribed - MemberId:{}, Destination:{}, SessionId:{}, SubId:{}",
-                principal.getMemberId(), destination, sessionId, subscriptionId);
+        if (principal != null) {
+            log.info("Unsubscribed - MemberId:{}, Destination:{}, SessionId:{}, SubId:{}",
+                    principal.getMemberId(), destination, sessionId, subscriptionId);
+            return;
+        }
+        log.info("Unsubscribed - Destination:{}, SessionId:{}, SubId:{}",
+                destination, sessionId, subscriptionId);
 
     }
 
@@ -116,6 +122,8 @@ public class WebSocketEventHandler {
 
         Long memberId = sessionContextRedisService.getAttr(sessionId, "memberId", Long.class);
         if (memberId == null) {
+            webSocketSessionService.cleanupSession(sessionId);
+            friendChatSubscriptionCacheService.removeSession(sessionId);
             sessionContextRedisService.removeAllAttr(sessionId);
             log.info("WebSocket 연결 해제 - SessionId: {} (memberId 없음)", sessionId);
             return;
@@ -159,25 +167,15 @@ public class WebSocketEventHandler {
     private boolean shouldSkipRoomLeave(String reason) {
         return "navigate-room".equalsIgnoreCase(reason);
     }
-
-
-    private void safeCleanup(Runnable cleanup, String errorMessage) {
-        try {
-            cleanup.run();
-        } catch (Exception e) {
-            log.debug(errorMessage, e);
-        }
-    }
-
-    private WebSocketMemberPrincipal getPrincipal(StompHeaderAccessor accessor) {
+    private WebSocketMemberPrincipal getPrincipalOrNull(StompHeaderAccessor accessor) {
         var sessionAttributes = accessor.getSessionAttributes();
         if (sessionAttributes == null) {
-            throw new WebSocketHandler(ErrorStatus._UNAUTHORIZED);
+            return null;
         }
 
         WebSocketMemberPrincipal principal = (WebSocketMemberPrincipal) sessionAttributes.get("user");
         if (principal == null) {
-            throw new WebSocketHandler(ErrorStatus._UNAUTHORIZED);
+            return null;
         }
         return principal;
     }

@@ -65,6 +65,10 @@ public class GameRoomNotification {
         return of(GameRoomNotificationType.PLAYER_LIST_UPDATED, roomId, null, allPlayers);
     }
 
+    public static GameRoomNotification screenStateUpdated(String roomId, GameRoomPlayerInfo playerInfo) {
+        return of(GameRoomNotificationType.SCREEN_STATE_UPDATED, roomId, playerInfo, null);
+    }
+
     /**
      * 방장 변경 알림
      */

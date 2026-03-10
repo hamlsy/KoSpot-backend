@@ -17,7 +17,7 @@ public class SetGameRoomIdAttrUseCase {
         Long memberId = webSocketMemberPrincipal.getMemberId();
         String sessionId = headerAccessor.getSessionId();
         sessionContextRedisService.setAttr(sessionId, "roomId", roomId);
-        sessionContextRedisService.setAttr(sessionId, "memberId", String.valueOf(memberId));
+        sessionContextRedisService.setAttr(sessionId, "memberId", memberId);
     }
 
 }

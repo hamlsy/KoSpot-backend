@@ -4,6 +4,9 @@ import com.kospot.game.domain.vo.GameMode;
 import com.kospot.multi.game.domain.vo.PlayerMatchType;
 import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.domain.vo.GameRoomStatus;
+import com.kospot.multi.room.domain.vo.MultiplayerScreenState;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 public class GameRoomRequest {
@@ -96,5 +99,23 @@ public class GameRoomRequest {
     @ToString
     public static class SwitchTeam {
         private String team;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class UpdateScreenState {
+        @NotNull
+        private MultiplayerScreenState state;
+
+        @NotNull
+        @PositiveOrZero
+        private Long clientSeq;
+
+        @NotNull
+        @PositiveOrZero
+        private Long clientTimestamp;
     }
 }

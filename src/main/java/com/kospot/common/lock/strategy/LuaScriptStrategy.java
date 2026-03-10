@@ -3,6 +3,7 @@ package com.kospot.common.lock.strategy;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
+import com.kospot.multi.room.domain.vo.MultiplayerScreenState;
 import com.kospot.common.lock.vo.HostAssignmentResult;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -193,11 +194,30 @@ public class LuaScriptStrategy implements HostAssignmentLockStrategy {
         return GameRoomPlayerInfo.builder()
                 .memberId(node.has("memberId") ? node.get("memberId").asLong() : null)
                 .nickname(node.has("nickname") ? node.get("nickname").asText() : null)
+                .markerImageUrl(node.has("markerImageUrl") && !node.get("markerImageUrl").isNull()
+                        ? node.get("markerImageUrl").asText()
+                        : null)
                 .isHost(node.has("isHost") ? node.get("isHost").asBoolean()
                         : (node.has("host") ? node.get("host").asBoolean() : false))
                 .joinedAt(node.has("joinedAt") ? node.get("joinedAt").asLong() : null)
                 .team(node.has("team") && !node.get("team").isNull() ? node.get("team").asText() : null)
+                .screenState(parseScreenState(node))
+                .screenStateSeq(node.has("screenStateSeq") ? node.get("screenStateSeq").asLong() : null)
+                .screenStateUpdatedAt(node.has("screenStateUpdatedAt") ? node.get("screenStateUpdatedAt").asLong() : null)
                 .build();
+    }
+
+    private MultiplayerScreenState parseScreenState(com.fasterxml.jackson.databind.JsonNode node) {
+        if (!node.has("screenState") || node.get("screenState").isNull()) {
+            return null;
+        }
+
+        try {
+            return MultiplayerScreenState.valueOf(node.get("screenState").asText());
+        } catch (IllegalArgumentException e) {
+            log.warn("Unknown screen state from lua result: {}", node.get("screenState").asText());
+            return null;
+        }
     }
 
     @Override

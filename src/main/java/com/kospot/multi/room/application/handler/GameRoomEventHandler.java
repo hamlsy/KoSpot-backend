@@ -5,6 +5,7 @@ import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.domain.event.GameRoomJoinEvent;
 import com.kospot.multi.room.domain.event.GameRoomLeaveEvent;
 import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
+import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import com.kospot.multi.room.infrastructure.websocket.service.GameRoomNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,21 +19,24 @@ import org.springframework.stereotype.Component;
 public class GameRoomEventHandler {
 
     private final GameRoomNotificationService gameRoomNotificationService;
+    private final GameRoomRedisService gameRoomRedisService;
 
     @Async
     @EventListener
     public void handleJoin(GameRoomJoinEvent event) {
         String roomId = event.getRoomId().toString();
-        GameRoomPlayerInfo playerInfo = GameRoomPlayerInfo.builder()
-                .memberId(event.getMemberId())
-                .markerImageUrl(event.getMarkerImageUrl())
-                .isHost(event.isHost())
-                .nickname(event.getNickname())
-                .team(event.getTeam())
-                .joinedAt(System.currentTimeMillis())
-                .build();
+        GameRoomPlayerInfo playerInfo = gameRoomRedisService.getRoomPlayer(roomId, event.getMemberId())
+                .orElse(null);
 
-        // STOMP 알림만 전송
+        if (playerInfo == null) {
+            log.warn("Skip player joined delta notification because player info not found in Redis - RoomId: {}, MemberId: {}",
+                    roomId,
+                    event.getMemberId());
+            gameRoomNotificationService.notifyPlayerListUpdated(roomId);
+            return;
+        }
+
+        // STOMP 알림만 전송 (Redis 저장값 기준)
         gameRoomNotificationService.notifyPlayerJoined(roomId, playerInfo);
         gameRoomNotificationService.notifyPlayerListUpdated(roomId);
     }
