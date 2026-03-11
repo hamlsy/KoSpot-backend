@@ -45,6 +45,6 @@ class MvpCandidateComparatorTest {
     }
 
     private MvpCandidateSnapshot snapshot(Long gameId, double score, LocalDateTime endedAt) {
-        return new MvpCandidateSnapshot(1L, gameId, score, endedAt, RankTier.GOLD, RankLevel.ONE, 2300);
+        return new MvpCandidateSnapshot(1L, gameId, "poi", score, endedAt, RankTier.GOLD, RankLevel.ONE, 2300);
     }
 }

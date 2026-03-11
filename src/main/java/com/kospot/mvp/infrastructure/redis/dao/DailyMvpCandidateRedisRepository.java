@@ -30,8 +30,9 @@ public class DailyMvpCandidateRedisRepository {
             local rankTier = ARGV[5]
             local rankLevel = ARGV[6]
             local ratingScore = ARGV[7]
-            local updatedAt = ARGV[8]
-            local ttlSeconds = tonumber(ARGV[9])
+            local poiName = ARGV[8]
+            local updatedAt = ARGV[9]
+            local ttlSeconds = tonumber(ARGV[10])
 
             local currentScore = redis.call('HGET', key, 'score')
             if not currentScore then
@@ -40,6 +41,7 @@ public class DailyMvpCandidateRedisRepository {
                     'roadViewGameId', gameId,
                     'score', ARGV[3],
                     'endedAtEpochMilli', ARGV[4],
+                    'poiName', poiName,
                     'rankTier', rankTier,
                     'rankLevel', rankLevel,
                     'ratingScore', ratingScore,
@@ -73,6 +75,7 @@ public class DailyMvpCandidateRedisRepository {
                 'roadViewGameId', gameId,
                 'score', ARGV[3],
                 'endedAtEpochMilli', ARGV[4],
+                'poiName', poiName,
                 'rankTier', rankTier,
                 'rankLevel', rankLevel,
                 'ratingScore', ratingScore,
@@ -101,6 +104,7 @@ public class DailyMvpCandidateRedisRepository {
                 snapshot.rankTier().name(),
                 snapshot.rankLevel().name(),
                 String.valueOf(snapshot.ratingScore()),
+                snapshot.poiName(),
                 String.valueOf(toEpochMilli(LocalDateTime.now(KST))),
                 String.valueOf(ttl.toSeconds())
         );
@@ -116,6 +120,7 @@ public class DailyMvpCandidateRedisRepository {
         return Optional.of(new MvpCandidateSnapshot(
                 Long.parseLong(String.valueOf(hash.get("memberId"))),
                 Long.parseLong(String.valueOf(hash.get("roadViewGameId"))),
+                String.valueOf(hash.get("poiName")),
                 Double.parseDouble(String.valueOf(hash.get("score"))),
                 fromEpochMilli(Long.parseLong(String.valueOf(hash.get("endedAtEpochMilli")))),
                 RankTier.valueOf(String.valueOf(hash.get("rankTier"))),

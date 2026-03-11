@@ -12,6 +12,7 @@ import java.util.Objects;
 public record MvpCandidateSnapshot(
         Long memberId,
         Long roadViewGameId,
+        String poiName,
         double score,
         LocalDateTime endedAt,
         RankTier rankTier,
@@ -23,6 +24,7 @@ public record MvpCandidateSnapshot(
         return new MvpCandidateSnapshot(
                 game.getMember().getId(),
                 game.getId(),
+                game.getPoiName(),
                 game.getScore(),
                 game.getEndedAt(),
                 gameRank.getRankTier(),
@@ -35,6 +37,7 @@ public record MvpCandidateSnapshot(
         return new MvpCandidateSnapshot(
                 dailyMvp.getMemberId(),
                 dailyMvp.getRoadViewGameId(),
+                dailyMvp.getPoiName(),
                 dailyMvp.getGameScore(),
                 endedAt,
                 dailyMvp.getRankTier(),
