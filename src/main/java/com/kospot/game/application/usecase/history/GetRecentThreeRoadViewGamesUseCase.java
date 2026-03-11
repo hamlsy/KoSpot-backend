@@ -9,7 +9,6 @@ import com.kospot.gamerank.application.service.GameRankService;
 import com.kospot.statistic.application.adaptor.MemberStatisticAdaptor;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.statistic.domain.entity.GameModeStatistic;
 import com.kospot.statistic.domain.entity.MemberStatistic;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.game.presentation.dto.response.RoadViewGameHistoryResponse;
@@ -40,11 +39,8 @@ public class GetRecentThreeRoadViewGamesUseCase {
         // 통계 정보 조회
         MemberStatistic statistic = memberStatisticAdaptor.queryByMemberFetchModeStatistics(member);
 
-        GameModeStatistic roadViewStatistic = statistic.findModeStatistic(GameMode.ROADVIEW);
-
         // 전체 랭킹 통계 조회
-//        long totalRankCount = gameRankAdaptor.queryTotalRankCountByGameMode(GameMode.ROADVIEW);
-        long totalRankCount = roadViewStatistic.getRank().getGames();
+        long totalRankCount = gameRankAdaptor.queryTotalRankCountByGameMode(GameMode.ROADVIEW);
         long higherRankCount = gameRankAdaptor.queryHigherRankCountByGameModeAndRatingScore(
                 GameMode.ROADVIEW,
                 gameRank.getRatingScore()

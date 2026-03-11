@@ -41,7 +41,6 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     private final WebSocketSessionService webSocketSessionService;
     private final SessionContextRedisService sessionContextRedisService;
 
-    private static final long PENDING_LEAVE_GRACE_MILLIS = 4000L;
     private static final int RATE_LIMIT = 40; // 1분에 허용되는 메시지 수
     private static final String RATE_LIMIT_KEY = "rate_limit:chat:";
 
@@ -93,6 +92,7 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
             sessionContextRedisService.setAttr(sessionId, "memberId", principal.getMemberId());
             sessionContextRedisService.setAttr(sessionId, "sessionVersion", sessionVersion);
             sessionContextRedisService.setAttr(sessionId, "connectedAt", System.currentTimeMillis());
+            sessionContextRedisService.setAttr(sessionId, "connectionState", "CONNECTED");
         }
         log.info("WebSocket connected - MemberId: {}, SessionId: {}",
                 principal.getMemberId(), accessor.getSessionId());

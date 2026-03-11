@@ -2,7 +2,7 @@ package com.kospot.common.websocket.handler;
 
 import com.kospot.multi.lobby.application.usecase.JoinGlobalLobbyUseCase;
 import com.kospot.multi.lobby.application.usecase.LeaveGlobalLobbyUseCase;
-import com.kospot.multi.room.application.usecase.LeaveGameRoomUseCase;
+import com.kospot.common.websocket.connection.service.WebSocketConnectionStateOrchestrator;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.common.redis.common.service.SessionContextRedisService;
@@ -38,8 +38,8 @@ public class WebSocketEventHandler {
 
     //usecase
     private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
-    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
     private final JoinGlobalLobbyUseCase joinGlobalLobbyUseCase;
+    private final WebSocketConnectionStateOrchestrator webSocketConnectionStateOrchestrator;
 
     //adaptor
     private final MemberAdaptor memberAdaptor;
@@ -49,9 +49,18 @@ public class WebSocketEventHandler {
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
-        if (sessionId != null) {
-            log.info("WebSocket 연결 성공 - SessionId: {}", sessionId);
+        if (sessionId == null) {
+            return;
         }
+
+        Long memberId = sessionContextRedisService.getAttr(sessionId, "memberId", Long.class);
+        if (memberId != null && memberId > 0) {
+            webSocketConnectionStateOrchestrator.handleReconnect(memberId, sessionId);
+            log.info("WebSocket 연결 성공 - MemberId: {}, SessionId: {}", memberId, sessionId);
+            return;
+        }
+
+        log.info("WebSocket 연결 성공 - SessionId: {}", sessionId);
     }
 
     @EventListener
@@ -120,22 +129,22 @@ public class WebSocketEventHandler {
             return;
         }
 
+        String reason = headerAccessor.getFirstNativeHeader("reason");
+        if (reason == null || reason.isBlank()) {
+            reason = "unknown";
+        }
+
         Long memberId = sessionContextRedisService.getAttr(sessionId, "memberId", Long.class);
         if (memberId == null) {
             webSocketSessionService.cleanupSession(sessionId);
             friendChatSubscriptionCacheService.removeSession(sessionId);
             sessionContextRedisService.removeAllAttr(sessionId);
-            log.info("WebSocket 연결 해제 - SessionId: {} (memberId 없음)", sessionId);
+            log.info("WebSocket 연결 해제 - SessionId: {} (memberId 없음), Reason: {}", sessionId, reason);
             return;
         }
 
         Member member = memberAdaptor.queryById(memberId);
         Long gameRoomId = member.getGameRoomId();
-
-        String reason = headerAccessor.getFirstNativeHeader("reason");
-        if (reason == null || reason.isBlank()) {
-            reason = "unknown";
-        }
 
         boolean skipRoomLeave = shouldSkipRoomLeave(reason);
 
@@ -145,20 +154,11 @@ public class WebSocketEventHandler {
             log.warn("Failed to leave global lobby - SessionId: {}", sessionId, e);
         }
 
-        if (!skipRoomLeave && gameRoomId != null) {
-            try {
-                leaveGameRoomUseCase.execute(member.getId(), gameRoomId);
-                log.info("Member left game room - MemberId: {}, RoomId: {}", memberId, gameRoomId);
-            } catch (Exception e) {
-                log.warn("Failed to leave game room - MemberId: {}, RoomId: {}", memberId, gameRoomId, e);
-            }
-        } else if (skipRoomLeave) {
+        if (skipRoomLeave) {
             log.info("Skip room leave due to graceful navigation - MemberId: {}, RoomId: {}", memberId, gameRoomId);
         }
 
-        webSocketSessionService.cleanupSession(sessionId);
-        friendChatSubscriptionCacheService.removeSession(sessionId);
-        sessionContextRedisService.removeAllAttr(sessionId);
+        webSocketConnectionStateOrchestrator.handleDisconnect(memberId, sessionId, gameRoomId, reason, skipRoomLeave);
 
         log.info("WebSocket 연결 해제 - SessionId: {}, Reason: {}", sessionId, reason);
     }

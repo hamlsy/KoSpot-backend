@@ -54,7 +54,7 @@ public class GameRankService {
             return 0.0;
         }
         // 내 순위 = 나보다 높은 랭크 수 + 1
-        long myRank = higherRankCount + 1;
+        long myRank = Math.min(higherRankCount + 1, totalRankCount);
         return Math.round((double) myRank / totalRankCount * 1000.0) / 10.0;
     }
 
