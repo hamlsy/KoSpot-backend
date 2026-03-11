@@ -1,16 +1,16 @@
 package com.kospot.admin.coordinate;
 
-import com.kospot.application.admin.coordinate.CreateCoordinateUseCase;
-import com.kospot.application.admin.coordinate.DeleteCoordinateUseCase;
-import com.kospot.application.admin.coordinate.FindAllCoordinatesUseCase;
-import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.coordinate.repository.CoordinateRepository;
-import com.kospot.domain.coordinate.entity.LocationType;
-import com.kospot.domain.member.entity.Member;
-import com.kospot.domain.member.repository.MemberRepository;
-import com.kospot.domain.member.vo.Role;
-import com.kospot.presentation.admin.dto.request.AdminCoordinateRequest;
-import com.kospot.presentation.admin.dto.response.AdminCoordinateResponse;
+import com.kospot.admin.application.usecase.coordinate.CreateCoordinateUseCase;
+import com.kospot.admin.application.usecase.coordinate.DeleteCoordinateUseCase;
+import com.kospot.admin.application.usecase.coordinate.FindAllCoordinatesUseCase;
+import com.kospot.coordinate.domain.entity.Coordinate;
+import com.kospot.coordinate.infrastructure.persistence.CoordinateRepository;
+import com.kospot.coordinate.domain.entity.LocationType;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.member.infrastructure.persistence.MemberRepository;
+import com.kospot.member.domain.vo.Role;
+import com.kospot.admin.presentation.dto.request.AdminCoordinateRequest;
+import com.kospot.admin.presentation.dto.response.AdminCoordinateResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

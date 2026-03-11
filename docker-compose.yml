@@ -84,7 +84,10 @@ services:
       # -------------------- AES Encryption --------------------
       # .env의 AES_SECRET_KEY 사용
       - AES_SECRET_KEY=${AES_SECRET_KEY}
-      
+      # -------------------- Slack --------------------
+      - SLACK_ENABLED=${SLACK_ENABLED:false}
+      - SLACK_WEBHOOK_ERROR_URL=${SLACK_WEBHOOK_ERROR_URL}
+      - SLACK_WEBHOOK_REGISTRATION_URL=${SLACK_WEBHOOK_REGISTRATION_URL}
     depends_on:
       redis:
         condition: service_healthy

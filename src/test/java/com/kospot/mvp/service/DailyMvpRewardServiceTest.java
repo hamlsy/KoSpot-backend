@@ -1,0 +1,86 @@
+package com.kospot.mvp.service;
+
+import com.kospot.gamerank.domain.vo.RankLevel;
+import com.kospot.gamerank.domain.vo.RankTier;
+import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
+import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
+import com.kospot.mvp.domain.entity.DailyMvp;
+import com.kospot.mvp.application.service.DailyMvpRewardService;
+import com.kospot.point.application.service.PointHistoryService;
+import com.kospot.point.application.service.PointService;
+import com.kospot.point.domain.vo.PointHistoryType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class DailyMvpRewardServiceTest {
+
+    @Mock
+    private DailyMvpAdaptor dailyMvpAdaptor;
+    @Mock
+    private MemberAdaptor memberAdaptor;
+    @Mock
+    private PointService pointService;
+    @Mock
+    private PointHistoryService pointHistoryService;
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
+    private DailyMvpRewardService dailyMvpRewardService;
+
+    @BeforeEach
+    void setUp() {
+        dailyMvpRewardService = new DailyMvpRewardService(
+                dailyMvpAdaptor,
+                memberAdaptor,
+                pointService,
+                pointHistoryService,
+                eventPublisher
+        );
+    }
+
+    @Test
+    @DisplayName("같은 대상에 대해 보상은 한 번만 처리된다")
+    void rewardShouldBeIdempotent() {
+        LocalDate targetDate = LocalDate.of(2026, 2, 28);
+        DailyMvp dailyMvp = DailyMvp.builder()
+                .mvpDate(targetDate)
+                .memberId(10L)
+                .roadViewGameId(100L)
+                .rewardPoint(200)
+                .rewardGranted(false)
+                .rankLevel(RankLevel.THREE)
+                .rankTier(RankTier.SILVER)
+                .poiName("서울역")
+                .gameScore(901.5)
+                .ratingScore(1200)
+                .build();
+        Member member = Member.builder().id(10L).nickname("mvp-user").build();
+
+        when(dailyMvpAdaptor.queryUnrewardedByDateLessThanEqual(targetDate)).thenReturn(List.of(dailyMvp));
+        when(dailyMvpAdaptor.queryByDateForUpdate(targetDate)).thenReturn(Optional.of(dailyMvp));
+        when(memberAdaptor.queryById(10L)).thenReturn(member);
+
+        int first = dailyMvpRewardService.rewardUnprocessedUpTo(targetDate);
+        int second = dailyMvpRewardService.rewardUnprocessedUpTo(targetDate);
+
+        assertEquals(1, first);
+        assertEquals(0, second);
+        verify(pointService, times(1)).addPoint(member, 200);
+        verify(pointHistoryService, times(1)).savePointHistory(member, 200, PointHistoryType.MVP_REWARD);
+        verify(eventPublisher, times(1)).publishEvent(any());
+    }
+}

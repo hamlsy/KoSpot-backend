@@ -1,0 +1,20 @@
+package com.kospot.multi.lobby.application.usecase;
+
+import com.kospot.common.annotation.usecase.UseCase;
+import com.kospot.multi.lobby.infrastructure.websocket.service.LobbyPresenceService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+
+@Slf4j
+@UseCase
+@RequiredArgsConstructor
+public class LeaveGlobalLobbyUseCase {
+
+    private final LobbyPresenceService lobbyPresenceService;
+
+    public void execute(SimpMessageHeaderAccessor headerAccessor) {
+        lobbyPresenceService.leaveGlobalLobby(headerAccessor.getSessionId());
+    }
+
+}

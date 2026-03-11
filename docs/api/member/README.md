@@ -102,7 +102,75 @@ Authorization: Bearer {access_token}
 
 ---
 
-## 2. 테스트용 멤버 조회
+## 2. 상점 내 정보 조회
+**GET** `/member/shop-info`
+
+상점 페이지에서 필요한 내 포인트, 장착 아이템, 보유 아이템을 한 번에 조회합니다.
+
+**Headers**
+```
+Authorization: Bearer {access_token}
+```
+
+**Response**
+```json
+{
+  "isSuccess": true,
+  "code": 2000,
+  "message": "성공입니다.",
+  "result": {
+    "currentPoint": 1200,
+    "equippedItems": [
+      {
+        "memberItemId": 10,
+        "itemType": "MARKER",
+        "itemImageUrl": "https://example.com/items/marker-basic.png",
+        "name": "기본 마커",
+        "description": "기본 제공 마커",
+        "equipped": true,
+        "purchaseTime": "2026-02-10T09:30:00"
+      }
+    ],
+    "ownedItems": [
+      {
+        "memberItemId": 10,
+        "itemType": "MARKER",
+        "itemImageUrl": "https://example.com/items/marker-basic.png",
+        "name": "기본 마커",
+        "description": "기본 제공 마커",
+        "equipped": true,
+        "purchaseTime": "2026-02-10T09:30:00"
+      },
+      {
+        "memberItemId": 15,
+        "itemType": "MARKER_EFFECT",
+        "itemImageUrl": "https://example.com/items/effect-fire.png",
+        "name": "불꽃 이펙트",
+        "description": "마커에 불꽃 효과를 추가합니다.",
+        "equipped": false,
+        "purchaseTime": "2026-02-11T14:00:00"
+      }
+    ]
+  }
+}
+```
+
+**응답 필드 설명**
+- `currentPoint`: 현재 보유 포인트
+- `equippedItems`: 현재 장착 중인 아이템 목록
+- `ownedItems`: 현재 보유 중인 아이템 전체 목록
+- 아이템 공통 필드
+  - `memberItemId`: 보유 아이템 식별자
+  - `itemType`: 아이템 타입 (`MARKER`, `MARKER_EFFECT`)
+  - `itemImageUrl`: 아이템 이미지 URL
+  - `name`: 아이템 이름
+  - `description`: 아이템 설명
+  - `equipped`: 장착 여부
+  - `purchaseTime`: 구매 일시
+
+---
+
+## 3. 테스트용 멤버 조회
 **GET** `/member/me`
 
 현재 로그인한 사용자의 username을 조회합니다.

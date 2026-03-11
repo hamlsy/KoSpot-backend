@@ -1,15 +1,15 @@
 package com.kospot.application.multi.round.roadview;
 
-import com.kospot.application.multi.flow.MultiGameFlowScheduler;
-import com.kospot.application.multi.game.service.CancelMultiGameService;
-import com.kospot.domain.coordinate.entity.Coordinate;
-import com.kospot.domain.multi.game.entity.MultiRoadViewGame;
-import com.kospot.domain.multi.round.entity.RoadViewGameRound;
-import com.kospot.infrastructure.redis.domain.multi.game.service.MultiGameRedisService;
-import com.kospot.infrastructure.websocket.domain.multi.lobby.service.LobbyRoomNotificationService;
-import com.kospot.infrastructure.websocket.domain.multi.round.service.GameRoundNotificationService;
-import com.kospot.infrastructure.websocket.domain.multi.timer.service.GameTimerService;
-import com.kospot.presentation.multi.game.dto.response.MultiRoadViewGameResponse;
+import com.kospot.multi.common.flow.MultiGameFlowScheduler;
+import com.kospot.multi.game.application.service.CancelMultiGameService;
+import com.kospot.coordinate.domain.entity.Coordinate;
+import com.kospot.multi.game.domain.entity.MultiRoadViewGame;
+import com.kospot.multi.round.entity.RoadViewGameRound;
+import com.kospot.common.redis.domain.multi.game.service.MultiGameRedisService;
+import com.kospot.multi.lobby.infrastructure.websocket.service.LobbyRoomNotificationService;
+import com.kospot.multi.round.infrastructure.websocket.service.GameRoundNotificationService;
+import com.kospot.multi.timer.infrastructure.websocket.service.GameTimerService;
+import com.kospot.multi.game.presentation.dto.response.MultiRoadViewGameResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

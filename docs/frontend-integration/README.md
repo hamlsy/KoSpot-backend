@@ -83,6 +83,21 @@
 
 ---
 
+### 5️⃣ [멀티 결과창 화면 상태 동기화](./MULTI_RESULT_SCREEN_STATE_WEBSOCKET_GUIDE.md)
+**Result/Room 전환 상태 동기화 및 JOINING 시작 게이트 연동 명세**
+
+- `playerList` 채널 통합 수신 규칙
+- `JOINING -> ROOM` 승격 조건(구독 기반)
+- 화면 상태 전송 타이밍 (`IN_GAME`, `RESULT`, `ROOM`)
+- 방장 시작 버튼 활성화 조건(전원 `ROOM`)
+
+**이 문서를 먼저 읽어야 하는 경우:**
+- 결과창에서 상대 상태 UI를 붙일 때
+- 방 입장 중(`JOINING`) 상태를 반영할 때
+- 시작 버튼 UX와 서버 검증을 맞출 때
+
+---
+
 ## 🎮 게임 플로우 요약
 
 ```

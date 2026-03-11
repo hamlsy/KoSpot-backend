@@ -1,0 +1,122 @@
+package com.kospot.image.application.service;
+
+import com.kospot.image.application.adaptor.ImageAdaptor;
+import com.kospot.image.domain.entity.Image;
+import com.kospot.image.domain.vo.ImageType;
+import com.kospot.image.infrastructure.persistence.ImageRepository;
+import com.kospot.item.domain.vo.ItemType;
+import com.kospot.common.s3.service.AwsS3Service;
+import com.kospot.image.presentation.request.ImageRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class ImageService {
+
+    private final AwsS3Service awsS3Service;
+    private final ImageRepository imageRepository;
+    private final ImageAdaptor imageAdaptor;
+
+    private static final String S3_IMAGE_PATH = "file/image/";
+    private static final String S3_NOTICE_PATH = S3_IMAGE_PATH + "notice/";
+    private static final String S3_ITEM_PATH = S3_IMAGE_PATH + "item/";
+    private static final String S3_BANNER_PATH = S3_IMAGE_PATH + "banner/";
+
+    public Image uploadItemImage(MultipartFile file, ItemType itemType) {
+        if(isValidImage(file)){
+            String uploadFilePath = S3_ITEM_PATH + itemType.name().toLowerCase() + "/";
+            Image image = uploadImage(file, uploadFilePath, ImageType.ITEM);
+            return imageRepository.save(image);
+        }
+        return null;
+    }
+
+    //todo refactoring bulk insert
+    public List<Image> uploadNoticeImages(List<MultipartFile> files) {
+        if(isNotValidImages(files)) {
+            return null;
+        }
+        List<Image> images = files.stream().map(f -> uploadImage(f, S3_NOTICE_PATH, ImageType.NOTICE)).collect(Collectors.toList());
+        imageRepository.saveAll(images);
+        return images;
+    }
+
+    public Image uploadNoticeImage(MultipartFile file) {
+        if(isNotValidImage(file)) {
+            return null;
+        }
+        Image image = uploadImage(file, S3_NOTICE_PATH, ImageType.NOTICE);
+        assert image != null;
+        image.updateStatusToTemp();
+        imageRepository.save(image);
+        return image;
+    }
+
+    private Image uploadImage(MultipartFile file, String uploadFilePath, ImageType imageType) {
+        if(isNotValidImage(file)){
+            return null;
+        }
+        String fileName = awsS3Service.uploadImage(file, uploadFilePath);
+        String s3Key = uploadFilePath + fileName;
+        String fileUrl = awsS3Service.generateFileUrl(s3Key);
+        return Image.create(uploadFilePath, fileName, s3Key, fileUrl, imageType);
+    }
+
+    private boolean isNotValidImages(List<MultipartFile> files) {
+        return files == null;
+    }
+
+    private boolean isNotValidImage(MultipartFile file) {
+        return file == null;
+    }
+
+    private boolean isValidImage(MultipartFile file) {
+        return file != null;
+    }
+
+    public void updateImage(ImageRequest.Update request) {
+        Image image = imageAdaptor.queryById(request.getImageId());
+
+        //delete
+        awsS3Service.deleteFile(image.getS3Key());
+
+        //upload
+        String newImageName = awsS3Service.uploadImage(request.getNewImage(), image.getImagePath());
+        String newS3Key = image.getImagePath() + newImageName;
+        String newImageUrl = awsS3Service.generateFileUrl(newS3Key);
+
+        //update
+        image.updateImage(newImageName, newS3Key, newImageUrl);
+
+    }
+
+    public void deleteImage(Image image) {
+        awsS3Service.deleteFile(image.getS3Key());
+    }
+
+    public Image uploadBannerImage(MultipartFile file) {
+        if (isNotValidImage(file)) {
+            return null;
+        }
+        return uploadImage(file, S3_BANNER_PATH, ImageType.BANNER);
+    }
+
+    public void deleteBannerImage(Image image) {
+        if (image != null) {
+            awsS3Service.deleteFile(image.getS3Key());
+            imageRepository.delete(image);
+        }
+    }
+
+    //todo implement upload event images
+
+}

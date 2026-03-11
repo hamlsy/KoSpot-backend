@@ -1,11 +1,12 @@
 package com.kospot.application.multi.room.websocket.usecase;
 
-import com.kospot.domain.multi.room.vo.GameRoomPlayerInfo;
-import com.kospot.domain.multi.gamePlayer.exception.GameTeamHandler;
-import com.kospot.infrastructure.websocket.auth.WebSocketMemberPrincipal;
-import com.kospot.infrastructure.websocket.domain.multi.room.service.GameRoomNotificationService;
-import com.kospot.infrastructure.redis.domain.multi.room.service.GameRoomRedisService;
-import com.kospot.presentation.multi.room.dto.request.GameRoomRequest;
+import com.kospot.multi.room.application.websocket.usecase.SwitchTeamUseCase;
+import com.kospot.multi.room.domain.vo.GameRoomPlayerInfo;
+import com.kospot.multi.player.domain.exception.GameTeamHandler;
+import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
+import com.kospot.multi.room.infrastructure.websocket.service.GameRoomNotificationService;
+import com.kospot.common.redis.domain.multi.room.service.GameRoomRedisService;
+import com.kospot.multi.room.presentation.dto.request.GameRoomRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

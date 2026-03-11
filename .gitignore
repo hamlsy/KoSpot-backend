@@ -1,4 +1,6 @@
 HELP.md
+# gradle
+.gradle-home/
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -47,6 +49,9 @@ out/
 ### Logs ###
 logs/
 *.log
+
+### Local dump files ###
+src/main/resources/dump/
 
 ### OS ###
 .DS_Store

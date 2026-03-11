@@ -28,6 +28,8 @@ spring:
         format_sql: true
         show_sql: false
 
+    open-in-view: false
+
   security:
     oauth2:
       client:
@@ -106,3 +108,45 @@ cloud:
 
 websocket:
   allowed-origins: ${WEBSOCKET_ALLOWED_ORIGINS}
+  heartbeat:
+    server-outgoing-ms: ${WEBSOCKET_HEARTBEAT_SERVER_OUTGOING_MS:10000}
+    server-incoming-ms: ${WEBSOCKET_HEARTBEAT_SERVER_INCOMING_MS:10000}
+    dead-threshold-ms: ${WEBSOCKET_HEARTBEAT_DEAD_THRESHOLD_MS:30000}
+    grace-period-ms: ${WEBSOCKET_HEARTBEAT_GRACE_PERIOD_MS:60000}
+    scheduler-pool-size: ${WEBSOCKET_HEARTBEAT_SCHEDULER_POOL_SIZE:2}
+
+
+notification:
+  ttl-days: 14
+
+slack:
+  enabled: ${SLACK_ENABLED:false}
+  webhook:
+    error-url: ${SLACK_WEBHOOK_ERROR_URL:}
+    registration-url: ${SLACK_WEBHOOK_REGISTRATION_URL:}
+
+chat:
+  persist:
+    enabled: ${CHAT_PERSIST_ENABLED:true}
+    friend-only: true
+    stream-key: chat:stream
+    dlq-stream-key: chat:stream:dlq
+    group: chat-persist-group
+    consumer-name: ${spring.application.name:kospot-backend}-${HOSTNAME:local}
+    batch-size: ${CHAT_PERSIST_BATCH_SIZE:500}
+    read-count: ${CHAT_PERSIST_READ_COUNT:500}
+    read-block-ms: ${CHAT_PERSIST_READ_BLOCK_MS:2000}
+    flush-interval-ms: ${CHAT_PERSIST_FLUSH_INTERVAL_MS:1000}
+    max-retry: ${CHAT_PERSIST_MAX_RETRY:5}
+    shutdown-timeout-ms: ${CHAT_PERSIST_SHUTDOWN_TIMEOUT_MS:10000}
+    init-retry-delay-ms: ${CHAT_PERSIST_INIT_RETRY_DELAY_MS:1000}
+    error-log-throttle-ms: ${CHAT_PERSIST_ERROR_LOG_THROTTLE_MS:30000}
+    init-fail-fast: ${CHAT_PERSIST_INIT_FAIL_FAST:true}
+  transient:
+    enabled: ${CHAT_TRANSIENT_ENABLED:true}
+    ttl-days: ${CHAT_TRANSIENT_TTL_DAYS:14}
+
+mvp:
+  reward-point: ${MVP_REWARD_POINT:200}
+  aggregate-cron: ${MVP_AGGREGATE_CRON:0 0 * * * *}
+  reward-cron: ${MVP_REWARD_CRON:0 5 0 * * *}
