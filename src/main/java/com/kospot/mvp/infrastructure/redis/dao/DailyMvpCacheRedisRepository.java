@@ -62,6 +62,15 @@ public class DailyMvpCacheRedisRepository {
         return Boolean.TRUE.equals(locked);
     }
 
+    public boolean setIfAbsent(String key, String value, Duration ttl) {
+        Boolean set = redisTemplate.opsForValue().setIfAbsent(key, value, ttl);
+        return Boolean.TRUE.equals(set);
+    }
+
+    public boolean exists(String key) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
+
     public void releaseLock(String lockKey) {
         redisTemplate.delete(lockKey);
     }

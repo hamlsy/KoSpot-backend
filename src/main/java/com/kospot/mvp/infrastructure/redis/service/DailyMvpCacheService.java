@@ -21,6 +21,7 @@ public class DailyMvpCacheService {
     private static final Duration TODAY_TTL = Duration.ofMinutes(70);
     private static final Duration HISTORY_TTL = Duration.ofHours(24);
     private static final Duration NONE_TTL = Duration.ofMinutes(10);
+    private static final Duration REWARD_DONE_TTL = Duration.ofDays(14);
 
     private final DailyMvpCacheRedisRepository repository;
 
@@ -63,6 +64,22 @@ public class DailyMvpCacheService {
         repository.releaseLock(scheduleLockKey(jobName));
     }
 
+    public boolean tryAcquireRewardLock(LocalDate mvpDate, Long memberId, Duration ttl) {
+        return repository.acquireLock(rewardLockKey(mvpDate, memberId), ttl);
+    }
+
+    public void releaseRewardLock(LocalDate mvpDate, Long memberId) {
+        repository.releaseLock(rewardLockKey(mvpDate, memberId));
+    }
+
+    public boolean isRewardProcessed(LocalDate mvpDate, Long memberId) {
+        return repository.exists(rewardDoneKey(mvpDate, memberId));
+    }
+
+    public void markRewardProcessed(LocalDate mvpDate, Long memberId) {
+        repository.setIfAbsent(rewardDoneKey(mvpDate, memberId), "1", REWARD_DONE_TTL);
+    }
+
     private Duration resolveTtl(LocalDate date) {
         LocalDate today = LocalDate.now(KST);
         return today.equals(date) ? TODAY_TTL : HISTORY_TTL;
@@ -82,6 +99,14 @@ public class DailyMvpCacheService {
 
     private String scheduleLockKey(String jobName) {
         return String.format(RedisKeyConstants.DAILY_MVP_SCHEDULE_LOCK_KEY_PATTERN, jobName);
+    }
+
+    private String rewardLockKey(LocalDate mvpDate, Long memberId) {
+        return String.format(RedisKeyConstants.DAILY_MVP_REWARD_LOCK_KEY_PATTERN, formatDate(mvpDate), memberId);
+    }
+
+    private String rewardDoneKey(LocalDate mvpDate, Long memberId) {
+        return String.format(RedisKeyConstants.DAILY_MVP_REWARD_DONE_KEY_PATTERN, formatDate(mvpDate), memberId);
     }
 
     private String formatDate(LocalDate date) {

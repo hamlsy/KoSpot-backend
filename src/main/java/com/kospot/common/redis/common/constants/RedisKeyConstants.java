@@ -30,7 +30,10 @@ public final class RedisKeyConstants {
     // Daily MVP cache keys
     public static final String DAILY_MVP_KEY_PATTERN = "mvp:daily:%s:v1";
     public static final String DAILY_MVP_NONE_KEY_PATTERN = "mvp:daily:none:%s:v1";
+    public static final String DAILY_MVP_CANDIDATE_KEY_PATTERN = "mvp:daily:candidate:%s:v1";
     public static final String DAILY_MVP_REBUILD_LOCK_KEY_PATTERN = "mvp:daily:rebuild:lock:%s";
     public static final String DAILY_MVP_SCHEDULE_LOCK_KEY_PATTERN = "mvp:daily:schedule:lock:%s";
+    public static final String DAILY_MVP_REWARD_LOCK_KEY_PATTERN = "mvp:daily:reward:lock:%s:%s";
+    public static final String DAILY_MVP_REWARD_DONE_KEY_PATTERN = "mvp:daily:reward:done:%s:%s";
 
 }
