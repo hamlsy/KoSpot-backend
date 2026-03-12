@@ -3,6 +3,8 @@ package com.kospot.common.websocket.handler;
 import com.kospot.multi.lobby.application.usecase.JoinGlobalLobbyUseCase;
 import com.kospot.multi.lobby.application.usecase.LeaveGlobalLobbyUseCase;
 import com.kospot.common.websocket.connection.service.WebSocketConnectionStateOrchestrator;
+import com.kospot.multi.room.application.service.RoomExitOrchestrator;
+import com.kospot.multi.room.application.vo.LeaveRoomResult;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.common.redis.common.service.SessionContextRedisService;
@@ -11,7 +13,7 @@ import com.kospot.common.websocket.auth.WebSocketMemberPrincipal;
 import com.kospot.friend.infrastructure.websocket.constants.FriendChatChannelConstants;
 import com.kospot.friend.infrastructure.websocket.service.FriendChatSubscriptionCacheService;
 import com.kospot.common.websocket.session.service.WebSocketSessionService;
-import com.kospot.multi.room.infrastructure.redis.adaptor.GameRoomRedisAdaptor;
+import com.kospot.multi.room.infrastructure.websocket.constants.GameRoomChannelConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -40,10 +42,10 @@ public class WebSocketEventHandler {
     private final LeaveGlobalLobbyUseCase leaveGlobalLobbyUseCase;
     private final JoinGlobalLobbyUseCase joinGlobalLobbyUseCase;
     private final WebSocketConnectionStateOrchestrator webSocketConnectionStateOrchestrator;
+    private final RoomExitOrchestrator roomExitOrchestrator;
 
     //adaptor
     private final MemberAdaptor memberAdaptor;
-    private final GameRoomRedisAdaptor gameRoomRedisAdaptor;
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
@@ -95,18 +97,33 @@ public class WebSocketEventHandler {
             leaveGlobalLobbyUseCase.execute(accessor);
         }
 
-//        if (destination != null && destination.startsWith(PREFIX_GAME_ROOM)) {
-//            try {
-//                Member member = memberAdaptor.queryById(principal.getMemberId());
-//                Long gameRoomId = member.getGameRoomId();
-//                if (gameRoomId != null) {
-//                    leaveGameRoomUseCase.execute(member, gameRoomId);
-//                }
-//                log.info("Member left game room on unsubscribe - MemberId: {}", principal.getMemberId());
-//            } catch (Exception e) {
-//                log.warn("Failed to leave game room on unsubscribe - MemberId: {}", principal.getMemberId(), e);
-//            }
-//        }
+        if (destination != null
+                && destination.startsWith(GameRoomChannelConstants.PREFIX_GAME_ROOM)
+                && principal != null
+                && principal.getMemberId() != null
+                && principal.getMemberId() > 0) {
+            boolean hasOtherRoomSubscriptions = webSocketSessionService.hasSubscriptionWithPrefixExcept(
+                    sessionId,
+                    GameRoomChannelConstants.PREFIX_GAME_ROOM,
+                    subscriptionId);
+
+            if (!hasOtherRoomSubscriptions) {
+                Long memberId = principal.getMemberId();
+                Long destinationRoomId = parseRoomIdFromDestination(destination);
+                Long effectiveRoomId = resolveCurrentRoomId(memberId, destinationRoomId);
+
+                LeaveRoomResult leaveResult = roomExitOrchestrator.requestExit(
+                        memberId,
+                        effectiveRoomId,
+                        "UNSUBSCRIBE",
+                        "game-room-unsubscribe");
+                log.info("Processed room leave on unsubscribe - MemberId: {}, RoomId: {}, Status: {}",
+                        memberId, effectiveRoomId, leaveResult.getStatus());
+            } else {
+                log.debug("Skip room leave on unsubscribe due to remaining room subscriptions - MemberId: {}, SessionId: {}",
+                        principal.getMemberId(), sessionId);
+            }
+        }
 
         webSocketSessionService.removeSubscription(sessionId, subscriptionId);
         if (principal != null) {
@@ -167,6 +184,32 @@ public class WebSocketEventHandler {
     private boolean shouldSkipRoomLeave(String reason) {
         return "navigate-room".equalsIgnoreCase(reason);
     }
+
+    private Long parseRoomIdFromDestination(String destination) {
+        String roomId = GameRoomChannelConstants.extractRoomIdFromDestination(destination);
+        if (roomId == null) {
+            return null;
+        }
+
+        try {
+            return Long.parseLong(roomId);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private Long resolveCurrentRoomId(Long memberId, Long destinationRoomId) {
+        try {
+            Member member = memberAdaptor.queryById(memberId);
+            if (member.getGameRoomId() != null) {
+                return member.getGameRoomId();
+            }
+        } catch (Exception e) {
+            log.warn("Failed to resolve member room from DB - MemberId: {}", memberId, e);
+        }
+        return destinationRoomId;
+    }
+
     private WebSocketMemberPrincipal getPrincipalOrNull(StompHeaderAccessor accessor) {
         var sessionAttributes = accessor.getSessionAttributes();
         if (sessionAttributes == null) {

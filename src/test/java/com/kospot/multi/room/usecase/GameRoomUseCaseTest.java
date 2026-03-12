@@ -180,7 +180,7 @@ public class GameRoomUseCaseTest {
                                                 .build());
 
                 // then
-                assertDoesNotThrow(() -> leaveGameRoomUseCase.execute(anotherPlayer, gameRoom.getId()));
+                assertDoesNotThrow(() -> leaveGameRoomUseCase.execute(anotherPlayer.getId(), gameRoom.getId()));
         }
 
         @DisplayName("호스트가 방을 나가는 경우를 테스트합니다.")
@@ -206,7 +206,7 @@ public class GameRoomUseCaseTest {
                                 p -> gameRoom.join(p, null, gameRoom.getId()));
 
                 // when
-                leaveGameRoomUseCase.execute(member, gameRoom.getId());
+                leaveGameRoomUseCase.execute(member.getId(), gameRoom.getId());
 
                 entityManager.clear();
 
@@ -249,7 +249,7 @@ public class GameRoomUseCaseTest {
 
                 // when
                 Member player1 = memberRepository.findById(3L).orElseThrow();
-                leaveGameRoomUseCase.execute(player1, gameRoom.getId());
+                leaveGameRoomUseCase.execute(player1.getId(), gameRoom.getId());
 
                 // then
                 long currentPlayerCount = gameRoomRedisRepository.getPlayerCount(gameRoom.getId().toString());

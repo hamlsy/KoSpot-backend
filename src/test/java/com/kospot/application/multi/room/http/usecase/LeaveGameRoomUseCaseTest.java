@@ -113,7 +113,7 @@ class LeaveGameRoomUseCaseTest {
                 .thenReturn(playerInfo);
 
         // when
-        leaveGameRoomUseCase.execute(playerMember, gameRoom.getId());
+        leaveGameRoomUseCase.execute(playerMember.getId(), gameRoom.getId());
 
         // then
         verify(lock).tryLock(5, 10, TimeUnit.SECONDS);
@@ -160,7 +160,7 @@ class LeaveGameRoomUseCaseTest {
         when(memberAdaptor.queryById(playerMember.getId())).thenReturn(playerMember);
 
         // when
-        leaveGameRoomUseCase.execute(hostMember, gameRoom.getId());
+        leaveGameRoomUseCase.execute(hostMember.getId(), gameRoom.getId());
 
         // then
         verify(lock).tryLock(5, 10, TimeUnit.SECONDS);
@@ -198,7 +198,7 @@ class LeaveGameRoomUseCaseTest {
                 .thenReturn(hostInfo);
 
         // when
-        leaveGameRoomUseCase.execute(hostMember, gameRoom.getId());
+        leaveGameRoomUseCase.execute(hostMember.getId(), gameRoom.getId());
 
         // then
         verify(lock).tryLock(5, 10, TimeUnit.SECONDS);
@@ -222,7 +222,7 @@ class LeaveGameRoomUseCaseTest {
         when(lock.tryLock(5, 10, TimeUnit.SECONDS)).thenReturn(false);
 
         // when & then
-        assertThatThrownBy(() -> leaveGameRoomUseCase.execute(playerMember, gameRoom.getId()))
+        assertThatThrownBy(() -> leaveGameRoomUseCase.execute(playerMember.getId(), gameRoom.getId()))
                 .isInstanceOf(GameRoomHandler.class)
                 .satisfies(exception -> {
                     GameRoomHandler handler = (GameRoomHandler) exception;
@@ -269,7 +269,7 @@ class LeaveGameRoomUseCaseTest {
         when(memberAdaptor.queryById(playerMember.getId())).thenReturn(playerMember);
 
         // when
-        leaveGameRoomUseCase.execute(hostMember, gameRoom.getId());
+        leaveGameRoomUseCase.execute(hostMember.getId(), gameRoom.getId());
 
         // then: 락 내부에서 Redis 상태를 재검증했는지 확인
         verify(gameRoomRedisService, times(2)).getRoomPlayers(roomId);
@@ -309,7 +309,7 @@ class LeaveGameRoomUseCaseTest {
                 .thenReturn(hostInfo);
 
         // when
-        leaveGameRoomUseCase.execute(hostMember, gameRoom.getId());
+        leaveGameRoomUseCase.execute(hostMember.getId(), gameRoom.getId());
 
         // then: Fallback으로 방 삭제
         verify(gameRoomRedisService).deleteRoomData(roomId);
@@ -329,7 +329,7 @@ class LeaveGameRoomUseCaseTest {
         when(lock.tryLock(5, 10, TimeUnit.SECONDS)).thenThrow(new InterruptedException());
 
         // when & then
-        assertThatThrownBy(() -> leaveGameRoomUseCase.execute(playerMember, gameRoom.getId()))
+        assertThatThrownBy(() -> leaveGameRoomUseCase.execute(playerMember.getId(), gameRoom.getId()))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Lock acquisition interrupted");
 
@@ -352,7 +352,7 @@ class LeaveGameRoomUseCaseTest {
                 .thenReturn(playerInfo);
 
         // when
-        leaveGameRoomUseCase.execute(playerMember, gameRoom.getId());
+        leaveGameRoomUseCase.execute(playerMember.getId(), gameRoom.getId());
 
         // then: finally 블록에서도 unlock 호출 확인
         verify(lock, atLeastOnce()).unlock();

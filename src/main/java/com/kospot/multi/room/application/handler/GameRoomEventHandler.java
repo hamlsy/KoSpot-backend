@@ -9,9 +9,10 @@ import com.kospot.multi.room.infrastructure.redis.service.GameRoomRedisService;
 import com.kospot.multi.room.infrastructure.websocket.service.GameRoomNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @Component
@@ -22,7 +23,7 @@ public class GameRoomEventHandler {
     private final GameRoomRedisService gameRoomRedisService;
 
     @Async
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleJoin(GameRoomJoinEvent event) {
         String roomId = event.getRoomId().toString();
         GameRoomPlayerInfo playerInfo = gameRoomRedisService.getRoomPlayer(roomId, event.getMemberId())
@@ -41,7 +42,7 @@ public class GameRoomEventHandler {
         gameRoomNotificationService.notifyPlayerListUpdated(roomId);
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleLeave(GameRoomLeaveEvent event) {
         LeaveDecision decision = event.getDecision();
         GameRoom gameRoom = event.getGameRoom();

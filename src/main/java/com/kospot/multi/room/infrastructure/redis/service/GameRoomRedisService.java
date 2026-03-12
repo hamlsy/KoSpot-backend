@@ -12,8 +12,12 @@ import com.kospot.multi.room.infrastructure.redis.dao.GameRoomRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -320,14 +324,6 @@ public class GameRoomRedisService {
         log.debug("Room capacity check - RoomId: {}, Current: {}, Max: {}, CanJoin: {}",
                 roomId, currentCount, maxPlayers, canJoin);
 
-        // #region agent log
-        try {
-            java.nio.file.Files.write(java.nio.file.Paths.get("c:\\KoSpot-backend\\.cursor\\debug.log"),
-                    (java.time.Instant.now().toEpochMilli() + "|cannotJoinRoom|check|{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"GameRoomRedisService.java:207\",\"message\":\"방 정원 확인\",\"data\":{\"roomId\":\"" + roomId + "\",\"currentCount\":" + currentCount + ",\"maxPlayers\":" + maxPlayers + ",\"canJoin\":" + canJoin + "}}\n").getBytes(),
-                    java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-        } catch (Exception e) {}
-        // #endregion
-
         return !canJoin;
     }
 
@@ -351,8 +347,47 @@ public class GameRoomRedisService {
         }
     }
 
-    public Set<String> getActiveRoomKeys() {
-        return redisTemplate.keys(String.format(ROOM_PLAYERS_KEY, "*"));
+    public Set<String> getActiveRoomIds() {
+        Set<String> roomIds = redisTemplate.execute((RedisCallback<Set<String>>) connection -> {
+            Set<String> ids = new HashSet<>();
+            ScanOptions options = ScanOptions.scanOptions()
+                    .match(String.format(ROOM_PLAYERS_KEY, "*"))
+                    .count(500)
+                    .build();
+
+            try (Cursor<byte[]> cursor = connection.scan(options)) {
+                while (cursor.hasNext()) {
+                    String key = new String(cursor.next(), StandardCharsets.UTF_8);
+                    String roomId = extractRoomIdFromRoomKey(key);
+                    if (roomId != null) {
+                        ids.add(roomId);
+                    }
+                }
+            } catch (Exception e) {
+                log.error("Failed to scan active room ids", e);
+            }
+            return ids;
+        });
+
+        return roomIds != null ? roomIds : Set.of();
     }
 
-} 
+    public Set<String> getActiveRoomKeys() {
+        return getActiveRoomIds();
+    }
+
+    private String extractRoomIdFromRoomKey(String roomKey) {
+        if (roomKey == null || !roomKey.startsWith("game:room:") || !roomKey.endsWith(":players")) {
+            return null;
+        }
+
+        int prefixLength = "game:room:".length();
+        int suffixIndex = roomKey.lastIndexOf(":players");
+        if (suffixIndex <= prefixLength) {
+            return null;
+        }
+
+        return roomKey.substring(prefixLength, suffixIndex);
+    }
+
+}

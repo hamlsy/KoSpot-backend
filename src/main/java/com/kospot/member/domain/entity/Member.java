@@ -23,6 +23,7 @@ import lombok.experimental.SuperBuilder;
         indexes = {
                 @Index(name = "idx_member_username", columnList = "username"),
                 @Index(name = "idx_member_nickname", columnList = "nickname"),
+                @Index(name = "idx_member_game_room_id", columnList = "game_room_id"),
         }
 )
 public class Member extends BaseTimeEntity {

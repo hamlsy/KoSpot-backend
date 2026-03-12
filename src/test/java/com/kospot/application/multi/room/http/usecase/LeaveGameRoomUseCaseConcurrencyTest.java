@@ -179,7 +179,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         gameRoomRedisService.savePlayerToRoom(testRoomId, hostInfo);
 
         // when
-        leaveGameRoomUseCase.execute(host, testGameRoom.getId());
+        leaveGameRoomUseCase.execute(host.getId(), testGameRoom.getId());
 
         // then
         List<GameRoomPlayerInfo> remainingPlayers = gameRoomRedisService.getRoomPlayers(testRoomId);
@@ -200,7 +200,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
         setUpRedisPlayers(testRoomId, host, player);
 
         // when
-        leaveGameRoomUseCase.execute(player, testGameRoom.getId());
+        leaveGameRoomUseCase.execute(player.getId(), testGameRoom.getId());
 
         // then
         List<GameRoomPlayerInfo> remainingPlayers = gameRoomRedisService.getRoomPlayers(testRoomId);
@@ -217,7 +217,7 @@ class LeaveGameRoomUseCaseConcurrencyTest {
     private void executeLeave(Member member, Long roomId, CountDownLatch startLatch, CountDownLatch finishLatch) {
         try {
             startLatch.await();
-            leaveGameRoomUseCase.execute(member, roomId);
+            leaveGameRoomUseCase.execute(member.getId(), roomId);
         } catch (Exception e) {
             // 동시 요청 시 예외 발생 가능 (정상)
         } finally {

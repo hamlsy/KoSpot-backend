@@ -2,6 +2,7 @@ package com.kospot.multi.room.application.usecase;
 
 import com.kospot.multi.game.application.service.CancelMultiGameService;
 import com.kospot.multi.room.application.vo.LeaveDecision;
+import com.kospot.multi.room.application.vo.LeaveRoomResult;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.multi.game.application.adaptor.MultiRoadViewGameAdaptor;
@@ -58,13 +59,22 @@ public class LeaveGameRoomUseCase {
     // notify
     private final LobbyRoomNotificationService lobbyRoomNotificationService;
 
-    public void execute(Long memberId, Long gameRoomId) {
+    public LeaveRoomResult execute(Long memberId, Long requestedRoomId) {
         Member member = memberAdaptor.queryById(memberId);
-        // 게임 방이 없을 경우 member leaveGameRoom 실행
-        GameRoom gameRoom = gameRoomRepository.findById(gameRoomId).orElse(null);
+        Long effectiveRoomId = resolveEffectiveRoomId(member, requestedRoomId);
+
+        if (effectiveRoomId == null) {
+            gameRoomRedisService.cleanupPlayerSession(member.getId());
+            return LeaveRoomResult.alreadyLeft(member.getId(), requestedRoomId, null, "No room to leave");
+        }
+
+        GameRoom gameRoom = gameRoomRepository.findById(effectiveRoomId).orElse(null);
         if (gameRoom == null) {
             member.leaveGameRoom();
-            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_NOT_FOUND);
+            gameRoomRedisService.cleanupPlayerSession(member.getId());
+            log.info("Room not found during leave; cleaned member room state - MemberId: {}, RequestedRoomId: {}, EffectiveRoomId: {}",
+                    memberId, requestedRoomId, effectiveRoomId);
+            return LeaveRoomResult.roomNotFoundCleaned(member.getId(), requestedRoomId, effectiveRoomId);
         }
 
         String roomId = gameRoom.getId().toString();
@@ -76,9 +86,23 @@ public class LeaveGameRoomUseCase {
                 () -> performLeaveOperation(roomId, member.getId()));
 
         if (!result.isSuccess()) {
+            if (result.isRetryableFailure()) {
+                log.warn("Retryable leave operation failure - RoomId: {}, MemberId: {}, Error: {}",
+                        roomId, member.getId(), result.getErrorMessage());
+                throw new GameRoomHandler(ErrorStatus.GAME_ROOM_OPERATION_IN_PROGRESS);
+            }
+
             log.warn("Leave operation failed - RoomId: {}, MemberId: {}, Error: {}",
                     roomId, member.getId(), result.getErrorMessage());
-            throw new GameRoomHandler(ErrorStatus.GAME_ROOM_OPERATION_IN_PROGRESS);
+            throw new GameRoomHandler(ErrorStatus._INTERNAL_SERVER_ERROR);
+        }
+
+        if (HostAssignmentResult.Action.ALREADY_LEFT.equals(result.getAction())) {
+            member.leaveGameRoom();
+            gameRoomRedisService.cleanupPlayerSession(member.getId());
+            log.info("Player already left room; reconciled member state - RoomId: {}, MemberId: {}",
+                    roomId, member.getId());
+            return LeaveRoomResult.alreadyLeft(member.getId(), requestedRoomId, effectiveRoomId, "Player already absent in Redis");
         }
 
         // LeaveDecision 생성
@@ -99,6 +123,16 @@ public class LeaveGameRoomUseCase {
 
         log.info("Player left room via {} - RoomId: {}, MemberId: {}, Action: {}",
                 lockStrategy.getStrategyName(), roomId, member.getId(), decision.getAction());
+
+        return LeaveRoomResult.left(member.getId(), requestedRoomId, effectiveRoomId, decision.getAction());
+    }
+
+    private Long resolveEffectiveRoomId(Member member, Long requestedRoomId) {
+        Long currentRoomId = member.getGameRoomId();
+        if (currentRoomId != null) {
+            return currentRoomId;
+        }
+        return requestedRoomId;
     }
 
     /**
@@ -107,7 +141,7 @@ public class LeaveGameRoomUseCase {
     private HostAssignmentResult performLeaveOperation(String roomId, Long memberId) {
         GameRoomPlayerInfo playerInfo = gameRoomRedisService.removePlayerFromRoom(roomId, memberId);
         if (playerInfo == null) {
-            return HostAssignmentResult.failure("Player not found in room");
+            return HostAssignmentResult.alreadyLeft(memberId);
         }
         return HostAssignmentResult.normalLeave(memberId, playerInfo);
     }
@@ -124,6 +158,7 @@ public class LeaveGameRoomUseCase {
             case DELETE_ROOM -> LeaveDecision.deleteRoom(gameRoom, member);
             case CHANGE_HOST -> LeaveDecision.changeHost(gameRoom, member, result.getNewHostInfo());
             case NORMAL_LEAVE -> LeaveDecision.normalLeave(member);
+            case ALREADY_LEFT -> throw new IllegalStateException("ALREADY_LEFT must be handled before decision conversion");
         };
     }
 

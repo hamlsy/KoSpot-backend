@@ -39,7 +39,7 @@ public class FriendOnlineStatusService {
             return Collections.emptySet();
         }
 
-        StringRedisSerializer serializer = redisTemplate.getStringSerializer();
+        StringRedisSerializer serializer = (StringRedisSerializer) redisTemplate.getStringSerializer();
         List<Object> states;
         try {
             states = redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
