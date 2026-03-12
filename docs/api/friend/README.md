@@ -59,7 +59,7 @@ Response `result`: `FriendListResponse[]`
 - `friendMemberId`: 친구 회원 ID
 - `nickname`: 친구 닉네임
 - `equippedMarkerImageUrl`: 친구 장착 마커 이미지 URL
-- `online`: 접속 중 여부
+- `online`: WebSocket 연결 상태가 `CONNECTED`인 경우 `true`, 그 외는 `false`
 - `roadViewRankTier`: 로드뷰 티어
 - `roadViewRankLevel`: 로드뷰 레벨
 - `roadViewRatingScore`: 로드뷰 레이팅 포인트

@@ -4,10 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.kospot.friend.application.adaptor.FriendAdaptor;
 import com.kospot.friend.infrastructure.persistence.FriendSummaryQueryModel;
 import com.kospot.member.application.adaptor.MemberAdaptor;
-import com.kospot.member.domain.entity.Member;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.friend.infrastructure.redis.service.FriendCacheRedisService;
-import com.kospot.multi.lobby.infrastructure.websocket.service.LobbyPresenceService;
+import com.kospot.friend.infrastructure.redis.service.FriendOnlineStatusService;
 import com.kospot.friend.presentation.dto.response.FriendListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,23 +22,22 @@ public class GetMyFriendsUseCase {
     private final MemberAdaptor memberAdaptor;
     private final FriendAdaptor friendAdaptor;
     private final FriendCacheRedisService friendCacheRedisService;
-    private final LobbyPresenceService lobbyPresenceService;
+    private final FriendOnlineStatusService friendOnlineStatusService;
 
     public List<FriendListResponse> execute(Long memberId) {
-        Member member = memberAdaptor.queryById(memberId);
+        memberAdaptor.queryById(memberId);
 
-        return friendCacheRedisService
+        List<FriendListResponse> cachedOrFresh = friendCacheRedisService
                 .getFriendList(memberId, new TypeReference<List<FriendListResponse>>() {})
                 .orElseGet(() -> {
                     List<FriendSummaryQueryModel> summaries = friendAdaptor.queryFriendSummaries(memberId);
-                    Set<Long> onlineMemberIds = lobbyPresenceService.getOnlineMemberIds();
 
                     List<FriendListResponse> response = summaries.stream()
                             .map(summary -> FriendListResponse.builder()
                                     .friendMemberId(summary.friendMemberId())
                                     .nickname(summary.nickname())
                                     .equippedMarkerImageUrl(summary.equippedMarkerImageUrl())
-                                    .online(onlineMemberIds.contains(summary.friendMemberId()))
+                                    .online(false)
                                     .roadViewRankTier(summary.roadViewRankTier())
                                     .roadViewRankLevel(summary.roadViewRankLevel())
                                     .roadViewRatingScore(summary.roadViewRatingScore())
@@ -49,5 +47,21 @@ public class GetMyFriendsUseCase {
                     friendCacheRedisService.setFriendList(memberId, response);
                     return response;
                 });
+
+        Set<Long> onlineMemberIds = friendOnlineStatusService.getOnlineMemberIds(
+                cachedOrFresh.stream().map(FriendListResponse::friendMemberId).toList()
+        );
+
+        return cachedOrFresh.stream()
+                .map(friend -> FriendListResponse.builder()
+                        .friendMemberId(friend.friendMemberId())
+                        .nickname(friend.nickname())
+                        .equippedMarkerImageUrl(friend.equippedMarkerImageUrl())
+                        .online(onlineMemberIds.contains(friend.friendMemberId()))
+                        .roadViewRankTier(friend.roadViewRankTier())
+                        .roadViewRankLevel(friend.roadViewRankLevel())
+                        .roadViewRatingScore(friend.roadViewRatingScore())
+                        .build())
+                .toList();
     }
 }
