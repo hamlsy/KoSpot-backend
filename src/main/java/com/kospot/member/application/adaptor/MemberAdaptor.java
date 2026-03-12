@@ -40,6 +40,10 @@ public class MemberAdaptor {
         return repository.findAllByGameRoomId(gameRoomId);
     }
 
+    public List<Member> queryAllWithGameRoomId() {
+        return repository.findAllByGameRoomIdIsNotNull();
+    }
+
     public Member queryByUsernameFetchEquippedMarkerImage(String username) {
         return repository.findByUsernameFetchEquippedMarkerImage(username).orElseThrow(
                 () -> new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND)

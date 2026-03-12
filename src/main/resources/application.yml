@@ -115,6 +115,13 @@ websocket:
     grace-period-ms: ${WEBSOCKET_HEARTBEAT_GRACE_PERIOD_MS:60000}
     scheduler-pool-size: ${WEBSOCKET_HEARTBEAT_SCHEDULER_POOL_SIZE:2}
 
+game-room:
+  consistency:
+    cleanup:
+      enabled: ${GAME_ROOM_CONSISTENCY_CLEANUP_ENABLED:false}
+      fixed-delay-ms: ${GAME_ROOM_CONSISTENCY_CLEANUP_FIXED_DELAY_MS:300000}
+      batch-size: ${GAME_ROOM_CONSISTENCY_CLEANUP_BATCH_SIZE:100}
+
 
 notification:
   ttl-days: 14
