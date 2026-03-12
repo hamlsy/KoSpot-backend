@@ -3,6 +3,8 @@ package com.kospot.multi.room.application.usecase;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.multi.room.application.adaptor.GameRoomAdaptor;
+import com.kospot.multi.room.application.service.AutoLeaveRecoveryService;
+import com.kospot.multi.room.application.vo.ReconcileResult;
 import com.kospot.multi.room.domain.entity.GameRoom;
 import com.kospot.multi.room.domain.event.GameRoomJoinEvent;
 import com.kospot.multi.room.application.service.service.GameRoomService;
@@ -33,9 +35,9 @@ public class JoinGameRoomUseCase {
     private final GameRoomRedisService gameRoomRedisService;
     private final MemberProfileRedisService memberProfileRedisService;
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
+    private final AutoLeaveRecoveryService autoLeaveRecoveryService;
 
     private final ApplicationEventPublisher eventPublisher;
-    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
 
     public void executeV1(Long playerId, Long gameRoomId, GameRoomRequest.Join request) {
         Member player = memberAdaptor.queryById(playerId);
@@ -90,7 +92,22 @@ public class JoinGameRoomUseCase {
             Long previousRoomId = player.getGameRoomId();
             log.info("Auto-leaving room {} before joining room {} - MemberId: {}",
                     previousRoomId, targetRoomId, player.getId());
-            leaveGameRoomUseCase.execute(player.getId(), previousRoomId);
+
+            ReconcileResult reconcileResult = autoLeaveRecoveryService.reconcileBeforeTransition(
+                    player.getId(),
+                    previousRoomId,
+                    targetRoomId,
+                    "JOIN");
+
+            if (reconcileResult.isFatalFailure()) {
+                throw new GameRoomHandler(ErrorStatus._INTERNAL_SERVER_ERROR);
+            }
+
+            // REQUIRES_NEW 트랜잭션 반영 결과를 현재 트랜잭션 엔티티에도 동기화
+            player.leaveGameRoom();
+
+            log.info("Auto-leave reconcile completed before join - MemberId: {}, PreviousRoomId: {}, TargetRoomId: {}, Status: {}",
+                    player.getId(), previousRoomId, targetRoomId, reconcileResult.getStatus());
         }
     }
 
