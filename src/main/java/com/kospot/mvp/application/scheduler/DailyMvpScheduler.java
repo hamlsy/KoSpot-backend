@@ -1,10 +1,12 @@
 package com.kospot.mvp.application.scheduler;
 
 import com.kospot.mvp.application.service.DailyMvpAggregationService;
+import com.kospot.mvp.application.service.DailyMvpReconcileService;
 import com.kospot.mvp.application.service.DailyMvpRewardService;
 import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +24,12 @@ public class DailyMvpScheduler {
     private static final String REWARD_JOB = "reward";
 
     private final DailyMvpAggregationService dailyMvpAggregationService;
+    private final DailyMvpReconcileService dailyMvpReconcileService;
     private final DailyMvpRewardService dailyMvpRewardService;
     private final DailyMvpCacheService dailyMvpCacheService;
+
+    @Value("${mvp.reconcile-only.enabled:true}")
+    private boolean reconcileOnlyEnabled;
 
     @Scheduled(cron = "${mvp.aggregate-cron:0 0 * * * *}")
     public void aggregateHourly() {
@@ -32,7 +38,11 @@ public class DailyMvpScheduler {
         }
 
         try {
-            dailyMvpAggregationService.aggregateToday();
+            if (reconcileOnlyEnabled) {
+                dailyMvpReconcileService.reconcileRecent();
+            } else {
+                dailyMvpAggregationService.aggregateToday();
+            }
         } catch (Exception e) {
             log.error("Failed to aggregate daily MVP", e);
         } finally {

@@ -7,6 +7,8 @@ import com.kospot.gamerank.application.adaptor.GameRankAdaptor;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.domain.entity.DailyMvp;
+import com.kospot.mvp.domain.policy.MvpCandidateComparator;
+import com.kospot.mvp.domain.vo.MvpCandidateSnapshot;
 import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ public class DailyMvpAggregationService {
     private final GameRankAdaptor gameRankAdaptor;
     private final DailyMvpAdaptor dailyMvpAdaptor;
     private final DailyMvpCacheService dailyMvpCacheService;
+    private final MvpCandidateComparator mvpCandidateComparator;
 
     @Value("${mvp.reward-point:200}")
     private int mvpRewardPoint;
@@ -53,9 +56,13 @@ public class DailyMvpAggregationService {
 
         RoadViewGame candidate = candidateOpt.get();
         GameRank gameRank = gameRankAdaptor.queryByMemberAndGameMode(candidate.getMember(), GameMode.ROADVIEW);
+        MvpCandidateSnapshot candidateSnapshot = MvpCandidateSnapshot.from(candidate, gameRank);
 
         DailyMvp saved = dailyMvpAdaptor.queryByDate(targetDate)
                 .map(existing -> {
+                    if (!shouldReplace(existing, candidateSnapshot)) {
+                        return existing;
+                    }
                     existing.updateSnapshot(candidate, gameRank);
                     return dailyMvpAdaptor.save(existing);
                 })
@@ -63,5 +70,15 @@ public class DailyMvpAggregationService {
 
         dailyMvpCacheService.evict(targetDate);
         return Optional.of(saved);
+    }
+
+    private boolean shouldReplace(DailyMvp existing, MvpCandidateSnapshot candidateSnapshot) {
+        if (existing.getRoadViewGameId().equals(candidateSnapshot.roadViewGameId())) {
+            return false;
+        }
+
+        RoadViewGame existingGame = roadViewGameAdaptor.queryById(existing.getRoadViewGameId());
+        MvpCandidateSnapshot currentSnapshot = MvpCandidateSnapshot.from(existing, existingGame.getEndedAt());
+        return mvpCandidateComparator.isBetter(candidateSnapshot, currentSnapshot);
     }
 }

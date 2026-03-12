@@ -5,6 +5,7 @@ import com.kospot.game.domain.entity.RoadViewGame;
 import com.kospot.gamerank.domain.entity.GameRank;
 import com.kospot.gamerank.domain.vo.RankLevel;
 import com.kospot.gamerank.domain.vo.RankTier;
+import com.kospot.mvp.domain.vo.MvpCandidateSnapshot;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -92,6 +93,31 @@ public class DailyMvp extends BaseTimeEntity {
         this.rankTier = gameRank.getRankTier();
         this.rankLevel = gameRank.getRankLevel();
         this.ratingScore = gameRank.getRatingScore();
+    }
+
+    public static DailyMvp create(LocalDate mvpDate, MvpCandidateSnapshot snapshot, int rewardPoint) {
+        return DailyMvp.builder()
+                .mvpDate(mvpDate)
+                .memberId(snapshot.memberId())
+                .roadViewGameId(snapshot.roadViewGameId())
+                .poiName(snapshot.poiName())
+                .gameScore(snapshot.score())
+                .rankTier(snapshot.rankTier())
+                .rankLevel(snapshot.rankLevel())
+                .ratingScore(snapshot.ratingScore())
+                .rewardPoint(rewardPoint)
+                .rewardGranted(false)
+                .build();
+    }
+
+    public void updateSnapshot(MvpCandidateSnapshot snapshot) {
+        this.memberId = snapshot.memberId();
+        this.roadViewGameId = snapshot.roadViewGameId();
+        this.poiName = snapshot.poiName();
+        this.gameScore = snapshot.score();
+        this.rankTier = snapshot.rankTier();
+        this.rankLevel = snapshot.rankLevel();
+        this.ratingScore = snapshot.ratingScore();
     }
 
     public void grantReward(LocalDateTime now) {
