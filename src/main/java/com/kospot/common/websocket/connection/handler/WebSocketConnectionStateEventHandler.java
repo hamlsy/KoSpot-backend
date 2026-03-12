@@ -1,7 +1,8 @@
 package com.kospot.common.websocket.connection.handler;
 
 import com.kospot.common.websocket.connection.event.WebSocketGracePeriodExpiredEvent;
-import com.kospot.multi.room.application.usecase.LeaveGameRoomUseCase;
+import com.kospot.multi.room.application.service.RoomExitOrchestrator;
+import com.kospot.multi.room.application.vo.LeaveRoomResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class WebSocketConnectionStateEventHandler {
 
-    private final LeaveGameRoomUseCase leaveGameRoomUseCase;
+    private final RoomExitOrchestrator roomExitOrchestrator;
 
     @Async
     @EventListener
@@ -22,8 +23,13 @@ public class WebSocketConnectionStateEventHandler {
         Long gameRoomId = event.gameRoomId();
 
         try {
-            leaveGameRoomUseCase.execute(memberId, gameRoomId);
-            log.info("Grace expired; member left game room - MemberId: {}, RoomId: {}", memberId, gameRoomId);
+            LeaveRoomResult leaveResult = roomExitOrchestrator.requestExit(
+                    memberId,
+                    gameRoomId,
+                    "GRACE_EXPIRED",
+                    "disconnect-grace-expired");
+            log.info("Grace expired; leave finalized - MemberId: {}, RoomId: {}, Status: {}",
+                    memberId, gameRoomId, leaveResult.getStatus());
         } catch (Exception e) {
             log.warn("Failed to finalize room leave after grace expiration - MemberId: {}, RoomId: {}",
                     memberId, gameRoomId, e);
