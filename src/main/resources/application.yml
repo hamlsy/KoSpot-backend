@@ -115,6 +115,13 @@ websocket:
     grace-period-ms: ${WEBSOCKET_HEARTBEAT_GRACE_PERIOD_MS:60000}
     scheduler-pool-size: ${WEBSOCKET_HEARTBEAT_SCHEDULER_POOL_SIZE:2}
 
+game-room:
+  consistency:
+    cleanup:
+      enabled: ${GAME_ROOM_CONSISTENCY_CLEANUP_ENABLED:false}
+      fixed-delay-ms: ${GAME_ROOM_CONSISTENCY_CLEANUP_FIXED_DELAY_MS:300000}
+      batch-size: ${GAME_ROOM_CONSISTENCY_CLEANUP_BATCH_SIZE:100}
+
 
 notification:
   ttl-days: 14
@@ -150,3 +157,8 @@ mvp:
   reward-point: ${MVP_REWARD_POINT:200}
   aggregate-cron: ${MVP_AGGREGATE_CRON:0 0 * * * *}
   reward-cron: ${MVP_REWARD_CRON:0 5 0 * * *}
+  incremental:
+    enabled: ${MVP_INCREMENTAL_ENABLED:true}
+  reconcile-only:
+    enabled: ${MVP_RECONCILE_ONLY_ENABLED:true}
+  aggregate-full-scan-fallback-enabled: ${MVP_AGGREGATE_FULL_SCAN_FALLBACK_ENABLED:true}

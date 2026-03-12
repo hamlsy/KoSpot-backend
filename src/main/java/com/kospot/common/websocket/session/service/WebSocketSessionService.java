@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -64,6 +65,33 @@ public class WebSocketSessionService {
             redisTemplate.delete(subsKey);
         } catch (Exception e) {
             log.error("Failed to remove all subscriptions - SessionId: {}", sessionId, e);
+        }
+    }
+
+    public boolean hasSubscriptionWithPrefixExcept(String sessionId, String prefix, String excludedSubscriptionId) {
+        try {
+            String subsKey = String.format(SUBS_KEY_PATTERN, sessionId);
+            Map<Object, Object> subscriptions = redisTemplate.opsForHash().entries(subsKey);
+            for (Map.Entry<Object, Object> entry : subscriptions.entrySet()) {
+                if (entry.getKey() == null || entry.getValue() == null) {
+                    continue;
+                }
+
+                if (excludedSubscriptionId != null && excludedSubscriptionId.equals(entry.getKey().toString())) {
+                    continue;
+                }
+
+                String destination = entry.getValue().toString();
+                if (destination.startsWith(prefix)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (Exception e) {
+            log.error("Failed to check subscription prefix - SessionId: {}, Prefix: {}, ExcludedSubId: {}",
+                    sessionId, prefix, excludedSubscriptionId, e);
+            return false;
         }
     }
 }

@@ -57,7 +57,7 @@ public class LuaScriptStrategy implements HostAssignmentLockStrategy {
                     leavingMemberId.toString());
 
             if (resultJson == null || resultJson.isEmpty()) {
-                return HostAssignmentResult.failure("Lua 스크립트 실행 실패");
+                return HostAssignmentResult.failureRetryable("Lua script returned empty result");
             }
 
             return parseLuaResult(resultJson, leavingMemberId);
@@ -65,7 +65,7 @@ public class LuaScriptStrategy implements HostAssignmentLockStrategy {
         } catch (Exception e) {
             log.error("Lua script execution failed - RoomId: {}, MemberId: {}",
                     roomId, leavingMemberId, e);
-            return HostAssignmentResult.failure("Lua 스크립트 오류: " + e.getMessage());
+            return HostAssignmentResult.failureRetryable("Lua script execution error: " + e.getMessage());
         }
     }
 
@@ -165,7 +165,10 @@ public class LuaScriptStrategy implements HostAssignmentLockStrategy {
 
             if ("ERROR".equals(action)) {
                 String message = resultNode.has("message") ? resultNode.get("message").asText() : "Unknown error";
-                return HostAssignmentResult.failure(message);
+                if ("Player not found".equalsIgnoreCase(message)) {
+                    return HostAssignmentResult.alreadyLeft(leavingMemberId);
+                }
+                return HostAssignmentResult.failureRetryable(message);
             }
 
             GameRoomPlayerInfo leavingPlayer = parsePlayerFromNode(resultNode.get("leavingPlayer"));
@@ -177,12 +180,12 @@ public class LuaScriptStrategy implements HostAssignmentLockStrategy {
                     GameRoomPlayerInfo newHost = parsePlayerFromNode(resultNode.get("newHost"));
                     yield HostAssignmentResult.changeHost(leavingMemberId, leavingPlayer, newHost);
                 }
-                default -> HostAssignmentResult.failure("Unknown action: " + action);
+                default -> HostAssignmentResult.failureFatal("Unknown Lua action: " + action);
             };
 
         } catch (JsonProcessingException e) {
             log.error("Failed to parse Lua script result - Result: {}", resultJson, e);
-            return HostAssignmentResult.failure("결과 파싱 실패");
+            return HostAssignmentResult.failureFatal("Failed to parse Lua result");
         }
     }
 

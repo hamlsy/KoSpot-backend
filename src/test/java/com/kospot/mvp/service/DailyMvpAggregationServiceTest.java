@@ -10,6 +10,7 @@ import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.domain.entity.DailyMvp;
+import com.kospot.mvp.domain.policy.MvpCandidateComparator;
 import com.kospot.mvp.application.service.DailyMvpAggregationService;
 import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,8 @@ class DailyMvpAggregationServiceTest {
                 roadViewGameAdaptor,
                 gameRankAdaptor,
                 dailyMvpAdaptor,
-                dailyMvpCacheService
+                dailyMvpCacheService,
+                new MvpCandidateComparator()
         );
         ReflectionTestUtils.setField(dailyMvpAggregationService, "mvpRewardPoint", 200);
     }

@@ -7,6 +7,7 @@ import com.kospot.member.domain.entity.Member;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.domain.entity.DailyMvp;
 import com.kospot.mvp.application.service.DailyMvpRewardService;
+import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import com.kospot.point.application.service.PointHistoryService;
 import com.kospot.point.application.service.PointService;
 import com.kospot.point.domain.vo.PointHistoryType;
@@ -38,6 +39,8 @@ class DailyMvpRewardServiceTest {
     private PointHistoryService pointHistoryService;
     @Mock
     private ApplicationEventPublisher eventPublisher;
+    @Mock
+    private DailyMvpCacheService dailyMvpCacheService;
 
     private DailyMvpRewardService dailyMvpRewardService;
 
@@ -48,7 +51,8 @@ class DailyMvpRewardServiceTest {
                 memberAdaptor,
                 pointService,
                 pointHistoryService,
-                eventPublisher
+                eventPublisher,
+                dailyMvpCacheService
         );
     }
 
@@ -73,6 +77,8 @@ class DailyMvpRewardServiceTest {
         when(dailyMvpAdaptor.queryUnrewardedByDateLessThanEqual(targetDate)).thenReturn(List.of(dailyMvp));
         when(dailyMvpAdaptor.queryByDateForUpdate(targetDate)).thenReturn(Optional.of(dailyMvp));
         when(memberAdaptor.queryById(10L)).thenReturn(member);
+        when(dailyMvpCacheService.tryAcquireRewardLock(eq(targetDate), eq(10L), any())).thenReturn(true);
+        when(dailyMvpCacheService.isRewardProcessed(targetDate, 10L)).thenReturn(false, true);
 
         int first = dailyMvpRewardService.rewardUnprocessedUpTo(targetDate);
         int second = dailyMvpRewardService.rewardUnprocessedUpTo(targetDate);
@@ -82,5 +88,6 @@ class DailyMvpRewardServiceTest {
         verify(pointService, times(1)).addPoint(member, 200);
         verify(pointHistoryService, times(1)).savePointHistory(member, 200, PointHistoryType.MVP_REWARD);
         verify(eventPublisher, times(1)).publishEvent(any());
+        verify(dailyMvpCacheService, times(2)).tryAcquireRewardLock(eq(targetDate), eq(10L), any());
     }
 }
