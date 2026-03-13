@@ -1,6 +1,7 @@
 package com.kospot.mvp.presentation.controller;
 
 import com.kospot.mvp.application.usecase.GetDailyMvpUseCase;
+import com.kospot.mvp.application.usecase.GetTodayAndYesterdayMvpUseCase;
 import com.kospot.common.exception.payload.dto.ApiResponseDto;
 import com.kospot.mvp.presentation.response.DailyMvpResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +27,7 @@ public class DailyMvpController {
     private static final ZoneId KST = ZoneId.of("Asia/Seoul");
 
     private final GetDailyMvpUseCase getDailyMvpUseCase;
+    private final GetTodayAndYesterdayMvpUseCase getTodayAndYesterdayMvpUseCase;
 
     @Operation(summary = "일자별 MVP 조회", description = "특정 날짜의 오늘의 MVP 정보를 조회합니다.")
     @GetMapping("/daily")
@@ -35,5 +37,11 @@ public class DailyMvpController {
     ) {
         LocalDate targetDate = date != null ? date : LocalDate.now(KST);
         return ApiResponseDto.onSuccess(getDailyMvpUseCase.execute(targetDate));
+    }
+
+    @Operation(summary = "오늘/어제 MVP 조회", description = "오늘의 MVP와 어제의 MVP를 함께 조회합니다.")
+    @GetMapping("/daily/today-with-yesterday")
+    public ApiResponseDto<DailyMvpResponse.DailyWithYesterday> getTodayAndYesterdayMvp() {
+        return ApiResponseDto.onSuccess(getTodayAndYesterdayMvpUseCase.execute());
     }
 }
