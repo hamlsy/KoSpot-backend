@@ -3,8 +3,11 @@ package com.kospot.application.mvp.usecase;
 import com.kospot.gamerank.domain.vo.RankLevel;
 import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
+import com.kospot.mvp.application.service.DailyMvpReconcileService;
 import com.kospot.mvp.domain.entity.DailyMvp;
+import com.kospot.mvp.domain.vo.MvpCandidateSnapshot;
 import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
+import com.kospot.mvp.infrastructure.redis.service.DailyMvpCandidateCacheService;
 import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import com.kospot.mvp.application.usecase.GetDailyMvpUseCase;
 import com.kospot.mvp.presentation.response.DailyMvpResponse;
@@ -16,6 +19,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +34,10 @@ class GetDailyMvpUseCaseTest {
     @Mock
     private DailyMvpCacheService dailyMvpCacheService;
     @Mock
+    private DailyMvpCandidateCacheService dailyMvpCandidateCacheService;
+    @Mock
+    private DailyMvpReconcileService dailyMvpReconcileService;
+    @Mock
     private MemberProfileRedisAdaptor memberProfileRedisAdaptor;
 
     private GetDailyMvpUseCase getDailyMvpUseCase;
@@ -38,6 +47,8 @@ class GetDailyMvpUseCaseTest {
         getDailyMvpUseCase = new GetDailyMvpUseCase(
                 dailyMvpAdaptor,
                 dailyMvpCacheService,
+                dailyMvpCandidateCacheService,
+                dailyMvpReconcileService,
                 memberProfileRedisAdaptor
         );
     }
@@ -112,5 +123,68 @@ class GetDailyMvpUseCaseTest {
         assertEquals("db-user", result.getNickname());
         verify(dailyMvpCacheService).cache(eq(date), any(DailyMvpResponse.Daily.class));
         verify(dailyMvpCacheService).releaseRebuildLock(date);
+    }
+
+    @Test
+    @DisplayName("오늘 날짜에 DB 미존재여도 candidate가 있으면 응답하고 reconcile 호출")
+    void shouldReturnCandidateForTodayWhenDbMissing() {
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        MvpCandidateSnapshot snapshot = new MvpCandidateSnapshot(
+                3L,
+                101L,
+                "강남",
+                975.5,
+                LocalDateTime.now(),
+                RankTier.DIAMOND,
+                RankLevel.ONE,
+                3550
+        );
+
+        when(dailyMvpCacheService.get(today)).thenReturn(Optional.empty());
+        when(dailyMvpCacheService.tryAcquireRebuildLock(today)).thenReturn(true);
+        when(dailyMvpAdaptor.queryByDate(today)).thenReturn(Optional.empty());
+        when(dailyMvpCandidateCacheService.get(today)).thenReturn(Optional.of(snapshot));
+        when(memberProfileRedisAdaptor.findProfile(3L))
+                .thenReturn(new MemberProfileRedisAdaptor.MemberProfileView(3L, "candidate-user", "marker-url"));
+
+        DailyMvpResponse.Daily result = getDailyMvpUseCase.execute(today);
+
+        assertNotNull(result);
+        assertEquals("candidate-user", result.getNickname());
+        verify(dailyMvpCacheService).cache(eq(today), any(DailyMvpResponse.Daily.class));
+        verify(dailyMvpReconcileService).reconcileByDateInNewTransaction(today);
+        verify(dailyMvpCacheService, never()).cacheNone(today);
+        verify(dailyMvpCacheService).releaseRebuildLock(today);
+    }
+
+    @Test
+    @DisplayName("오늘 날짜에 none 캐시가 있어도 candidate가 있으면 즉시 반환한다")
+    void shouldReturnCandidateWhenTodayNoneCacheExists() {
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        MvpCandidateSnapshot snapshot = new MvpCandidateSnapshot(
+                4L,
+                202L,
+                "여의도",
+                990.0,
+                LocalDateTime.now(),
+                RankTier.MASTER,
+                RankLevel.ONE,
+                3800
+        );
+
+        when(dailyMvpCacheService.get(today)).thenReturn(Optional.empty());
+        when(dailyMvpCacheService.isNoneCached(today)).thenReturn(true);
+        when(dailyMvpCandidateCacheService.get(today)).thenReturn(Optional.of(snapshot));
+        when(memberProfileRedisAdaptor.findProfile(4L))
+                .thenReturn(new MemberProfileRedisAdaptor.MemberProfileView(4L, "today-candidate", "marker-url"));
+
+        DailyMvpResponse.Daily result = getDailyMvpUseCase.execute(today);
+
+        assertNotNull(result);
+        assertEquals("today-candidate", result.getNickname());
+        verify(dailyMvpCacheService).cache(eq(today), any(DailyMvpResponse.Daily.class));
+        verify(dailyMvpReconcileService).reconcileByDateInNewTransaction(today);
+        verify(dailyMvpCacheService, never()).tryAcquireRebuildLock(today);
+        verifyNoInteractions(dailyMvpAdaptor);
     }
 }

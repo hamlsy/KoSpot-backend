@@ -3,6 +3,7 @@ package com.kospot.mvp.presentation.response;
 import com.kospot.gamerank.domain.vo.RankLevel;
 import com.kospot.gamerank.domain.vo.RankTier;
 import com.kospot.mvp.domain.entity.DailyMvp;
+import com.kospot.mvp.domain.vo.MvpCandidateSnapshot;
 import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +43,20 @@ public class DailyMvpResponse {
                     .ratingScore(dailyMvp.getRatingScore())
                     .gameScore(dailyMvp.getGameScore())
                     .poiName(dailyMvp.getPoiName())
+                    .build();
+        }
+
+        public static Daily from(LocalDate date, MvpCandidateSnapshot snapshot, MemberProfileRedisAdaptor.MemberProfileView profileView) {
+            return Daily.builder()
+                    .mvpDate(date)
+                    .memberId(snapshot.memberId())
+                    .nickname(profileView.nickname())
+                    .equippedMarkerImageUrl(profileView.markerImageUrl())
+                    .rankTier(snapshot.rankTier())
+                    .rankLevel(snapshot.rankLevel())
+                    .ratingScore(snapshot.ratingScore())
+                    .gameScore(snapshot.score())
+                    .poiName(snapshot.poiName())
                     .build();
         }
     }
