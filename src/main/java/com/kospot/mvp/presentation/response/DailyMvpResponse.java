@@ -13,6 +13,13 @@ public class DailyMvpResponse {
 
     @Getter
     @Builder
+    public static class DailyWithYesterday {
+        private Daily today;
+        private Daily yesterday;
+    }
+
+    @Getter
+    @Builder
     public static class Daily {
         private LocalDate mvpDate;
         private Long memberId;
