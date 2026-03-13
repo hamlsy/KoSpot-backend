@@ -64,7 +64,7 @@ public class NoticeController {
 
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
     @PutMapping("/{id}")
-    public ApiResponseDto<?> updateNotice(@CurrentMember Long memberId, @PathVariable("id") Long noticeId, @ModelAttribute NoticeRequest.Update request) {
+    public ApiResponseDto<?> updateNotice(@CurrentMember Long memberId, @PathVariable("id") Long noticeId, @RequestBody NoticeRequest.Update request) {
         updateNoticeUseCase.execute(memberId, noticeId, request);
         return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
