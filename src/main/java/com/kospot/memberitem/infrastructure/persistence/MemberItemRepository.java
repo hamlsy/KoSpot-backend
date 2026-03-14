@@ -1,6 +1,7 @@
 package com.kospot.memberitem.infrastructure.persistence;
 
 import com.kospot.item.domain.vo.ItemType;
+import com.kospot.item.domain.entity.Item;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.memberitem.domain.entity.MemberItem;
 import com.kospot.memberitem.presentation.response.MemberItemResponse;
@@ -56,5 +57,13 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long> {
             "from MemberItem mi join mi.item join mi.item.image " +
             "where mi.member = :member")
     List<MemberItemResponse> findAllByMemberFetch(@Param("member") Member member);
+
+    @Query("select mi.id from MemberItem mi where mi.member.id = :memberId and mi.isEquipped = true")
+    List<Long> findEquippedIdsByMemberId(@Param("memberId") Long memberId);
+
+    @Query("select mi.id from MemberItem mi where mi.member.id = :memberId")
+    List<Long> findOwnedIdsByMemberId(@Param("memberId") Long memberId);
+
+    boolean existsByMemberAndItem(Member member, Item item);
 
 }

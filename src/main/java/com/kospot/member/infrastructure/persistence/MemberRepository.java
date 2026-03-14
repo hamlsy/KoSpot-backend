@@ -37,4 +37,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m where m.role = 'BOT'")
     List<Member> findAllBot();
 
+    @Query("select m.point from Member m where m.id = :memberId")
+    Optional<Integer> findPointById(@Param("memberId") Long memberId);
+
 }

@@ -1,6 +1,7 @@
 package com.kospot.memberitem.application.adaptor;
 
 import com.kospot.item.domain.vo.ItemType;
+import com.kospot.item.domain.entity.Item;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.memberitem.domain.entity.MemberItem;
 import com.kospot.memberitem.infrastructure.persistence.MemberItemRepository;
@@ -50,6 +51,18 @@ public class MemberItemAdaptor {
 
     public List<MemberItemResponse> queryAllByMemberFetch(Member member) {
         return repository.findAllByMemberFetch(member);
+    }
+
+    public List<Long> queryEquippedItemIdsByMemberId(Long memberId) {
+        return repository.findEquippedIdsByMemberId(memberId);
+    }
+
+    public List<Long> queryOwnedItemIdsByMemberId(Long memberId) {
+        return repository.findOwnedIdsByMemberId(memberId);
+    }
+
+    public boolean existsByMemberAndItem(Member member, Item item) {
+        return repository.existsByMemberAndItem(member, item);
     }
 
 }

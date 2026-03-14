@@ -26,6 +26,12 @@ public class MemberAdaptor {
         );
     }
 
+    public int queryPointById(Long memberId) {
+        return repository.findPointById(memberId).orElseThrow(
+                () -> new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND)
+        );
+    }
+
     public List<Member> queryAllByNicknameKeyword(String keyword) {
         return repository.findAllByNicknameKeyword(keyword);
     }

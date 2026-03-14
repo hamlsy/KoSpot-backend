@@ -1,16 +1,13 @@
 package com.kospot.member.application.usecase;
 
 import com.kospot.member.application.adaptor.MemberAdaptor;
-import com.kospot.member.domain.entity.Member;
 import com.kospot.memberitem.application.adaptor.MemberItemAdaptor;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.member.presentation.response.MemberShopInfoResponse;
-import com.kospot.memberitem.presentation.response.MemberItemResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @UseCase
 @RequiredArgsConstructor
@@ -21,16 +18,14 @@ public class GetMemberShopInfoUseCase {
     private final MemberItemAdaptor memberItemAdaptor;
 
     public MemberShopInfoResponse execute(Long memberId) {
-        Member member = memberAdaptor.queryById(memberId);
-        List<MemberItemResponse> ownedItems = memberItemAdaptor.queryAllByMemberFetch(member);
-        List<MemberItemResponse> equippedItems = ownedItems.stream()
-                .filter(item -> item.getIsEquipped())
-                .collect(Collectors.toList());
+        int currentPoint = memberAdaptor.queryPointById(memberId);
+        List<Long> equippedItemIds = memberItemAdaptor.queryEquippedItemIdsByMemberId(memberId);
+        List<Long> ownedMemberItemIds = memberItemAdaptor.queryOwnedItemIdsByMemberId(memberId);
 
         return MemberShopInfoResponse.builder()
-                .currentPoint(member.getPoint())
-                .equippedItems(equippedItems)
-                .ownedItems(ownedItems)
+                .currentPoint(currentPoint)
+                .equippedItemIds(equippedItemIds)
+                .ownedMemberItemIds(ownedMemberItemIds)
                 .build();
     }
 }

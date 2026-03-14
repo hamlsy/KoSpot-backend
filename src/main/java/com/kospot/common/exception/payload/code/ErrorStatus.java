@@ -60,6 +60,7 @@ public enum ErrorStatus implements BaseCode {
     // Item Error (4271 ~ 4280)
     ITEM_NOT_FOUND(NOT_FOUND, 4271, "해당 아이템을 찾을 수 없습니다."),
     ITEM_OUT_OF_STOCK(BAD_REQUEST, 4272, "아이템 재고가 없습니다."),
+    ITEM_ALREADY_OWNED(BAD_REQUEST, 4273, "이미 보유한 아이템입니다."),
 
     // Image Error (4281 ~ 4290)
     IMAGE_TYPE_NOT_FOUND(NOT_FOUND, 4281, "해당 이미지 타입을 찾을 수 없습니다."),

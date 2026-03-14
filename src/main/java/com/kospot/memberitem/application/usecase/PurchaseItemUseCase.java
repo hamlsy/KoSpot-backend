@@ -3,8 +3,11 @@ package com.kospot.memberitem.application.usecase;
 import com.kospot.item.application.adaptor.ItemAdaptor;
 import com.kospot.item.domain.entity.Item;
 import com.kospot.item.application.service.ItemService;
+import com.kospot.common.exception.object.domain.ItemHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import com.kospot.member.application.adaptor.MemberAdaptor;
 import com.kospot.member.domain.entity.Member;
+import com.kospot.memberitem.application.adaptor.MemberItemAdaptor;
 import com.kospot.memberitem.application.service.MemberItemService;
 import com.kospot.point.domain.vo.PointHistoryType;
 import com.kospot.point.application.service.PointHistoryService;
@@ -22,6 +25,7 @@ public class PurchaseItemUseCase {
 
     private final MemberAdaptor memberAdaptor;
     private final ItemAdaptor itemAdaptor;
+    private final MemberItemAdaptor memberItemAdaptor;
     private final ItemService itemService;
     private final MemberItemService memberItemService;
     private final PointService pointService;
@@ -31,6 +35,11 @@ public class PurchaseItemUseCase {
     public void execute(Long memberId, Long itemId) {
         Member member = memberAdaptor.queryById(memberId);
         Item item = itemAdaptor.queryById(itemId);
+
+        if (memberItemAdaptor.existsByMemberAndItem(member, item)) {
+            throw new ItemHandler(ErrorStatus.ITEM_ALREADY_OWNED);
+        }
+
         int itemPrice = item.getPrice();
 
         // member point 감소

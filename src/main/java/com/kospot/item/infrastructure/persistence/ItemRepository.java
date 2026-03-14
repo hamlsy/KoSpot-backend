@@ -31,11 +31,18 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("""
         select new com.kospot.item.presentation.dto.response.ItemResponse(
           i.id, i.name, i.description, i.price, i.stock, img.imageUrl,
-          (mi.id is not null)
+          (case when exists (
+            select 1 from MemberItem mi
+            where mi.item = i and mi.member = :member
+          ) then true else false end),
+          (select min(mi.id) from MemberItem mi where mi.item = i and mi.member = :member),
+          (case when exists (
+            select 1 from MemberItem mi
+            where mi.item = i and mi.member = :member and mi.isEquipped = true
+          ) then true else false end)
         )
         from Item i
         left join i.image img
-        left join MemberItem mi on i.id = mi.item.id and mi.member = :member
         where i.itemType = :itemType and i.isAvailable = true
     """)
     List<ItemResponse> findAvailableItemsWithOwnersByTypeFetchImage(

@@ -1,6 +1,5 @@
 package com.kospot.member.presentation.response;
 
-import com.kospot.memberitem.presentation.response.MemberItemResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,6 +10,6 @@ import java.util.List;
 public class MemberShopInfoResponse {
 
     private int currentPoint;
-    private List<MemberItemResponse> equippedItems;
-    private List<MemberItemResponse> ownedItems;
+    private List<Long> equippedItemIds;
+    private List<Long> ownedMemberItemIds;
 }
