@@ -2,9 +2,11 @@ package com.kospot.multi.game.presentation.controller;
 
 import com.kospot.multi.round.application.usecase.roadview.NextRoadViewRoundUseCase;
 import com.kospot.common.exception.payload.dto.ApiResponseDto;
+import com.kospot.multi.game.presentation.dto.request.MultiGameRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,9 @@ public class MultiRoadViewGameController {
     @PostMapping("/{gameId}/rounds/{roundId}/reIssue")
     public ApiResponseDto<?> reissueRound(@PathVariable("roomId") Long roomId,
                                           @PathVariable("gameId") Long gameId,
-                                          @PathVariable("roundId") Long roundId) {
-        return ApiResponseDto.onSuccess(nextRoadViewRoundUseCase.reissueRound(roomId, gameId, roundId));
+                                          @PathVariable("roundId") Long roundId,
+                                          @Valid @RequestBody MultiGameRequest.Reissue request) {
+        return ApiResponseDto.onSuccess(
+                nextRoadViewRoundUseCase.reissueRound(roomId, gameId, roundId, request.getExpectedRoundVersion()));
     }
 }

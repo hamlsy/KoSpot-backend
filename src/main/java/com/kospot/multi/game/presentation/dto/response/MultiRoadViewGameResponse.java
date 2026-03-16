@@ -78,15 +78,20 @@ public class MultiRoadViewGameResponse {
         private Long gameId;
         private Long roundId;
         private long roundVersion;
+        private boolean reissued;
         private String poiName;
         private double targetLat;
         private double targetLng;
 
-        public static RoundProblem from(MultiRoadViewGame game, RoadViewGameRound round, long roundVersion) {
+        public static RoundProblem from(MultiRoadViewGame game,
+                                        RoadViewGameRound round,
+                                        long roundVersion,
+                                        boolean reissued) {
             return RoundProblem.builder()
                     .gameId(game.getId())
                     .roundId(round.getId())
                     .roundVersion(roundVersion)
+                    .reissued(reissued)
                     .poiName(game.isPoiNameVisible() ? round.getTargetCoordinate().getPoiName() : "")
                     .targetLat(round.getTargetCoordinate().getLat())
                     .targetLng(round.getTargetCoordinate().getLng())

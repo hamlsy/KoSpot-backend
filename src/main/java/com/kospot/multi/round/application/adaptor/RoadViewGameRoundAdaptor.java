@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+
 @Slf4j
 @Adaptor
 @RequiredArgsConstructor
@@ -38,6 +40,29 @@ public class RoadViewGameRoundAdaptor {
     public RoadViewGameRound queryByIdFetchGameForUpdate(Long id) {
         return repository.findByIdFetchGameForUpdate(id).orElseThrow(
                 () -> new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND)
+        );
+    }
+
+    public RoadViewGameRound queryByIdFetchCoordinateAndGame(Long id) {
+        return repository.findByIdFetchCoordinateAndGame(id).orElseThrow(
+                () -> new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND)
+        );
+    }
+
+    @Transactional
+    public int tryAdvanceReissueVersion(Long roundId,
+                                        Long gameId,
+                                        Long expectedVersion,
+                                        Integer maxReissueCount,
+                                        Instant cooldownThreshold,
+                                        Instant now) {
+        return repository.tryAdvanceReissueVersion(
+                roundId,
+                gameId,
+                expectedVersion,
+                maxReissueCount,
+                cooldownThreshold,
+                now
         );
     }
 
