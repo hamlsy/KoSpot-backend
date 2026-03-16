@@ -40,7 +40,7 @@ public class RoadViewSubmissionService {
                 submission.getLng(),
                 submission.getTimeToAnswer()
         );
-        newSubmission.assignDistanceAndPlayerScore(round.getTargetCoordinate());
+        newSubmission.assignDistanceAndPlayerScore(round.getTargetCoordinate(), round.getDuration().toMillis());
         return repository.save(newSubmission);
     }
 
@@ -58,6 +58,8 @@ public class RoadViewSubmissionService {
                 submission.getDistance(),
                 submission.getTimeToAnswer()
         );
+
+        newSubmission.assignDistanceAndTeamScore(round.getTargetCoordinate(), round.getDuration().toMillis());
 
         return repository.save(newSubmission);
     }
