@@ -64,10 +64,10 @@ public class RoadViewGame extends Game {
     public void end(Member member, double submittedLat, double submittedLng, double answerTime, double answerDistance) {
         super.end(member, submittedLat, submittedLng, answerTime);
         this.answerDistance = answerDistance;
-        this.score = getScore(answerDistance, answerTime);
+        this.score = calculateGameScore(answerDistance, answerTime);
     }
 
-    private double getScore(double distance, double answerTime) {
+    private double calculateGameScore(double distance, double answerTime) {
         if (GameType.RANK.equals(getGameType())) {
             long elapsedMs = normalizeRankElapsedMs(answerTime);
             return ScoreCalculator.calculateFinalScore(
@@ -87,5 +87,14 @@ public class RoadViewGame extends Game {
     private long normalizeRankElapsedMs(double answerTime) {
         long raw = Math.round(answerTime);
         return Math.max(0L, Math.min(raw, SINGLE_RANK_LIMIT_MS));
+    }
+
+    public double getBaseScore() {
+        return ScoreCalculator.calculateBaseScore(this.answerDistance);
+    }
+
+    public double getBonusScore() {
+        double bonus = this.score - getBaseScore();
+        return Math.max(0.0, bonus);
     }
 }

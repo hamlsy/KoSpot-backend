@@ -38,6 +38,8 @@ public class EndGameResponse {
         private double answerDistance;
         private String fullAddress;
         private String poiName;
+        private double baseScore;
+        private double bonusScore;
         private double score;
         private int previousRatingScore;
         private int currentRatingScore;
@@ -56,6 +58,8 @@ public class EndGameResponse {
 
             return RoadViewRank.builder()
                     .nickname(member.getNickname())
+                    .baseScore(game.getBaseScore())
+                    .bonusScore(game.getBonusScore())
                     .score(game.getScore())
                     .fullAddress(coordinate.getAddress().getFullAddress())
                     .poiName(coordinate.getPoiName())
