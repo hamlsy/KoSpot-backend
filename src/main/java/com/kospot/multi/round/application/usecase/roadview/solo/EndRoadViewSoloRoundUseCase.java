@@ -44,7 +44,7 @@ public class EndRoadViewSoloRoundUseCase {
         // 라운드 종료 처리 및 전체 순위 처리 - service
         roadViewGameRoundService.endGameRound(round);
 
-        List<GamePlayer> players = gamePlayerAdaptor.queryByMultiRoadViewGameId(gameId);
+        List<GamePlayer> players = gamePlayerAdaptor.queryByMultiRoadViewGameIdWithMember(gameId);
         List<GamePlayer> updatedPlayers = gamePlayerService.updateTotalRank(players);
 
         // redis  정리
