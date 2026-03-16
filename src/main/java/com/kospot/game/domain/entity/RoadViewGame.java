@@ -15,6 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Getter
 @Entity
 @SuperBuilder
@@ -93,8 +96,13 @@ public class RoadViewGame extends Game {
         return ScoreCalculator.calculateBaseScore(this.answerDistance);
     }
 
-    public double getBonusScore() {
+    public int getBonusScore() {
         double bonus = this.score - getBaseScore();
-        return Math.max(0.0, bonus);
+        if (bonus <= 0.0) {
+            return 0;
+        }
+        return BigDecimal.valueOf(bonus)
+                .setScale(0, RoundingMode.HALF_UP)
+                .intValue();
     }
 }

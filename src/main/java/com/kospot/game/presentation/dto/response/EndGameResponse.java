@@ -39,7 +39,7 @@ public class EndGameResponse {
         private String fullAddress;
         private String poiName;
         private double baseScore;
-        private double bonusScore;
+        private int bonusScore;
         private double score;
         private int previousRatingScore;
         private int currentRatingScore;
