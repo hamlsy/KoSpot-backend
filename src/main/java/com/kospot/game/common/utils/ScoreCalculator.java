@@ -2,101 +2,119 @@ package com.kospot.game.common.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ScoreCalculator {
 
     public static final double ZERO_SCORE = 0.0;
     public static final double MAX_SCORE = 1000.0;
+    public static final double MAX_TIME_MULTIPLIER = 1.3;
+    public static final double MIN_TIME_MULTIPLIER = 1.0;
+    public static final long DEFAULT_GRACE_PERIOD_MS = 5_000L;
 
-    // 거리 기준점 (km)
-    private static final double D0 = 0.0;    // 0km
-    private static final double D1 = 1.0;    // 1km → 950점
-    private static final double D2 = 5.0;    // 5km → 900점
-    private static final double D3 = 10.0;   // 10km → 800점
-    private static final double D4 = 30.0;   // 30km → 700점
-    private static final double D5 = 50.0;   // 50km → 600점
-    private static final double D6 = 100.0;  // 100km → 400점
-    private static final double D7 = 200.0;  // 200km → 200점
     private static final double D_MAX = 400.0; // 400km 이상 → 0점
 
-    // 각 거리에서의 목표 점수
-    private static final double S0 = MAX_SCORE; // 0km → 1000점
-    private static final double S1 = 950.0;     // 1km
-    private static final double S2 = 900.0;     // 5km
-    private static final double S3 = 800.0;     // 10km
-    private static final double S4 = 700.0;     // 30km
-    private static final double S5 = 600.0;     // 50km
-    private static final double S6 = 400.0;     // 100km
-    private static final double S7 = 200.0;     // 200km
-    private static final double S8 = 0.0;       // 400km
+    private static final TreeMap<Double, Double> DISTANCE_SCORE_TABLE = new TreeMap<>();
 
     private static final BigDecimal ZERO_SCORE_BD = BigDecimal.ZERO;
-    private static final BigDecimal MAX_SCORE_BD = BigDecimal.valueOf(10000.0);
+    private static final BigDecimal MAX_SCORE_BD = BigDecimal.valueOf(MAX_SCORE);
 
     private static final double MULTI_GAME_SCALE = 0.08; // 멀티게임 환산 배수
+
+    static {
+        DISTANCE_SCORE_TABLE.put(0.0, 1000.0);
+        DISTANCE_SCORE_TABLE.put(1.0, 950.0);
+        DISTANCE_SCORE_TABLE.put(5.0, 900.0);
+        DISTANCE_SCORE_TABLE.put(10.0, 800.0);
+        DISTANCE_SCORE_TABLE.put(30.0, 700.0);
+        DISTANCE_SCORE_TABLE.put(50.0, 600.0);
+        DISTANCE_SCORE_TABLE.put(100.0, 400.0);
+        DISTANCE_SCORE_TABLE.put(200.0, 200.0);
+        DISTANCE_SCORE_TABLE.put(400.0, 0.0);
+    }
 
     /**
      * 거리 기반 점수 계산 (구간별 선형 보간)
      */
-    public static double calculateScore(double distance) {
-        if (distance <= 0) {
-            return MAX_SCORE;
-        }
-        if (distance >= D_MAX) {
+    public static double calculateBaseScore(double distance) {
+        double normalizedDistance = Math.max(0.0, distance);
+        if (normalizedDistance >= D_MAX) {
             return ZERO_SCORE;
         }
 
-        double score;
+        Map.Entry<Double, Double> lower = DISTANCE_SCORE_TABLE.floorEntry(normalizedDistance);
+        Map.Entry<Double, Double> upper = DISTANCE_SCORE_TABLE.ceilingEntry(normalizedDistance);
 
-        if (distance <= D1) {
-            // 0 ~ 1km: 1000 → 950
-            score = lerp(distance, D0, D1, S0, S1);
-        } else if (distance <= D2) {
-            // 1 ~ 5km: 950 → 900
-            score = lerp(distance, D1, D2, S1, S2);
-        } else if (distance <= D3) {
-            // 5 ~ 10km: 900 → 800
-            score = lerp(distance, D2, D3, S2, S3);
-        } else if (distance <= D4) {
-            // 10 ~ 30km: 800 → 700
-            score = lerp(distance, D3, D4, S3, S4);
-        } else if (distance <= D5) {
-            // 30 ~ 50km: 700 → 600
-            score = lerp(distance, D4, D5, S4, S5);
-        } else if (distance <= D6) {
-            // 50 ~ 100km: 600 → 400
-            score = lerp(distance, D5, D6, S5, S6);
-        } else if (distance <= D7) {
-            // 100 ~ 200km: 400 → 200
-            score = lerp(distance, D6, D7, S6, S7);
-        } else {
-            // 200 ~ 400km: 200 → 0
-            score = lerp(distance, D7, D_MAX, S7, S8);
+        if (lower == null) {
+            return MAX_SCORE;
+        }
+        if (upper == null) {
+            return ZERO_SCORE;
+        }
+        if (lower.getKey().equals(upper.getKey())) {
+            return normalizeScore(lower.getValue());
         }
 
-        // 소수 둘째 자리까지
-        BigDecimal rounded = BigDecimal
-                .valueOf(score)
-                .setScale(2, RoundingMode.HALF_UP);
-        if (rounded.compareTo(ZERO_SCORE_BD) < 0) {
-            rounded = ZERO_SCORE_BD;
-        } else if (rounded.compareTo(MAX_SCORE_BD) > 0) {
-            rounded = MAX_SCORE_BD;
+        double interpolated = lerp(
+                normalizedDistance,
+                lower.getKey(),
+                upper.getKey(),
+                lower.getValue(),
+                upper.getValue()
+        );
+        return normalizeScore(interpolated);
+    }
+
+    public static double calculateTimeMultiplier(long elapsedMs, long limitMs, long graceMs) {
+        if (limitMs <= 0) {
+            return MIN_TIME_MULTIPLIER;
         }
 
-        return rounded.doubleValue();
+        long normalizedElapsed = Math.max(0L, Math.min(elapsedMs, limitMs));
+        long normalizedGrace = Math.max(0L, Math.min(graceMs, limitMs));
+
+        if (normalizedElapsed <= normalizedGrace) {
+            return MAX_TIME_MULTIPLIER;
+        }
+
+        long decayWindow = limitMs - normalizedGrace;
+        if (decayWindow <= 0) {
+            return MIN_TIME_MULTIPLIER;
+        }
+
+        double ratio = (double) (limitMs - normalizedElapsed) / decayWindow;
+        double multiplier = MIN_TIME_MULTIPLIER + (MAX_TIME_MULTIPLIER - MIN_TIME_MULTIPLIER) * ratio;
+        return clamp(multiplier, MIN_TIME_MULTIPLIER, MAX_TIME_MULTIPLIER);
+    }
+
+    public static double calculateFinalScore(double distance, long elapsedMs, long limitMs, long graceMs) {
+        double baseScore = calculateBaseScore(distance);
+        if (baseScore <= ZERO_SCORE) {
+            return ZERO_SCORE;
+        }
+        double multiplier = calculateTimeMultiplier(elapsedMs, limitMs, graceMs);
+        return normalizeNonNegative(baseScore * multiplier);
+    }
+
+    public static double calculateFinalMultiScore(double distance, long elapsedMs, long limitMs, long graceMs) {
+        return normalizeNonNegative(calculateFinalScore(distance, elapsedMs, limitMs, graceMs) * MULTI_GAME_SCALE);
     }
 
     /**
      * 멀티 게임 점수 환산 (싱글 대비 8%)
      */
+    @Deprecated
     public static double calculateMultiGameScore(double distance) {
-        BigDecimal score = BigDecimal
-                .valueOf(calculateScore(distance))
-                .multiply(BigDecimal.valueOf(MULTI_GAME_SCALE))
-                .setScale(2, RoundingMode.HALF_UP);
+        return calculateFinalMultiScore(distance, 0L, 1L, 0L);
+    }
 
-        return score.doubleValue();
+    /**
+     * 거리 기반 점수 계산 (구간별 선형 보간)
+     */
+    @Deprecated
+    public static double calculateScore(double distance) {
+        return calculateBaseScore(distance);
     }
 
     /**
@@ -108,6 +126,37 @@ public class ScoreCalculator {
         }
         double t = (x - x1) / (x2 - x1);
         return y1 + t * (y2 - y1);
+    }
+
+    private static double normalizeScore(double value) {
+        BigDecimal rounded = BigDecimal
+                .valueOf(value)
+                .setScale(2, RoundingMode.HALF_UP);
+
+        if (rounded.compareTo(ZERO_SCORE_BD) < 0) {
+            return ZERO_SCORE;
+        }
+        if (rounded.compareTo(MAX_SCORE_BD) > 0) {
+            return MAX_SCORE_BD.doubleValue();
+        }
+
+        return rounded.doubleValue();
+    }
+
+    private static double normalizeNonNegative(double value) {
+        BigDecimal rounded = BigDecimal
+                .valueOf(value)
+                .setScale(2, RoundingMode.HALF_UP);
+
+        if (rounded.compareTo(ZERO_SCORE_BD) < 0) {
+            return ZERO_SCORE;
+        }
+
+        return rounded.doubleValue();
+    }
+
+    private static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(value, max));
     }
 
 }
