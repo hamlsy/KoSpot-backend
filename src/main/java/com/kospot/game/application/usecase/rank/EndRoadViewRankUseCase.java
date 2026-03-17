@@ -36,7 +36,7 @@ public class EndRoadViewRankUseCase {
         RoadViewGame game = roadViewGameAdaptor.queryByIdFetchCoordinate(request.getGameId());
         roadViewGameService.finishGame(member, game, request);
 
-        int previousRatingScore = gameRank.getRatingScore();
+        int previousRatingScore = gameRank.getRatingScore()+100; // penalty
 
         // calculate rating point
         gameRankService.updateRatingScoreAfterGameEnd(gameRank, game);
