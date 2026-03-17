@@ -1,9 +1,10 @@
 package com.kospot.multi.round.application.usecase.roadview;
 
 import com.kospot.multi.common.flow.MultiGameFlowScheduler;
+import com.kospot.common.exception.object.domain.GameRoundHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import com.kospot.multi.game.application.service.CancelMultiGameService;
 import com.kospot.multi.game.domain.entity.MultiRoadViewGame;
-import com.kospot.multi.game.infrastructure.redis.service.MultiGameRedisService;
 import com.kospot.multi.room.domain.vo.GameRoomStatus;
 import com.kospot.multi.round.application.service.roadview.RoundPreparationService;
 import com.kospot.multi.round.entity.RoadViewGameRound;
@@ -19,8 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
+import java.time.Instant;
 
 /**
  * 로드뷰 라운드 진행을 조율하는 UseCase
@@ -38,13 +41,18 @@ public class NextRoadViewRoundUseCase {
     private final RoundPreparationService roundPreparationService;
 
     // Infrastructure Services (직접 사용)
-    private final MultiGameRedisService multiGameRedisService;
     private final GameRoundNotificationService gameRoundNotificationService;
     private final LobbyRoomNotificationService lobbyRoomNotificationService;
     private final MultiGameFlowScheduler multiGameFlowScheduler;
     private final GameTimerService gameTimerService;
     private final PlatformTransactionManager transactionManager;
     private final CancelMultiGameService cancelMultiGameService;
+
+    @Value("${multi.roadview.reissue.max-count-per-round:5}")
+    private Integer maxReissueCountPerRound;
+
+    @Value("${multi.roadview.reissue.cooldown-ms:1000}")
+    private Long reissueCooldownMs;
 
     /**
      * 모든 플레이어 로딩이 끝난 직후 호출되어 1라운드를 준비한다.
@@ -65,7 +73,7 @@ public class NextRoadViewRoundUseCase {
         }
 
         String roomKey = roomId.toString();
-        long version = multiGameRedisService.incrementRoundVersion(roomKey, result.getRound().getId());
+        long version = result.getRound().getRoundVersion();
 
         MultiRoadViewGameResponse.StartPlayerGame preview =
                 MultiRoadViewGameResponse.StartPlayerGame.from(
@@ -95,7 +103,7 @@ public class NextRoadViewRoundUseCase {
                 roundPreparationService.prepareNextRound(gameId);
 
         String roomKey = roomId.toString();
-        long version = multiGameRedisService.incrementRoundVersion(roomKey, result.getRound().getId());
+        long version = result.getRound().getRoundVersion();
 
         MultiRoadViewGameResponse.NextRound preview =
                 MultiRoadViewGameResponse.NextRound.from(result.getGame(), result.getRound(), version);
@@ -108,27 +116,50 @@ public class NextRoadViewRoundUseCase {
     /**
      * 라운드 번호에 따라 적절한 재발행 로직을 선택
      */
-    public MultiRoadViewGameResponse.RoundProblem reissueRound(Long roomId, Long gameId, Long roundId) {
+    public MultiRoadViewGameResponse.RoundProblem reissueRound(Long roomId,
+                                                               Long gameId,
+                                                               Long roundId,
+                                                               Long expectedRoundVersion) {
+        if (expectedRoundVersion == null) {
+            throw new GameRoundHandler(ErrorStatus._BAD_REQUEST);
+        }
+
         String roomKey = roomId.toString();
-        long observedVersion = multiGameRedisService.getRoundVersion(roomKey, roundId);
+        Instant now = Instant.now();
+        Instant cooldownThreshold = now.minusMillis(reissueCooldownMs);
+
+        int casUpdated = roundPreparationService.tryAdvanceReissueVersion(
+                roundId,
+                gameId,
+                expectedRoundVersion,
+                maxReissueCountPerRound,
+                cooldownThreshold,
+                now
+        );
+
+        if (casUpdated == 0) {
+            RoadViewGameRound latestRound = roundPreparationService.getRoundForReissue(roundId, gameId, roomId);
+            long latestVersion = latestRound.getRoundVersion();
+            log.info("Skip duplicate or blocked reissue request - RoomId: {}, RoundId: {}, ExpectedVersion: {}, CurrentVersion: {}",
+                    roomKey, roundId, expectedRoundVersion, latestVersion);
+            return MultiRoadViewGameResponse.RoundProblem.from(
+                    latestRound.getMultiRoadViewGame(), latestRound, latestVersion, false);
+        }
 
         RoadViewGameRound lockedRound = roundPreparationService.getRoundForReissueWithLock(roundId, gameId);
-        long currentVersion = multiGameRedisService.getRoundVersion(roomKey, roundId);
+        roundPreparationService.validateOwnership(lockedRound, gameId, roomId);
 
-        if (currentVersion != observedVersion) {
-            log.info("Skip duplicate reissue request - RoomId: {}, RoundId: {}, ObservedVersion: {}, CurrentVersion: {}",
-                    roomKey, roundId, observedVersion, currentVersion);
-            return MultiRoadViewGameResponse.RoundProblem.from(
-                    lockedRound.getMultiRoadViewGame(), lockedRound, currentVersion);
+        if (lockedRound.getServerStartTime() != null || lockedRound.getIsFinished()) {
+            throw new GameRoundHandler(ErrorStatus._BAD_REQUEST);
         }
 
         RoundPreparationService.ReissueResult result =
                 roundPreparationService.reissueRound(lockedRound, gameId);
 
-        long version = multiGameRedisService.incrementRoundVersion(roomKey, roundId);
+        long version = result.getRound().getRoundVersion();
         MultiRoadViewGameResponse.RoundProblem problem =
                 MultiRoadViewGameResponse.RoundProblem.from(
-                        result.getGame(), result.getRound(), version);
+                        result.getGame(), result.getRound(), version, true);
 
         gameRoundNotificationService.broadcastRoundStart(roomKey, problem);
         log.info("Reissued round problem - RoomId: {}, RoundId: {}, Version: {}", roomKey, roundId, version);

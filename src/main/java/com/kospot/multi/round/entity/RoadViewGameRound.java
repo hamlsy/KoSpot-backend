@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.time.Instant;
 
 /**
  * 로드뷰 게임 라운드 엔티티
@@ -36,6 +37,17 @@ public class RoadViewGameRound extends BaseGameRound {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coordinate_id")
     private Coordinate targetCoordinate;
+
+    @Column(name = "round_version", nullable = false)
+    @Builder.Default
+    private Long roundVersion = 1L;
+
+    @Column(name = "reissue_count", nullable = false)
+    @Builder.Default
+    private Integer reissueCount = 0;
+
+    @Column(name = "last_reissue_at")
+    private Instant lastReissueAt;
 
     @Override
     public Long getId() {
@@ -68,6 +80,8 @@ public class RoadViewGameRound extends BaseGameRound {
                 .timeLimit(timeLimit)
                 .playerIds(playerIds) //redis
                 .isFinished(false)
+                .roundVersion(1L)
+                .reissueCount(0)
                 .build();
     }
 
@@ -78,5 +92,11 @@ public class RoadViewGameRound extends BaseGameRound {
 
     public void reassignPlayerIds(List<Long> playerIds) {
         replacePlayerIds(playerIds);
+    }
+
+    public void markReissue(Instant now) {
+        this.roundVersion = this.roundVersion + 1;
+        this.reissueCount = this.reissueCount + 1;
+        this.lastReissueAt = now;
     }
 } 

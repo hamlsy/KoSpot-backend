@@ -4,6 +4,7 @@ import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.application.service.DailyMvpReconcileService;
 import com.kospot.mvp.domain.entity.DailyMvp;
 import com.kospot.mvp.domain.vo.MvpCandidateSnapshot;
+import com.kospot.game.application.adaptor.RoadViewGameAdaptor;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.mvp.infrastructure.redis.service.DailyMvpCandidateCacheService;
@@ -30,6 +31,7 @@ public class GetDailyMvpUseCase {
     private final DailyMvpCandidateCacheService dailyMvpCandidateCacheService;
     private final DailyMvpReconcileService dailyMvpReconcileService;
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
+    private final RoadViewGameAdaptor roadViewGameAdaptor;
 
     public DailyMvpResponse.Daily execute(LocalDate date) {
         return dailyMvpCacheService.get(date)
@@ -75,7 +77,8 @@ public class GetDailyMvpUseCase {
             }
 
             MemberProfileRedisAdaptor.MemberProfileView profileView = memberProfileRedisAdaptor.findProfile(dailyMvp.getMemberId());
-            DailyMvpResponse.Daily response = DailyMvpResponse.Daily.from(dailyMvp, profileView);
+            double answerTime = roadViewGameAdaptor.queryById(dailyMvp.getRoadViewGameId()).getAnswerTime();
+            DailyMvpResponse.Daily response = DailyMvpResponse.Daily.from(dailyMvp, profileView, answerTime);
             dailyMvpCacheService.cache(date, response);
             return response;
         } finally {
@@ -90,7 +93,8 @@ public class GetDailyMvpUseCase {
 
     private DailyMvpResponse.Daily toCandidateResponse(LocalDate date, MvpCandidateSnapshot snapshot) {
         MemberProfileRedisAdaptor.MemberProfileView profileView = memberProfileRedisAdaptor.findProfile(snapshot.memberId());
-        return DailyMvpResponse.Daily.from(date, snapshot, profileView);
+        double answerTime = roadViewGameAdaptor.queryById(snapshot.roadViewGameId()).getAnswerTime();
+        return DailyMvpResponse.Daily.from(date, snapshot, profileView, answerTime);
     }
 
     private void triggerTodayReconcile(LocalDate date) {

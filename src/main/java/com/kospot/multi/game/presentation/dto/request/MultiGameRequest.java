@@ -1,5 +1,6 @@
 package com.kospot.multi.game.presentation.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 public class MultiGameRequest {
@@ -15,6 +16,19 @@ public class MultiGameRequest {
         private String playerMatchTypeKey;
         private Integer timeLimit;
 
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class Reissue {
+
+        @NotNull
+        private Long expectedRoundVersion;
+
+        private String reason;
     }
 
 }

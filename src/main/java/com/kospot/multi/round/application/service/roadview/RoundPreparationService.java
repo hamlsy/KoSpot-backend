@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -92,10 +93,39 @@ public class RoundPreparationService {
         return round;
     }
 
+    public RoadViewGameRound getRoundForReissue(Long roundId, Long gameId, Long roomId) {
+        RoadViewGameRound round = roadViewGameRoundAdaptor.queryByIdFetchCoordinateAndGame(roundId);
+        validateOwnership(round, gameId, roomId);
+        return round;
+    }
+
+    public int tryAdvanceReissueVersion(Long roundId,
+                                        Long gameId,
+                                        Long expectedVersion,
+                                        Integer maxReissueCount,
+                                        Instant cooldownThreshold,
+                                        Instant now) {
+        return roadViewGameRoundAdaptor.tryAdvanceReissueVersion(
+                roundId,
+                gameId,
+                expectedVersion,
+                maxReissueCount,
+                cooldownThreshold,
+                now
+        );
+    }
+
     public ReissueResult reissueRound(RoadViewGameRound round, Long gameId) {
         MultiRoadViewGame game = validateGameMatch(round, gameId);
         roadViewGameRoundService.reissueRound(round, round.getPlayerIds());
         return new ReissueResult(game, round);
+    }
+
+    public void validateOwnership(RoadViewGameRound round, Long gameId, Long roomId) {
+        MultiRoadViewGame game = validateGameMatch(round, gameId);
+        if (!game.getGameRoomId().equals(roomId)) {
+            throw new GameRoundHandler(ErrorStatus.GAME_ROUND_NOT_FOUND);
+        }
     }
 
     private MultiRoadViewGame validateGameMatch(RoadViewGameRound round, Long gameId) {

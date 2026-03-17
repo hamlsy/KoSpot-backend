@@ -24,6 +24,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class RoadViewSubmission extends BaseTimeEntity {
 
+    private static final long MIN_LIMIT_MS = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -88,6 +90,30 @@ public class RoadViewSubmission extends BaseTimeEntity {
     public void assignDistanceAndTeamScore(Coordinate coordinate) {
         this.distance = DistanceCalculator.calculateHaversineDistance(lat, lng, coordinate);
         this.earnedScore = ScoreCalculator.calculateMultiGameScore(distance);
+    }
+
+    public void assignDistanceAndPlayerScore(Coordinate coordinate, long limitMs) {
+        this.distance = DistanceCalculator.calculateHaversineDistance(lat, lng, coordinate);
+        long elapsedMs = normalizeElapsedMs();
+        long normalizedLimitMs = Math.max(limitMs, MIN_LIMIT_MS);
+        this.earnedScore = ScoreCalculator.calculateFinalMultiScore(
+                distance,
+                elapsedMs,
+                normalizedLimitMs,
+                ScoreCalculator.DEFAULT_GRACE_PERIOD_MS
+        );
+    }
+
+    public void assignDistanceAndTeamScore(Coordinate coordinate, long limitMs) {
+        this.distance = DistanceCalculator.calculateHaversineDistance(lat, lng, coordinate);
+        long elapsedMs = normalizeElapsedMs();
+        long normalizedLimitMs = Math.max(limitMs, MIN_LIMIT_MS);
+        this.earnedScore = ScoreCalculator.calculateFinalMultiScore(
+                distance,
+                elapsedMs,
+                normalizedLimitMs,
+                ScoreCalculator.DEFAULT_GRACE_PERIOD_MS
+        );
     }
 
     public boolean isSoloMode() {
@@ -217,6 +243,13 @@ public class RoadViewSubmission extends BaseTimeEntity {
         if (teamNumber < 1 || teamNumber > 4) {
             throw new IllegalArgumentException("Team number must be between 1 and 4");
         }
+    }
+
+    private long normalizeElapsedMs() {
+        if (timeToAnswer == null) {
+            return 0L;
+        }
+        return Math.max(0L, Math.round(timeToAnswer));
     }
 }
 

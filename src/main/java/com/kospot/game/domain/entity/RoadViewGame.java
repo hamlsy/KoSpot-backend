@@ -15,6 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Getter
 @Entity
 @SuperBuilder
@@ -28,6 +31,8 @@ import lombok.experimental.SuperBuilder;
         }
 )
 public class RoadViewGame extends Game {
+
+    private static final long SINGLE_RANK_LIMIT_MS = 180_000L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,14 +67,42 @@ public class RoadViewGame extends Game {
     public void end(Member member, double submittedLat, double submittedLng, double answerTime, double answerDistance) {
         super.end(member, submittedLat, submittedLng, answerTime);
         this.answerDistance = answerDistance;
-        this.score = getScore(answerDistance);
+        this.score = calculateGameScore(answerDistance, answerTime);
     }
 
-    private double getScore(double distance) {
-        return ScoreCalculator.calculateScore(distance);
+    private double calculateGameScore(double distance, double answerTime) {
+        if (GameType.RANK.equals(getGameType())) {
+            long elapsedMs = normalizeRankElapsedMs(answerTime);
+            return ScoreCalculator.calculateFinalScore(
+                    distance,
+                    elapsedMs,
+                    SINGLE_RANK_LIMIT_MS,
+                    ScoreCalculator.DEFAULT_GRACE_PERIOD_MS
+            );
+        }
+        return ScoreCalculator.calculateBaseScore(distance);
     }
 
     private int getChangeRatingScore(int currentRatingScore) {
         return RatingScoreCalculator.calculateRatingChange(this.score, currentRatingScore);
+    }
+
+    private long normalizeRankElapsedMs(double answerTime) {
+        long raw = Math.round(answerTime);
+        return Math.max(0L, Math.min(raw, SINGLE_RANK_LIMIT_MS));
+    }
+
+    public double getBaseScore() {
+        return ScoreCalculator.calculateBaseScore(this.answerDistance);
+    }
+
+    public int getBonusScore() {
+        double bonus = this.score - getBaseScore();
+        if (bonus <= 0.0) {
+            return 0;
+        }
+        return BigDecimal.valueOf(bonus)
+                .setScale(0, RoundingMode.HALF_UP)
+                .intValue();
     }
 }

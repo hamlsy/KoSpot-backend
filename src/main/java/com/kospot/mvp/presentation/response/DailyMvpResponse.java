@@ -30,9 +30,14 @@ public class DailyMvpResponse {
         private RankLevel rankLevel;
         private int ratingScore;
         private double gameScore;
+        private double answerTime;
         private String poiName;
 
-        public static Daily from(DailyMvp dailyMvp, MemberProfileRedisAdaptor.MemberProfileView profileView) {
+        public static Daily from(
+                DailyMvp dailyMvp,
+                MemberProfileRedisAdaptor.MemberProfileView profileView,
+                double answerTime
+        ) {
             return Daily.builder()
                     .mvpDate(dailyMvp.getMvpDate())
                     .memberId(dailyMvp.getMemberId())
@@ -42,11 +47,17 @@ public class DailyMvpResponse {
                     .rankLevel(dailyMvp.getRankLevel())
                     .ratingScore(dailyMvp.getRatingScore())
                     .gameScore(dailyMvp.getGameScore())
+                    .answerTime(answerTime)
                     .poiName(dailyMvp.getPoiName())
                     .build();
         }
 
-        public static Daily from(LocalDate date, MvpCandidateSnapshot snapshot, MemberProfileRedisAdaptor.MemberProfileView profileView) {
+        public static Daily from(
+                LocalDate date,
+                MvpCandidateSnapshot snapshot,
+                MemberProfileRedisAdaptor.MemberProfileView profileView,
+                double answerTime
+        ) {
             return Daily.builder()
                     .mvpDate(date)
                     .memberId(snapshot.memberId())
@@ -56,6 +67,7 @@ public class DailyMvpResponse {
                     .rankLevel(snapshot.rankLevel())
                     .ratingScore(snapshot.ratingScore())
                     .gameScore(snapshot.score())
+                    .answerTime(answerTime)
                     .poiName(snapshot.poiName())
                     .build();
         }
