@@ -29,22 +29,25 @@ public class GetRankingUseCase {
 
     public GameRankResponse.Ranking execute(
             Long memberId, String gameMode, String rankTier, int page) {
-        Member member = memberAdaptor.queryById(memberId);
-
         GameMode mode = GameMode.fromKey(gameMode);
         RankTier tier = RankTier.fromKey(rankTier);
         Pageable pageable = Pageable.ofSize(DEFAULT_SIZE).withPage(page);
-        GameRank myRank = gameRankAdaptor.queryByMemberAndGameMode(member, mode);
+
         Page<GameRank> gameRanks = gameRankAdaptor.queryPageByGameModeAndRankTierFetchMember(
                 mode,
                 tier,
                 pageable
         );
-
-        GameRankResponse.MyRankInfo myRankInfo = GameRankResponse.MyRankInfo.from(member, myRank);
         List<GameRankResponse.PlayerSummary> playerSummaries = gameRanks.map(
                 gr -> GameRankResponse.PlayerSummary.from(gr.getMember(), gr)
         ).getContent();
+
+        GameRankResponse.MyRankInfo myRankInfo = null;
+        if (memberId != null) {
+            Member member = memberAdaptor.queryById(memberId);
+            GameRank myRank = gameRankAdaptor.queryByMemberAndGameMode(member, mode);
+            myRankInfo = GameRankResponse.MyRankInfo.from(member, myRank);
+        }
 
         return GameRankResponse.Ranking.builder()
                 .myRank(myRankInfo)
