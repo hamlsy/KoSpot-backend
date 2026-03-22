@@ -77,7 +77,7 @@ public class RoadViewGameServiceTest {
                 .build();
 
         // when
-        EndGameResponse.RoadViewPractice response = endRoadViewPracticeUseCase.execute(member, request);
+        EndGameResponse.RoadViewPractice response = endRoadViewPracticeUseCase.execute(member.getId(), request, null);
 
         // then
         int expectedPoint = PointCalculator.getPracticePoint(game.getScore());
