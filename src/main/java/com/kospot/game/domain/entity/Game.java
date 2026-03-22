@@ -81,6 +81,15 @@ public abstract class Game extends BaseTimeEntity {
         this.endedAt = LocalDateTime.now();
     }
 
+    public void endAnonymous(double submittedLat, double submittedLng, double answerTime) {
+        validateGameStatus();
+        this.gameStatus = GameStatus.COMPLETED;
+        this.submittedLat = submittedLat;
+        this.submittedLng = submittedLng;
+        this.answerTime = answerTime;
+        this.endedAt = LocalDateTime.now();
+    }
+
 
     //validation
     private void validateGameStatus() {
