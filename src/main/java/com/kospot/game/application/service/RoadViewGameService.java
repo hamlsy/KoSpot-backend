@@ -52,6 +52,26 @@ public class RoadViewGameService {
     }
 
 
+    public RoadViewGame startAnonymousPracticeGame(String sidoKey) {
+        Sido sido = Sido.fromKey(sidoKey);
+        Coordinate coordinate = coordinateAdaptor.getRandomCoordinateBySido(sido);
+        RoadViewGame game = RoadViewGame.create(coordinate, null, GameType.PRACTICE, sido);
+        repository.save(game);
+        return game;
+    }
+
+    public RoadViewGame finishGameAnonymous(RoadViewGame game, EndGameRequest.RoadView request) {
+        double distance = DistanceCalculator.calculateHaversineDistance(
+                request.getSubmittedLat(), request.getSubmittedLng(),
+                game.getCoordinate()
+        );
+        game.endAnonymous(
+                request.getSubmittedLat(), request.getSubmittedLng(),
+                request.getAnswerTime(), distance
+        );
+        return game;
+    }
+
     private void endGameUpdate(Member member, RoadViewGame game,
                                EndGameRequest.RoadView request) {
         double distance = DistanceCalculator.calculateHaversineDistance(
