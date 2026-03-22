@@ -29,6 +29,16 @@ public class EndGameResponse {
                     .poiName(coordinate.getPoiName())
                     .build();
         }
+
+        public static RoadViewPractice fromAnonymous(RoadViewGame game, Coordinate coordinate) {
+            return RoadViewPractice.builder()
+                    .nickname("게스트")
+                    .score(game.getScore())
+                    .answerDistance(game.getAnswerDistance())
+                    .fullAddress(coordinate.getAddress().getFullAddress())
+                    .poiName(coordinate.getPoiName())
+                    .build();
+        }
     }
 
     @Getter
