@@ -18,8 +18,14 @@ public class FindAllItemsByTypeUseCase {
     private final ItemAdaptor itemAdaptor;
 
     public List<ItemResponse> execute(Long memberId, String itemTypeKey) {
-        Member member = memberAdaptor.queryById(memberId);
         ItemType itemType = ItemType.fromKey(itemTypeKey);
+        if (memberId == null) {
+            return itemAdaptor.queryAvailableItemsByItemTypeFetchImage(itemType)
+                    .stream()
+                    .map(ItemResponse::from)
+                    .toList();
+        }
+        Member member = memberAdaptor.queryById(memberId);
         return itemAdaptor.queryAvailableItemsByWithOwnersByFetchImage(member, itemType);
     }
 
