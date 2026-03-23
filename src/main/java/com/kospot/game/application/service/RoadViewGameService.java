@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -65,9 +68,10 @@ public class RoadViewGameService {
                 request.getSubmittedLat(), request.getSubmittedLng(),
                 game.getCoordinate()
         );
+        double normalizedAnswerTime = getNormalizedAnswerTime(request.getAnswerTime());
         game.endAnonymous(
                 request.getSubmittedLat(), request.getSubmittedLng(),
-                request.getAnswerTime(), distance
+                normalizedAnswerTime, distance
         );
         return game;
     }
@@ -78,10 +82,17 @@ public class RoadViewGameService {
                 request.getSubmittedLat(), request.getSubmittedLng(),
                 game.getCoordinate()
         );
+        double normalizedAnswerTime = getNormalizedAnswerTime(request.getAnswerTime());
         game.end(
                 member, request.getSubmittedLat(), request.getSubmittedLng(),
-                request.getAnswerTime(), distance
+                normalizedAnswerTime, distance
         );
+    }
+
+    private double getNormalizedAnswerTime(double answerTime) {
+        return BigDecimal.valueOf(answerTime)
+                .setScale(3, RoundingMode.HALF_UP)
+                .doubleValue();
     }
 
 }

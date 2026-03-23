@@ -1,0 +1,482 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1774157286498,
+  "projectRoot": "C:\\kospot-backend",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Java/Kotlin",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "build.gradle"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "gradle",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "bin",
+      "docs",
+      "scripts",
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "bin": {
+      "path": "bin",
+      "purpose": "Executable scripts",
+      "fileCount": 0,
+      "lastAccessed": 1774157286437,
+      "keyFiles": []
+    },
+    "build": {
+      "path": "build",
+      "purpose": "Build output",
+      "fileCount": 0,
+      "lastAccessed": 1774157286438,
+      "keyFiles": []
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 11,
+      "lastAccessed": 1774157286439,
+      "keyFiles": [
+        "EARLY_ROUND_COMPLETION_IMPLEMENTATION.md",
+        "GAME_TIMER_DESIGN_IMPROVEMENTS.md",
+        "mvp-index-optimization-report.md",
+        "mvp-read-enhancement-plan.md",
+        "Redis-Data-Structure-Guide.md"
+      ]
+    },
+    "gradle": {
+      "path": "gradle",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774157286439,
+      "keyFiles": []
+    },
+    "k6-scripts": {
+      "path": "k6-scripts",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1774157286440,
+      "keyFiles": [
+        "timer-broadcast-test.js",
+        "timer-interval-test.js"
+      ]
+    },
+    "KoSpot-backend-private": {
+      "path": "KoSpot-backend-private",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1774157286440,
+      "keyFiles": [
+        "README.md"
+      ]
+    },
+    "nginx": {
+      "path": "nginx",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1774157286441,
+      "keyFiles": [
+        "kospot.conf",
+        "nginx.conf"
+      ]
+    },
+    "out": {
+      "path": "out",
+      "purpose": "Build output",
+      "fileCount": 0,
+      "lastAccessed": 1774157286441,
+      "keyFiles": []
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 5,
+      "lastAccessed": 1774157286442,
+      "keyFiles": [
+        "after_install.sh",
+        "before_install.sh",
+        "start.sh",
+        "stop.sh",
+        "validate.sh"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1774157286442,
+      "keyFiles": []
+    },
+    "bin\\test": {
+      "path": "bin\\test",
+      "purpose": "Test files",
+      "fileCount": 0,
+      "lastAccessed": 1774157286443,
+      "keyFiles": []
+    },
+    "docs\\api": {
+      "path": "docs\\api",
+      "purpose": "API routes",
+      "fileCount": 1,
+      "lastAccessed": 1774157286445,
+      "keyFiles": [
+        "README.md"
+      ]
+    },
+    "k6-scripts\\utils": {
+      "path": "k6-scripts\\utils",
+      "purpose": "Utility functions",
+      "fileCount": 1,
+      "lastAccessed": 1774157286446,
+      "keyFiles": [
+        "stomp-client.js"
+      ]
+    },
+    "out\\test": {
+      "path": "out\\test",
+      "purpose": "Test files",
+      "fileCount": 0,
+      "lastAccessed": 1774157286447,
+      "keyFiles": []
+    },
+    "src\\test": {
+      "path": "src\\test",
+      "purpose": "Test files",
+      "fileCount": 0,
+      "lastAccessed": 1774157286448,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "",
+      "accessCount": 12,
+      "lastAccessed": 1774168395684,
+      "type": "directory"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\presentation\\controller\\RoadViewGameController.java",
+      "accessCount": 8,
+      "lastAccessed": 1774159789454,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\application\\service\\RoadViewGameService.java",
+      "accessCount": 5,
+      "lastAccessed": 1774159844589,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\application\\usecase\\rank\\ReIssueRoadViewCoordinateUseCase.java",
+      "accessCount": 4,
+      "lastAccessed": 1774159660661,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\domain\\entity\\Game.java",
+      "accessCount": 4,
+      "lastAccessed": 1774159831477,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\domain\\entity\\RoadViewGame.java",
+      "accessCount": 4,
+      "lastAccessed": 1774159838426,
+      "type": "file"
+    },
+    {
+      "path": "docs\\pr\\Anonymous_Practice_Plan.md",
+      "accessCount": 3,
+      "lastAccessed": 1774158817297,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot",
+      "accessCount": 3,
+      "lastAccessed": 1774158956338,
+      "type": "directory"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\presentation\\dto\\response\\StartGameResponse.java",
+      "accessCount": 3,
+      "lastAccessed": 1774159583273,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\presentation\\dto\\response\\EndGameResponse.java",
+      "accessCount": 3,
+      "lastAccessed": 1774159593899,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\application\\usecase\\practice\\usecase\\StartRoadViewPracticeUseCase.java",
+      "accessCount": 3,
+      "lastAccessed": 1774159624299,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\application\\usecase\\practice\\usecase\\EndRoadViewPracticeUseCase.java",
+      "accessCount": 3,
+      "lastAccessed": 1774159643857,
+      "type": "file"
+    },
+    {
+      "path": "src\\test\\java\\com\\kospot\\game\\service\\RoadViewGameServiceTest.java",
+      "accessCount": 3,
+      "lastAccessed": 1774159818998,
+      "type": "file"
+    },
+    {
+      "path": "src\\test\\java\\com\\kospot\\game\\application\\usecase\\EndRoadViewPracticeUseCaseTest.java",
+      "accessCount": 3,
+      "lastAccessed": 1774159995947,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\item\\presentation\\controller\\ItemController.java",
+      "accessCount": 3,
+      "lastAccessed": 1774164474886,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\application\\usecase\\practice\\listner\\EndRoadViewPracticeEventListener.java",
+      "accessCount": 2,
+      "lastAccessed": 1774157369274,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\aop\\BotSuccessAspect.java",
+      "accessCount": 2,
+      "lastAccessed": 1774157939862,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\security\\resolver\\CustomAuthenticationPrincipalArgumentResolver.java",
+      "accessCount": 2,
+      "lastAccessed": 1774157940431,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\exception\\payload\\code\\ErrorStatus.java",
+      "accessCount": 2,
+      "lastAccessed": 1774158997028,
+      "type": "file"
+    },
+    {
+      "path": "src\\test\\java\\com\\kospot\\game\\service\\RoadViewGameListenerTest.java",
+      "accessCount": 2,
+      "lastAccessed": 1774159809268,
+      "type": "file"
+    },
+    {
+      "path": "src\\test\\java\\com\\kospot\\application\\multi\\room\\http\\usecase\\LeaveGameRoomUseCaseTest.java",
+      "accessCount": 2,
+      "lastAccessed": 1774159823529,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\infrastructure\\redis\\adaptor\\AnonymousPracticeTokenRedisAdaptor.java",
+      "accessCount": 2,
+      "lastAccessed": 1774159837530,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\infrastructure\\redis\\dao\\AnonymousPracticeTokenRedisRepository.java",
+      "accessCount": 2,
+      "lastAccessed": 1774159837691,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\application\\adaptor\\RoadViewGameAdaptor.java",
+      "accessCount": 2,
+      "lastAccessed": 1774159844934,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\presentation\\dto\\request\\EndGameRequest.java",
+      "accessCount": 2,
+      "lastAccessed": 1774159868913,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\member\\infrastructure\\redis\\adaptor\\MemberProfileRedisAdaptor.java",
+      "accessCount": 2,
+      "lastAccessed": 1774159869769,
+      "type": "file"
+    },
+    {
+      "path": "src\\test\\java\\com\\kospot\\game\\application\\usecase\\StartRoadViewPracticeUseCaseTest.java",
+      "accessCount": 2,
+      "lastAccessed": 1774159981256,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\item",
+      "accessCount": 2,
+      "lastAccessed": 1774164438366,
+      "type": "directory"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\item\\application\\usecase\\FindAllItemsByTypeUseCase.java",
+      "accessCount": 2,
+      "lastAccessed": 1774164483671,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\main\\presentation\\controller\\MainPageController.java",
+      "accessCount": 1,
+      "lastAccessed": 1774157322320,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\application\\usecase\\practice",
+      "accessCount": 1,
+      "lastAccessed": 1774157323328,
+      "type": "directory"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game",
+      "accessCount": 1,
+      "lastAccessed": 1774157327123,
+      "type": "directory"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\security\\aop\\CurrentMemberOrNull.java",
+      "accessCount": 1,
+      "lastAccessed": 1774157335154,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\exception\\payload\\code",
+      "accessCount": 1,
+      "lastAccessed": 1774157927547,
+      "type": "directory"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\security\\config\\SecurityConfig.java",
+      "accessCount": 1,
+      "lastAccessed": 1774157931313,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\multi\\room\\infrastructure\\redis\\adaptor\\GameRoomRedisAdaptor.java",
+      "accessCount": 1,
+      "lastAccessed": 1774157932058,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\member\\infrastructure\\redis\\dao\\MemberProfileRedisRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1774157938858,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\annotation\\adaptor\\Adaptor.java",
+      "accessCount": 1,
+      "lastAccessed": 1774157939186,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\multi\\room\\infrastructure\\redis\\dao\\GameRoomRedisRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1774158006335,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\multi\\room\\infrastructure\\redis\\constant\\GameRoomRedisKeyConstants.java",
+      "accessCount": 1,
+      "lastAccessed": 1774158007011,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\domain\\event\\RoadViewPracticeEvent.java",
+      "accessCount": 1,
+      "lastAccessed": 1774158516170,
+      "type": "file"
+    },
+    {
+      "path": "src\\test\\java\\com\\kospot\\game\\common\\utils\\ScoreCalculatorTest.java",
+      "accessCount": 1,
+      "lastAccessed": 1774158522635,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\member\\domain\\entity\\Member.java",
+      "accessCount": 1,
+      "lastAccessed": 1774158560088,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\statistic\\application\\service\\MemberStatisticService.java",
+      "accessCount": 1,
+      "lastAccessed": 1774158560336,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\redis\\common\\config\\RedisConfig.java",
+      "accessCount": 1,
+      "lastAccessed": 1774158960744,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\game\\infrastructure\\redis\\constant\\AnonymousPracticeRedisKeyConstants.java",
+      "accessCount": 1,
+      "lastAccessed": 1774159469483,
+      "type": "file"
+    },
+    {
+      "path": "src\\test\\java\\com\\kospot\\game\\domain\\GameAnonymousEndTest.java",
+      "accessCount": 1,
+      "lastAccessed": 1774159887127,
+      "type": "file"
+    },
+    {
+      "path": "src\\test\\java\\com\\kospot\\game\\infrastructure\\redis\\AnonymousPracticeTokenRedisAdaptorTest.java",
+      "accessCount": 1,
+      "lastAccessed": 1774159898785,
+      "type": "file"
+    },
+    {
+      "path": "src\\test\\java\\com\\kospot\\game\\application\\usecase\\ReIssueRoadViewCoordinateUseCaseTest.java",
+      "accessCount": 1,
+      "lastAccessed": 1774159936868,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\item\\application\\adaptor\\ItemAdaptor.java",
+      "accessCount": 1,
+      "lastAccessed": 1774164435252,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

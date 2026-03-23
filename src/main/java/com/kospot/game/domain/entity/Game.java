@@ -77,7 +77,7 @@ public abstract class Game extends BaseTimeEntity {
         this.gameStatus = GameStatus.COMPLETED;
         this.submittedLat = submittedLat;
         this.submittedLng = submittedLng;
-        this.answerTime = answerTime;
+        this.answerTime =  answerTime;
         this.endedAt = LocalDateTime.now();
     }
 
