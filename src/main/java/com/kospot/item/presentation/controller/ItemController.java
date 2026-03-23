@@ -2,6 +2,7 @@ package com.kospot.item.presentation.controller;
 
 import com.kospot.image.application.service.ImageService;
 import com.kospot.common.security.aop.CurrentMember;
+import com.kospot.common.security.aop.CurrentMemberOrNull;
 import com.kospot.item.application.usecase.*;
 import com.kospot.item.presentation.dto.request.ItemRequest;
 import com.kospot.item.presentation.dto.response.ItemResponse;
@@ -51,9 +52,9 @@ public class ItemController {
      * ----------------------------
      */
 
-    @Operation(summary = "아이템 타입 별 조회", description = "타입 별 아이템들을 조회합니다.")
+    @Operation(summary = "아이템 타입 별 조회", description = "타입 별 아이템들을 조회합니다. 비로그인 사용자는 구매/장착 여부가 모두 false로 반환됩니다.")
     @GetMapping("/{itemTypeKey}")
-    public ApiResponseDto<List<ItemResponse>> findItemsByItemType(@CurrentMember Long memberId, @PathVariable("itemTypeKey") String itemTypeKey) {
+    public ApiResponseDto<List<ItemResponse>> findItemsByItemType(@CurrentMemberOrNull Long memberId, @PathVariable("itemTypeKey") String itemTypeKey) {
         return ApiResponseDto.onSuccess(findAllItemsByTypeUseCase.execute(memberId, itemTypeKey));
     }
 

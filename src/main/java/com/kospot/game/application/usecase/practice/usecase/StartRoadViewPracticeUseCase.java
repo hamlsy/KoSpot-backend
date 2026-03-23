@@ -1,5 +1,6 @@
 package com.kospot.game.application.usecase.practice.usecase;
 
+import com.kospot.game.infrastructure.redis.adaptor.AnonymousPracticeTokenRedisAdaptor;
 import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.game.presentation.dto.response.StartGameResponse;
 import com.kospot.game.domain.entity.RoadViewGame;
@@ -20,25 +21,38 @@ public class StartRoadViewPracticeUseCase {
     private final RoadViewGameService roadViewGameService;
     private final AESService aesService;
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
+    private final AnonymousPracticeTokenRedisAdaptor anonymousPracticeTokenRedisAdaptor;
 
     public StartGameResponse.RoadView execute(Long memberId, String sidoKey) {
-        Member member = memberAdaptor.queryById(memberId);
-        RoadViewGame game = roadViewGameService.startPracticeGame(member, sidoKey);
-        MemberProfileRedisAdaptor.MemberProfileView cachedProfile = memberProfileRedisAdaptor.findProfile(member.getId());
-        String markerImageUrl = cachedProfile.markerImageUrl();
-        return getEncryptedRoadViewGameResponse(member, game, markerImageUrl);
+        if (memberId != null) {
+            return startAsLoggedIn(memberId, sidoKey);
+        }
+        return startAsAnonymous(sidoKey);
     }
 
-    //encrypt -> response
-    private StartGameResponse.RoadView getEncryptedRoadViewGameResponse(Member member, RoadViewGame game, String markerImageUrl) {
+    private StartGameResponse.RoadView startAsLoggedIn(Long memberId, String sidoKey) {
+        Member member = memberAdaptor.queryById(memberId);
+        RoadViewGame game = roadViewGameService.startPracticeGame(member, sidoKey);
+        String markerImageUrl = memberProfileRedisAdaptor.findProfile(memberId).markerImageUrl();
+        return buildResponse(game, markerImageUrl, null);
+    }
+
+    private StartGameResponse.RoadView startAsAnonymous(String sidoKey) {
+        RoadViewGame game = roadViewGameService.startAnonymousPracticeGame(sidoKey);
+        String practiceToken = anonymousPracticeTokenRedisAdaptor.generateAndStore(game.getId());
+        return buildResponse(game, null, practiceToken);
+    }
+
+    private StartGameResponse.RoadView buildResponse(RoadViewGame game,
+                                                      String markerImageUrl,
+                                                      String practiceToken) {
         return StartGameResponse.RoadView.builder()
-                .poiName(game.getCoordinate().getPoiName())
                 .gameId(game.getId())
+                .poiName(game.getCoordinate().getPoiName())
                 .targetLat(aesService.toEncryptString(game.getCoordinate().getLat()))
                 .targetLng(aesService.toEncryptString(game.getCoordinate().getLng()))
                 .markerImageUrl(markerImageUrl)
+                .practiceToken(practiceToken)
                 .build();
     }
-
-
 }

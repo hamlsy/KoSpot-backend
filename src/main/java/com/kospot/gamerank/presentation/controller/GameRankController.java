@@ -3,6 +3,7 @@ package com.kospot.gamerank.presentation.controller;
 import com.kospot.gamerank.application.usecase.GetRankingUseCase;
 import com.kospot.common.exception.payload.dto.ApiResponseDto;
 import com.kospot.common.security.aop.CurrentMember;
+import com.kospot.common.security.aop.CurrentMemberOrNull;
 import com.kospot.gamerank.presentation.response.GameRankResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +28,7 @@ public class GameRankController {
     @Operation(summary = "게임 랭킹 조회", description = "특정 게임 모드와 랭크 티어에 해당하는 플레이어들의 랭킹 정보를 페이지 단위로 조회합니다.")
     @GetMapping
     public ApiResponseDto<GameRankResponse.Ranking> getRanking(
-            @CurrentMember Long memberId,
+            @CurrentMemberOrNull Long memberId,
             @RequestParam("gameMode") String gameMode,
             @RequestParam("rankTier") String rankTier,
             @RequestParam("page") int page) {

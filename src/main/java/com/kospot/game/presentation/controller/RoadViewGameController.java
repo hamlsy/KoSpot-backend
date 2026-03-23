@@ -9,6 +9,7 @@ import com.kospot.game.application.usecase.practice.usecase.StartRoadViewPractic
 
 import com.kospot.common.annotation.adsense.BotSuccess;
 import com.kospot.common.security.aop.CurrentMember;
+import com.kospot.common.security.aop.CurrentMemberOrNull;
 import com.kospot.game.application.usecase.rank.StartRoadViewRankUseCase;
 import com.kospot.game.presentation.dto.request.EndGameRequest;
 import com.kospot.game.presentation.dto.response.EndGameResponse;
@@ -62,17 +63,22 @@ public class RoadViewGameController {
      * -----------------PRACTICE------------------
      */
 
-    @Operation(summary = "로드뷰 연습 게임 시작", description = "로드뷰 연습 게임을 시작합니다.")
+    @Operation(summary = "로드뷰 연습 게임 시작",
+               description = "로드뷰 연습 게임을 시작합니다. 비로그인 사용자는 응답의 practiceToken을 저장하여 end/reissue 요청에 사용해야 합니다.")
     @BotSuccess
     @PostMapping("/practice/start")
-    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@CurrentMember Long memberId, @RequestParam("sido") String sidoKey) {
+    public ApiResponseDto<StartGameResponse.RoadView> startPracticeGame(@CurrentMemberOrNull Long memberId, @RequestParam("sido") String sidoKey) {
         return ApiResponseDto.onSuccess(startRoadViewPracticeUseCase.execute(memberId, sidoKey));
     }
 
-    @Operation(summary = "로드뷰 연습 게임 종료", description = "로드뷰 연습 게임을 종료합니다.")
+    @Operation(summary = "로드뷰 연습 게임 종료",
+               description = "로드뷰 연습 게임을 종료합니다. 비로그인 사용자는 X-Practice-Token 헤더에 시작 시 발급된 토큰을 포함해야 합니다.")
     @PostMapping("/practice/end")
-    public ApiResponseDto<EndGameResponse.RoadViewPractice> endPracticeGame(@CurrentMember Long memberId, @RequestBody EndGameRequest.RoadView request) {
-        return ApiResponseDto.onSuccess(endRoadViewPracticeUseCase.execute(memberId, request));
+    public ApiResponseDto<EndGameResponse.RoadViewPractice> endPracticeGame(
+            @CurrentMemberOrNull Long memberId,
+            @RequestHeader(value = "X-Practice-Token", required = false) String practiceToken,
+            @RequestBody EndGameRequest.RoadView request) {
+        return ApiResponseDto.onSuccess(endRoadViewPracticeUseCase.execute(memberId, request, practiceToken));
     }
 
     /**
@@ -99,10 +105,13 @@ public class RoadViewGameController {
      *  ------------------------------------------
      */
 
-    @Operation(summary = "로드뷰 좌표 재발급", description = "로드뷰 연습 게임에서 좌표를 재발급합니다.")
+    @Operation(summary = "로드뷰 좌표 재발급", description = "로드뷰 연습 게임에서 좌표를 재발급합니다. 비로그인 사용자는 X-Practice-Token 헤더에 시작 시 발급된 토큰을 포함해야 합니다.")
     @PostMapping("/{gameId}/reissue-coordinate")
-    public ApiResponseDto<StartGameResponse.ReIssue> reissuePracticeCoordinate(@CurrentMember Long memberId, @PathVariable("gameId") Long gameId) {
-        return ApiResponseDto.onSuccess(reIssueRoadViewCoordinateUseCase.execute(memberId, gameId));
+    public ApiResponseDto<StartGameResponse.ReIssue> reissuePracticeCoordinate(
+            @CurrentMemberOrNull Long memberId,
+            @RequestHeader(value = "X-Practice-Token", required = false) String practiceToken,
+            @PathVariable("gameId") Long gameId) {
+        return ApiResponseDto.onSuccess(reIssueRoadViewCoordinateUseCase.execute(memberId, gameId, practiceToken));
     }
 
 

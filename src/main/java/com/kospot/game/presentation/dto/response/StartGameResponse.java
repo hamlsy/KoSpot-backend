@@ -14,6 +14,7 @@ public class StartGameResponse {
         private String targetLat;
         private String targetLng;
         private String markerImageUrl;
+        private String practiceToken;
     }
 
     @Getter

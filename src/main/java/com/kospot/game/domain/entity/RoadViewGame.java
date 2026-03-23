@@ -70,6 +70,12 @@ public class RoadViewGame extends Game {
         this.score = calculateGameScore(answerDistance, answerTime);
     }
 
+    public void endAnonymous(double submittedLat, double submittedLng, double answerTime, double answerDistance) {
+        super.endAnonymous(submittedLat, submittedLng, answerTime);
+        this.answerDistance = answerDistance;
+        this.score = calculateGameScore(answerDistance, answerTime);
+    }
+
     private double calculateGameScore(double distance, double answerTime) {
         if (GameType.RANK.equals(getGameType())) {
             long elapsedMs = normalizeRankElapsedMs(answerTime);

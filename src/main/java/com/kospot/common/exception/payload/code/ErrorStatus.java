@@ -50,6 +50,8 @@ public enum ErrorStatus implements BaseCode {
     GAME_TYPE_NOT_FOUND(NOT_FOUND, 4214, "존재하지 않는 게임입니다."),
     GAME_MODE_NOT_FOUND(NOT_FOUND, 4215, "존재하지 않는 게임 모드입니다."),
     GAME_NOT_SAME_MEMBER(BAD_REQUEST, 4216, "동일한 사용자가 아닙니다."),
+    ANONYMOUS_PRACTICE_TOKEN_REQUIRED(UNAUTHORIZED, 4217, "익명 연습 게임 토큰이 필요합니다."),
+    ANONYMOUS_PRACTICE_TOKEN_INVALID(FORBIDDEN, 4218, "익명 연습 게임 토큰이 유효하지 않습니다."),
 
     // Point Error (4251 ~ 4260)
     POINT_INSUFFICIENT(BAD_REQUEST, 4251, "포인트가 부족합니다."),
