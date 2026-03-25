@@ -3,7 +3,11 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(find . -maxdepth 2 -type f \\\\\\(-name README* -o -name pom.xml -o -name build.gradle -o -name Makefile -o -name package.json -o -name .env* \\\\\\))",
+      "Bash(find /c/KoSpot-backend/src/test -type f -name *.java)",
+      "Bash(find /c/KoSpot-backend -name start.sh -o -name stop.sh -o -name *.sh)",
+      "Bash(grep -l \"@SpringBootTest\\\\|@DataJpaTest\\\\|@WebMvcTest\" /c/KoSpot-backend/src/test/java/com/kospot/**/*.java)"
     ]
   }
 }
