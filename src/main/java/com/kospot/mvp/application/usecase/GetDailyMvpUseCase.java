@@ -1,6 +1,7 @@
 package com.kospot.mvp.application.usecase;
 
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
+import com.kospot.mvp.application.adaptor.MvpCommentAdaptor;
 import com.kospot.mvp.application.service.DailyMvpReconcileService;
 import com.kospot.mvp.domain.entity.DailyMvp;
 import com.kospot.mvp.domain.vo.MvpCandidateSnapshot;
@@ -32,10 +33,16 @@ public class GetDailyMvpUseCase {
     private final DailyMvpReconcileService dailyMvpReconcileService;
     private final MemberProfileRedisAdaptor memberProfileRedisAdaptor;
     private final RoadViewGameAdaptor roadViewGameAdaptor;
+    private final MvpCommentAdaptor mvpCommentAdaptor;
 
     public DailyMvpResponse.Daily execute(LocalDate date) {
-        return dailyMvpCacheService.get(date)
+        DailyMvpResponse.Daily daily = dailyMvpCacheService.get(date)
                 .orElseGet(() -> loadAndCache(date));
+        if (daily == null) {
+            return null;
+        }
+        long commentCount = mvpCommentAdaptor.countByMvpDate(daily.getMvpDate());
+        return daily.withCommentCount(commentCount);
     }
 
     private DailyMvpResponse.Daily loadAndCache(LocalDate date) {

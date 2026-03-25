@@ -115,6 +115,11 @@ public enum ErrorStatus implements BaseCode {
     NOTIFICATION_NOT_FOUND(NOT_FOUND, 4391, "해당 알림을 찾을 수 없습니다."),
     NOTIFICATION_ACCESS_DENIED(FORBIDDEN, 4392, "해당 알림에 접근할 수 없습니다."),
 
+    // MVP Error (4401 ~ 4410)
+    DAILY_MVP_NOT_FOUND(NOT_FOUND, 4401, "해당 MVP를 찾을 수 없습니다."),
+    MVP_COMMENT_NOT_FOUND(NOT_FOUND, 4402, "해당 댓글을 찾을 수 없습니다."),
+    MVP_COMMENT_NO_PERMISSION(FORBIDDEN, 4403, "댓글 삭제 권한이 없습니다."),
+
 
     ;
 

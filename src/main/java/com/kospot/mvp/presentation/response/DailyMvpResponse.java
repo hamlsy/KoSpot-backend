@@ -32,6 +32,23 @@ public class DailyMvpResponse {
         private double gameScore;
         private double answerTime;
         private String poiName;
+        private long commentCount;
+
+        public Daily withCommentCount(long commentCount) {
+            return Daily.builder()
+                    .mvpDate(this.mvpDate)
+                    .memberId(this.memberId)
+                    .nickname(this.nickname)
+                    .equippedMarkerImageUrl(this.equippedMarkerImageUrl)
+                    .rankTier(this.rankTier)
+                    .rankLevel(this.rankLevel)
+                    .ratingScore(this.ratingScore)
+                    .gameScore(this.gameScore)
+                    .answerTime(this.answerTime)
+                    .poiName(this.poiName)
+                    .commentCount(commentCount)
+                    .build();
+        }
 
         public static Daily from(
                 DailyMvp dailyMvp,
