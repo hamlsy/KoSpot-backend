@@ -16,6 +16,7 @@ public class MvpCommentResponse {
     public static class CommentInfo {
         private Long commentId;
         private String nickname;
+        private Long memberId;
         private String markerImageUrl;
         private String content;
         private LocalDateTime createdDate;
@@ -24,6 +25,7 @@ public class MvpCommentResponse {
             return new CommentInfo(
                     comment.getId(),
                     profile.nickname(),
+                    profile.memberId(),
                     profile.markerImageUrl(),
                     comment.getContent(),
                     comment.getCreatedDate()
