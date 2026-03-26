@@ -3,11 +3,10 @@ package com.kospot.mvp.application.usecase;
 import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
-import com.kospot.mvp.application.adaptor.MvpCommentAdaptor;
 import com.kospot.mvp.application.service.MvpCommentService;
 import com.kospot.mvp.domain.entity.DailyMvp;
 import com.kospot.mvp.domain.entity.MvpComment;
-import com.kospot.mvp.presentation.response.MvpCommentResponse;
+import com.kospot.mvp.presentation.dto.response.MvpCommentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 

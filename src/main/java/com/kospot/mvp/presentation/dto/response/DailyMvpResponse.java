@@ -1,4 +1,4 @@
-package com.kospot.mvp.presentation.response;
+package com.kospot.mvp.presentation.dto.response;
 
 import com.kospot.gamerank.domain.vo.RankLevel;
 import com.kospot.gamerank.domain.vo.RankTier;
@@ -22,6 +22,7 @@ public class DailyMvpResponse {
     @Getter
     @Builder
     public static class Daily {
+        private Long mvpId;
         private LocalDate mvpDate;
         private Long memberId;
         private String nickname;
@@ -36,6 +37,7 @@ public class DailyMvpResponse {
 
         public Daily withCommentCount(long commentCount) {
             return Daily.builder()
+                    .mvpId(this.mvpId)
                     .mvpDate(this.mvpDate)
                     .memberId(this.memberId)
                     .nickname(this.nickname)
@@ -56,6 +58,7 @@ public class DailyMvpResponse {
                 double answerTime
         ) {
             return Daily.builder()
+                    .mvpId(dailyMvp.getId())
                     .mvpDate(dailyMvp.getMvpDate())
                     .memberId(dailyMvp.getMemberId())
                     .nickname(profileView.nickname())

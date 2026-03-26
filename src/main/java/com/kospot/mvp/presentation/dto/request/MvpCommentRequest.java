@@ -1,4 +1,4 @@
-package com.kospot.mvp.presentation.request;
+package com.kospot.mvp.presentation.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

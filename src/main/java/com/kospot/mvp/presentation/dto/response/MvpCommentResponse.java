@@ -1,4 +1,4 @@
-package com.kospot.mvp.presentation.response;
+package com.kospot.mvp.presentation.dto.response;
 
 import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.mvp.domain.entity.MvpComment;

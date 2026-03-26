@@ -10,7 +10,7 @@ import com.kospot.common.annotation.usecase.UseCase;
 import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.mvp.infrastructure.redis.service.DailyMvpCandidateCacheService;
 import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
-import com.kospot.mvp.presentation.response.DailyMvpResponse;
+import com.kospot.mvp.presentation.dto.response.DailyMvpResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;

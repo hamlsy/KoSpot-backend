@@ -5,7 +5,7 @@ import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.mvp.application.adaptor.DailyMvpAdaptor;
 import com.kospot.mvp.application.adaptor.MvpCommentAdaptor;
 import com.kospot.mvp.domain.entity.MvpComment;
-import com.kospot.mvp.presentation.response.MvpCommentResponse;
+import com.kospot.mvp.presentation.dto.response.MvpCommentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

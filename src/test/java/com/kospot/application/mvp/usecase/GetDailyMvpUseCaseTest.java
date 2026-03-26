@@ -10,7 +10,7 @@ import com.kospot.member.infrastructure.redis.adaptor.MemberProfileRedisAdaptor;
 import com.kospot.mvp.infrastructure.redis.service.DailyMvpCandidateCacheService;
 import com.kospot.mvp.infrastructure.redis.service.DailyMvpCacheService;
 import com.kospot.mvp.application.usecase.GetDailyMvpUseCase;
-import com.kospot.mvp.presentation.response.DailyMvpResponse;
+import com.kospot.mvp.presentation.dto.response.DailyMvpResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

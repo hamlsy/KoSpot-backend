@@ -2,7 +2,7 @@ package com.kospot.application.mvp.usecase;
 
 import com.kospot.mvp.application.usecase.GetDailyMvpUseCase;
 import com.kospot.mvp.application.usecase.GetTodayAndYesterdayMvpUseCase;
-import com.kospot.mvp.presentation.response.DailyMvpResponse;
+import com.kospot.mvp.presentation.dto.response.DailyMvpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

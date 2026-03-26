@@ -2,7 +2,7 @@ package com.kospot.mvp.infrastructure.redis.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kospot.mvp.presentation.response.DailyMvpResponse;
+import com.kospot.mvp.presentation.dto.response.DailyMvpResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;

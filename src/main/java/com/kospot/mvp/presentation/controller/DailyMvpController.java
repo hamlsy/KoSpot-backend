@@ -3,7 +3,7 @@ package com.kospot.mvp.presentation.controller;
 import com.kospot.mvp.application.usecase.GetDailyMvpUseCase;
 import com.kospot.mvp.application.usecase.GetTodayAndYesterdayMvpUseCase;
 import com.kospot.common.exception.payload.dto.ApiResponseDto;
-import com.kospot.mvp.presentation.response.DailyMvpResponse;
+import com.kospot.mvp.presentation.dto.response.DailyMvpResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
