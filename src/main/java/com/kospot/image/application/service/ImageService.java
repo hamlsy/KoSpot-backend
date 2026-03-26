@@ -107,7 +107,8 @@ public class ImageService {
         if (isNotValidImage(file)) {
             return null;
         }
-        return uploadImage(file, S3_BANNER_PATH, ImageType.BANNER);
+        Image image = uploadImage(file, S3_BANNER_PATH, ImageType.BANNER);
+        return imageRepository.save(image);
     }
 
     public void deleteBannerImage(Image image) {

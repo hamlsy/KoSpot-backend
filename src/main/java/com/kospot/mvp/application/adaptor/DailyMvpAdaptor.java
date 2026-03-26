@@ -1,5 +1,7 @@
 package com.kospot.mvp.application.adaptor;
 
+import com.kospot.common.exception.object.domain.MvpHandler;
+import com.kospot.common.exception.payload.code.ErrorStatus;
 import com.kospot.mvp.domain.entity.DailyMvp;
 import com.kospot.mvp.infrastructure.persistence.DailyMvpRepository;
 import com.kospot.common.annotation.adaptor.Adaptor;
@@ -25,6 +27,11 @@ public class DailyMvpAdaptor {
 
     public List<DailyMvp> queryUnrewardedByDateLessThanEqual(LocalDate targetDate) {
         return repository.findUnrewardedByDateLessThanEqual(targetDate);
+    }
+
+    public DailyMvp queryById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new MvpHandler(ErrorStatus.DAILY_MVP_NOT_FOUND));
     }
 
     public DailyMvp save(DailyMvp dailyMvp) {

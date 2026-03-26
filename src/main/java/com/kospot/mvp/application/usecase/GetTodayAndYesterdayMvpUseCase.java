@@ -1,7 +1,7 @@
 package com.kospot.mvp.application.usecase;
 
 import com.kospot.common.annotation.usecase.UseCase;
-import com.kospot.mvp.presentation.response.DailyMvpResponse;
+import com.kospot.mvp.presentation.dto.response.DailyMvpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
