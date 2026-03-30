@@ -3,14 +3,13 @@ package com.kospot.member.application.service;
 import com.kospot.member.domain.entity.Member;
 import com.kospot.member.domain.exception.MemberHandler;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
+import com.kospot.member.domain.vo.AuthProvider;
 import com.kospot.member.domain.vo.Role;
 import com.kospot.common.exception.payload.code.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -20,16 +19,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member initializeMember(String username, String email) {
-        String nickname = "kospot_" + UUID.randomUUID().toString().substring(0, 8);
-        Member member = Member.builder()
-                .username(username)
-                .nickname(nickname)
-                .email(email)
-                .firstVisited(true)
-                .role(Role.USER)
-                .build();
-        return memberRepository.save(member);
+    public Member initializeSocialMember(String username, String email, AuthProvider authProvider) {
+        return memberRepository.save(Member.ofSocial(username, email, authProvider));
+    }
+
+    public Member initializeLocalMember(String email, String nickname, String encodedPassword) {
+        return memberRepository.save(Member.ofLocal(email, nickname, encodedPassword));
     }
 
     public Member registerAdsenseBot(String username) {
@@ -40,6 +35,7 @@ public class MemberService {
                 .email("adsense_bot@email")
                 .firstVisited(false)
                 .role(Role.BOT)
+                .authProvider(AuthProvider.LOCAL)
                 .build();
         return memberRepository.save(member);
     }
