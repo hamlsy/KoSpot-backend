@@ -1,6 +1,7 @@
 package com.kospot.common.security.service;
 
 import com.kospot.member.application.adaptor.MemberAdaptor;
+import com.kospot.member.domain.entity.Member;
 import com.kospot.common.auth.domain.CustomOAuthUser;
 import com.kospot.common.exception.object.general.GeneralException;
 import com.kospot.common.exception.payload.code.ErrorStatus;
@@ -70,6 +71,14 @@ public class TokenService {
                 customUserDetails.getAuthorities());
 
         // 새 토큰 생성
+        return generateToken(authentication);
+    }
+
+    public JwtToken generateTokenByMember(Member member) {
+        CustomUserDetails userDetails = CustomUserDetails.from(member);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities()
+        );
         return generateToken(authentication);
     }
 
