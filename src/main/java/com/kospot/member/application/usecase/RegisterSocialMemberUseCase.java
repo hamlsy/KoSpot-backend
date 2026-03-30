@@ -5,6 +5,7 @@ import com.kospot.item.application.adaptor.ItemAdaptor;
 import com.kospot.item.domain.entity.Item;
 import com.kospot.item.domain.vo.ItemType;
 import com.kospot.member.domain.entity.Member;
+import com.kospot.member.domain.vo.AuthProvider;
 import com.kospot.member.application.service.MemberService;
 import com.kospot.statistic.application.service.MemberStatisticService;
 import com.kospot.memberitem.domain.entity.MemberItem;
@@ -33,8 +34,8 @@ public class RegisterSocialMemberUseCase {
 
     private final SlackNotifier slackNotifier;
 
-    public Member execute(String username, String email) {
-        Member member = memberService.initializeMember(username, email);
+    public Member execute(String username, String email, AuthProvider authProvider) {
+        Member member = memberService.initializeSocialMember(username, email, authProvider);
 
         memberStatisticService.initializeStatistic(member);
 

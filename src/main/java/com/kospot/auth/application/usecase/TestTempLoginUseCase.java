@@ -2,6 +2,7 @@ package com.kospot.auth.application.usecase;
 
 import com.kospot.member.application.usecase.RegisterSocialMemberUseCase;
 import com.kospot.member.domain.entity.Member;
+import com.kospot.member.domain.vo.AuthProvider;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.point.application.service.PointService;
 import com.kospot.common.annotation.usecase.UseCase;
@@ -31,7 +32,7 @@ public class TestTempLoginUseCase {
     public AuthResponse.TempLogin testLogin(String username) {
         Member member = memberRepository.findByUsername(username)
                 .orElseGet(() -> {
-                    Member newMember = registerSocialMemberUseCase.execute(username, "kospot@email");
+                    Member newMember = registerSocialMemberUseCase.execute(username, "kospot@email", AuthProvider.LOCAL);
                     pointService.addPoint(newMember, 100000);
                     return newMember;
                 });

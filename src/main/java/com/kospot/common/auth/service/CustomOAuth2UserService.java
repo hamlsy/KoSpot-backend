@@ -1,9 +1,8 @@
 package com.kospot.common.auth.service;
 
 import com.kospot.member.application.usecase.RegisterSocialMemberUseCase;
-import com.kospot.gamerank.application.service.GameRankService;
 import com.kospot.member.domain.entity.Member;
-import com.kospot.statistic.application.service.MemberStatisticService;
+import com.kospot.member.domain.vo.AuthProvider;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.common.auth.domain.CustomOAuthUser;
 import com.kospot.common.auth.domain.OAuth2Attributes;
@@ -31,8 +30,6 @@ import java.util.Optional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
-    private final MemberStatisticService memberStatisticService;
-    private final GameRankService gameRankService;
     private final RegisterSocialMemberUseCase registerSocialMemberUseCase;
 
     @Override
@@ -61,11 +58,35 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         log.info("email={}", email);
 
         String username = registrationId + "_" + socialId;
-        Optional<Member> targetMember = memberRepository.findByUsername(username);
-        Member member = targetMember.orElseGet(() -> registerSocialMemberUseCase.execute(username, email));
 
-        return new CustomOAuthUser(member,
-                Collections.singleton(new SimpleGrantedAuthority(member.getRole().getName())),
+        AuthProvider authProvider = switch (socialType) {
+            case GOOGLE -> AuthProvider.GOOGLE;
+            case NAVER -> AuthProvider.NAVER;
+            case KAKAO -> AuthProvider.KAKAO;
+        };
+
+        // 1. username 기준 조회 — 기존 소셜 유저
+        Optional<Member> byUsername = memberRepository.findByUsername(username);
+        if (byUsername.isPresent()) {
+            return new CustomOAuthUser(byUsername.get(),
+                    Collections.singleton(new SimpleGrantedAuthority(byUsername.get().getRole().getName())),
+                    attributes);
+        }
+
+        // 2. email 기준 조회 — 동일 이메일로 이미 가입된 계정 (LOCAL 또는 다른 소셜)
+        if (email != null) {
+            Optional<Member> byEmail = memberRepository.findByEmail(email);
+            if (byEmail.isPresent()) {
+                return new CustomOAuthUser(byEmail.get(),
+                        Collections.singleton(new SimpleGrantedAuthority(byEmail.get().getRole().getName())),
+                        attributes);
+            }
+        }
+
+        // 3. 신규 소셜 가입
+        Member newMember = registerSocialMemberUseCase.execute(username, email, authProvider);
+        return new CustomOAuthUser(newMember,
+                Collections.singleton(new SimpleGrantedAuthority(newMember.getRole().getName())),
                 attributes);
     }
 
