@@ -78,6 +78,16 @@ public class MemberAdaptor {
         return repository.existsByNickname(nickname);
     }
 
+    public Member queryByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(
+                () -> new MemberHandler(MemberErrorStatus.EMAIL_NOT_FOUND)
+        );
+    }
+
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
+    }
+
     public Member queryFirstBotMember() {
         Member member = repository.findAllBot().get(0);
         if(member == null) {
