@@ -24,6 +24,39 @@ public class AuthResponse {
                     .refreshToken(jwtToken.getRefreshToken())
                     .build();
         }
+    }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SignUpResult {
+        private Long memberId;
+        private String accessToken;
+        private String refreshToken;
+
+        public static SignUpResult from(Long memberId, JwtToken token) {
+            return SignUpResult.builder()
+                    .memberId(memberId)
+                    .accessToken(token.getAccessToken())
+                    .refreshToken(token.getRefreshToken())
+                    .build();
+        }
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LoginResult {
+        private String accessToken;
+        private String refreshToken;
+
+        public static LoginResult from(JwtToken token) {
+            return LoginResult.builder()
+                    .accessToken(token.getAccessToken())
+                    .refreshToken(token.getRefreshToken())
+                    .build();
+        }
     }
 }
