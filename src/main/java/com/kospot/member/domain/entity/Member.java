@@ -2,6 +2,7 @@ package com.kospot.member.domain.entity;
 
 import com.kospot.common.auditing.entity.BaseTimeEntity;
 import com.kospot.image.domain.entity.Image;
+import com.kospot.member.domain.vo.AuthProvider;
 import com.kospot.member.domain.vo.Role;
 import com.kospot.member.domain.exception.MemberHandler;
 import com.kospot.common.exception.object.domain.PointHandler;
@@ -12,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -43,6 +46,12 @@ public class Member extends BaseTimeEntity {
     private String nickname;
 
     private String email;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private AuthProvider authProvider;
 
     private int point;
 
@@ -119,5 +128,31 @@ public class Member extends BaseTimeEntity {
 
     public void markVisited() {
         this.firstVisited = false;
+    }
+
+    public static Member ofSocial(String username, String email, AuthProvider authProvider) {
+        String nickname = "kospot_" + UUID.randomUUID().toString().substring(0, 8);
+        return Member.builder()
+                .username(username)
+                .nickname(nickname)
+                .email(email)
+                .firstVisited(true)
+                .role(Role.USER)
+                .authProvider(authProvider)
+                .build();
+    }
+
+    public static Member ofLocal(String email, String encodedPassword) {
+        String username = "local_" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        String nickname = "kospot_" + UUID.randomUUID().toString().substring(0, 8);
+        return Member.builder()
+                .username(username)
+                .nickname(nickname)
+                .email(email)
+                .password(encodedPassword)
+                .firstVisited(true)
+                .role(Role.USER)
+                .authProvider(AuthProvider.LOCAL)
+                .build();
     }
 }

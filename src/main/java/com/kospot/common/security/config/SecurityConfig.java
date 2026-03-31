@@ -117,7 +117,9 @@ public class SecurityConfig {
 
     private RequestMatcher[] authRelatedEndpoints() {
         List<RequestMatcher> requestMatchers = List.of(
-                antMatcher("/tokens/**")
+                antMatcher("/tokens/**"),
+                antMatcher("/auth/signup"),
+                antMatcher("/auth/login")
         );
         return requestMatchers.toArray(RequestMatcher[]::new);
     }
