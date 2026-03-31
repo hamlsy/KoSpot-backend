@@ -37,16 +37,13 @@ public class SignUpUseCase {
     private final SlackNotifier slackNotifier;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public JwtToken execute(String email, String nickname, String rawPassword) {
+    public JwtToken execute(String email, String rawPassword) {
         if (memberAdaptor.existsByEmail(email)) {
             throw new MemberHandler(MemberErrorStatus.EMAIL_ALREADY_EXISTS);
         }
-        if (memberAdaptor.existsByNickname(nickname)) {
-            throw new MemberHandler(MemberErrorStatus.NICKNAME_ALREADY_EXISTS);
-        }
 
         String encodedPassword = passwordEncoder.encode(rawPassword);
-        Member member = memberService.initializeLocalMember(email, nickname, encodedPassword);
+        Member member = memberService.initializeLocalMember(email, encodedPassword);
 
         memberStatisticService.initializeStatistic(member);
         gameRankService.initGameRank(member);

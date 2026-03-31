@@ -142,8 +142,9 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
-    public static Member ofLocal(String email, String nickname, String encodedPassword) {
+    public static Member ofLocal(String email, String encodedPassword) {
         String username = "local_" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        String nickname = "kospot_" + UUID.randomUUID().toString().substring(0, 8);
         return Member.builder()
                 .username(username)
                 .nickname(nickname)

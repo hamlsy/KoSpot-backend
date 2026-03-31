@@ -61,7 +61,7 @@ public class AuthController {
     @Operation(summary = "이메일 회원가입", description = "이메일/비밀번호로 회원가입 후 JWT 즉시 발급")
     @PostMapping("/signup")
     public ApiResponseDto<AuthResponse.SignUpResult> signUp(@RequestBody @Valid AuthRequest.SignUp request) {
-        JwtToken token = signUpUseCase.execute(request.getEmail(), request.getNickname(), request.getPassword());
+        JwtToken token = signUpUseCase.execute(request.getEmail(), request.getPassword());
         Long memberId = tokenService.getMemberIdFromToken(token.getAccessToken());
         return ApiResponseDto.onSuccess(AuthResponse.SignUpResult.from(memberId, token));
     }
