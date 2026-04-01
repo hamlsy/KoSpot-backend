@@ -120,6 +120,9 @@ public enum ErrorStatus implements BaseCode {
     MVP_COMMENT_NOT_FOUND(NOT_FOUND, 4402, "해당 댓글을 찾을 수 없습니다."),
     MVP_COMMENT_NO_PERMISSION(FORBIDDEN, 4403, "댓글 삭제 권한이 없습니다."),
 
+    // Email Error (4411 ~ 4420)
+    EMAIL_SEND_FAILED(INTERNAL_SERVER_ERROR, 4411, "이메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요."),
+    EMAIL_RATE_LIMIT_EXCEEDED(TOO_MANY_REQUESTS, 4412, "이메일 요청 횟수를 초과했습니다. 잠시 후 다시 시도해주세요."),
 
     ;
 

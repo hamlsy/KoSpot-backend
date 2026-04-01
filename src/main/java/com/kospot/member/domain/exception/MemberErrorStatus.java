@@ -18,7 +18,8 @@ public enum MemberErrorStatus implements BaseCode  {
     EMAIL_ALREADY_EXISTS(CONFLICT, 4102, "이미 사용 중인 이메일입니다."),
     EMAIL_NOT_FOUND(UNAUTHORIZED, 4103, "존재하지 않는 이메일입니다."),
     INVALID_PASSWORD(UNAUTHORIZED, 4104, "비밀번호가 일치하지 않습니다."),
-    SOCIAL_ACCOUNT_ONLY(BAD_REQUEST, 4105, "소셜 계정 전용입니다. 소셜 로그인을 이용해주세요.");
+    SOCIAL_ACCOUNT_ONLY(BAD_REQUEST, 4105, "소셜 계정 전용입니다. 소셜 로그인을 이용해주세요."),
+    PASSWORD_RESET_TOKEN_INVALID(BAD_REQUEST, 4106, "유효하지 않거나 만료된 비밀번호 재설정 토큰입니다.");
 
 
     private final HttpStatus httpStatus;
