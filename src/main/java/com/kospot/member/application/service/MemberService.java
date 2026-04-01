@@ -1,6 +1,7 @@
 package com.kospot.member.application.service;
 
 import com.kospot.member.domain.entity.Member;
+import com.kospot.member.domain.exception.MemberErrorStatus;
 import com.kospot.member.domain.exception.MemberHandler;
 import com.kospot.member.infrastructure.persistence.MemberRepository;
 import com.kospot.member.domain.vo.AuthProvider;
@@ -55,6 +56,12 @@ public class MemberService {
 
     public void updateNickname(Member member, String nickname) {
         member.setNickname(nickname);
+    }
+
+    public void updatePasswordById(Long memberId, String encodedPassword) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(MemberErrorStatus.MEMBER_NOT_FOUND));
+        member.updatePassword(encodedPassword);
     }
 
     public void validateAdmin(Member member) {

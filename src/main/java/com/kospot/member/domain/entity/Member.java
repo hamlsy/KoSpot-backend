@@ -130,6 +130,10 @@ public class Member extends BaseTimeEntity {
         this.firstVisited = false;
     }
 
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
     public static Member ofSocial(String username, String email, AuthProvider authProvider) {
         String nickname = "kospot_" + UUID.randomUUID().toString().substring(0, 8);
         return Member.builder()

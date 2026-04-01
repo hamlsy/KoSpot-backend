@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Adaptor
 @Transactional(readOnly = true)
@@ -82,6 +83,10 @@ public class MemberAdaptor {
         return repository.findByEmail(email).orElseThrow(
                 () -> new MemberHandler(MemberErrorStatus.EMAIL_NOT_FOUND)
         );
+    }
+
+    public Optional<Member> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
     public boolean existsByEmail(String email) {
