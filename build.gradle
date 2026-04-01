@@ -45,6 +45,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation("org.redisson:redisson:3.52.0")
 
+	// mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	//security, oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'

@@ -87,11 +87,27 @@ logging:
 auth:
   success-redirect-uri: ${AUTH_SUCCESS_REDIRECT_URI}
 
+spring:
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
 app:
   jwt:
     secret: ${APP_JWT_SECRET}
   cors:
     front-path: ${APP_CORS_FRONT_PATH}
+  password-reset:
+    base-url: ${PASSWORD_RESET_BASE_URL:https://kospot.kr/reset-password}
+    from-email: ${MAIL_FROM:noreply@kospot.kr}
+    token-ttl-minutes: 15
+    rate-limit-max: 5
+    rate-limit-ttl-hours: 1
 
 aes:
   secret-key: ${AES_SECRET_KEY}
