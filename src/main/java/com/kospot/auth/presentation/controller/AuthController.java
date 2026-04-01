@@ -1,8 +1,10 @@
 package com.kospot.auth.presentation.controller;
 
+import com.kospot.auth.application.usecase.ConfirmPasswordResetUseCase;
 import com.kospot.auth.application.usecase.LocalLoginUseCase;
 import com.kospot.auth.application.usecase.LogoutUseCase;
 import com.kospot.auth.application.usecase.ReIssueRefreshTokenUseCase;
+import com.kospot.auth.application.usecase.RequestPasswordResetUseCase;
 import com.kospot.auth.application.usecase.TestTempLoginUseCase;
 import com.kospot.common.exception.payload.code.SuccessStatus;
 import com.kospot.common.exception.payload.dto.ApiResponseDto;
@@ -32,6 +34,8 @@ public class AuthController {
     private final SignUpUseCase signUpUseCase;
     private final LocalLoginUseCase localLoginUseCase;
     private final TokenService tokenService;
+    private final RequestPasswordResetUseCase requestPasswordResetUseCase;
+    private final ConfirmPasswordResetUseCase confirmPasswordResetUseCase;
 
     //test
     private final TestTempLoginUseCase testTempLoginUseCase;
@@ -71,6 +75,20 @@ public class AuthController {
     public ApiResponseDto<AuthResponse.LoginResult> login(@RequestBody @Valid AuthRequest.LocalLogin request) {
         JwtToken token = localLoginUseCase.execute(request.getEmail(), request.getPassword());
         return ApiResponseDto.onSuccess(AuthResponse.LoginResult.from(token));
+    }
+
+    @Operation(summary = "비밀번호 재설정 메일 발송", description = "이메일로 비밀번호 재설정 링크 발송 (항상 200 반환)")
+    @PostMapping("/password-reset/request")
+    public ApiResponseDto<?> requestPasswordReset(@RequestBody @Valid AuthRequest.PasswordResetRequest request) {
+        requestPasswordResetUseCase.execute(request.getEmail());
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
+    }
+
+    @Operation(summary = "비밀번호 재설정 확인", description = "토큰 검증 후 비밀번호 변경")
+    @PostMapping("/password-reset/confirm")
+    public ApiResponseDto<?> confirmPasswordReset(@RequestBody @Valid AuthRequest.ConfirmPasswordReset request) {
+        confirmPasswordResetUseCase.execute(request.getToken(), request.getNewPassword());
+        return ApiResponseDto.onSuccess(SuccessStatus._SUCCESS);
     }
 
 }

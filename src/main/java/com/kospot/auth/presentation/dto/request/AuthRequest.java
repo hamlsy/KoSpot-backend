@@ -43,4 +43,22 @@ public class AuthRequest {
         private String password;
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PasswordResetRequest {
+        @NotBlank @Email
+        private String email;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ConfirmPasswordReset {
+        @NotBlank
+        private String token;
+        @NotBlank @Size(min = 8)
+        private String newPassword;
+    }
+
 }

@@ -119,7 +119,8 @@ public class SecurityConfig {
         List<RequestMatcher> requestMatchers = List.of(
                 antMatcher("/tokens/**"),
                 antMatcher("/auth/signup"),
-                antMatcher("/auth/login")
+                antMatcher("/auth/login"),
+                antMatcher("/auth/password-reset/**")
         );
         return requestMatchers.toArray(RequestMatcher[]::new);
     }
