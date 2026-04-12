@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1774420959534,
+  "lastScanned": 1775007177637,
   "projectRoot": "C:\\KoSpot-backend",
   "techStack": {
     "languages": [
@@ -50,41 +50,41 @@
       "path": "bin",
       "purpose": "Executable scripts",
       "fileCount": 0,
-      "lastAccessed": 1774420959483,
+      "lastAccessed": 1775007177579,
       "keyFiles": []
     },
     "build": {
       "path": "build",
       "purpose": "Build output",
       "fileCount": 0,
-      "lastAccessed": 1774420959484,
+      "lastAccessed": 1775007177580,
       "keyFiles": []
     },
     "docs": {
       "path": "docs",
       "purpose": "Documentation",
-      "fileCount": 11,
-      "lastAccessed": 1774420959485,
+      "fileCount": 12,
+      "lastAccessed": 1775007177581,
       "keyFiles": [
         "EARLY_ROUND_COMPLETION_IMPLEMENTATION.md",
         "GAME_TIMER_DESIGN_IMPROVEMENTS.md",
         "mvp-index-optimization-report.md",
         "mvp-read-enhancement-plan.md",
-        "Redis-Data-Structure-Guide.md"
+        "plan-issue-200-email-auth.md"
       ]
     },
     "gradle": {
       "path": "gradle",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1774420959485,
+      "lastAccessed": 1775007177581,
       "keyFiles": []
     },
     "k6-scripts": {
       "path": "k6-scripts",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1774420959485,
+      "lastAccessed": 1775007177582,
       "keyFiles": [
         "timer-broadcast-test.js",
         "timer-interval-test.js"
@@ -94,7 +94,7 @@
       "path": "KoSpot-backend-private",
       "purpose": null,
       "fileCount": 3,
-      "lastAccessed": 1774420959486,
+      "lastAccessed": 1775007177582,
       "keyFiles": [
         "README.md"
       ]
@@ -103,7 +103,7 @@
       "path": "nginx",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1774420959486,
+      "lastAccessed": 1775007177583,
       "keyFiles": [
         "kospot.conf",
         "nginx.conf"
@@ -113,14 +113,14 @@
       "path": "out",
       "purpose": "Build output",
       "fileCount": 0,
-      "lastAccessed": 1774420959486,
+      "lastAccessed": 1775007177583,
       "keyFiles": []
     },
     "scripts": {
       "path": "scripts",
       "purpose": "Build/utility scripts",
       "fileCount": 5,
-      "lastAccessed": 1774420959487,
+      "lastAccessed": 1775007177583,
       "keyFiles": [
         "after_install.sh",
         "before_install.sh",
@@ -133,21 +133,21 @@
       "path": "src",
       "purpose": "Source code",
       "fileCount": 0,
-      "lastAccessed": 1774420959487,
+      "lastAccessed": 1775007177584,
       "keyFiles": []
     },
     "bin\\test": {
       "path": "bin\\test",
       "purpose": "Test files",
       "fileCount": 0,
-      "lastAccessed": 1774420959489,
+      "lastAccessed": 1775007177585,
       "keyFiles": []
     },
     "docs\\api": {
       "path": "docs\\api",
       "purpose": "API routes",
       "fileCount": 1,
-      "lastAccessed": 1774420959491,
+      "lastAccessed": 1775007177586,
       "keyFiles": [
         "README.md"
       ]
@@ -156,7 +156,7 @@
       "path": "k6-scripts\\utils",
       "purpose": "Utility functions",
       "fileCount": 1,
-      "lastAccessed": 1774420959492,
+      "lastAccessed": 1775007177587,
       "keyFiles": [
         "stomp-client.js"
       ]
@@ -165,244 +165,214 @@
       "path": "out\\test",
       "purpose": "Test files",
       "fileCount": 0,
-      "lastAccessed": 1774420959493,
+      "lastAccessed": 1775007177589,
       "keyFiles": []
     },
     "src\\test": {
       "path": "src\\test",
       "purpose": "Test files",
       "fileCount": 0,
-      "lastAccessed": 1774420959494,
+      "lastAccessed": 1775007177590,
       "keyFiles": []
     }
   },
   "hotPaths": [
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\application\\usecase\\GetDailyMvpUseCase.java",
-      "accessCount": 6,
-      "lastAccessed": 1774425460519,
+      "path": "docs\\plan-issue-202-password-reset.md",
+      "accessCount": 18,
+      "lastAccessed": 1775017150908,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\common\\exception\\payload\\code\\ErrorStatus.java",
+      "path": "src\\main\\java\\com\\kospot\\member\\application\\service\\MemberService.java",
       "accessCount": 4,
-      "lastAccessed": 1774425067080,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\application\\adaptor\\DailyMvpAdaptor.java",
-      "accessCount": 4,
-      "lastAccessed": 1774425098998,
-      "type": "file"
-    },
-    {
-      "path": "CLAUDE.md",
-      "accessCount": 4,
-      "lastAccessed": 1774425186945,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\infrastructure\\persistence\\MvpCommentRepository.java",
-      "accessCount": 4,
-      "lastAccessed": 1774425402880,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\application\\adaptor\\MvpCommentAdaptor.java",
-      "accessCount": 3,
-      "lastAccessed": 1774425414340,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\presentation\\response\\DailyMvpResponse.java",
-      "accessCount": 3,
-      "lastAccessed": 1774425432852,
-      "type": "file"
-    },
-    {
-      "path": "src",
-      "accessCount": 2,
-      "lastAccessed": 1774424934220,
-      "type": "directory"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\presentation\\controller\\DailyMvpController.java",
-      "accessCount": 2,
-      "lastAccessed": 1774424952516,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\domain\\entity\\DailyMvp.java",
-      "accessCount": 2,
-      "lastAccessed": 1774424956801,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\infrastructure\\persistence\\DailyMvpRepository.java",
-      "accessCount": 2,
-      "lastAccessed": 1774424957465,
-      "type": "file"
-    },
-    {
-      "path": "README.md",
-      "accessCount": 1,
-      "lastAccessed": 1774421295165,
-      "type": "file"
-    },
-    {
-      "path": "KoSpot-backend-private\\README.md",
-      "accessCount": 1,
-      "lastAccessed": 1774421300943,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\resources\\application.yml",
-      "accessCount": 1,
-      "lastAccessed": 1774421303653,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\resources\\application-local.yml",
-      "accessCount": 1,
-      "lastAccessed": 1774421304109,
-      "type": "file"
-    },
-    {
-      "path": "Dockerfile",
-      "accessCount": 1,
-      "lastAccessed": 1774421426215,
-      "type": "file"
-    },
-    {
-      "path": "docker-compose.yml",
-      "accessCount": 1,
-      "lastAccessed": 1774421426457,
-      "type": "file"
-    },
-    {
-      "path": "appspec.yml",
-      "accessCount": 1,
-      "lastAccessed": 1774421426662,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\KoSpotApplication.java",
-      "accessCount": 1,
-      "lastAccessed": 1774421718825,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\common\\config\\spring\\JpaAuditingConfig.java",
-      "accessCount": 1,
-      "lastAccessed": 1774421718871,
-      "type": "file"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\common\\config\\swagger\\SwaggerConfig.java",
-      "accessCount": 1,
-      "lastAccessed": 1774421719053,
-      "type": "file"
-    },
-    {
-      "path": "docs\\api\\README.md",
-      "accessCount": 1,
-      "lastAccessed": 1774421725961,
-      "type": "file"
-    },
-    {
-      "path": ".claude\\settings.local.json",
-      "accessCount": 1,
-      "lastAccessed": 1774421806242,
+      "lastAccessed": 1775017278935,
       "type": "file"
     },
     {
       "path": "src\\main\\java\\com\\kospot\\member\\application\\adaptor\\MemberAdaptor.java",
-      "accessCount": 1,
-      "lastAccessed": 1774424930938,
+      "accessCount": 4,
+      "lastAccessed": 1775017901546,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\common",
-      "accessCount": 1,
-      "lastAccessed": 1774424933795,
-      "type": "directory"
-    },
-    {
-      "path": "src\\main\\java\\com\\kospot\\common\\annotation\\usecase\\UseCase.java",
-      "accessCount": 1,
-      "lastAccessed": 1774424936408,
+      "path": "src\\main\\java\\com\\kospot\\auth\\presentation\\controller\\AuthController.java",
+      "accessCount": 4,
+      "lastAccessed": 1775018045662,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\common\\annotation\\adaptor\\Adaptor.java",
-      "accessCount": 1,
-      "lastAccessed": 1774424936684,
+      "path": "src\\main\\java\\com\\kospot\\common\\exception\\payload\\code\\ErrorStatus.java",
+      "accessCount": 3,
+      "lastAccessed": 1775017235495,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\common\\exception\\object\\domain\\NotificationHandler.java",
-      "accessCount": 1,
-      "lastAccessed": 1774424962520,
+      "path": "src\\main\\java\\com\\kospot\\auth\\presentation\\dto\\request\\AuthRequest.java",
+      "accessCount": 3,
+      "lastAccessed": 1775018022826,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\common\\exception\\object\\domain\\MvpHandler.java",
-      "accessCount": 1,
-      "lastAccessed": 1774425072337,
+      "path": "src\\main\\resources\\application.yml",
+      "accessCount": 2,
+      "lastAccessed": 1775017187274,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\domain\\entity\\MvpComment.java",
-      "accessCount": 1,
-      "lastAccessed": 1774425080932,
+      "path": "src\\main\\resources\\application-local.yml",
+      "accessCount": 2,
+      "lastAccessed": 1775017195840,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\application\\service\\MvpCommentService.java",
-      "accessCount": 1,
-      "lastAccessed": 1774425109743,
+      "path": "src\\main\\resources\\application-test.yml",
+      "accessCount": 2,
+      "lastAccessed": 1775017202548,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\presentation\\request\\MvpCommentRequest.java",
-      "accessCount": 1,
-      "lastAccessed": 1774425115411,
+      "path": "src\\main\\java\\com\\kospot\\member\\domain\\exception\\MemberErrorStatus.java",
+      "accessCount": 2,
+      "lastAccessed": 1775017249200,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\presentation\\response\\MvpCommentResponse.java",
-      "accessCount": 1,
-      "lastAccessed": 1774425125632,
+      "path": "src\\main\\java\\com\\kospot\\member\\domain\\entity\\Member.java",
+      "accessCount": 2,
+      "lastAccessed": 1775017261484,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\application\\usecase\\CreateMvpCommentUseCase.java",
-      "accessCount": 1,
-      "lastAccessed": 1774425133963,
+      "path": "src\\main\\java\\com\\kospot\\common\\security\\config\\SecurityConfig.java",
+      "accessCount": 2,
+      "lastAccessed": 1775018052504,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\application\\usecase\\DeleteMvpCommentUseCase.java",
+      "path": "src\\main\\java\\com\\kospot\\member\\application\\usecase\\SignUpUseCase.java",
       "accessCount": 1,
-      "lastAccessed": 1774425141029,
+      "lastAccessed": 1775009784418,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\application\\usecase\\GetMvpCommentsUseCase.java",
+      "path": "src\\main\\java\\com\\kospot\\auth\\application\\usecase\\LocalLoginUseCase.java",
       "accessCount": 1,
-      "lastAccessed": 1774425148541,
+      "lastAccessed": 1775010205577,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\presentation\\controller\\MvpCommentController.java",
+      "path": "src\\main\\java\\com\\kospot\\member\\infrastructure\\redis\\service\\MemberProfileRedisService.java",
       "accessCount": 1,
-      "lastAccessed": 1774425164299,
+      "lastAccessed": 1775010211768,
       "type": "file"
     },
     {
-      "path": "src\\main\\java\\com\\kospot\\mvp\\application\\usecase\\GetTodayAndYesterdayMvpUseCase.java",
+      "path": "src\\main\\java\\com\\kospot\\member\\infrastructure\\redis\\dao\\MemberProfileRedisRepository.java",
       "accessCount": 1,
-      "lastAccessed": 1774425337607,
+      "lastAccessed": 1775010221448,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\auth\\presentation\\dto\\response\\AuthResponse.java",
+      "accessCount": 1,
+      "lastAccessed": 1775010227475,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\member\\domain\\exception\\MemberHandler.java",
+      "accessCount": 1,
+      "lastAccessed": 1775011603724,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\exception\\object\\general\\GeneralException.java",
+      "accessCount": 1,
+      "lastAccessed": 1775011610993,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\exception\\advice\\ExceptionAdvice.java",
+      "accessCount": 1,
+      "lastAccessed": 1775011611708,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\exception\\object\\domain\\EmailHandler.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017242035,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\config\\mail\\PasswordResetProperties.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017914649,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\config\\async\\AsyncConfig.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017921189,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\config\\mail\\MailConfig.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017926183,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\auth\\infrastructure\\redis\\PasswordResetTokenRedisRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017936209,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\auth\\application\\service\\PasswordResetTokenRedisService.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017944525,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\auth\\application\\service\\PasswordResetRateLimitService.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017950425,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\common\\email\\EmailService.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017965123,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\auth\\application\\service\\PasswordResetEmailComposer.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017972774,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\resources\\templates\\email\\password-reset.html",
+      "accessCount": 1,
+      "lastAccessed": 1775017980507,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\auth\\application\\usecase\\RequestPasswordResetUseCase.java",
+      "accessCount": 1,
+      "lastAccessed": 1775017998414,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\java\\com\\kospot\\auth\\application\\usecase\\ConfirmPasswordResetUseCase.java",
+      "accessCount": 1,
+      "lastAccessed": 1775018008360,
+      "type": "file"
+    },
+    {
+      "path": "docs\\frontend-password-reset-spec.md",
+      "accessCount": 1,
+      "lastAccessed": 1775025139132,
       "type": "file"
     }
   ],
