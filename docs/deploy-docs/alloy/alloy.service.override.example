@@ -1,0 +1,4 @@
+[Service]
+EnvironmentFile=/etc/alloy/alloy.env
+ExecStart=
+ExecStart=/usr/bin/alloy run /etc/alloy/config.alloy --storage.path=/var/lib/alloy/data --config.expand-env=true
