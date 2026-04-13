@@ -84,6 +84,22 @@ logging:
     root: info
     org.springframework.web: info
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  endpoint:
+    health:
+      show-details: never
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      application: kospot-backend
+
 auth:
   success-redirect-uri: ${AUTH_SUCCESS_REDIRECT_URI}
 
