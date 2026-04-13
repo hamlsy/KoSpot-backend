@@ -1,7 +1,7 @@
 {
-  "tool_name": "Read",
-  "tool_input_preview": "{\"file_path\":\"C:\\\\KoSpot-backend\\\\src\\\\main\\\\java\\\\com\\\\kospot\\\\common\\\\annotation\\\\Adaptor.java\"}",
-  "error": "File does not exist. Note: your current working directory is C:\\KoSpot-backend.",
-  "timestamp": "2026-03-25T07:48:50.840Z",
-  "retry_count": 2
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"powershell -Command \\\"(New-Object -ComObject Scripting.FileSystemObject).GetFolder('C:\\\\Users\\\\이승영\\\\.jdks\\\\jdk-17').ShortPath\\\"\",\"description\":\"Get Windows short path for Java 17\"}",
+  "error": "Exit code 1\n���ܰ� �߻��� HRESULT: 0x800A004C (CTL_E_PATHNOTFOUND)\r\n��ġ ��:1 ����:1\r\n+ (New-Object -ComObject Scripting.FileSystemObject).GetFolder('C:\\User ...\r\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : OperationStopped: (:) [], DirectoryNotFoundException\r\n    + FullyQualifiedErrorId : System.IO.DirectoryNotFoundException",
+  "timestamp": "2026-04-01T04:37:16.635Z",
+  "retry_count": 1
 }

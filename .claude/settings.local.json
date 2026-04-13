@@ -7,7 +7,20 @@
       "Bash(find . -maxdepth 2 -type f \\\\\\(-name README* -o -name pom.xml -o -name build.gradle -o -name Makefile -o -name package.json -o -name .env* \\\\\\))",
       "Bash(find /c/KoSpot-backend/src/test -type f -name *.java)",
       "Bash(find /c/KoSpot-backend -name start.sh -o -name stop.sh -o -name *.sh)",
-      "Bash(grep -l \"@SpringBootTest\\\\|@DataJpaTest\\\\|@WebMvcTest\" /c/KoSpot-backend/src/test/java/com/kospot/**/*.java)"
+      "Bash(grep -l \"@SpringBootTest\\\\|@DataJpaTest\\\\|@WebMvcTest\" /c/KoSpot-backend/src/test/java/com/kospot/**/*.java)",
+      "Bash(find /c/KoSpot-backend -type f \\\\\\(-name *.sql -o -name schema* \\\\\\))",
+      "Bash(./gradlew build:*)",
+      "Bash(./gradlew compileJava --stacktrace --no-daemon)",
+      "Bash(./gradlew --stop)",
+      "Bash(./gradlew compileJava -x test --no-daemon)",
+      "Bash(java -version)",
+      "Read(//c/Program Files/Java/**)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Program Files/Java//**)",
+      "Read(//c/Users/이승영/.jdks/**)",
+      "Bash(JAVA_HOME=\"C:/Users/이승영/.jdks/jdk-17\" ./gradlew build -x test --no-daemon)",
+      "Bash(JAVA_HOME=\"/c/Users/이승영/.jdks/jdk-17\" ./gradlew build -x test --no-daemon)",
+      "Bash(powershell -Command \"\\(New-Object -ComObject Scripting.FileSystemObject\\).GetFolder\\('C:\\\\Users\\\\이승영\\\\.jdks\\\\jdk-17'\\).ShortPath\")"
     ]
   }
 }

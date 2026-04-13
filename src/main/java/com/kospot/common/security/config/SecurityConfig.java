@@ -93,6 +93,7 @@ public class SecurityConfig {
                             .requestMatchers(permitAllRequest()).permitAll()        //비인증 api 허용 처리
                             .requestMatchers(authRelatedEndpoints()).permitAll()
                             .requestMatchers(oauth2Endpoints()).permitAll()
+                            .requestMatchers(actuatorEndpoints()).permitAll()
                             .requestMatchers(additionalSwaggerRequests()).permitAll()
                             .anyRequest().permitAll();      //지정하지 않은 url의 경우 인증 처리
 
@@ -120,6 +121,14 @@ public class SecurityConfig {
                 antMatcher("/tokens/**"),
                 antMatcher("/auth/signup"),
                 antMatcher("/auth/login")
+        );
+        return requestMatchers.toArray(RequestMatcher[]::new);
+    }
+
+    private RequestMatcher[] actuatorEndpoints() {
+        List<RequestMatcher> requestMatchers = List.of(
+                antMatcher("/actuator/health"),
+                antMatcher("/actuator/prometheus")
         );
         return requestMatchers.toArray(RequestMatcher[]::new);
     }

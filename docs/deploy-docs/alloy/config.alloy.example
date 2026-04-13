@@ -1,0 +1,37 @@
+// Minimal Grafana Alloy config for KoSpot backend metrics.
+// Copy this file to /etc/alloy/config.alloy on the server.
+//
+// Required environment variables:
+// - GRAFANA_CLOUD_PROM_RW_URL
+// - GRAFANA_CLOUD_PROM_USER
+// - GRAFANA_CLOUD_API_KEY
+// If Alloy runs in a container, replace 127.0.0.1:8080 with the app container address.
+
+prometheus.scrape "kospot_backend" {
+  targets = [{
+    "__address__" = "127.0.0.1:8080",
+  }]
+
+  job_name        = "kospot-backend"
+  metrics_path    = "/actuator/prometheus"
+  scrape_interval = "30s"
+  scrape_timeout  = "10s"
+
+  forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+}
+
+prometheus.remote_write "grafana_cloud" {
+  endpoint {
+    url = "${GRAFANA_CLOUD_PROM_RW_URL}"
+
+    basic_auth {
+      username = "${GRAFANA_CLOUD_PROM_USER}"
+      password = "${GRAFANA_CLOUD_API_KEY}"
+    }
+  }
+
+  external_labels = {
+    application = "kospot-backend",
+    source      = "alloy",
+  }
+}
